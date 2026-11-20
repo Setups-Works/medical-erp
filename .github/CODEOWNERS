@@ -1,0 +1,93 @@
+# Replace placeholder handles (@kamesh-gh etc.) with real GitHub usernames when the org is set up.
+# Nitheesh (@nitheeshdr) manages everything: default owner + second reviewer on every path.
+# Later rules win, so specific paths are listed after the default.
+
+*                                   @nitheeshdr
+
+# Docs
+/docs/product/                      @prakalya-gh @nitheeshdr
+/docs/business-requirements/        @prakalya-gh @nitheeshdr
+/docs/workflows/                    @prakalya-gh @nitheeshdr
+/docs/compliance/                   @prakalya-gh @nitheeshdr
+/docs/design/                       @meyyarivu-gh @nitheeshdr
+/docs/database/                     @kamesh-gh @nitheeshdr
+/docs/api/                          @kamesh-gh @nitheeshdr
+/docs/testing/                      @ashok-gh @nitheeshdr
+/docs/deployment/                   @jeeva-gh @nitheeshdr
+/docs/runbooks/                     @jeeva-gh @nitheeshdr
+
+# Generated from docs/team/OWNERSHIP_MATRIX.md: change that file first.
+
+# Backend modules
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/catalog/         @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/party/           @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/pricing/         @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/purchase/        @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/inventory/       @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/sales/           @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/returns/         @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/compliance/      @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/taxation/        @kamesh-gh @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/auth/            @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/tenancy/         @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/identity/        @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/subscription/    @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/audit/           @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/files/           @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/sync/            @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/notification/    @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/payment/         @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/accounting/      @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/reporting/       @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/fieldsales/      @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/resources/db/migration/                            @kamesh-gh @nitheeshdr
+/backend/meno-api/src/test/java/com/setupsworks/meno/scenarios/               @ashok-gh @kamesh-gh
+
+# Frontend (Meyyarivu: shell + transactional screens)
+/apps/web/                              @meyyarivu-gh @nitheeshdr
+/packages/ui/                           @meyyarivu-gh @nitheeshdr
+/packages/validation/                   @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/auth/            @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/purchase/        @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/inventory/       @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/pos/             @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/returns/         @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/wholesale/       @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/pricing/         @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/gst/             @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/compliance/      @meyyarivu-gh @nitheeshdr
+# Master data (Prakalya)
+/apps/web/src/features/catalog/         @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/parties/         @prakalya-gh @meyyarivu-gh
+# Admin, finance, dashboards, reports, CRM (Nitheesh)
+/apps/web/src/features/company/         @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/branches/        @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/users/           @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/settings/        @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/admin/           @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/dashboard/       @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/reports/         @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/accounting/      @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/payments/        @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/crm/             @nitheeshdr @meyyarivu-gh
+/apps/web/tests/e2e/                    @ashok-gh @meyyarivu-gh
+
+# Desktop
+/apps/desktop/                      @nitheeshdr @jeeva-gh
+
+# Shared contracts (lead approval always)
+/contracts/                         @nitheeshdr
+/contracts/test-vectors/            @nitheeshdr @prakalya-gh @ashok-gh
+/packages/billing-engine/           @nitheeshdr
+/packages/api-client/               @nitheeshdr
+/packages/types/                    @nitheeshdr
+
+# Infrastructure
+/infrastructure/                    @jeeva-gh @nitheeshdr
+/.github/workflows/                 @jeeva-gh @nitheeshdr
+/docker-compose.yml                 @jeeva-gh @nitheeshdr
+
+# Rules for agents and owners
+/AGENTS.md                          @nitheeshdr
+/.github/CODEOWNERS                 @nitheeshdr
+/.claude/                           @nitheeshdr

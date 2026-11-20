@@ -1,0 +1,42 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.iml
+
+# Env & secrets (only *.example is committed)
+.env
+.env.*
+!.env.example
+!**/.env.example
+*.pem
+*.key
+
+# Node / TS
+node_modules/
+.pnpm-store/
+.turbo/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+playwright-report/
+test-results/
+
+# Java
+backend/**/target/
+*.class
+hs_err_pid*
+
+# Electron
+apps/desktop/release/
+apps/desktop/build/
+
+# Local data
+*.sqlite
+*.sqlite-journal
+infrastructure/docker/data/
+!.env.*.example
+!**/.env.*.example

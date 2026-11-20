@@ -1,0 +1,9 @@
+---
+description: MENO project rules (always applied)
+alwaysApply: true
+---
+
+Follow AGENTS.md at the repo root and the AGENTS.md in every folder you edit.
+UI: docs/design/DESIGN_LANGUAGE.md (tokens only, shadcn from packages/ui, lucide icons).
+Backend: one module may use another only through its `api` package.
+Money: BigDecimal / decimal.js, never float. Stock: inventory movements only. Tenant: from token only.

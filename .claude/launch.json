@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "project-hub",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "project-management", "run", "dev"],
+      "port": 4100
+    }
+  ]
+}
