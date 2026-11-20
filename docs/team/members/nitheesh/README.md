@@ -1,4 +1,4 @@
-# Nitheesh — Product Owner, Technical Lead & Project Manager
+# Nitheesh — Tech Lead & Full-stack Engineer
 
 ## Your job in one line
 

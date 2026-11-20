@@ -107,7 +107,7 @@ Environment templates for every environment: [infrastructure/env/](infrastructur
 
 | Member | Role | Owns |
 |---|---|---|
-| Nitheesh | Product Owner, Tech Lead & PM: backend + frontend | Platform & admin, finance, dashboards, reports, CRM; architecture; releases |
+| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | Platform & admin, finance, dashboards, reports, CRM; architecture; releases |
 | Kamesh | Backend Engineer | Catalog, parties, pricing, purchase, inventory, sales, returns, compliance, GST modules |
 | Meyyarivu | Frontend Lead | Design system, app shell, POS, medicine master, purchase, inventory, wholesale, returns, GST and compliance screens |
 | Prakalya | Business Analyst + Frontend | Requirements, stories, workflows, supplier/customer/doctor screens |

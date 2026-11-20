@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart TB
-    N["Nitheesh<br/>PO · Tech Lead · PM<br/>(manages all)"]
+    N["Nitheesh<br/>Tech Lead · Full-stack<br/>(manages all)"]
     P["Prakalya<br/>BA + Frontend (back office)"]
     K["Kamesh<br/>Backend"]
     M["Meyyarivu<br/>Frontend Lead"]

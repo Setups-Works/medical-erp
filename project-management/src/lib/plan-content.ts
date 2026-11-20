@@ -17,7 +17,7 @@ export const AREA_OF: Record<Slug, Area> = {
 };
 
 export const ROLE_OF: Record<Slug, string> = {
-  nitheesh: "Product Owner, Tech Lead & PM",
+  nitheesh: "Tech Lead & Full-stack Engineer",
   prakalya: "Business Analyst + Frontend",
   kamesh: "Backend Engineer",
   meyyarivu: "Frontend Lead",
