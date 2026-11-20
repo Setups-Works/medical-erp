@@ -34,7 +34,7 @@ import {
  */
 
 export const TEAM = [
-  { slug: "nitheesh", name: "Nitheesh", title: "Product Owner, Tech Lead & PM", role: "admin", tint: "violet" },
+  { slug: "nitheesh", name: "Nitheesh", title: "Tech Lead & Full-stack Engineer", role: "admin", tint: "violet" },
   { slug: "prakalya", name: "Prakalya", title: "Business Analyst + Frontend", role: "member", tint: "pink" },
   { slug: "kamesh", name: "Kamesh", title: "Backend Engineer", role: "member", tint: "blue" },
   { slug: "meyyarivu", name: "Meyyarivu", title: "Frontend Lead", role: "member", tint: "green" },

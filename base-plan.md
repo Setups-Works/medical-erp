@@ -44,7 +44,7 @@ The objective is to create one unified platform with Retail and Wholesale editio
 
 | Member | Designation | Primary Responsibility |
 |---|---|---|
-| Nitheesh | Product Owner & Technical Lead | Architecture, product development, technical decisions |
+| Nitheesh | Tech Lead & Full-stack Engineer | Architecture, product development, technical decisions |
 | Prakalya | Business Analyst & Product Operations | Business requirements, workflows, documentation |
 | Kamesh | Backend Engineer | Spring Boot, APIs, database and business logic |
 | Meyyarivu | Frontend Engineer | Next.js, UI, frontend architecture |
@@ -53,7 +53,7 @@ The objective is to create one unified platform with Retail and Wholesale editio
 
 All members are initially beginners/freshers. Responsibilities are ownership areas, with mentoring and cross-training encouraged.
 
-## 2.1 Nitheesh — Product Owner & Technical Lead
+## 2.1 Nitheesh — Tech Lead & Full-stack Engineer
 
 Responsibilities:
 

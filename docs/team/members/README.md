@@ -10,7 +10,7 @@ Each member has a folder with:
 
 | Member | Role | Folder | Main paths owned |
 |---|---|---|---|
-| Nitheesh | Product Owner, Tech Lead & PM (backend + frontend) | [nitheesh/](nitheesh/README.md) | Platform, finance, dashboards, reports, CRM (full stack); auth/sync/notifications/integrations backend; architecture, contracts |
+| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | [nitheesh/](nitheesh/README.md) | Platform, finance, dashboards, reports, CRM (full stack); auth/sync/notifications/integrations backend; architecture, contracts |
 | Prakalya | Business Analyst + Frontend (parties) · 40 tasks | [prakalya/](prakalya/README.md) | `docs/product`, `docs/business-requirements`, `docs/workflows`, compliance research; web `parties` |
 | Kamesh | Backend Engineer | [kamesh/](kamesh/README.md) | Backend modules catalog, party, pricing, purchase, inventory, sales, returns, compliance, taxation + their migrations |
 | Meyyarivu | Frontend Lead | [meyyarivu/](meyyarivu/README.md) | `packages/ui`, `packages/validation`, `docs/design`, app shell; web auth, purchase, inventory, pos, returns, wholesale, pricing, gst, compliance |
