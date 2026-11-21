@@ -41,7 +41,7 @@ Fill the last two columns in the meeting, then update each ADR's Status and the 
 | 0006 | Shared schema + RLS | Cross-tenant test base class owner (Nitheesh, P1) | | |
 | 0007 | Inventory ledger + immutable documents | Kamesh's ER v1 follows it? | | |
 | 0008 | Mobile deferred to P7 | — | | |
-| 0009 | Plain resources + Problem Details | **Proposed.** Accept the error shape, `code` registry and status table? | | |
+| 0009 | Plain resources + Problem Details | Accepted on 2026-11-21. Walk through the error shape, `code` registry and status table so everyone can use it | Accepted | |
 | 0010 | UUIDv7 keys | Library choice for Java and TS | | |
 | 0011 | Shared calculation vectors | First 40 vectors ready (Ashok + Prakalya)? | | |
 | 0012 | Paper-and-ink design language | Design check script in CI from P1 | | |
@@ -54,7 +54,7 @@ Approve each row: owner agrees, acceptance criteria exist in the Hub task, depen
 
 | Deliverable | Owner | Depends on | Approved |
 |---|---|---|---|
-| Spring Boot skeleton, Modulith test, `common/error` (ADR-0009), OpenAPI export, Flyway, Testcontainers base | Nitheesh | ADR-0009 accepted | |
+| Spring Boot skeleton, Modulith test, `common/error` (ADR-0009), OpenAPI export, Flyway, Testcontainers base | Nitheesh | ADR-0009 (accepted) | |
 | `security/`: JWT, refresh rotation, cookie, `PermissionChecker` | Nitheesh | skeleton | |
 | `tenancy/` + RLS + cross-tenant test base | Nitheesh (+ Kamesh) | skeleton | |
 | Docker Compose (postgres, redis, minio, mailpit), Dockerfiles, CI pipeline | Jeeva | repo + branch protection | |
