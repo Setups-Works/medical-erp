@@ -12,7 +12,7 @@
 - [x] [nitheesh] Create the GitHub repo `meno`, push the foundation (folders + docs) through a PR into `develop`
 - [x] [nitheesh] Hold the architecture review meeting and accept or change each ADR (`docs/decisions/`)
 - [x] [nitheesh] Decide ADR-0009 (Problem Details vs response envelope) and mark it Accepted
-- [ ] [jeeva] Replace placeholder GitHub handles in `.github/CODEOWNERS` and turn on branch protection
+- [x] [jeeva] Replace placeholder GitHub handles in `.github/CODEOWNERS` and turn on branch protection
 - [x] [prakalya] List every ⚠ VERIFY rule from CALCULATIONS.md and COMPLIANCE.md with who will confirm it and by when
 
 ## P1
