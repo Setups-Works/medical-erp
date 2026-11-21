@@ -11,11 +11,11 @@
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 1 | Review `docs/testing/TEST_STRATEGY.md`; adapt to our tools | Groundwork | — |
-| 2 | Test-case template, defect template, sprint test report template | Groundwork | — |
-| 3 | 40 test vectors JSON with Prakalya (GST, MRP-inclusive, discounts, free qty, rounding) | Groundwork | — |
-| 4 | Learn: Playwright, REST testing (Bruno/Postman), JUnit basics, SQL for verification | Groundwork | — |
-| 5 | Learn the frontend stack (Next.js, TanStack Query, RHF + Zod, shadcn/ui); pair sessions with Meyyarivu | Groundwork | — |
+| 1 | ✅ Review `docs/testing/TEST_STRATEGY.md`; adapt to our tools | Groundwork | — |
+| 2 | ✅ Test-case template, defect template, sprint test report template | Groundwork | — |
+| 3 | ✅ 40 test vectors JSON with Prakalya (GST, MRP-inclusive, discounts, free qty, rounding) | Groundwork | — |
+| 4 | ✅ Learn: Playwright, REST testing (Bruno/Postman), JUnit basics, SQL for verification | Groundwork | — |
+| 5 | ✅ Learn the frontend stack (Next.js, TanStack Query, RHF + Zod, shadcn/ui); pair sessions with Meyyarivu | Groundwork | — |
 
 ## P1 · Platform core (9)
 
