@@ -190,6 +190,9 @@ sec("K. Accounting & finance", "Double-entry ledger: sales, purchases, payments,
  ("Ledger groups", "/finance/account-groups", "Chart-of-accounts tree: groups and sub-groups", "ACX-14", "OW AC"),
  ("Chart of accounts", "/finance/accounts", "Ledgers by group, opening balances, default system ledgers", "ACC-03 ACX-03 ACX-15 ACX-16", "OW AC"),
  ("Posting rules", "/finance/posting-rules", "Which ledgers each document posts to", "ACX-17", "OW AC"),
+ ("TDS / TCS sections", "/finance/tds-sections", "Section and rate masters (data, never hard-coded)", "ACX-06", "OW AC"),
+ ("Fixed assets", "/finance/assets", "Asset master, purchase, depreciation schedule", "ACX-04", "OW AC"),
+ ("Loans", "/finance/loans", "Loan accounts, EMI schedule, interest", "ACX-05", "OW AC"),
  ("General ledger", "/finance/ledger", "Ledger entries with drill-down", "ACX-13 ACC-06", "OW AC AU"),
  ("Customer ledger", "/finance/ledgers/customers", "Receivables", "PTY-06", "OW AC AU"),
  ("Supplier ledger", "/finance/ledgers/suppliers", "Payables", "PTY-06", "OW AC AU"),
@@ -307,6 +310,7 @@ sec("P. Administration & system settings", "", [
  ("Billing & invoices", "/admin/billing", "Platform billing", "ADM-10", "OW SA"),
  ("Settings home", "/admin", "Tiles for every administration page below", "PLT-13", "OW BM"),
  ("Help & support", "/help", "Help centre and support tickets", "ADM-11", ALL),
+ ("My keyboard shortcuts", "/me/shortcuts", "View and change your shortcuts; reset to default", "MKT-08 NAV-04", ALL),
  ("Integrations", "/admin/integrations", "GSP, WhatsApp, SMS, Tally, payments", "ADM-01 INT-01 INT-02 INT-03", "OW"),
 ])
 
