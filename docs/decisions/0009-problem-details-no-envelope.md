@@ -1,8 +1,8 @@
 # ADR-0009: Plain resources + RFC 9457 Problem Details
 
-- Status: Proposed (recommended for acceptance at the Sprint 0 architecture review, day 13)
-- Date: 2026-11-21
-- Deciders: Nitheesh (+ Kamesh, Meyyarivu, Ashok at the review)
+- Status: **Accepted**
+- Date: 2026-11-21 (proposed and accepted)
+- Deciders: Nitheesh
 
 ## Context
 
@@ -52,9 +52,11 @@ We adopt option 2:
 - Must do in P1 (Nitheesh): `common/error` handler, `code` registry per module, page envelope in `common/web`, OpenAPI schema for Problem Details, an error-code → message map in `packages/validation`.
 - Revisit only if a client we must support cannot read `application/problem+json` (none known).
 
-## Review checklist (architecture meeting)
+## Team walk-through (Sprint 0 architecture review)
+
+The decision is accepted. At the review each owner confirms they can work with it; any problem becomes a new ADR that supersedes this one.
 
 - [ ] Kamesh: happy to return resources directly and throw typed exceptions mapped by `common/error`
 - [ ] Meyyarivu: generated client + `errors[]` → form fields works for the purchase grid and POS
 - [ ] Ashok: API tests can assert `status` + `code`; Bruno/Postman collections updated
-- [ ] Decision recorded: Status → **Accepted** (or changed), date and deciders filled in, index in `README.md` updated
+- [x] Decision recorded: Status → **Accepted**, index in `README.md` updated
