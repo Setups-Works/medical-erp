@@ -11,7 +11,8 @@
     "start": "next start -p 4100",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "task-order": "tsx scripts/task-order.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "6.3.1",

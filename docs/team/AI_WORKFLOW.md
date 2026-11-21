@@ -27,7 +27,7 @@ AGENTS.md (root)                      ← always loaded (CLAUDE.md/GEMINI.md/.cu
 | Agent | Used by | Does |
 |---|---|---|
 | `backend-engineer` | Kamesh, Nitheesh | Spring module work following the module recipe |
-| `frontend-engineer` | Meyyarivu, Prakalya | Screens with the design system and TanStack Query |
+| `frontend-engineer` | Meyyarivu, Nitheesh, Ashok | Screens with the design system and TanStack Query |
 | `qa-engineer` | Ashok | Test cases, Playwright, API and scenario tests |
 | `devops-engineer` | Jeeva | Dockerfiles, Compose, workflows, Bicep, runbooks (never applies to Azure) |
 | `business-analyst` | Prakalya | Stories, FRS sections, workflow diagrams, FEATURES coverage |

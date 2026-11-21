@@ -8,7 +8,7 @@
 
 - **Product & backlog:** final say on scope and priority; you approve every sprint plan (Prakalya grooms the backlog).
 - **People:** daily stand-up, 1:1 every two weeks with each member, mentoring, and rebalancing work when someone is blocked or overloaded.
-- **Quality gates:** you are the **second reviewer on every path** (`* @nitheesh` in CODEOWNERS), and the release go/no-go is yours. You also give the final QA sign-off on the screens Ashok builds (returns, compliance, reports), since he can't sign off his own work.
+- **Quality gates:** you are the **second reviewer on every path** (`* @nitheesh` in CODEOWNERS), and the release go/no-go is yours. You give the final QA sign-off. On the frontend you are one of three (with Meyyarivu and Ashok) who build every screen.
 - **Delivery:** phase gates (`docs/planning/PHASES.md`), `CURRENT_STATE.md`, risks and decisions log.
 - **Budget & access:** Azure spend (with Jeeva), production access, secrets.
 

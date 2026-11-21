@@ -1,5 +1,7 @@
 # Kamesh — phase plan
 
+Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md).
+
 Backend only. Feature tasks for CAT, PTY, PRC, PUR, INV, IJX, MKT, POS, WHS, DOC, RET, CMP, GST come from FEATURES.md in MENO Hub; this list is the module groundwork around them.
 
 ## P0 Foundation

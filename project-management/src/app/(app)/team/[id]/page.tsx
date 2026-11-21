@@ -12,6 +12,7 @@ import { Avatar, Badge, Progress, Skeleton } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { api, useActivity, useTasks } from "@/lib/client";
 import { useLookups } from "@/lib/maps";
+import { withSteps } from "@/lib/steps";
 import type { TaskT } from "@/lib/types";
 
 const TABS = [
@@ -50,7 +51,8 @@ export default function MemberPage() {
   }, [tasks]);
 
   const active = TABS.find((x) => x.key === tab)!;
-  const list = (tasks ?? []).filter(active.match).sort((a, b) => (a.phase || "P9").localeCompare(b.phase || "P9") || a.number - b.number);
+  const { sorted, step } = withSteps(tasks);
+  const list = sorted.filter(active.match);
   const grouped = PHASES.map((p) => ({ phase: p, items: list.filter((t) => t.phase === p) })).filter((g) => g.items.length);
   const other = list.filter((t) => !PHASES.includes(t.phase));
 
@@ -131,10 +133,10 @@ export default function MemberPage() {
                 <p className="px-2 py-1 text-[11.5px] font-medium uppercase tracking-wide text-ink-4">
                   {g.phase} · {g.items.length}
                 </p>
-                <TaskRows tasks={g.items} users={userMap} boards={boardMap} />
+                <TaskRows tasks={g.items} users={userMap} boards={boardMap} steps={step} />
               </div>
             ))}
-            {other.length > 0 && <TaskRows tasks={other} users={userMap} boards={boardMap} />}
+            {other.length > 0 && <TaskRows tasks={other} users={userMap} boards={boardMap} steps={step} />}
           </section>
           <div className="min-w-0 space-y-6">
             <section className="card p-5">

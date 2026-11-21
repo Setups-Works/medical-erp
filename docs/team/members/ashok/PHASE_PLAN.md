@@ -1,8 +1,6 @@
 # Ashok — phase plan
 
-Legend: **[FE]** frontend; everything else is QA.
-
-QA + frontend. MENO Hub also gives you one **QA task per module per phase** (e.g. "QA: Purchase · P3") listing every feature to test, plus the 15 critical scenarios, and the feature tasks for RET, CMP, RPT and ANX screens (from FEATURES.md).
+QA lead + frontend. Legend: **[FE]** frontend; everything else is QA. Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md). MENO Hub also gives you one **QA task per module per phase** for your areas (see the QA column in OWNERSHIP_MATRIX.md) (e.g. "QA: Purchase · P3") listing every feature to test, plus the 15 critical scenarios.
 
 ## P0 Foundation
 - [ ] Review `docs/testing/TEST_STRATEGY.md`; adapt to our tools
@@ -15,16 +13,19 @@ QA + frontend. MENO Hub also gives you one **QA task per module per phase** (e.g
 - [ ] Playwright setup in `apps/web/tests/e2e`, CI job with Jeeva
 - [ ] Auth, roles, tenant isolation test cases; API collection v1
 - [ ] Test vector runner contract (JSON schema) for Java + TS
-- [ ] [FE] First screen with Meyyarivu's page patterns: report filter bar + ReportPage skeleton (web `reports/`)
+- [ ] [FE] First screen on Meyyarivu's patterns: report filter bar + ReportPage skeleton (web `reports/`)
 
 ## P2 Masters
-- [ ] Masters test cases + E2E for item/party CRUD
+- [ ] [FE] Medicine master screens: list, add/edit, details, generic/salt, brand, manufacturer, units + conversion, barcodes (web `catalog/`)
+- [ ] [FE] Suppliers, customers, doctors: list, add/edit, details (web `parties/`)
+- [ ] Masters test cases + E2E for item/party CRUD (screens you didn't build: Prakalya runs QA on yours)
 - [ ] Validation test suite from VALIDATION_AND_BUSINESS_RULES.md (every rule: valid, invalid, boundary), audit log checks
 
 ## P3 Purchase & inventory
 - [ ] Critical scenarios 1, 2, 3, 5 automated (backend scenario tests)
 - [ ] Stock reconciliation verification queries
 - [ ] CSV import negative tests (bad rows, duplicates, unknown items)
+- [ ] [FE] Medicine export, medicine history and supplier price list screens
 - [ ] [FE] Reports centre screens: stock, batch, expiry, purchase reports with export (web `reports/`)
 
 ## P4 Retail POS & returns
@@ -32,20 +33,19 @@ QA + frontend. MENO Hub also gives you one **QA task per module per phase** (e.g
 - [ ] Scenario 11 (duplicate requests → one invoice)
 - [ ] POS E2E: keyboard-only billing, H1 capture, returns, printing
 - [ ] Performance baseline (k6): item search, invoice post
-- [ ] [FE] Returns screens: sales return, purchase return, inspection, credit/debit notes (web `returns/`)
+- [ ] [FE] Returns screens: sales/purchase return, inspection, credit/debit notes (web `returns/`)
 - [ ] [FE] Compliance screens: Schedule H/H1/X registers, prescription register, narcotic stock (web `compliance/`)
-- [ ] [FE] Sales and daily-business reports (web `reports/`)
 
 ## P5 Wholesale, finance, offline
 - [ ] Scenario 12 offline sync: 3-day offline, conflicts, duplicates
 - [ ] Credit limit, outstanding, ageing, ledger balance tests
 - [ ] Security: OWASP ZAP baseline, cross-tenant fuzzing, permission matrix tests
 - [ ] Full regression suite in CI; restore drill verification with Jeeva
+- [ ] [FE] Customer groups and account statements screens (web `parties/`)
 - [ ] [FE] Outstanding, ageing, GST and wholesale reports; analytics screens (web `reports/`)
 
 ## P6 Pilot
 - [ ] GSTR export validation, pilot defect triage, release reports
-- [ ] [FE] UX fixes from pilot on returns, compliance and reports screens
 
 ## P7 Growth
 - [ ] Mobile test strategy

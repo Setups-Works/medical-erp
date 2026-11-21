@@ -12,6 +12,7 @@ import {
   type Slug,
   complianceTask,
   featureOwners,
+  qaOwner,
   featureTask,
   gateTask,
   parsePhases,
@@ -35,16 +36,16 @@ import {
 
 export const TEAM = [
   { slug: "nitheesh", name: "Nitheesh", title: "Tech Lead & Full-stack Engineer", role: "admin", tint: "violet" },
-  { slug: "prakalya", name: "Prakalya", title: "Business Analyst + Frontend", role: "member", tint: "pink" },
+  { slug: "prakalya", name: "Prakalya", title: "Business Analyst + QA (part-time)", role: "member", tint: "pink" },
   { slug: "kamesh", name: "Kamesh", title: "Backend Engineer", role: "member", tint: "blue" },
-  { slug: "meyyarivu", name: "Meyyarivu", title: "Frontend Lead", role: "member", tint: "green" },
-  { slug: "ashok", name: "Ashok", title: "QA Engineer + Frontend", role: "member", tint: "amber" },
+  { slug: "meyyarivu", name: "Meyyarivu", title: "Frontend Lead + QA", role: "member", tint: "green" },
+  { slug: "ashok", name: "Ashok", title: "QA Lead + Frontend", role: "member", tint: "amber" },
   { slug: "jeeva", name: "Jeeva", title: "DevOps Engineer", role: "member", tint: "red" },
 ] as const;
 
 const EMAIL_DOMAIN = process.env.HUB_EMAIL_DOMAIN || "meno.team";
 
-function docsDir() {
+export function docsDir() {
   const candidates = [process.env.MENO_DOCS_PATH, path.resolve(process.cwd(), "../docs"), path.resolve(process.cwd(), "docs")];
   return candidates.find((p) => p && fs.existsSync(path.join(p, "planning"))) ?? null;
 }
@@ -72,9 +73,9 @@ function parseChecklistDoc(md: string) {
       owners = o[1].split("+") as Slug[];
       title = title.slice(o[0].length);
     }
-    const t = title.match(/^\[(BA|FE)\]\s*/);
+    const t = title.match(/^\[(BA|FE|QA)\]\s*/);
     if (t) {
-      tag = t[1] === "BA" ? "business-analysis" : "frontend";
+      tag = t[1] === "BA" ? "business-analysis" : t[1] === "QA" ? "qa" : "frontend";
       title = title.slice(t[0].length);
     }
     items.push({ phase, title: clean(title), done: m[1].toLowerCase() === "x", owners, tag });
@@ -147,6 +148,7 @@ type Draft = {
   area: string;
   content: Content;
   order: number;
+  rank?: number;
 };
 
 export function buildDrafts(dir: string): Draft[] {
@@ -165,7 +167,7 @@ export function buildDrafts(dir: string): Draft[] {
   // 1. Member plans
   for (const t of TEAM) {
     for (const [i, it] of parseChecklistDoc(read(dir, `team/members/${t.slug}/PHASE_PLAN.md`)).entries()) {
-      const area = it.tag === "frontend" ? "frontend" : AREA_OF[t.slug];
+      const area = it.tag === "frontend" ? "frontend" : it.tag === "qa" ? "qa" : AREA_OF[t.slug];
       drafts.push({
         sourceKey: `plan:${t.slug}:${it.phase}:${it.title.slice(0, 120)}`,
         phase: it.phase,
@@ -218,7 +220,7 @@ export function buildDrafts(dir: string): Draft[] {
     });
   }
 
-  // 3b. One QA task per feature prefix per phase (Ashok)
+  // 3b. One QA task per feature prefix per phase, owned by the QA column of the matrix
   const featureList = parseFeatures(read(dir, "product/FEATURES.md"));
   const qaGroups = new Map<string, Feature[]>();
   for (const f of featureList) {
@@ -233,11 +235,11 @@ export function buildDrafts(dir: string): Draft[] {
       phase,
       title: `QA: ${area} · ${phase} (${fs.length} feature${fs.length > 1 ? "s" : ""})`,
       column: col(phase),
-      owners: ["ashok"],
+      owners: [qaOwner(prefix)],
       labels: ["qa", AREA_BY_PREFIX[prefix] ?? "product"],
       priority: fs.some((f) => f.priority === "M") ? "high" : "medium",
       area: "qa",
-      content: qaTask(area, phases[phase], fs.map((f) => ({ id: f.id, title: f.title }))),
+      content: qaTask(area, phases[phase], fs.map((f) => ({ id: f.id, title: f.title })), qaOwner(prefix)),
       order: 8000,
     });
   }
@@ -315,7 +317,46 @@ export function buildDrafts(dir: string): Draft[] {
 
   // de-duplicate by sourceKey (first wins)
   const seen = new Set<string>();
-  return drafts.filter((d) => (seen.has(d.sourceKey) ? false : (seen.add(d.sourceKey), true)));
+  return rankDrafts(drafts.filter((d) => (seen.has(d.sourceKey) ? false : (seen.add(d.sourceKey), true))));
+}
+
+/** Build order of feature areas: foundations first, then the money/stock flow, then finance, reports and extras. */
+const PREFIX_ORDER = "PLT AUT NAV CAT PTY PRC PUR INV IJX MKT POS RET WHS DOC CMP GST ACC ACX DSH RPT ANX CRM ENG NTF ADM INT DSK MOB".split(" ");
+/** Within a phase: groundwork → rules to confirm → features → readiness → critical scenarios → QA → phase gate. */
+const STAGE: Record<string, number> = { plan: 1, compliance: 2, feature: 3, ready: 4, runbook: 4, scenario: 5, qa: 6, gate: 9 };
+const PRIORITY_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 };
+
+/**
+ * Gives every task a global "rank": the order the work should happen in. A developer's own Step 1, 2, 3…
+ * is their tasks sorted by rank, so everyone sees what to do first and what comes next.
+ */
+function rankDrafts(drafts: Draft[]): Draft[] {
+  const phaseIdx = (p: string) => {
+    const i = PHASES.findIndex((x) => x.key === p);
+    return i < 0 ? 99 : i;
+  };
+  const prefixIdx = (d: Draft) => {
+    const p = d.featureId ? d.featureId.slice(0, 3) : d.sourceKey.startsWith("qa:") ? d.sourceKey.split(":")[1] : "";
+    const i = PREFIX_ORDER.indexOf(p);
+    return i < 0 ? 99 : i;
+  };
+  const sorted = drafts
+    .map((d, i) => ({ d, i }))
+    .sort((a, b) => {
+      const x = a.d;
+      const y = b.d;
+      const stage = (d: Draft) => STAGE[d.sourceKey.split(":")[0]] ?? 5;
+      return (
+        phaseIdx(x.phase) - phaseIdx(y.phase) ||
+        stage(x) - stage(y) ||
+        (stage(x) === STAGE.feature ? PRIORITY_ORDER[x.priority] - PRIORITY_ORDER[y.priority] : 0) ||
+        prefixIdx(x) - prefixIdx(y) ||
+        (x.featureId && y.featureId ? x.featureId.localeCompare(y.featureId) : 0) ||
+        x.order - y.order ||
+        a.i - b.i
+      );
+    });
+  return sorted.map(({ d }, i) => ({ ...d, rank: i + 1 }));
 }
 
 export async function seedAll(log: (s: string) => void = () => {}) {
@@ -370,7 +411,7 @@ export async function seedAll(log: (s: string) => void = () => {}) {
 
   const drafts = buildDrafts(dir);
   const existing = new Map(
-    (await Task.find({ sourceKey: { $in: drafts.map((d) => d.sourceKey) } }).select("sourceKey boardId column description checklist autoContent autoAssign assignees").lean()).map((t) => [t.sourceKey!, t]),
+    (await Task.find({ sourceKey: { $in: drafts.map((d) => d.sourceKey) } }).select("sourceKey boardId column description checklist autoContent autoAssign assignees rank archived order").lean()).map((t) => [t.sourceKey!, t]),
   );
 
   // New tasks
@@ -382,7 +423,8 @@ export async function seedAll(log: (s: string) => void = () => {}) {
       fresh.map((d, i) => ({
         boardId: boards[d.phase.toLowerCase()] ?? boards.backlog,
         column: d.column,
-        order: d.order * 10,
+        order: (d.rank ?? d.order) * 10,
+        rank: d.rank ?? 0,
         number: first + i,
         title: d.title,
         description: d.content.description,
@@ -407,6 +449,11 @@ export async function seedAll(log: (s: string) => void = () => {}) {
     const t = existing.get(d.sourceKey);
     if (!t) continue;
     const set: Record<string, unknown> = {};
+    if (t.rank !== d.rank) set.rank = d.rank ?? 0;
+    // Backlog and To do columns follow the planned work order (re-running the seed restores it there).
+    if (["backlog", "todo"].includes(t.column) && t.order !== (d.rank ?? 0) * 10 && d.rank) set.order = d.rank * 10;
+    // Back in the docs after being archived as stale (and never touched by hand): bring it back.
+    if (t.archived && t.autoContent) set.archived = false;
     const legacy = !t.description || t.description.startsWith("From FEATURES.md");
     const untouched = t.autoContent === true || (legacy && !t.checklist?.length);
     if (untouched) {
@@ -417,7 +464,7 @@ export async function seedAll(log: (s: string) => void = () => {}) {
     }
     if (d.featureId && String(t.boardId) === boards.backlog && t.column === "backlog" && boards[d.phase.toLowerCase()]) {
       set.boardId = boards[d.phase.toLowerCase()];
-      set.order = d.order * 10;
+      set.order = (d.rank ?? d.order) * 10;
     }
     // Owners follow OWNERSHIP_MATRIX.md until someone reassigns the task by hand or work starts.
     const wanted = d.owners.map((s) => users[s]).filter(Boolean);
@@ -462,7 +509,7 @@ export async function seedAll(log: (s: string) => void = () => {}) {
         route: c[2].replace(/`/g, ""),
         notes: c[3],
         featureIds: ids(c[4]),
-        meta: { phase: c[5], backend: c[6], frontend: c[7], roles: c[8] },
+        meta: { phase: c[5], backend: c[6], frontend: c[7], roles: c[8], qa: c[9] ?? "" },
         order: po++,
       });
     }

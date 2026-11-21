@@ -37,6 +37,7 @@ export type TaskT = {
   boardId: string;
   column: string;
   order: number;
+  rank?: number;
   number: number;
   title: string;
   description: string;

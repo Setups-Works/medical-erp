@@ -1,9 +1,12 @@
 # Nitheesh — phase plan
 
+Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md).
+
 Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC, ACX, DSH, RPT, ANX, CRM, ENG come from FEATURES.md in MENO Hub; this list is the platform and leadership work around them.
 
 ## P0 Foundation
 - [x] Monorepo folder structure, AGENTS.md files, architecture docs, ADRs
+- [ ] Study 2 existing pharmacy products: features, flows, pain points (share notes with Prakalya)
 - [ ] Review BRD for P1–P3 with Prakalya
 - [ ] Review ER diagram with Kamesh; review wireframes with Meyyarivu
 - [ ] Run architecture review meeting (day 13); approve Sprint 1 backlog
@@ -47,4 +50,5 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [ ] Pilot support rota, weekly pilot review, prioritise feedback
 
 ## P7 Growth
+- [ ] Field-sales and mobile owner app requirements (Prakalya reviews)
 - [ ] Mobile architecture ADR (Expo, shared packages), fieldsales module design

@@ -18,10 +18,10 @@ export const AREA_OF: Record<Slug, Area> = {
 
 export const ROLE_OF: Record<Slug, string> = {
   nitheesh: "Tech Lead & Full-stack Engineer",
-  prakalya: "Business Analyst + Frontend",
+  prakalya: "Business Analyst + QA (part-time)",
   kamesh: "Backend Engineer",
-  meyyarivu: "Frontend Lead",
-  ashok: "QA Engineer + Frontend",
+  meyyarivu: "Frontend Lead + QA",
+  ashok: "QA Lead + Frontend",
   jeeva: "DevOps Engineer",
 };
 
@@ -184,7 +184,7 @@ export function planTask(o: { title: string; owners: Slug[]; phase?: PhaseInfo; 
   return { description: desc.filter((l, i, a) => !(l === "" && a[i - 1] === "")).join("\n"), checklist: cl(steps) };
 }
 
-type FeatureMeta = { module: string; web: string; be: Slug; fe: Slug | null; extra?: Slug };
+type FeatureMeta = { module: string; web: string; be: Slug; fe: Slug | null; extra?: Slug; qa?: Slug };
 
 export const FEATURE_META: Record<string, FeatureMeta> = {
   PLT: { module: "identity · tenancy · auth", web: "users · company · settings", be: "nitheesh", fe: "prakalya" },
@@ -223,8 +223,14 @@ export function applyOwnershipMatrix(md: string) {
     const be = c[4].toLowerCase() as Slug;
     const fe = (c[5].toLowerCase() || null) as Slug | null;
     const extra = (c[7]?.toLowerCase() || undefined) as Slug | undefined;
-    FEATURE_META[c[1]] = { module: c[3], web: c[6] || "—", be, fe, ...(extra ? { extra } : {}) };
+    const qa = (c[8]?.toLowerCase() || undefined) as Slug | undefined;
+    FEATURE_META[c[1]] = { module: c[3], web: c[6] || "—", be, fe, ...(extra ? { extra } : {}), ...(qa ? { qa } : {}) };
   }
+}
+
+/** Who runs QA for a feature prefix (QA column of the matrix); never the person who built it. */
+export function qaOwner(prefix: string): Slug {
+  return FEATURE_META[prefix]?.qa ?? "ashok";
 }
 
 export function featureOwners(id: string): Slug[] {
@@ -241,8 +247,7 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
   const verify = /\(verify\)/.test(f.title);
   const money = /GST|PRC|ACC|ACX|POS|PUR|RET|WHS|DOC/.test(f.id.slice(0, 3));
   const owners = featureOwners(f.id);
-  // Ashok builds these screens, so someone else tests them: nobody signs off their own work.
-  const selfBuilt = m?.fe === "ashok";
+  const qa = cap(qaOwner(f.id.slice(0, 3)));
   const firstModule = m?.module.split(" · ")[0];
   const read = [
     `docs/product/FEATURES.md`,
@@ -259,7 +264,7 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
     `**Feature:** ${f.id} — ${f.title.replace(" (verify)", "")}`,
     `**Edition:** ${EDITION[f.edition] ?? f.edition} · **Phase:** ${phaseLine(phase) || f.phase} · **Priority:** ${PRIORITY[f.priority] ?? f.priority}`,
     m ? `**Backend module:** \`${m.module}\` · **Web feature:** \`${m.web}\`` : "",
-    `**Backend:** ${cap(m?.be ?? "kamesh")}${m?.fe ? ` · **Frontend:** ${cap(m.fe)}` : ""}${m?.extra ? ` · **Infra:** ${cap(m.extra)}` : ""} · **Story:** Prakalya · **QA:** ${selfBuilt ? "Meyyarivu (UI/E2E) · sign-off Nitheesh" : "Ashok"}`,
+    `**Backend:** ${cap(m?.be ?? "kamesh")}${m?.fe ? ` · **Frontend:** ${cap(m.fe)}` : ""}${m?.extra ? ` · **Infra:** ${cap(m.extra)}` : ""} · **Story:** Prakalya · **QA:** ${qa}`,
     "",
     "### Why",
     `Part of "${f.section}" in the feature catalogue. ${f.priority === "M" ? "It is needed for the pilot release." : f.priority === "S" ? "Expected by customers; build it in this phase if time allows." : "Nice to have; build after the Must and Should items."}`,
@@ -271,12 +276,12 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
     "### Done when",
     "- The user story's acceptance criteria all pass on staging",
     "- API, screen and tests are merged through reviewed PRs into `develop`",
-    `- ${selfBuilt ? "Meyyarivu tested it and Nitheesh signed off QA" : "Ashok verified it"} (no open S1/S2) and Prakalya accepted it`,
+    `- ${qa} verified it (no open S1/S2) and Prakalya accepted it`,
   ];
   const steps = [
     "Story: user story + acceptance criteria written (Prakalya)",
     ...(verify ? ["Rules: ⚠ VERIFY items confirmed and source recorded (Prakalya)"] : []),
-    "Test cases written from the acceptance criteria (Ashok)",
+    `Test cases written from the acceptance criteria (${qa})`,
     `Contract PR: endpoints, DTOs, OpenAPI (${cap(m?.be ?? "kamesh")})`,
     "Backend: migration with constraints + RLS, domain rules, service, controller",
     "Validation in all 4 layers; no hard-coded rates, limits, states or option lists (read from configuration)",
@@ -289,8 +294,8 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
           "Frontend: keyboard, accessibility, Light/Dark, 375 px and 1280 px",
         ]
       : []),
-    "Automated tests (E2E/API) added (Ashok)",
-    `Verified on staging, no open S1/S2 (${selfBuilt ? "Meyyarivu; QA sign-off Nitheesh" : "Ashok"})`,
+    `Automated tests (E2E/API) added (${qa})`,
+    `Verified on staging, no open S1/S2 (${qa})`,
     "Docs updated: DATA_MODEL, CURRENT_STATE, module AGENTS.md",
     "Business acceptance (Prakalya)",
   ];
@@ -388,11 +393,11 @@ export function complianceTask(area: string, need: string): Content {
   };
 }
 
-export function qaTask(area: string, phase: PhaseInfo | undefined, features: { id: string; title: string }[]): Content {
+export function qaTask(area: string, phase: PhaseInfo | undefined, features: { id: string; title: string }[], owner: Slug = "ashok"): Content {
   return {
     description: tidy([
       `**What:** Test every ${area} feature planned for ${phase ? phaseLine(phase) : "this phase"} (${features.length} features).`,
-      "**Owner:** Ashok (QA)",
+      owner === "ashok" ? "**Owner:** Ashok (QA lead)" : `**Owner:** ${cap(owner)} (QA; you did not build this area). Ashok reviews your test cases.`,
       "",
       "### Why",
       "A feature is Done only after QA verifies it on staging. This task keeps one place to track QA for the module in this phase.",

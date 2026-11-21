@@ -11,11 +11,11 @@ Full split: [OWNERSHIP_MATRIX.md](../../OWNERSHIP_MATRIX.md). You build **most o
 - `packages/ui/` (tokens, shadcn components), `packages/validation/` (Zod schemas)
 - `docs/design/` (token changes need Nitheesh)
 - Web foundation: `apps/web/src/{app/layout, components, lib, hooks, stores, config, styles}`, routing, TanStack Query setup, MSW mocks, the sidebar from `docs/design/NAVIGATION.md`, and the **page patterns** (ListPage, FormPage, ReportPage, DocumentGrid)
-- Web features: `auth/`, `catalog/`, `purchase/`, `inventory/`, `pos/`, `wholesale/`, `pricing/`, `gst/`
+- Web features: `auth/`, `purchase/`, `inventory/`, `pos/`, `wholesale/`, `pricing/`, `gst/`
 - Desktop renderer UI (sync status, sync issues, device setup). Main process: Nitheesh; packaging: Jeeva.
-- **UI reviewer** for Prakalya's and Nitheesh's screens
+- **UI reviewer** for Nitheesh's and Ashok's screens
 
-Prakalya builds `parties/`. Nitheesh builds `company, branches, users, settings, admin, dashboard, accounting, payments, crm`. Ashok builds `returns, compliance, reports`: you review his UI and test his screens (he can't QA his own work). Build the shared patterns early (P1) so all three can move fast.
+Three of you take all the frontend. Nitheesh builds `company, branches, users, settings, admin, dashboard, accounting, payments, crm`. Ashok builds `catalog, parties, returns, compliance, reports`. Build the shared patterns early (P1) so everyone can move fast.
 
 ## Handoffs
 
@@ -24,6 +24,9 @@ Prakalya builds `parties/`. Nitheesh builds `company, branches, users, settings,
 | Stories + wireframe notes | Prakalya | Screens on staging | Ashok (tests), Prakalya (UAT) |
 | OpenAPI contract PR (merged before you start) | Kamesh | Shared components + page patterns | Prakalya |
 | Generated `api-client`, billing-engine | Nitheesh | `data-testid`s on key elements | Ashok |
+| Nitheesh's dashboard/admin screens and Ashok's reports/analytics screens on staging | Nitheesh | QA results and defects ("QA: …" tasks) | Nitheesh |
+
+> **You also do QA** for DSH and ADM (Nitheesh's screens) and RPT, ANX (Ashok's screens), since they can't test their own work. Follow Ashok's test-case template; Ashok reviews your test cases.
 
 ## Working before the backend is ready
 
