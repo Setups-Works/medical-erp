@@ -13,7 +13,7 @@
 - [x] [nitheesh] Hold the architecture review meeting and accept or change each ADR (`docs/decisions/`)
 - [x] [nitheesh] Decide ADR-0009 (Problem Details vs response envelope) and mark it Accepted
 - [ ] [jeeva] Replace placeholder GitHub handles in `.github/CODEOWNERS` and turn on branch protection
-- [ ] [prakalya] List every ⚠ VERIFY rule from CALCULATIONS.md and COMPLIANCE.md with who will confirm it and by when
+- [x] [prakalya] List every ⚠ VERIFY rule from CALCULATIONS.md and COMPLIANCE.md with who will confirm it and by when
 
 ## P1
 - [ ] [jeeva] Create `.env` files for local/staging from `infrastructure/env/*.example`; store secrets in GitHub Environments

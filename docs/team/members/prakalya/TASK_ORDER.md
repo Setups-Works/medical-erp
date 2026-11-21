@@ -11,11 +11,11 @@
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 1 | Interview 1 retail + 1 wholesale pharmacy (notes in `docs/workflows/`) | Groundwork | — |
-| 2 | BRD for Platform, Masters, Purchase, Inventory, POS (`docs/business-requirements/brd/`) | Groundwork | — |
-| 3 | Review GLOSSARY, FEATURES and PAGES; permission matrix role × action (`frs/PERMISSIONS.md`) | Groundwork | — |
-| 4 | 40 test vectors with Ashok | Groundwork | — |
-| 5 | List every ⚠ VERIFY rule from CALCULATIONS.md and COMPLIANCE.md with who will confirm it and by when | Readiness | — |
+| 1 | ✅ Interview 1 retail + 1 wholesale pharmacy (notes in `docs/workflows/`) | Groundwork | — |
+| 2 | ✅ BRD for Platform, Masters, Purchase, Inventory, POS (`docs/business-requirements/brd/`) | Groundwork | — |
+| 3 | ✅ Review GLOSSARY, FEATURES and PAGES; permission matrix role × action (`frs/PERMISSIONS.md`) | Groundwork | — |
+| 4 | ✅ 40 test vectors with Ashok | Groundwork | — |
+| 5 | ✅ List every ⚠ VERIFY rule from CALCULATIONS.md and COMPLIANCE.md with who will confirm it and by when | Readiness | — |
 
 ## P1 · Platform core (3)
 
