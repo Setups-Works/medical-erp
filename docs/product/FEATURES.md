@@ -428,6 +428,10 @@ Added after mapping every page in [PAGES.md](PAGES.md) to a feature. Each page i
 |---|---|---|---|---|
 | ACX-12 | Cash-flow statement | B | P6 | S |
 | ACX-13 | Finance dashboard and general ledger page (drill down from any balance to vouchers to documents) | B | P5 | M |
+| ACX-14 | Ledger group master: chart-of-accounts tree (Asset / Liability / Equity / Income / Expense → sub-groups such as Current Assets → Sundry Debtors); user sub-groups; system groups locked | B | P5 | M |
+| ACX-15 | Default chart of accounts seeded on company set-up (CHART_OF_ACCOUNTS.md: 24 groups, 43 ledgers for cash, bank, sales, purchase, returns, GST input/output, round-off, discounts, expiry loss, expenses); system ledgers renamable, never deletable ⚠ confirm with CA | B | P5 | M |
+| ACX-16 | Party ledgers created automatically: every supplier under Sundry Creditors, every customer under Sundry Debtors, linked to the party master | B | P5 | M |
+| ACX-17 | Posting rules: each document event (sale, purchase, returns, receipt, payment, write-off, expense) mapped to system ledgers by code, effective-dated; posting is refused if a ledger is missing | B | P5 | M |
 | GST-09 | GST configuration: registrations per company, rate master, reverse-charge and composition settings (data, never hard-coded) | B | P2 | M |
 | GST-10 | Input tax credit register from purchases | B | P6 | M |
 | GST-11 | Invoice GST validation before posting (GSTIN format/state, place of supply, HSN, rate, totals) | B | P3 | M |

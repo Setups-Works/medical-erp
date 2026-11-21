@@ -16,6 +16,7 @@
 | E-way bill | Movement of goods above ₹50,000 (state variations) | ⚠ VERIFY |
 | GST returns | GSTR-1, 3B data exports; composition dealers file differently | ⚠ VERIFY |
 | Record retention | Accounts & invoices retained ~6–8 years | ⚠ VERIFY |
+| Default chart of accounts | Groups, system ledgers and posting rules in `docs/architecture/CHART_OF_ACCOUNTS.md` (incl. stock write-off entry and free-goods cost) reviewed by a CA | ⚠ VERIFY with CA before P5 |
 | DPDP Act 2023 | Notice, consent, purpose limitation, data principal rights, breach notification | ⚠ VERIFY with lawyer |
 | State rules | State drug controller specifics | ⚠ per pilot state (Tamil Nadu first) |
 

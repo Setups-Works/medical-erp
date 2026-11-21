@@ -6,7 +6,7 @@
 |---|---|
 | **Status** | Foundation (P0): architecture, documentation and planning are complete; application code starts in P1 |
 | **Team board** | MENO Hub: https://setupsworks-pms.vercel.app (sign in with your team email) |
-| **Scope** | 284 features · 255 pages · 10 roles · 8 phases (P0–P7) |
+| **Scope** | 288 features · 258 pages · 10 roles · 8 phases (P0–P7) |
 | **Pilot target** | End of P5 (≈ June 2027), see [PHASES.md](docs/planning/PHASES.md) |
 
 ---

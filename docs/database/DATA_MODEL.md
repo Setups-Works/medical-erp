@@ -99,7 +99,10 @@ Common line columns: `id, doc_id, line_no, item_id, batch_id, qty, free_qty, rat
 
 ### payment / accounting
 - `payment(id, tenant_id, branch_id, party_id, direction[IN|OUT], mode[CASH|UPI|CARD|BANK|CHEQUE], amount, reference, payment_date)`, `payment_allocation(payment_id, document_type, document_id, amount)`
-- `ledger_account(id, tenant_id, company_id, code, name, type[ASSET|LIABILITY|INCOME|EXPENSE|EQUITY], party_id null)`
+- `ledger_group(id, tenant_id, company_id, parent_id null, code, name, nature[ASSET|LIABILITY|EQUITY|INCOME|EXPENSE], affects_gross_profit, system_code null, is_system, sort_order)` — the chart-of-accounts tree (ACX-14). UNIQUE (company_id, system_code); a child's nature equals its parent's (CHECK via trigger); system groups can't be deleted or change nature.
+- `ledger_account(id, tenant_id, company_id, group_id, code, name, nature, system_code null, is_system, party_id null, opening_balance numeric(18,4), opening_side[DR|CR], active)` — nature always equals the group's nature; UNIQUE (company_id, system_code); UNIQUE (company_id, party_id) so each party has one ledger (ACX-16).
+- `posting_rule(id, tenant_id, company_id, event, line_role, side[DR|CR], ledger_system_code, valid_from, valid_to)` — which system ledger each document line posts to (ACX-17), effective-dated.
+- Defaults for groups, ledgers and posting rules: `docs/architecture/CHART_OF_ACCOUNTS.md` → `contracts/reference-data/chart-of-accounts.v1.json`, seeded per company by the books wizard (ACX-11).
 - `voucher(id, tenant_id, company_id, type, date, source_type, source_id, narration)` / `voucher_entry(voucher_id, ledger_account_id, debit, credit)` — Σ debit = Σ credit (CHECK via trigger)
 
 ### platform

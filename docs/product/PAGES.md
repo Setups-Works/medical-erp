@@ -2,7 +2,7 @@
 
 > Every screen MENO will have, grouped A–P. **Generated** by `scripts/docs/build_pages.py` from the page list in that script, `FEATURES.md` (phases) and `docs/team/OWNERSHIP_MATRIX.md` (owners): edit those, then re-run the script. MENO Hub shows this catalogue on its Product map with live status.
 
-**255 pages** in 16 sections. Frontend: Ashok 94 · Meyyarivu 84 · Nitheesh 77.
+**258 pages** in 16 sections. Frontend: Ashok 94 · Meyyarivu 84 · Nitheesh 80.
 
 - **Phase**: the phase in which the page is complete (latest phase among its features). Pages can appear earlier with partial functionality.
 - **Backend / Frontend / QA**: owners of the page's first feature prefix (QA is never the person who built it). Frontend is split between Meyyarivu, Nitheesh and Ashok.
@@ -23,6 +23,7 @@ Public and first-run pages.
 | Pharmacy setup | `/onboarding/pharmacy` | Drug licences, GSTIN, company details | PLT-01, PLT-02, GST-09 | P2 | Nitheesh | Nitheesh | OW | Ashok |
 | Branch setup | `/onboarding/branches` | Create branches and warehouses | PLT-03, MKT-06 | P5 | Nitheesh | Nitheesh | OW | Ashok |
 | Initial configuration | `/onboarding/configuration` | Tax, invoice series, currency, units, rounding | AUT-02, PLT-05, CAT-17 | P2 | Nitheesh | Meyyarivu | OW | Ashok |
+| Books setup | `/onboarding/books` | Chart of accounts, bank accounts, financial year, opening balances | ACX-11, ACX-15 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
 | Subscription selection | `/onboarding/plan` | Choose plan / trial | PLT-14 | P6 | Nitheesh | Nitheesh | OW | Ashok |
 | Onboarding checklist | `/onboarding` | Setup steps with progress until ready to bill | AUT-03 | P2 | Nitheesh | Meyyarivu | OW BM | Ashok |
 
@@ -229,7 +230,9 @@ Double-entry ledger: sales, purchases, payments, returns and taxes post controll
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles | QA |
 |---|---|---|---|---|---|---|---|---|
 | Finance dashboard | `/dashboard/finance` | Financial summary | DSH-05, ACX-13 | P5 | Nitheesh | Nitheesh | OW AC | Meyyarivu |
-| Chart of accounts | `/finance/accounts` | Account hierarchy | ACC-03, ACX-03 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
+| Ledger groups | `/finance/account-groups` | Chart-of-accounts tree: groups and sub-groups | ACX-14 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
+| Chart of accounts | `/finance/accounts` | Ledgers by group, opening balances, default system ledgers | ACC-03, ACX-03, ACX-15, ACX-16 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
+| Posting rules | `/finance/posting-rules` | Which ledgers each document posts to | ACX-17 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
 | General ledger | `/finance/ledger` | Ledger entries with drill-down | ACX-13, ACC-06 | P5 | Nitheesh | Nitheesh | OW AC AU | Ashok |
 | Customer ledger | `/finance/ledgers/customers` | Receivables | PTY-06 | P5 | Kamesh | Ashok | OW AC AU | Prakalya |
 | Supplier ledger | `/finance/ledgers/suppliers` | Payables | PTY-06 | P5 | Kamesh | Ashok | OW AC AU | Prakalya |
