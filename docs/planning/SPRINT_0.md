@@ -4,7 +4,7 @@
 |---|---|---|
 | 1 | All | Kick-off: read README, AGENTS.md, VISION, FEATURES, GLOSSARY. Each member reads their `docs/team/members/<name>/` folder |
 | 1–2 | All | Product walkthrough; visit/call 2 pharmacies (1 retail, 1 wholesale); note workflows |
-| 2 | Jeeva | GitHub org + repo `meno`, branch protection (`main`, `develop`), Projects board, labels, CODEOWNERS live |
+| 2 | Jeeva | GitHub org + repo `Setups-Works/medical-erp`, branch protection (`main`, `develop`), Projects board, labels, CODEOWNERS live |
 | 3–4 | Prakalya + Nitheesh | BRD for P1–P3; user-story template filled for P1 |
 | 3–5 | Jeeva | Azure: resource group, budget alerts at $25/$50/$75, staging VM plan, PostgreSQL Flexible plan (no prod yet) |
 | 5–6 | Kamesh + Nitheesh | ER diagram v1 (`docs/database/DATA_MODEL.md`), module template walkthrough |

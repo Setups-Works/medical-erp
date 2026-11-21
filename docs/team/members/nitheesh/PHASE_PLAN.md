@@ -6,10 +6,10 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 
 ## P0 Foundation
 - [x] Monorepo folder structure, AGENTS.md files, architecture docs, ADRs
-- [ ] Study 2 existing pharmacy products: features, flows, pain points (share notes with Prakalya)
+- [x] Study 2 existing pharmacy products: features, flows, pain points (share notes with Prakalya)
 - [ ] Review BRD for P1–P3 with Prakalya
 - [ ] Review ER diagram with Kamesh; review wireframes with Meyyarivu
-- [ ] Run architecture review meeting (day 13); approve Sprint 1 backlog
+- [x] Run architecture review meeting (day 13); approve Sprint 1 backlog
 
 ## P1 Platform core
 - [ ] Backend skeleton: Maven project, Spring Modulith, `ArchitectureTest`, `common/error` (Problem Details), `common/web` (page envelope), `common/money`, `common/validation`
