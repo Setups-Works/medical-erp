@@ -2,7 +2,7 @@
 
 import * as Popover from "@radix-ui/react-popover";
 import { formatDistanceToNowStrict } from "date-fns";
-import { Activity, Bell, CheckSquare, ChevronDown, Files, Home, KanbanSquare, ListChecks, LogOut, Map, Menu as MenuIcon, Moon, Settings, Sun, Users } from "lucide-react";
+import { Activity, Bell, CheckSquare, ChevronDown, Files, GraduationCap, Home, KanbanSquare, ListChecks, LogOut, Map, Menu as MenuIcon, Moon, Settings, Sun, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,6 +18,7 @@ const NAV = [
   { href: "/features", label: "Features", icon: ListChecks },
   { href: "/pages", label: "Pages", icon: Files },
   { href: "/product", label: "Product map", icon: Map },
+  { href: "/learn", label: "Learn", icon: GraduationCap },
   { href: "/team", label: "Team", icon: Users },
   { href: "/activity", label: "Activity", icon: Activity },
 ];
@@ -77,16 +78,16 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-dvh">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[248px] border-r border-line bg-side lg:block">{sidebar}</aside>
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[248px] border-r border-line bg-side lg:block print:hidden!">{sidebar}</aside>
       {open && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <button aria-label="Close menu" className="absolute inset-0 bg-ink/20" onClick={() => setOpen(false)} />
           <aside className="absolute inset-y-0 left-0 w-[264px] bg-side shadow-pop">{sidebar}</aside>
         </div>
       )}
-      <div className="flex min-w-0 flex-1 flex-col lg:pl-[248px]">
+      <div className="flex min-w-0 flex-1 flex-col lg:pl-[248px] print:pl-0!">
         <TopBar onMenu={() => setOpen(true)} />
-        <main className="flex-1 px-[clamp(16px,3vw,40px)] py-7">{children}</main>
+        <main className="flex-1 px-[clamp(16px,3vw,40px)] py-7 print:p-0!">{children}</main>
       </div>
     </div>
   );
@@ -119,7 +120,7 @@ function TopBar({ onMenu }: { onMenu: () => void }) {
   const onlineUsers = users?.filter((u) => online.includes(u.id)) ?? [];
 
   return (
-    <header className="sticky top-0 z-20 flex h-12 items-center gap-2 border-b border-line bg-paper/95 px-[clamp(12px,3vw,40px)] backdrop-blur-0">
+    <header className="sticky top-0 z-20 flex h-12 print:hidden! items-center gap-2 border-b border-line bg-paper/95 px-[clamp(12px,3vw,40px)] backdrop-blur-0">
       <Button variant="ghost" size="icon" className="lg:hidden" onClick={onMenu} aria-label="Open menu">
         <MenuIcon className="size-4" />
       </Button>

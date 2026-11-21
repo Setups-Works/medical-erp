@@ -151,3 +151,46 @@ html,
 
 /* Thin scrollbars for board columns */
 .scroll-thin { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+
+/* ---------- Print (Learn → Download PDF) ---------- */
+@page {
+  size: A4;
+  margin: 14mm 12mm;
+}
+@media print {
+  /* Always print on white paper, even from dark mode. */
+  :root,
+  :root.dark {
+    --paper: #ffffff;
+    --side: #f7f7f7;
+    --raised: #ffffff;
+    --sunken: #f0f0f0;
+    --ink: #242424;
+    --ink-2: #4a4a4a;
+    --ink-3: #5c5c5c;
+    --ink-4: #7a7a7a;
+    --line: #e2e2e2;
+    --line-2: #d4d4d4;
+    --line-3: #8f8f8f;
+    --hover: transparent;
+  }
+  html,
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 12px;
+  }
+  .avoid-break {
+    break-inside: avoid;
+  }
+  .lesson-break {
+    break-before: page;
+  }
+  .learn-section h2 {
+    break-after: avoid;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
