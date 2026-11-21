@@ -13,8 +13,8 @@
 |---|---|---|---|
 | 1 | ✅ Monorepo folder structure, AGENTS.md files, architecture docs, ADRs | Groundwork | — |
 | 2 | ✅ Study 2 existing pharmacy products: features, flows, pain points (share notes with Prakalya) | Groundwork | — |
-| 3 | Review BRD for P1–P3 with Prakalya | Groundwork | — |
-| 4 | Review ER diagram with Kamesh; review wireframes with Meyyarivu | Groundwork | — |
+| 3 | ✅ Review BRD for P1–P3 with Prakalya | Groundwork | — |
+| 4 | ✅ Review ER diagram with Kamesh; review wireframes with Meyyarivu | Groundwork | — |
 | 5 | ✅ Run architecture review meeting (day 13); approve Sprint 1 backlog | Groundwork | — |
 | 6 | ✅ Create the GitHub repo `meno`, push the foundation (folders + docs) through a PR into `develop` | Readiness | — |
 | 7 | ✅ Hold the architecture review meeting and accept or change each ADR (`docs/decisions/`) | Readiness | — |
