@@ -3,11 +3,11 @@
 QA lead + frontend. Legend: **[FE]** frontend; everything else is QA. Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md). MENO Hub also gives you one **QA task per module per phase** for your areas (see the QA column in OWNERSHIP_MATRIX.md) (e.g. "QA: Purchase · P3") listing every feature to test, plus the 15 critical scenarios.
 
 ## P0 Foundation
-- [ ] Review `docs/testing/TEST_STRATEGY.md`; adapt to our tools
-- [ ] Test-case template, defect template, sprint test report template
-- [ ] 40 test vectors JSON with Prakalya (GST, MRP-inclusive, discounts, free qty, rounding)
-- [ ] Learn: Playwright, REST testing (Bruno/Postman), JUnit basics, SQL for verification
-- [ ] [FE] Learn the frontend stack (Next.js, TanStack Query, RHF + Zod, shadcn/ui); pair sessions with Meyyarivu
+- [x] Review `docs/testing/TEST_STRATEGY.md`; adapt to our tools
+- [x] Test-case template, defect template, sprint test report template
+- [x] 40 test vectors JSON with Prakalya (GST, MRP-inclusive, discounts, free qty, rounding)
+- [x] Learn: Playwright, REST testing (Bruno/Postman), JUnit basics, SQL for verification
+- [x] [FE] Learn the frontend stack (Next.js, TanStack Query, RHF + Zod, shadcn/ui); pair sessions with Meyyarivu
 
 ## P1 Platform core
 - [ ] Playwright setup in `apps/web/tests/e2e`, CI job with Jeeva
