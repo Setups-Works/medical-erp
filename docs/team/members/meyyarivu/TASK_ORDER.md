@@ -11,10 +11,10 @@
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 1 | Learn/refresh: Next.js App Router (client-side), TanStack Query, RHF + Zod, shadcn/ui, Tailwind v4 | Groundwork | — |
-| 2 | Read `docs/design/DESIGN_LANGUAGE.md`; wireframes: app shell, POS, purchase grid, list/form/report patterns | Groundwork | — |
-| 3 | POS keyboard map proposal (`docs/design/POS_KEYBOARD.md`) | Groundwork | — |
-| 4 | Pair sessions with Ashok and Nitheesh on the frontend stack | Groundwork | — |
+| 1 | ✅ Learn/refresh: Next.js App Router (client-side), TanStack Query, RHF + Zod, shadcn/ui, Tailwind v4 | Groundwork | — |
+| 2 | ✅ Read `docs/design/DESIGN_LANGUAGE.md`; wireframes: app shell, POS, purchase grid, list/form/report patterns | Groundwork | — |
+| 3 | ✅ POS keyboard map proposal (`docs/design/POS_KEYBOARD.md`) | Groundwork | — |
+| 4 | ✅ Pair sessions with Ashok and Nitheesh on the frontend stack | Groundwork | — |
 
 ## P1 · Platform core (9)
 
