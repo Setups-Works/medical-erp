@@ -1,5 +1,7 @@
 # Sprint 0 architecture review (day 13 of Sprint 0, see SPRINT_0.md)
 
+> **Held. Outcome: all 14 ADRs accepted as written** (ADR-0001 updated for the repo name).
+
 > Owner: Nitheesh · Everyone attends · 90 minutes · Hub tasks: "Run architecture review meeting; approve Sprint 1 backlog" and "Hold the architecture review meeting and accept or change each ADR"
 > Goal: leave the room with every ADR **Accepted** or with a named change, and a Sprint 1 backlog everyone agrees to.
 
@@ -33,20 +35,20 @@ Fill the last two columns in the meeting, then update each ADR's Status and the 
 
 | ADR | Decision | Question to settle in the room | Outcome | Notes |
 |---|---|---|---|---|
-| 0001 | Monorepo, pnpm + Turborepo, Maven | ADR says repo `meno`; the GitHub repo is `Setups-Works/medical-erp`. Keep the name and update ADR-0001, or rename? (Recommendation: keep `medical-erp`, update the ADR; `meno-api` folder names stay.) | | |
-| 0002 | Modular monolith, Spring Modulith | Is everyone clear that only `api` packages are public? | | |
-| 0003 | Next.js static SPA, no API routes | Any page that needs SSR? (Expected: none.) | | |
-| 0004 | Electron + SQLite/SQLCipher offline billing | Native module build (better-sqlite3) owned by Jeeva? | | |
-| 0005 | Azure VM + Docker Compose + managed PostgreSQL | Budget alerts set at $25/$50/$75? | | |
-| 0006 | Shared schema + RLS | Cross-tenant test base class owner (Nitheesh, P1) | | |
-| 0007 | Inventory ledger + immutable documents | Kamesh's ER v1 follows it? | | |
-| 0008 | Mobile deferred to P7 | — | | |
-| 0009 | Plain resources + Problem Details | Accepted on 2026-11-21. Walk through the error shape, `code` registry and status table so everyone can use it | Accepted | |
-| 0010 | UUIDv7 keys | Library choice for Java and TS | | |
-| 0011 | Shared calculation vectors | First 40 vectors ready (Ashok + Prakalya)? | | |
-| 0012 | Paper-and-ink design language | Design check script in CI from P1 | | |
-| 0013 | PostgreSQL only product DB | — | | |
-| 0014 | Configuration over hard-coding | Which settings are needed in P1 (number series, tax config tables)? | | |
+| 0001 | Monorepo, pnpm + Turborepo, Maven | ADR says repo `meno`; the GitHub repo is `Setups-Works/medical-erp`. Keep the name and update ADR-0001, or rename? | Accepted | Repo stays `medical-erp`; ADR-0001 updated; `meno-api` names stay |
+| 0002 | Modular monolith, Spring Modulith | Is everyone clear that only `api` packages are public? | Accepted | |
+| 0003 | Next.js static SPA, no API routes | Any page that needs SSR? (Expected: none.) | Accepted | |
+| 0004 | Electron + SQLite/SQLCipher offline billing | Native module build (better-sqlite3) owned by Jeeva? | Accepted | |
+| 0005 | Azure VM + Docker Compose + managed PostgreSQL | Budget alerts set at $25/$50/$75? | Accepted | |
+| 0006 | Shared schema + RLS | Cross-tenant test base class owner (Nitheesh, P1) | Accepted | |
+| 0007 | Inventory ledger + immutable documents | Kamesh's ER v1 follows it? | Accepted | |
+| 0008 | Mobile deferred to P7 | — | Accepted | |
+| 0009 | Plain resources + Problem Details | Accepted on 2026-11-21. Walk through the error shape, `code` registry and status table so everyone can use it | Accepted | Walked through in the meeting |
+| 0010 | UUIDv7 keys | Library choice for Java and TS | Accepted | |
+| 0011 | Shared calculation vectors | First 40 vectors ready (Ashok + Prakalya)? | Accepted | |
+| 0012 | Paper-and-ink design language | Design check script in CI from P1 | Accepted | |
+| 0013 | PostgreSQL only product DB | — | Accepted | |
+| 0014 | Configuration over hard-coding | Which settings are needed in P1 (number series, tax config tables)? | Accepted | |
 
 ## Sprint 1 backlog to approve (P1, first half)
 
@@ -64,7 +66,7 @@ Approve each row: owner agrees, acceptance criteria exist in the Hub task, depen
 
 ## After the meeting (Nitheesh)
 
-- [ ] Each ADR: Status updated (Accepted / changed), date and deciders; index updated
+- [x] Each ADR: Status updated (Accepted / changed), date and deciders; index updated
 - [ ] Decisions and action items posted in the Hub P0 board discussion
 - [ ] Sprint 1 tasks moved from Backlog to To do on the P1 board
 - [ ] `docs/planning/CURRENT_STATE.md` updated

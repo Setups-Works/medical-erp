@@ -9,9 +9,9 @@
 > Format for the Hub importer: `## P<n>` headings, then `- [ ] [owner] task title`. The owner is a team member's first name in lower case; several owners are separated by `+`.
 
 ## P0
-- [ ] [nitheesh] Create the GitHub repo `meno`, push the foundation (folders + docs) through a PR into `develop`
-- [ ] [nitheesh] Hold the architecture review meeting and accept or change each ADR (`docs/decisions/`)
-- [ ] [nitheesh] Decide ADR-0009 (Problem Details vs response envelope) and mark it Accepted
+- [x] [nitheesh] Create the GitHub repo `meno`, push the foundation (folders + docs) through a PR into `develop`
+- [x] [nitheesh] Hold the architecture review meeting and accept or change each ADR (`docs/decisions/`)
+- [x] [nitheesh] Decide ADR-0009 (Problem Details vs response envelope) and mark it Accepted
 - [ ] [jeeva] Replace placeholder GitHub handles in `.github/CODEOWNERS` and turn on branch protection
 - [ ] [prakalya] List every ⚠ VERIFY rule from CALCULATIONS.md and COMPLIANCE.md with who will confirm it and by when
 
