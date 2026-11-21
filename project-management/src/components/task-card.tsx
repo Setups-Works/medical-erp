@@ -3,14 +3,19 @@
 import { format, isPast, isToday } from "date-fns";
 import { CalendarDays, CheckSquare, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useTaskLinks } from "@/lib/product";
 import type { TaskT, UserT } from "@/lib/types";
 import { Inline } from "./inline";
+import { TaskLinkBadges } from "./task-links";
 import { AvatarStack, Badge, PRIORITY, labelTint } from "./ui";
 
 export function TaskCard({ task, users, onOpen, dragging }: { task: TaskT; users: Map<string, UserT>; onOpen?: () => void; dragging?: boolean }) {
   const done = task.checklist.filter((c) => c.done).length;
   const due = task.dueDate ? new Date(task.dueDate) : null;
   const overdue = due && task.column !== "done" && isPast(due) && !isToday(due);
+  const links = useTaskLinks(task);
+  // The feature ID is shown as a badge, so drop the "PLT-01 " prefix from the title.
+  const title = task.featureId ? task.title.replace(new RegExp(`^${task.featureId}\\s+`), "") : task.title;
   return (
     <div
       role="button"
@@ -35,10 +40,11 @@ export function TaskCard({ task, users, onOpen, dragging }: { task: TaskT; users
           </Badge>
         )}
       </div>
-      <p className={cn("text-[13.5px] leading-snug text-ink", task.column === "done" && "line-through decoration-ink-4")}><Inline text={task.title} /></p>
+      <p className={cn("text-[13.5px] leading-snug text-ink", task.column === "done" && "line-through decoration-ink-4")}><Inline text={title} /></p>
+      <TaskLinkBadges links={links} />
       {task.labels.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1">
-          {task.labels.slice(0, 3).map((l) => (
+        <div className="mt-1.5 flex flex-wrap gap-1">
+          {task.labels.filter((l) => !(l === "feature" && links.features.length)).slice(0, 3).map((l) => (
             <Badge key={l} tint={labelTint(l)}>
               {l}
             </Badge>

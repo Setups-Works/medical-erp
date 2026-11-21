@@ -9,6 +9,8 @@ import { api, refresh, useActivity, useTask } from "@/lib/client";
 import type { BoardT, ChecklistItem, TaskT, UserT } from "@/lib/types";
 import { Comments } from "./comments";
 import { Markdown } from "./markdown";
+import { TaskLinkPanel } from "./task-links";
+import { useTaskLinks } from "@/lib/product";
 import { DatePicker } from "./date-picker";
 import { Avatar, Badge, Button, Dialog, Input, Label, PRIORITY, Picker, Progress, Skeleton, Textarea, labelTint } from "./ui";
 
@@ -59,6 +61,7 @@ function TaskBody({ task, board, users, onClose }: { task: TaskT; board: BoardT;
   const doneCount = checklist.filter((c) => c.done).length;
   const userList = [...users.values()];
   const col = board.columns.find((c) => c.key === task.column);
+  const links = useTaskLinks(task);
 
   return (
     <div className="grid gap-6 md:grid-cols-[1fr_240px]">
@@ -71,6 +74,7 @@ function TaskBody({ task, board, users, onClose }: { task: TaskT; board: BoardT;
           aria-label="Title"
           className="w-full resize-none bg-transparent font-display text-[22px] font-semibold leading-tight tracking-[-0.022em] outline-none field-sizing-content"
         />
+        <TaskLinkPanel links={links} />
         <div>
           <div className="mb-1.5 flex items-center justify-between">
             <Label className="mb-0">Description</Label>
@@ -243,11 +247,6 @@ function TaskBody({ task, board, users, onClose }: { task: TaskT; board: BoardT;
             <Input value={newLabel} onChange={(e) => setNewLabel(e.target.value)} placeholder="Add label + Enter" className="h-8 text-[13px]" />
           </form>
         </Field>
-        {task.featureId && (
-          <Field label="Feature">
-            <span className="font-mono text-[13px]">{task.featureId}</span>
-          </Field>
-        )}
         <div className="border-t border-line pt-3">
           <ArchiveButton
             onConfirm={async () => {
