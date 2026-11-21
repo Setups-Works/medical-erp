@@ -11,9 +11,9 @@
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 1 | Learn: Spring Boot 4 basics, Spring Data JPA, Flyway, Testcontainers, Spring Modulith (links in `docs/team/ONBOARDING.md`) | Groundwork | — |
-| 2 | ER diagram v1 for catalog, party, purchase, inventory, sales (`docs/database/DATA_MODEL.md`) | Groundwork | — |
-| 3 | Walk through module template with Nitheesh | Groundwork | — |
+| 1 | ✅ Learn: Spring Boot 4 basics, Spring Data JPA, Flyway, Testcontainers, Spring Modulith (links in `docs/team/ONBOARDING.md`) | Groundwork | — |
+| 2 | ✅ ER diagram v1 for catalog, party, purchase, inventory, sales (`docs/database/DATA_MODEL.md`) | Groundwork | — |
+| 3 | ✅ Walk through module template with Nitheesh | Groundwork | — |
 
 ## P1 · Platform core (4)
 

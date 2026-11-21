@@ -11,11 +11,11 @@
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 1 | GitHub org/repo `meno`, branches `main` + `develop`, protection rules, CODEOWNERS, labels, Projects board | Groundwork | — |
-| 2 | Azure: subscription check, resource group `rg-meno-staging`, budget alerts | Groundwork | — |
-| 3 | Design docs: CI pipeline, environments, naming (`docs/deployment/ENVIRONMENTS.md`) | Groundwork | — |
-| 4 | Learn: Docker, Compose, GitHub Actions, Nginx, Linux basics, Azure CLI/Bicep | Groundwork | — |
-| 5 | Replace placeholder GitHub handles in `.github/CODEOWNERS` and turn on branch protection | Readiness | — |
+| 1 | ✅ GitHub org/repo `meno`, branches `main` + `develop`, protection rules, CODEOWNERS, labels, Projects board | Groundwork | — |
+| 2 | ✅ Azure: subscription check, resource group `rg-meno-staging`, budget alerts | Groundwork | — |
+| 3 | ✅ Design docs: CI pipeline, environments, naming (`docs/deployment/ENVIRONMENTS.md`) | Groundwork | — |
+| 4 | ✅ Learn: Docker, Compose, GitHub Actions, Nginx, Linux basics, Azure CLI/Bicep | Groundwork | — |
+| 5 | ✅ Replace placeholder GitHub handles in `.github/CODEOWNERS` and turn on branch protection | Readiness | — |
 
 ## P1 · Platform core (7)
 

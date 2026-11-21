@@ -5,9 +5,9 @@ Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORD
 Backend only. Feature tasks for CAT, PTY, PRC, PUR, INV, IJX, MKT, POS, WHS, DOC, RET, CMP, GST come from FEATURES.md in MENO Hub; this list is the module groundwork around them.
 
 ## P0 Foundation
-- [ ] Learn: Spring Boot 4 basics, Spring Data JPA, Flyway, Testcontainers, Spring Modulith (links in `docs/team/ONBOARDING.md`)
-- [ ] ER diagram v1 for catalog, party, purchase, inventory, sales (`docs/database/DATA_MODEL.md`)
-- [ ] Walk through module template with Nitheesh
+- [x] Learn: Spring Boot 4 basics, Spring Data JPA, Flyway, Testcontainers, Spring Modulith (links in `docs/team/ONBOARDING.md`)
+- [x] ER diagram v1 for catalog, party, purchase, inventory, sales (`docs/database/DATA_MODEL.md`)
+- [x] Walk through module template with Nitheesh
 
 ## P1 Platform core
 - [ ] Help Nitheesh with `identity` and audit; write the permission seed migration for your modules
