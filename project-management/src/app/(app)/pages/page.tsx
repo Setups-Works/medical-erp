@@ -2,7 +2,7 @@
 
 import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { CheckBox } from "@/components/check";
 import { Filters } from "@/components/filters";
@@ -21,6 +21,11 @@ export default function PagesPage() {
   const { data } = useProductMap();
   const { users } = useLookups();
   const [q, setQ] = useState("");
+  // Task badges link here with ?q=<feature id or route>; read it after mount (static export, no Suspense needed).
+  useEffect(() => {
+    const initial = new URLSearchParams(window.location.search).get("q");
+    if (initial) setQ(initial);
+  }, []);
   const [phase, setPhase] = useState("");
   const [owner, setOwner] = useState("");
   const [status, setStatus] = useState<"all" | "open" | "done">("all");
