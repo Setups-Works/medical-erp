@@ -2,7 +2,7 @@
 
 ## Your job in one line
 
-Own the frontend foundation and the high-speed transactional screens — POS, purchase entry, inventory, returns, wholesale — all in one consistent "paper and ink" look, fast and keyboard-first.
+Own the frontend foundation and the high-speed transactional screens — POS, purchase entry, inventory, wholesale — all in one consistent "paper and ink" look, fast and keyboard-first.
 
 ## You own (CODEOWNER)
 
@@ -11,11 +11,11 @@ Full split: [OWNERSHIP_MATRIX.md](../../OWNERSHIP_MATRIX.md). You build **most o
 - `packages/ui/` (tokens, shadcn components), `packages/validation/` (Zod schemas)
 - `docs/design/` (token changes need Nitheesh)
 - Web foundation: `apps/web/src/{app/layout, components, lib, hooks, stores, config, styles}`, routing, TanStack Query setup, MSW mocks, the sidebar from `docs/design/NAVIGATION.md`, and the **page patterns** (ListPage, FormPage, ReportPage, DocumentGrid)
-- Web features: `auth/`, `catalog/`, `purchase/`, `inventory/`, `pos/`, `returns/`, `wholesale/`, `pricing/`, `gst/`, `compliance/`
+- Web features: `auth/`, `catalog/`, `purchase/`, `inventory/`, `pos/`, `wholesale/`, `pricing/`, `gst/`
 - Desktop renderer UI (sync status, sync issues, device setup). Main process: Nitheesh; packaging: Jeeva.
 - **UI reviewer** for Prakalya's and Nitheesh's screens
 
-Prakalya builds `parties/`. Nitheesh builds `company, branches, users, settings, admin, dashboard, reports, accounting, payments, crm`. Build the shared patterns early (P1) so both can move fast.
+Prakalya builds `parties/`. Nitheesh builds `company, branches, users, settings, admin, dashboard, accounting, payments, crm`. Ashok builds `returns, compliance, reports`: you review his UI and test his screens (he can't QA his own work). Build the shared patterns early (P1) so all three can move fast.
 
 ## Handoffs
 

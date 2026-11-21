@@ -32,7 +32,7 @@ Each role lands on its own dashboard (ROLES_AND_DASHBOARDS.md). Widgets come fro
 
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles |
 |---|---|---|---|---|---|---|---|
-| Main dashboard | `/dashboard` | Sales, purchases, stock, profit overview | RPT-01, DSH-01, DSH-08 | P4 | Nitheesh | Nitheesh | OW BM |
+| Main dashboard | `/dashboard` | Sales, purchases, stock, profit overview | RPT-01, DSH-01, DSH-08 | P4 | Nitheesh | Ashok | OW BM |
 | Retail dashboard | `/dashboard/retail` | Counter sales, daily bills, collections | DSH-02 | P4 | Nitheesh | Nitheesh | OW BM PH BO |
 | Wholesale dashboard | `/dashboard/wholesale` | Distributor sales, orders, receivables | DSH-03 | P5 | Nitheesh | Nitheesh | OW WM |
 | Inventory dashboard | `/dashboard/inventory` | Total stock, low stock, expiry | DSH-04 | P3 | Nitheesh | Nitheesh | OW BM IM |
@@ -78,10 +78,10 @@ Medicine fields (required unless noted): product name, generic name, brand, manu
 | Supplier details | `/masters/suppliers/[id]` | Profile and business details | PTY-01 | P2 | Kamesh | Prakalya | OW BM IM AC |
 | Supplier ledger | `/masters/suppliers/[id]/ledger` | Debit and credit history | PTY-06 | P5 | Kamesh | Prakalya | OW AC AU |
 | Supplier outstanding | `/masters/suppliers/[id]/outstanding` | Payable balances and ageing | PTY-06, ACC-09 | P5 | Kamesh | Prakalya | OW AC |
-| Supplier transactions | `/masters/suppliers/[id]/purchases` | Purchase history | RPT-03 | P3 | Nitheesh | Nitheesh | OW BM IM AC |
+| Supplier transactions | `/masters/suppliers/[id]/purchases` | Purchase history | RPT-03 | P3 | Nitheesh | Ashok | OW BM IM AC |
 | Supplier payments | `/finance/payments?supplier=[id]` | Payment management | ACC-02 | P5 | Nitheesh | Nitheesh | OW AC |
-| Supplier returns | `/purchase/returns?supplier=[id]` | Return history | RET-03 | P4 | Kamesh | Meyyarivu | OW BM IM |
-| Supplier claims | `/purchase/claims` | Expiry/damage claims until credit note | RET-04 | P4 | Kamesh | Meyyarivu | OW BM IM AC |
+| Supplier returns | `/purchase/returns?supplier=[id]` | Return history | RET-03 | P4 | Kamesh | Ashok | OW BM IM |
+| Supplier claims | `/purchase/claims` | Expiry/damage claims until credit note | RET-04 | P4 | Kamesh | Ashok | OW BM IM AC |
 | Supplier price list | `/masters/suppliers/[id]/prices` | Supplier-specific rates | PTY-11 | P3 | Kamesh | Prakalya | OW IM |
 | Supplier import | `/admin/imports?type=suppliers` | Bulk data import | PLT-16, ADM-06 | P3 | Nitheesh | Nitheesh | OW |
 
@@ -114,11 +114,11 @@ Medicine fields (required unless noted): product name, generic name, brand, manu
 | Purchase import | `/purchase/import` | Excel, CSV and supported invoice formats | PUR-04 | P3 | Kamesh | Meyyarivu | OW IM |
 | Goods received note | `/purchase/grn` | Goods inward | PUR-03, DOC-02 | P3 | Kamesh | Meyyarivu | OW BM IM |
 | Purchase verification | `/purchase/verification` | Verify quantity and batch against PO/GRN | PUR-14 | P3 | Kamesh | Meyyarivu | OW BM IM |
-| Purchase return | `/purchase/returns` | Return to supplier | RET-03 | P4 | Kamesh | Meyyarivu | OW BM IM |
-| Purchase debit note | `/purchase/debit-notes` | Supplier adjustment | RET-03 | P4 | Kamesh | Meyyarivu | OW AC |
+| Purchase return | `/purchase/returns` | Return to supplier | RET-03 | P4 | Kamesh | Ashok | OW BM IM |
+| Purchase debit note | `/purchase/debit-notes` | Supplier adjustment | RET-03 | P4 | Kamesh | Ashok | OW AC |
 | Purchase payment | `/finance/payments/new?type=supplier` | Supplier payment | ACC-02 | P5 | Nitheesh | Nitheesh | OW AC |
 | Pending purchases | `/purchase/pending` | Unreceived / partially received orders | PUR-13 | P3 | Kamesh | Meyyarivu | OW BM IM |
-| Purchase history | `/reports/purchase` | Historical transactions | RPT-03 | P3 | Nitheesh | Nitheesh | OW BM IM AC AU |
+| Purchase history | `/reports/purchase` | Historical transactions | RPT-03 | P3 | Nitheesh | Ashok | OW BM IM AC AU |
 | Purchase price analysis | `/purchase/price-analysis` | Compare supplier prices | PUR-09, PUR-15 | P5 | Kamesh | Meyyarivu | OW IM |
 | Purchase approval | `/admin/approvals?type=purchase` | Approval workflow above thresholds | PLT-19 | P5 | Nitheesh | Nitheesh | OW BM |
 
@@ -131,7 +131,7 @@ Default batch selection is FEFO; authorised users may override with a recorded r
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles |
 |---|---|---|---|---|---|---|---|
 | Inventory dashboard | `/dashboard/inventory` | Inventory KPIs | DSH-04 | P3 | Nitheesh | Nitheesh | OW BM IM |
-| Stock overview | `/inventory/stock` | All medicine stock | RPT-04, INV-10 | P3 | Nitheesh | Nitheesh | OW BM IM PH |
+| Stock overview | `/inventory/stock` | All medicine stock | RPT-04, INV-10 | P3 | Nitheesh | Ashok | OW BM IM PH |
 | Batch stock | `/inventory/batches` | Batch-wise quantity | INV-01 | P3 | Kamesh | Meyyarivu | OW BM IM PH |
 | Batch details | `/inventory/batches/[id]` | Batch history and traceability | INV-01, INV-02, RPT-14 | P4 | Kamesh | Meyyarivu | OW BM IM AU |
 | Expiry dashboard | `/inventory/expiry` | Near-expiry stock with actions | INV-05 | P3 | Kamesh | Meyyarivu | OW BM IM |
@@ -145,13 +145,13 @@ Default batch selection is FEFO; authorised users may override with a recorded r
 | Stock valuation | `/inventory/valuation` | Inventory value | INV-10 | P3 | Kamesh | Meyyarivu | OW AC AU |
 | Low stock | `/inventory/low-stock` | Reorder candidates | INV-06 | P3 | Kamesh | Meyyarivu | OW BM IM |
 | Non-moving stock | `/inventory/non-moving` | Dead stock | INV-13 | P5 | Kamesh | Meyyarivu | OW BM IM |
-| Fast-moving stock | `/inventory/fast-moving` | High-demand medicines (ABC) | ANX-02 | P5 | Nitheesh | Nitheesh | OW BM IM |
+| Fast-moving stock | `/inventory/fast-moving` | High-demand medicines (ABC) | ANX-02 | P5 | Nitheesh | Ashok | OW BM IM |
 | Stock aging | `/inventory/aging` | Inventory aging | INV-16 | P5 | Kamesh | Meyyarivu | OW BM IM AC |
 | Stock movement | `/inventory/movements` | Inward / outward history | INV-02, RPT-04 | P3 | Kamesh | Meyyarivu | OW BM IM AU |
 | Reorder management | `/inventory/reorder` | Automatic reorder suggestions | PUR-11, CAT-08, MKT-01 | P5 | Kamesh | Meyyarivu | OW BM IM |
 | Stock reservation | `/inventory/reservations` | Reserved quantities | INV-17 | P5 | Kamesh | Meyyarivu | OW BM IM WM |
 | Damage management | `/inventory/damaged` | Damaged stock bucket | MKT-04 | P4 | Kamesh | Meyyarivu | OW BM IM |
-| Expiry claims | `/purchase/claims` | Supplier return claims | RET-04 | P4 | Kamesh | Meyyarivu | OW BM IM AC |
+| Expiry claims | `/purchase/claims` | Supplier return claims | RET-04 | P4 | Kamesh | Ashok | OW BM IM AC |
 
 ## H. Retail sales & POS
 
@@ -161,9 +161,9 @@ Default batch selection is FEFO; authorised users may override with a recorded r
 | New sales invoice | `/sales/invoices/new` | Create invoice (non-POS) | POS-10, WHS-03 | P5 | Kamesh | Meyyarivu | OW BM PH BO |
 | Sales invoice list | `/sales/invoices` | Invoice history | POS-20 | P4 | Kamesh | Meyyarivu | OW BM PH BO AC AU |
 | Invoice details | `/sales/invoices/[id]` | Complete invoice, reprint, share | POS-20, POS-11 | P4 | Kamesh | Meyyarivu | OW BM PH BO AC AU |
-| Sales returns | `/sales/returns` | Return management | RET-01, POS-12 | P4 | Kamesh | Meyyarivu | OW BM PH BO |
-| Sales return details | `/sales/returns/[id]` | Return history | RET-01 | P4 | Kamesh | Meyyarivu | OW BM PH BO AC |
-| Credit notes | `/sales/credit-notes` | Customer adjustments | RET-02 | P4 | Kamesh | Meyyarivu | OW BM AC |
+| Sales returns | `/sales/returns` | Return management | RET-01, POS-12 | P4 | Kamesh | Ashok | OW BM PH BO |
+| Sales return details | `/sales/returns/[id]` | Return history | RET-01 | P4 | Kamesh | Ashok | OW BM PH BO AC |
+| Credit notes | `/sales/credit-notes` | Customer adjustments | RET-02 | P4 | Kamesh | Ashok | OW BM AC |
 | Quotations | `/sales/quotations` | Estimates | POS-19 | P5 | Kamesh | Meyyarivu | OW BM PH BO WM |
 | Sales orders | `/sales/orders` | Customer orders | WHS-01 | P5 | Kamesh | Meyyarivu | OW BM WM |
 | Delivery challans | `/sales/challans` | Dispatch documents | DOC-01 | P5 | Kamesh | Meyyarivu | OW BM WM |
@@ -201,7 +201,7 @@ POS must support: barcode scanner, search by name / generic or salt / manufactur
 | E-way bill workflow | `/gst/eway-bills` | Prepare documentation for eligible shipments | WHS-07 | P5 | Kamesh | Meyyarivu | OW WM AC |
 | Customer claims | `/wholesale/claims` | Claims and adjustments | WHS-13 | P5 | Kamesh | Meyyarivu | OW WM AC |
 | Scheme claims | `/wholesale/scheme-claims` | Scheme reconciliation with manufacturers | WHS-14 | P6 | Kamesh | Meyyarivu | OW WM AC |
-| Sales performance | `/reports/sales-performance` | Customer and salesman analytics | ANX-03, WHS-09 | P6 | Nitheesh | Nitheesh | OW WM |
+| Sales performance | `/reports/sales-performance` | Customer and salesman analytics | ANX-03, WHS-09 | P6 | Nitheesh | Ashok | OW WM |
 
 Wholesale must support: PTR / PTS / MRP pricing, customer-specific price, company-wise discount (PRC-11), product-wise and free-quantity schemes, credit days and limits, bill-wise outstanding, partial payments, delivery challans, multiple warehouses, stock allocation (INV-17), batch traceability, expiry and damage claims, replacement management (RET-07).
 
@@ -209,18 +209,18 @@ Wholesale must support: PTR / PTS / MRP pricing, customer-specific price, compan
 
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles |
 |---|---|---|---|---|---|---|---|
-| Sales return list | `/sales/returns` | Retail and wholesale returns | RET-01 | P4 | Kamesh | Meyyarivu | OW BM PH BO WM |
-| Create sales return | `/sales/returns/new` | Return entry against invoice | RET-01, POS-12 | P4 | Kamesh | Meyyarivu | OW BM PH BO WM |
-| Purchase return list | `/purchase/returns` | Supplier returns | RET-03 | P4 | Kamesh | Meyyarivu | OW BM IM |
-| Create purchase return | `/purchase/returns/new` | Purchase return entry | RET-03 | P4 | Kamesh | Meyyarivu | OW BM IM |
-| Expiry return | `/purchase/returns/new?type=expiry` | Expired batch return | RET-04 | P4 | Kamesh | Meyyarivu | OW BM IM |
-| Damage return | `/purchase/returns/new?type=damage` | Damaged products | RET-04, MKT-04 | P4 | Kamesh | Meyyarivu | OW BM IM |
-| Replacement management | `/returns/replacements` | Replacement processing | RET-07 | P5 | Kamesh | Meyyarivu | OW BM WM |
-| Return inspection | `/returns/inspection` | Condition verification per line | RET-08 | P4 | Kamesh | Meyyarivu | OW BM IM PH |
-| Return approval | `/admin/approvals?type=return` | Authorisation above limits | RET-06, PLT-19 | P5 | Kamesh | Meyyarivu | OW BM |
-| Credit note management | `/sales/credit-notes` | Customer adjustments | RET-02 | P4 | Kamesh | Meyyarivu | OW AC |
-| Debit note management | `/purchase/debit-notes` | Supplier adjustments | RET-03 | P4 | Kamesh | Meyyarivu | OW AC |
-| Return claims tracking | `/purchase/claims` | Claim status until settled | RET-04, WHS-13 | P5 | Kamesh | Meyyarivu | OW BM AC |
+| Sales return list | `/sales/returns` | Retail and wholesale returns | RET-01 | P4 | Kamesh | Ashok | OW BM PH BO WM |
+| Create sales return | `/sales/returns/new` | Return entry against invoice | RET-01, POS-12 | P4 | Kamesh | Ashok | OW BM PH BO WM |
+| Purchase return list | `/purchase/returns` | Supplier returns | RET-03 | P4 | Kamesh | Ashok | OW BM IM |
+| Create purchase return | `/purchase/returns/new` | Purchase return entry | RET-03 | P4 | Kamesh | Ashok | OW BM IM |
+| Expiry return | `/purchase/returns/new?type=expiry` | Expired batch return | RET-04 | P4 | Kamesh | Ashok | OW BM IM |
+| Damage return | `/purchase/returns/new?type=damage` | Damaged products | RET-04, MKT-04 | P4 | Kamesh | Ashok | OW BM IM |
+| Replacement management | `/returns/replacements` | Replacement processing | RET-07 | P5 | Kamesh | Ashok | OW BM WM |
+| Return inspection | `/returns/inspection` | Condition verification per line | RET-08 | P4 | Kamesh | Ashok | OW BM IM PH |
+| Return approval | `/admin/approvals?type=return` | Authorisation above limits | RET-06, PLT-19 | P5 | Kamesh | Ashok | OW BM |
+| Credit note management | `/sales/credit-notes` | Customer adjustments | RET-02 | P4 | Kamesh | Ashok | OW AC |
+| Debit note management | `/purchase/debit-notes` | Supplier adjustments | RET-03 | P4 | Kamesh | Ashok | OW AC |
+| Return claims tracking | `/purchase/claims` | Claim status until settled | RET-04, WHS-13 | P5 | Kamesh | Ashok | OW BM AC |
 
 ## K. Accounting & finance
 
@@ -241,8 +241,8 @@ Double-entry ledger: sales, purchases, payments, returns and taxes post controll
 | Income | `/finance/income` | Other income | ACX-02 | P5 | Nitheesh | Nitheesh | OW AC |
 | Journal entries | `/finance/journal` | Accounting journals | ACX-01 | P5 | Nitheesh | Nitheesh | OW AC |
 | Contra entries | `/finance/contra` | Cash / bank transfers | ACX-01 | P5 | Nitheesh | Nitheesh | OW AC |
-| Credit notes | `/sales/credit-notes` | Adjustments | RET-02 | P4 | Kamesh | Meyyarivu | OW AC |
-| Debit notes | `/purchase/debit-notes` | Adjustments | RET-03 | P4 | Kamesh | Meyyarivu | OW AC |
+| Credit notes | `/sales/credit-notes` | Adjustments | RET-02 | P4 | Kamesh | Ashok | OW AC |
+| Debit notes | `/purchase/debit-notes` | Adjustments | RET-03 | P4 | Kamesh | Ashok | OW AC |
 | Bank reconciliation | `/finance/bank-reconciliation` | Bank statement matching | ACC-07 | P6 | Nitheesh | Nitheesh | OW AC |
 | Financial statements | `/finance/statements` | Hub for trial balance, P&L, balance sheet, cash flow | ACX-07, ACC-08 | P6 | Nitheesh | Nitheesh | OW AC AU |
 | Trial balance | `/finance/trial-balance` | Account summary | ACX-07, ACC-08 | P6 | Nitheesh | Nitheesh | OW AC AU |
@@ -266,9 +266,9 @@ Double-entry ledger: sales, purchases, payments, returns and taxes post controll
 | GST reconciliation | `/gst/reconciliation` | Compare books with 2B | GST-05 | P6 | Kamesh | Meyyarivu | OW AC |
 | E-invoice management | `/gst/e-invoices` | IRN workflow where applicable | WHS-06, GST-06 | P5 | Kamesh | Meyyarivu | OW AC WM |
 | E-way bill | `/gst/eway-bills` | Eligible transport workflows | WHS-07, GST-06 | P5 | Kamesh | Meyyarivu | OW AC WM |
-| Tax reports | `/reports/gst` | Tax reporting | RPT-08 | P6 | Nitheesh | Nitheesh | OW AC AU |
+| Tax reports | `/reports/gst` | Tax reporting | RPT-08 | P6 | Nitheesh | Ashok | OW AC AU |
 | Invoice validation | `/gst/validation` | GST field checks before posting | GST-11 | P3 | Kamesh | Meyyarivu | OW AC |
-| Statutory registers | `/compliance/registers` | Applicable record-keeping | CMP-01, CMP-02 | P6 | Kamesh | Meyyarivu | OW PH AU |
+| Statutory registers | `/compliance/registers` | Applicable record-keeping | CMP-01, CMP-02 | P6 | Kamesh | Ashok | OW PH AU |
 
 These pages **prepare, validate and export** records. Do not advertise or build direct filing or government API connectivity until the integration and authorisation exist (VALIDATION_AND_BUSINESS_RULES.md §6).
 
@@ -278,19 +278,19 @@ Exact statutory workflows are built only after the rule is confirmed with a qual
 
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles |
 |---|---|---|---|---|---|---|---|
-| Prescription list | `/compliance/prescriptions` | Prescription records | CMP-03 | P4 | Kamesh | Meyyarivu | OW BM PH AU |
-| Add prescription | `/compliance/prescriptions/new` | Capture prescription | CMP-03, POS-06 | P4 | Kamesh | Meyyarivu | OW BM PH |
-| Prescription details | `/compliance/prescriptions/[id]` | Patient and prescription information | CMP-03 | P4 | Kamesh | Meyyarivu | OW BM PH AU |
-| Prescription attachments | `/compliance/prescriptions/[id]/files` | Image / document uploads | CMP-03 | P4 | Kamesh | Meyyarivu | OW PH |
+| Prescription list | `/compliance/prescriptions` | Prescription records | CMP-03 | P4 | Kamesh | Ashok | OW BM PH AU |
+| Add prescription | `/compliance/prescriptions/new` | Capture prescription | CMP-03, POS-06 | P4 | Kamesh | Ashok | OW BM PH |
+| Prescription details | `/compliance/prescriptions/[id]` | Patient and prescription information | CMP-03 | P4 | Kamesh | Ashok | OW BM PH AU |
+| Prescription attachments | `/compliance/prescriptions/[id]/files` | Image / document uploads | CMP-03 | P4 | Kamesh | Ashok | OW PH |
 | Prescription-linked billing | `/sales/pos?rx=[id]` | Link sale to prescription | POS-06 | P4 | Kamesh | Meyyarivu | PH BO |
-| Patient history | `/compliance/patients/[id]` | Historical prescription records (consent-based) | CMP-08 | P5 | Kamesh | Meyyarivu | OW PH |
-| Restricted medicine alerts | `/compliance/alerts` | Applicable schedule warnings | CMP-09 | P4 | Kamesh | Meyyarivu | OW PH BM |
-| Schedule H/H1 register | `/compliance/registers/h1` | Applicable statutory register | CMP-01 | P4 | Kamesh | Meyyarivu | OW PH AU |
-| Schedule X records | `/compliance/registers/x` | Controlled-drug records | CMP-02 | P6 | Kamesh | Meyyarivu | OW PH AU |
-| Controlled stock register | `/compliance/controlled-stock` | Restricted inventory tracking | CMP-10 | P6 | Kamesh | Meyyarivu | OW PH AU |
-| Pharmacist details | `/compliance/pharmacists` | Authorised personnel | CMP-04 | P4 | Kamesh | Meyyarivu | OW BM |
-| Drug licence management | `/compliance/licences` | Licence records and expiry | CMP-05, PTY-04 | P5 | Kamesh | Meyyarivu | OW BM AU |
-| Regulatory audit | `/compliance/audit` | Compliance activity, inspection pack | CMP-11 | P6 | Kamesh | Meyyarivu | OW AU |
+| Patient history | `/compliance/patients/[id]` | Historical prescription records (consent-based) | CMP-08 | P5 | Kamesh | Ashok | OW PH |
+| Restricted medicine alerts | `/compliance/alerts` | Applicable schedule warnings | CMP-09 | P4 | Kamesh | Ashok | OW PH BM |
+| Schedule H/H1 register | `/compliance/registers/h1` | Applicable statutory register | CMP-01 | P4 | Kamesh | Ashok | OW PH AU |
+| Schedule X records | `/compliance/registers/x` | Controlled-drug records | CMP-02 | P6 | Kamesh | Ashok | OW PH AU |
+| Controlled stock register | `/compliance/controlled-stock` | Restricted inventory tracking | CMP-10 | P6 | Kamesh | Ashok | OW PH AU |
+| Pharmacist details | `/compliance/pharmacists` | Authorised personnel | CMP-04 | P4 | Kamesh | Ashok | OW BM |
+| Drug licence management | `/compliance/licences` | Licence records and expiry | CMP-05, PTY-04 | P5 | Kamesh | Ashok | OW BM AU |
+| Regulatory audit | `/compliance/audit` | Compliance activity, inspection pack | CMP-11 | P6 | Kamesh | Ashok | OW AU |
 
 ## N. CRM & customer engagement
 
@@ -318,28 +318,28 @@ Every report: date range, filters, server pagination, export (Excel / PDF / CSV)
 
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles |
 |---|---|---|---|---|---|---|---|
-| Reports dashboard | `/reports` | Report catalogue, favourites, saved filters | RPT-13 | P4 | Nitheesh | Nitheesh | OW BM AC AU IM WM |
-| Sales report | `/reports/sales` | Sales performance | RPT-02 | P4 | Nitheesh | Nitheesh | OW BM AC AU |
-| Purchase report | `/reports/purchase` | Purchase analysis | RPT-03 | P3 | Nitheesh | Nitheesh | OW BM IM AC AU |
-| Item-wise sales | `/reports/sales/items` | Medicine performance | RPT-02 | P4 | Nitheesh | Nitheesh | OW BM IM |
-| Batch-wise sales | `/reports/sales/batches` | Batch movement and recall traceability | RPT-14 | P4 | Nitheesh | Nitheesh | OW BM IM AU |
-| Customer-wise sales | `/reports/sales/customers` | Customer performance | RPT-02, ANX-03 | P6 | Nitheesh | Nitheesh | OW BM WM |
-| Supplier-wise purchase | `/reports/purchase/suppliers` | Supplier analysis | RPT-03 | P3 | Nitheesh | Nitheesh | OW IM AC |
-| Profit report | `/reports/profit` | Gross margin | RPT-06, ANX-01 | P5 | Nitheesh | Nitheesh | OW AC |
-| Discount report | `/reports/discounts` | Discount analysis | RPT-15 | P4 | Nitheesh | Nitheesh | OW BM AU |
-| Tax report | `/reports/gst` | GST details | RPT-08 | P6 | Nitheesh | Nitheesh | OW AC AU |
-| Stock report | `/reports/stock` | Stock position | RPT-04 | P3 | Nitheesh | Nitheesh | OW BM IM AU |
-| Expiry report | `/reports/expiry` | Expiry analysis | RPT-05 | P3 | Nitheesh | Nitheesh | OW BM IM |
+| Reports dashboard | `/reports` | Report catalogue, favourites, saved filters | RPT-13 | P4 | Nitheesh | Ashok | OW BM AC AU IM WM |
+| Sales report | `/reports/sales` | Sales performance | RPT-02 | P4 | Nitheesh | Ashok | OW BM AC AU |
+| Purchase report | `/reports/purchase` | Purchase analysis | RPT-03 | P3 | Nitheesh | Ashok | OW BM IM AC AU |
+| Item-wise sales | `/reports/sales/items` | Medicine performance | RPT-02 | P4 | Nitheesh | Ashok | OW BM IM |
+| Batch-wise sales | `/reports/sales/batches` | Batch movement and recall traceability | RPT-14 | P4 | Nitheesh | Ashok | OW BM IM AU |
+| Customer-wise sales | `/reports/sales/customers` | Customer performance | RPT-02, ANX-03 | P6 | Nitheesh | Ashok | OW BM WM |
+| Supplier-wise purchase | `/reports/purchase/suppliers` | Supplier analysis | RPT-03 | P3 | Nitheesh | Ashok | OW IM AC |
+| Profit report | `/reports/profit` | Gross margin | RPT-06, ANX-01 | P5 | Nitheesh | Ashok | OW AC |
+| Discount report | `/reports/discounts` | Discount analysis | RPT-15 | P4 | Nitheesh | Ashok | OW BM AU |
+| Tax report | `/reports/gst` | GST details | RPT-08 | P6 | Nitheesh | Ashok | OW AC AU |
+| Stock report | `/reports/stock` | Stock position | RPT-04 | P3 | Nitheesh | Ashok | OW BM IM AU |
+| Expiry report | `/reports/expiry` | Expiry analysis | RPT-05 | P3 | Nitheesh | Ashok | OW BM IM |
 | Stock aging report | `/reports/stock-aging` | Aging | INV-16 | P5 | Kamesh | Meyyarivu | OW IM AC |
 | Dead stock report | `/reports/dead-stock` | Non-moving products | INV-13 | P5 | Kamesh | Meyyarivu | OW BM IM |
 | Reorder report | `/reports/reorder` | Purchase requirements | PUR-11 | P5 | Kamesh | Meyyarivu | OW BM IM |
-| Outstanding report | `/reports/outstanding` | Receivables / payables | RPT-07 | P5 | Nitheesh | Nitheesh | OW AC WM |
+| Outstanding report | `/reports/outstanding` | Receivables / payables | RPT-07 | P5 | Nitheesh | Ashok | OW AC WM |
 | Cash flow report | `/reports/cash-flow` | Cash movement | ACX-12 | P6 | Nitheesh | Nitheesh | OW AC |
 | Financial reports | `/reports/financial` | Final accounts and outstanding reports | ACX-07, RPT-07 | P6 | Nitheesh | Nitheesh | OW AC AU |
-| Branch comparison | `/reports/branches` | Location performance | RPT-10 | P6 | Nitheesh | Nitheesh | OW |
+| Branch comparison | `/reports/branches` | Location performance | RPT-10 | P6 | Nitheesh | Ashok | OW |
 | Salesman report | `/reports/salesmen` | Representative performance | WHS-09 | P5 | Kamesh | Meyyarivu | OW WM |
 | Audit report | `/reports/audit` | User activity | PLT-12 | P2 | Nitheesh | Nitheesh | OW AU |
-| Export centre | `/admin/exports` | Excel / PDF / CSV exports as jobs | RPT-11, ADM-07 | P5 | Nitheesh | Nitheesh | OW AC AU |
+| Export centre | `/admin/exports` | Excel / PDF / CSV exports as jobs | RPT-11, ADM-07 | P5 | Nitheesh | Ashok | OW AC AU |
 
 ## P. Administration & system settings
 

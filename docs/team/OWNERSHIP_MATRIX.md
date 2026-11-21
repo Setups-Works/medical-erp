@@ -6,8 +6,8 @@ Rules of the split:
 - **Kamesh**: backend only (core money and stock modules).
 - **Nitheesh**: backend and frontend (platform, finance, dashboards, reports, CRM) and backend for the platform plumbing. Also manages everything.
 - **Meyyarivu**: frontend lead; most screens, the design system and the app shell.
+- **Ashok**: QA for every feature **plus frontend** for returns, compliance and reports / analytics screens.
 - **Prakalya**: business analysis plus supplier / customer / doctor screens; **40 tasks in total**.
-- **Ashok**: QA only: one QA task per module per phase, the critical scenarios, test plans. Tests every feature.
 - **Jeeva**: DevOps; also the desktop installer and integration infrastructure.
 
 | Prefix | Area | Backend module(s) | Backend | Frontend | Web feature folder(s) | Extra |
@@ -26,13 +26,13 @@ Rules of the split:
 | POS | Retail POS & invoices | sales | kamesh | meyyarivu | pos | |
 | WHS | Wholesale | sales | kamesh | meyyarivu | wholesale | |
 | DOC | Sales & purchase document cycle | sales, purchase | kamesh | meyyarivu | wholesale, purchase | |
-| RET | Returns | returns | kamesh | meyyarivu | returns | |
-| CMP | Pharmacy compliance | compliance | kamesh | meyyarivu | compliance | |
+| RET | Returns | returns | kamesh | ashok | returns | |
+| CMP | Pharmacy compliance | compliance | kamesh | ashok | compliance | |
 | GST | GST & statutory | taxation | kamesh | meyyarivu | gst | |
 | ACC | Payments & accounting | payment, accounting | nitheesh | nitheesh | payments, accounting | |
 | ACX | Full books & finance | accounting | nitheesh | nitheesh | accounting | |
-| RPT | Reports | reporting | nitheesh | nitheesh | reports | |
-| ANX | Analytics | reporting | nitheesh | nitheesh | reports | |
+| RPT | Reports | reporting | nitheesh | ashok | reports | |
+| ANX | Analytics | reporting | nitheesh | ashok | reports | |
 | CRM | CRM & customer care | party, sales, notification | nitheesh | nitheesh | crm | |
 | ENG | Engagement (campaigns) | notification | nitheesh | nitheesh | crm | |
 | NTF | Notifications | notification | nitheesh | meyyarivu | (app shell) | |
@@ -45,6 +45,8 @@ Compliance rules (⚠ items in COMPLIANCE.md) are confirmed by **Nitheesh** with
 
 QA: **Ashok** tests every prefix. The Hub creates one QA task per prefix per phase ("QA: Purchase · P3") listing every feature to test.
 
+**Nobody signs off their own screens:** returns, compliance and reports screens that Ashok builds are tested by Meyyarivu (UI and E2E review) and accepted by Prakalya; Nitheesh gives the final QA sign-off for them.
+
 ## Backend modules by owner
 
 | Owner | Modules (`backend/meno-api/.../modules/`) |
@@ -56,6 +58,7 @@ QA: **Ashok** tests every prefix. The Hub creates one QA task per prefix per pha
 
 | Owner | `apps/web/src/features/` |
 |---|---|
-| Meyyarivu | auth, catalog, purchase, inventory, pos, returns, wholesale, pricing, gst, compliance + app shell, `packages/ui`, page patterns |
+| Meyyarivu | auth, catalog, purchase, inventory, pos, wholesale, pricing, gst + app shell, `packages/ui`, page patterns |
 | Prakalya | parties |
-| Nitheesh | company, branches, users, settings, admin, dashboard, reports, accounting, payments, crm |
+| Nitheesh | company, branches, users, settings, admin, dashboard, accounting, payments, crm |
+| Ashok | returns, compliance, reports |

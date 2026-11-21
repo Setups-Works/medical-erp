@@ -21,7 +21,7 @@ export const ROLE_OF: Record<Slug, string> = {
   prakalya: "Business Analyst + Frontend",
   kamesh: "Backend Engineer",
   meyyarivu: "Frontend Lead",
-  ashok: "QA Engineer",
+  ashok: "QA Engineer + Frontend",
   jeeva: "DevOps Engineer",
 };
 
@@ -158,9 +158,9 @@ function phaseLine(p?: PhaseInfo) {
   return p ? `${p.key} · ${p.name}` : "";
 }
 
-export function planTask(o: { title: string; owners: Slug[]; phase?: PhaseInfo; done?: boolean; source: string }): Content {
+export function planTask(o: { title: string; owners: Slug[]; phase?: PhaseInfo; done?: boolean; source: string; area?: Area }): Content {
   const lead = o.owners[0];
-  const area = AREA_OF[lead];
+  const area = o.area ?? AREA_OF[lead];
   const steps = [...STEPS[area]];
   const desc = [
     `**What:** ${o.title}`,
@@ -241,6 +241,8 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
   const verify = /\(verify\)/.test(f.title);
   const money = /GST|PRC|ACC|ACX|POS|PUR|RET|WHS|DOC/.test(f.id.slice(0, 3));
   const owners = featureOwners(f.id);
+  // Ashok builds these screens, so someone else tests them: nobody signs off their own work.
+  const selfBuilt = m?.fe === "ashok";
   const firstModule = m?.module.split(" · ")[0];
   const read = [
     `docs/product/FEATURES.md`,
@@ -257,7 +259,7 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
     `**Feature:** ${f.id} — ${f.title.replace(" (verify)", "")}`,
     `**Edition:** ${EDITION[f.edition] ?? f.edition} · **Phase:** ${phaseLine(phase) || f.phase} · **Priority:** ${PRIORITY[f.priority] ?? f.priority}`,
     m ? `**Backend module:** \`${m.module}\` · **Web feature:** \`${m.web}\`` : "",
-    `**Backend:** ${cap(m?.be ?? "kamesh")}${m?.fe ? ` · **Frontend:** ${cap(m.fe)}` : ""}${m?.extra ? ` · **Infra:** ${cap(m.extra)}` : ""} · **Story:** Prakalya · **QA:** Ashok`,
+    `**Backend:** ${cap(m?.be ?? "kamesh")}${m?.fe ? ` · **Frontend:** ${cap(m.fe)}` : ""}${m?.extra ? ` · **Infra:** ${cap(m.extra)}` : ""} · **Story:** Prakalya · **QA:** ${selfBuilt ? "Meyyarivu (UI/E2E) · sign-off Nitheesh" : "Ashok"}`,
     "",
     "### Why",
     `Part of "${f.section}" in the feature catalogue. ${f.priority === "M" ? "It is needed for the pilot release." : f.priority === "S" ? "Expected by customers; build it in this phase if time allows." : "Nice to have; build after the Must and Should items."}`,
@@ -269,7 +271,7 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
     "### Done when",
     "- The user story's acceptance criteria all pass on staging",
     "- API, screen and tests are merged through reviewed PRs into `develop`",
-    "- Ashok verified it (no open S1/S2) and Prakalya accepted it",
+    `- ${selfBuilt ? "Meyyarivu tested it and Nitheesh signed off QA" : "Ashok verified it"} (no open S1/S2) and Prakalya accepted it`,
   ];
   const steps = [
     "Story: user story + acceptance criteria written (Prakalya)",
@@ -288,7 +290,7 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
         ]
       : []),
     "Automated tests (E2E/API) added (Ashok)",
-    "Verified on staging, no open S1/S2 (Ashok)",
+    `Verified on staging, no open S1/S2 (${selfBuilt ? "Meyyarivu; QA sign-off Nitheesh" : "Ashok"})`,
     "Docs updated: DATA_MODEL, CURRENT_STATE, module AGENTS.md",
     "Business acceptance (Prakalya)",
   ];

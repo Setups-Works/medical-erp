@@ -10,20 +10,21 @@ Each member has a folder with:
 
 | Member | Role | Folder | Main paths owned |
 |---|---|---|---|
-| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | [nitheesh/](nitheesh/README.md) | Platform, finance, dashboards, reports, CRM (full stack); auth/sync/notifications/integrations backend; architecture, contracts |
+| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | [nitheesh/](nitheesh/README.md) | Platform, finance, dashboards, CRM (full stack), reports backend; auth/sync/notifications/integrations backend; architecture, contracts |
 | Prakalya | Business Analyst + Frontend (parties) · 40 tasks | [prakalya/](prakalya/README.md) | `docs/product`, `docs/business-requirements`, `docs/workflows`, compliance research; web `parties` |
 | Kamesh | Backend Engineer | [kamesh/](kamesh/README.md) | Backend modules catalog, party, pricing, purchase, inventory, sales, returns, compliance, taxation + their migrations |
-| Meyyarivu | Frontend Lead | [meyyarivu/](meyyarivu/README.md) | `packages/ui`, `packages/validation`, `docs/design`, app shell; web auth, purchase, inventory, pos, returns, wholesale, pricing, gst, compliance |
-| Ashok | QA Engineer (QA only) | [ashok/](ashok/README.md) | `docs/testing`, `apps/web/tests/e2e`, backend `scenarios/` tests, API collections; QA task per module per phase |
+| Meyyarivu | Frontend Lead | [meyyarivu/](meyyarivu/README.md) | `packages/ui`, `packages/validation`, `docs/design`, app shell; web auth, catalog, purchase, inventory, pos, wholesale, pricing, gst |
+| Ashok | QA Engineer + Frontend | [ashok/](ashok/README.md) | `docs/testing`, `apps/web/tests/e2e`, backend `scenarios/` tests, API collections; QA task per module per phase; web returns, compliance, reports |
 | Jeeva | DevOps Engineer | [jeeva/](jeeva/README.md) | `infrastructure/`, `.github/workflows`, `docker-compose.yml`, Dockerfiles, desktop packaging |
 
 ## Frontend split
 
 ```
 apps/web/src/features/
-  auth/ catalog/ purchase/ inventory/ pos/ returns/ wholesale/ pricing/ gst/ compliance/ → Meyyarivu (+ app shell, packages/ui)
+  auth/ catalog/ purchase/ inventory/ pos/ wholesale/ pricing/ gst/                 → Meyyarivu (+ app shell, packages/ui)
   parties/                                                                          → Prakalya
-  company/ branches/ users/ settings/ admin/ dashboard/ reports/ accounting/ payments/ crm/ → Nitheesh
+  company/ branches/ users/ settings/ admin/ dashboard/ accounting/ payments/ crm/ → Nitheesh
+  returns/ compliance/ reports/                                                     → Ashok
 ```
 
 Everything is derived from [OWNERSHIP_MATRIX.md](../OWNERSHIP_MATRIX.md); change that file first.

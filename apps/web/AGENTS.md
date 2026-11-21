@@ -43,9 +43,10 @@ The sidebar menu is defined in `docs/design/NAVIGATION.md` (Dashboard + 9 groups
 
 | Feature folders | Owner |
 |---|---|
-| `auth catalog purchase inventory pos returns wholesale pricing gst compliance` + shell | Meyyarivu |
+| `auth catalog purchase inventory pos wholesale pricing gst` + shell | Meyyarivu |
 | `parties` | Prakalya |
-| `company branches users settings admin dashboard reports accounting payments crm` | Nitheesh |
+| `company branches users settings admin dashboard accounting payments crm` | Nitheesh |
+| `returns compliance reports` | Ashok |
 
 Source of truth: `docs/team/OWNERSHIP_MATRIX.md`.
 

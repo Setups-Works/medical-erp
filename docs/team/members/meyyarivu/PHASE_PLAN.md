@@ -1,6 +1,6 @@
 # Meyyarivu — phase plan
 
-Frontend lead. Feature tasks for CAT, POS, PUR, INV, IJX, MKT, WHS, DOC, RET, PRC, GST, CMP, AUT, NAV, NTF, DSK, MOB screens come from FEATURES.md in MENO Hub; this list is the foundation work around them.
+Frontend lead. Feature tasks for CAT, POS, PUR, INV, IJX, MKT, WHS, DOC, PRC, GST, AUT, NAV, NTF, DSK, MOB screens come from FEATURES.md in MENO Hub; this list is the foundation work around them.
 
 ## P0 Foundation
 - [ ] Learn/refresh: Next.js App Router (client-side), TanStack Query, RHF + Zod, shadcn/ui, Tailwind v4
@@ -31,7 +31,8 @@ Frontend lead. Feature tasks for CAT, POS, PUR, INV, IJX, MKT, WHS, DOC, RET, PR
 - [ ] POS: barcode-first, search by name/salt/manufacturer, batch picker, payments, hold/recall, discount approval
 - [ ] Prescription capture and restricted-medicine alerts
 - [ ] Print templates (thermal 2"/3", A4/A5)
-- [ ] Returns screens with inspection, notification centre
+- [ ] Notification centre
+- [ ] UI review + E2E test pass on Ashok's returns and compliance screens
 
 ## P5 Wholesale, finance, offline
 - [ ] Wholesale order entry, pick list, invoice, credit warnings, price lists and schemes screens

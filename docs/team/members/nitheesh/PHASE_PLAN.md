@@ -25,7 +25,7 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 ## P3 Purchase & inventory
 - [ ] `packages/billing-engine` (decimal.js) passing all test vectors, with Kamesh's Java engines
 - [ ] `reporting` module: report framework (filters, pagination, export, permissions), stock/expiry/purchase report views
-- [ ] Reports centre + inventory dashboard screens (web `reports/`, `dashboard/`)
+- [ ] Inventory dashboard screens (web `dashboard/`); report API contracts for Ashok's reports centre
 
 ## P4 Retail POS & returns
 - [ ] Electron main process: window, preload bridge, printing service, scanner input, auto-update hook (Jeeva packages)

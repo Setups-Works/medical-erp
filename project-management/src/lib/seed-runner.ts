@@ -38,7 +38,7 @@ export const TEAM = [
   { slug: "prakalya", name: "Prakalya", title: "Business Analyst + Frontend", role: "member", tint: "pink" },
   { slug: "kamesh", name: "Kamesh", title: "Backend Engineer", role: "member", tint: "blue" },
   { slug: "meyyarivu", name: "Meyyarivu", title: "Frontend Lead", role: "member", tint: "green" },
-  { slug: "ashok", name: "Ashok", title: "QA Engineer", role: "member", tint: "amber" },
+  { slug: "ashok", name: "Ashok", title: "QA Engineer + Frontend", role: "member", tint: "amber" },
   { slug: "jeeva", name: "Jeeva", title: "DevOps Engineer", role: "member", tint: "red" },
 ] as const;
 
@@ -175,7 +175,7 @@ export function buildDrafts(dir: string): Draft[] {
         labels: [...new Set([area, ...(it.tag ? [it.tag] : [])])],
         priority: it.phase === "P0" ? "high" : "medium",
         area,
-        content: planTask({ title: it.title, owners: [t.slug], phase: phases[it.phase], done: it.done, source: `docs/team/members/${t.slug}/PHASE_PLAN.md` }),
+        content: planTask({ title: it.title, owners: [t.slug], phase: phases[it.phase], done: it.done, source: `docs/team/members/${t.slug}/PHASE_PLAN.md`, area }),
         order: 1000 + i,
       });
     }

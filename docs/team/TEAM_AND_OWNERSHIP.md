@@ -8,7 +8,7 @@ flowchart TB
     P["Prakalya<br/>BA + Frontend (back office)"]
     K["Kamesh<br/>Backend"]
     M["Meyyarivu<br/>Frontend Lead"]
-    A["Ashok<br/>QA"]
+    A["Ashok<br/>QA + Frontend"]
     J["Jeeva<br/>DevOps"]
     N --> P & K & M & A & J
     P -- stories --> K & M & A
@@ -33,7 +33,8 @@ R = does it · A = accountable (one per row) · C = consulted · I = informed
 | Backend platform/finance/reporting modules | A/R | I | C | I | C | I |
 | Frontend foundation, design system, transactional screens | A | C | I | R | C | I |
 | Frontend party screens (suppliers, customers, doctors) | A | R | I | C (UI review) | C | I |
-| Frontend admin, finance, dashboards, reports, CRM screens | A/R | C | I | C (UI review) | C | I |
+| Frontend admin, finance, dashboards, CRM screens | A/R | C | I | C (UI review) | C | I |
+| Frontend returns, compliance, reports screens | A | C (UAT) | I | C (UI review, tests) | R | I |
 | Desktop app (offline, devices) | A/R | I | I | R (renderer) | C | R (packaging) |
 | GST/pricing maths & test vectors | A | R (values) | R (Java) | I | R (format) | I |
 | Testing & release recommendation | A | C | R | R | R | C |
@@ -46,7 +47,7 @@ Nitheesh is accountable for everything; the R column says who does the work.
 
 ## Backups (cross-training pairs)
 
-Kamesh ↔ Nitheesh (backend) · Meyyarivu ↔ Nitheesh / Prakalya (frontend) · Ashok ↔ Prakalya (acceptance) · Jeeva ↔ Nitheesh (infra & prod access).
+Kamesh ↔ Nitheesh (backend) · Meyyarivu ↔ Nitheesh / Prakalya (frontend) · Ashok ↔ Prakalya (acceptance) · Ashok ↔ Meyyarivu (frontend) · Jeeva ↔ Nitheesh (infra & prod access).
 
 Per-prefix owners: [OWNERSHIP_MATRIX.md](OWNERSHIP_MATRIX.md).
 
