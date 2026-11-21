@@ -15,6 +15,7 @@ Checks that MENO covers every capability a pharmacy retail + wholesale ERP must 
 | Accounting | ACC-03, ACC-04, ACC-06, ACX-01, ACX-03, ACX-07, ACX-14, ACX-15, ACX-16, ACX-17 | Double entry, vouchers, books, final accounts, ledger groups, default chart of accounts, posting rules |
 | Multi-branch | PLT-02, PLT-03, INV-08, MKT-06 | Companies, branches, warehouses, transfers |
 | Offline operation | POS-15, DSK-02, DSK-05 | Desktop offline billing with safe sync |
+| Desktop navigation & keyboard | NAV-01, NAV-02, NAV-03, NAV-04, NAV-05, MKT-08, POS-01 | Sidebar, desktop menu bar, command search, global and screen shortcuts, per-user customisation |
 | Distributor ordering ecosystem | MKT-03, WHS-10 | Retailer → distributor ordering between MENO tenants |
 | Prescription handling | POS-06, CMP-01, CMP-03, PTY-05 | Rx capture, H1 register, doctor master |
 | Salesman management | DOC-04, WHS-09, DOC-03, MOB-02 | Salesman master, commission, field app |

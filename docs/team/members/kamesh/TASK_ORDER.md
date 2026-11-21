@@ -181,7 +181,7 @@
 | 143 | INV-17 Stock reservation for confirmed orders and held bills (available = on hand − reserved) | Feature | Meyyarivu |
 | 144 | IJX-01 Stock inward / outward vouchers (non-purchase receipts and issues, e.g. samples, free goods from company) | Feature | Meyyarivu |
 | 145 | MKT-06 Multi-warehouse within a branch (godown, cold room, display) with location-level stock | Feature | Meyyarivu |
-| 146 | MKT-08 Customisable keyboard shortcuts per user (settings page) | Feature | Meyyarivu |
+| 146 | MKT-08 Customisable keyboard shortcuts per user (`/me/shortcuts`): change any key from KEYBOARD_SHORTCUTS.md, conflict check, reset to default, synced to desktop | Feature | Meyyarivu |
 | 147 | POS-08 UPI QR on screen / on bill (static VPA QR with amount) | Feature | Meyyarivu |
 | 148 | POS-17 Repeat last bill for a customer (chronic refill) | Feature | Meyyarivu |
 | 149 | POS-19 Estimate / quotation convertible to bill | Feature | Meyyarivu |
