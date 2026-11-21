@@ -457,6 +457,8 @@ export async function seedAll(log: (s: string) => void = () => {}) {
     const legacy = !t.description || t.description.startsWith("From FEATURES.md");
     const untouched = t.autoContent === true || (legacy && !t.checklist?.length);
     if (untouched) {
+      // Generated titles can change too (e.g. "QA: … (9 features)" when features are added).
+      set.title = d.title;
       set.description = d.content.description;
       if (!t.checklist?.some((c) => c.done)) set.checklist = d.content.checklist;
       set.autoContent = true;
