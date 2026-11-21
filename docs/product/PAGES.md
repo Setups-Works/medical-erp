@@ -2,7 +2,7 @@
 
 > Every screen MENO will have, grouped A–P. **Generated** by `scripts/docs/build_pages.py` from the page list in that script, `FEATURES.md` (phases) and `docs/team/OWNERSHIP_MATRIX.md` (owners): edit those, then re-run the script. MENO Hub shows this catalogue on its Product map with live status.
 
-**258 pages** in 16 sections. Frontend: Ashok 94 · Meyyarivu 84 · Nitheesh 80.
+**262 pages** in 16 sections. Frontend: Ashok 94 · Meyyarivu 85 · Nitheesh 83.
 
 - **Phase**: the phase in which the page is complete (latest phase among its features). Pages can appear earlier with partial functionality.
 - **Backend / Frontend / QA**: owners of the page's first feature prefix (QA is never the person who built it). Frontend is split between Meyyarivu, Nitheesh and Ashok.
@@ -233,6 +233,9 @@ Double-entry ledger: sales, purchases, payments, returns and taxes post controll
 | Ledger groups | `/finance/account-groups` | Chart-of-accounts tree: groups and sub-groups | ACX-14 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
 | Chart of accounts | `/finance/accounts` | Ledgers by group, opening balances, default system ledgers | ACC-03, ACX-03, ACX-15, ACX-16 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
 | Posting rules | `/finance/posting-rules` | Which ledgers each document posts to | ACX-17 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
+| TDS / TCS sections | `/finance/tds-sections` | Section and rate masters (data, never hard-coded) | ACX-06 | P6 | Nitheesh | Nitheesh | OW AC | Ashok |
+| Fixed assets | `/finance/assets` | Asset master, purchase, depreciation schedule | ACX-04 | P6 | Nitheesh | Nitheesh | OW AC | Ashok |
+| Loans | `/finance/loans` | Loan accounts, EMI schedule, interest | ACX-05 | P6 | Nitheesh | Nitheesh | OW AC | Ashok |
 | General ledger | `/finance/ledger` | Ledger entries with drill-down | ACX-13, ACC-06 | P5 | Nitheesh | Nitheesh | OW AC AU | Ashok |
 | Customer ledger | `/finance/ledgers/customers` | Receivables | PTY-06 | P5 | Kamesh | Ashok | OW AC AU | Prakalya |
 | Supplier ledger | `/finance/ledgers/suppliers` | Payables | PTY-06 | P5 | Kamesh | Ashok | OW AC AU | Prakalya |
@@ -373,4 +376,5 @@ Every report: date range, filters, server pagination, export (Excel / PDF / CSV)
 | Billing & invoices | `/admin/billing` | Platform billing | ADM-10 | P6 | Nitheesh | Nitheesh | OW SA | Meyyarivu |
 | Settings home | `/admin` | Tiles for every administration page below | PLT-13 | P2 | Nitheesh | Nitheesh | OW BM | Ashok |
 | Help & support | `/help` | Help centre and support tickets | ADM-11 | P6 | Nitheesh | Nitheesh | All | Meyyarivu |
+| My keyboard shortcuts | `/me/shortcuts` | View and change your shortcuts; reset to default | MKT-08, NAV-04 | P5 | Kamesh | Meyyarivu | All | Ashok |
 | Integrations | `/admin/integrations` | GSP, WhatsApp, SMS, Tally, payments | ADM-01, INT-01, INT-02, INT-03 | P6 | Nitheesh | Nitheesh | OW | Meyyarivu |

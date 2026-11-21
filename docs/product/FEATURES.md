@@ -285,7 +285,7 @@ Features that established Indian pharmacy ERPs and GST accounting products offer
 | MKT-05 | Party-wise last rate and last discount shown while billing and purchasing | B | P4 | M |
 | MKT-06 | Multi-warehouse within a branch (godown, cold room, display) with location-level stock | B | P5 | S |
 | MKT-07 | Expiry-based promotions (auto-suggested discount on near-expiry batches) | R | P6 | C |
-| MKT-08 | Customisable keyboard shortcuts per user (settings page) | B | P5 | S |
+| MKT-08 | Customisable keyboard shortcuts per user (`/me/shortcuts`): change any key from KEYBOARD_SHORTCUTS.md, conflict check, reset to default, synced to desktop | B | P5 | S |
 | MKT-09 | AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | B | P7 | C |
 | MKT-10 | Consolidated multi-branch dashboard for chains | B | P6 | S |
 
@@ -350,6 +350,9 @@ Added after checking the full capability list and the app sidebar ([NAVIGATION.m
 |---|---|---|---|---|
 | NAV-01 | **App sidebar navigation**: Dashboard + 10 groups (Sales, Purchase, Inventory, Masters, Wholesale, Finance, CRM & Engagement, Reports, GST & Compliance, Administration) exactly as in NAVIGATION.md; hides items by edition and permission; collapsible rail; remembers open groups | B | P1 | M |
 | NAV-02 | Global command search (`Ctrl K`): jump to any menu item, item, party or document number | B | P4 | S |
+| NAV-03 | **Desktop menu bar** (File, Edit, View, Go, New, Window, Help) built from the same nav config as the sidebar, edition- and permission-aware, accelerators from KEYBOARD_SHORTCUTS.md | B | P4 | M |
+| NAV-04 | **Global keyboard shortcuts**: one shortcut registry, global keys, `G` go-to and `N` create sequences, list keys, form keys (`Ctrl+S`, `Ctrl+Enter`, `Ctrl+P`), shortcut sheet `Ctrl+/`, shortcuts in tooltips and command search (KEYBOARD_SHORTCUTS.md) | B | P2 | M |
+| NAV-05 | **Transaction-screen keyboard map**: purchase entry, sales invoice, transfers and journals use the POS meanings (`F2` item, `F3` party, `F5` batch, `F10` save & post, `Ctrl+Del` remove line); full grid navigation without a mouse | B | P3 | M |
 | CRM-01 | **Customer history** (customer 360): all bills, returns, prescriptions, doctors, outstanding, refill pattern on one page | B | P5 | S |
 | CRM-02 | **Complaints**: log customer/retailer complaints (wrong item, short supply, damaged, billing error) with status, owner, due date, resolution and link to the bill/return | B | P6 | S |
 | ADM-01 | **Integrations** settings page: GST e-invoice provider, WhatsApp, SMS, email, Tally export, payment links: connect, test, see status and last error | B | P5 | S |
