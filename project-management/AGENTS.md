@@ -12,6 +12,7 @@ src/components/       Shell, kanban, task-card, task-dialog, comments, feeds, da
 src/lib/              db (Mongo connection), models (Mongoose), session (jose), api (route wrapper), events (live bus),
                       actions (activity/notify/mentions), seed-runner (imports ../docs), client (SWR hooks), types
 scripts/seed.ts       npm run seed: re-import the plan
+scripts/agent-task.ts npm run agent-task: AI agents start/tick/comment/review a task by number (docs/team/AGENT_TASK_WORKFLOW.md)
 ```
 
 ## Rules

@@ -12,6 +12,10 @@ Every member pairs with an AI agent (Claude Code, Cursor, Copilot, Gemini). This
 6. **Never paste secrets, real customer or patient data** into prompts.
 7. **No AI attribution in git.** Agents must not add `Co-Authored-By` lines or "Generated with" footers to commits or PRs. If your tool adds one automatically, turn it off (Claude Code: `includeCoAuthoredBy: false` in `.claude/settings.json`).
 
+## Working a MENO Hub task
+
+Agents start, update and hand off hub tasks by number with `npm run agent-task` (in `project-management/`): start → tick checklist → comment → review. Only Nitheesh moves a task to Done. Full steps: [AGENT_TASK_WORKFLOW.md](AGENT_TASK_WORKFLOW.md).
+
 ## How context reaches the agent
 
 ```
