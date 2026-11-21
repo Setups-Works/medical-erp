@@ -183,7 +183,7 @@
 | 145 | QA: Sales & purchase document cycle · P5 (2 features) | QA | — |
 | 146 | QA: GST & statutory · P5 (1 feature) | QA | — |
 | 147 | QA: Payments & accounting · P5 (7 features) | QA | — |
-| 148 | QA: Full books & finance · P5 (5 features) | QA | — |
+| 148 | QA: Full books & finance · P5 (9 features) | QA | — |
 | 149 | QA: Notifications · P5 (2 features) | QA | — |
 | 150 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P5 (2 features) | QA | — |
 | 151 | QA: Desktop app & offline · P5 (3 features) | QA | — |

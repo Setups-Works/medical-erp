@@ -12,7 +12,7 @@ Checks that MENO covers every capability a pharmacy retail + wholesale ERP must 
 | Supplier returns | RET-03, RET-04, MKT-04 | Purchase returns, expiry/breakage claims, debit notes |
 | Customer ledger | PTY-06, ACC-01, ACC-09, CRM-01 | Ledger, receipts, ageing, customer history |
 | GST workflows | GST-01, GST-02, GST-03, GST-04, GST-05, GST-06 | Tax calc, HSN summary, GSTR exports, e-invoice/e-way |
-| Accounting | ACC-03, ACC-04, ACC-06, ACX-01, ACX-03, ACX-07 | Double entry, vouchers, books, final accounts |
+| Accounting | ACC-03, ACC-04, ACC-06, ACX-01, ACX-03, ACX-07, ACX-14, ACX-15, ACX-16, ACX-17 | Double entry, vouchers, books, final accounts, ledger groups, default chart of accounts, posting rules |
 | Multi-branch | PLT-02, PLT-03, INV-08, MKT-06 | Companies, branches, warehouses, transfers |
 | Offline operation | POS-15, DSK-02, DSK-05 | Desktop offline billing with safe sync |
 | Distributor ordering ecosystem | MKT-03, WHS-10 | Retailer → distributor ordering between MENO tenants |

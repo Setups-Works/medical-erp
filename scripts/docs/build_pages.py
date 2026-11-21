@@ -28,6 +28,7 @@ sec("A. Authentication & onboarding", "Public and first-run pages.", [
  ("Pharmacy setup", "/onboarding/pharmacy", "Drug licences, GSTIN, company details", "PLT-01 PLT-02 GST-09", "OW"),
  ("Branch setup", "/onboarding/branches", "Create branches and warehouses", "PLT-03 MKT-06", "OW"),
  ("Initial configuration", "/onboarding/configuration", "Tax, invoice series, currency, units, rounding", "AUT-02 PLT-05 CAT-17", "OW"),
+ ("Books setup", "/onboarding/books", "Chart of accounts, bank accounts, financial year, opening balances", "ACX-11 ACX-15", "OW AC"),
  ("Subscription selection", "/onboarding/plan", "Choose plan / trial", "PLT-14", "OW"),
  ("Onboarding checklist", "/onboarding", "Setup steps with progress until ready to bill", "AUT-03", "OW BM"),
 ])
@@ -186,7 +187,9 @@ sec("J. Returns management", "", [
 ])
 sec("K. Accounting & finance", "Double-entry ledger: sales, purchases, payments, returns and taxes post controlled vouchers automatically (ACC-04); manual journals are permission-gated and audited.", [
  ("Finance dashboard", "/dashboard/finance", "Financial summary", "DSH-05 ACX-13", "OW AC"),
- ("Chart of accounts", "/finance/accounts", "Account hierarchy", "ACC-03 ACX-03", "OW AC"),
+ ("Ledger groups", "/finance/account-groups", "Chart-of-accounts tree: groups and sub-groups", "ACX-14", "OW AC"),
+ ("Chart of accounts", "/finance/accounts", "Ledgers by group, opening balances, default system ledgers", "ACC-03 ACX-03 ACX-15 ACX-16", "OW AC"),
+ ("Posting rules", "/finance/posting-rules", "Which ledgers each document posts to", "ACX-17", "OW AC"),
  ("General ledger", "/finance/ledger", "Ledger entries with drill-down", "ACX-13 ACC-06", "OW AC AU"),
  ("Customer ledger", "/finance/ledgers/customers", "Receivables", "PTY-06", "OW AC AU"),
  ("Supplier ledger", "/finance/ledgers/suppliers", "Payables", "PTY-06", "OW AC AU"),
