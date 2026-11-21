@@ -13,7 +13,7 @@ own = {}
 for line in (ROOT/"docs/team/OWNERSHIP_MATRIX.md").read_text().splitlines():
     c = [x.strip() for x in line.split("|")]
     if len(c) > 7 and re.fullmatch(r"[A-Z]{3}", c[1]):
-        own[c[1]] = (c[4].capitalize(), (c[5] or "—").capitalize())
+        own[c[1]] = (c[4].capitalize(), (c[5] or "—").capitalize(), ((c[8] if len(c) > 9 else "") or "Ashok").capitalize())
 
 ALL = "All"
 S = []  # (section, intro, pages); page = (name, route, what, ids, roles)
@@ -314,29 +314,31 @@ def phase(ids):
     return max(ps)
 def owners(ids):
     pre = ids[0][:3]
-    return own.get(pre, ("?", "?"))
+    return own.get(pre, ("?", "?", "Ashok"))
 
 out = ["# Page catalogue", "",
 "> Every screen MENO will have, grouped A–P. **Generated** by `scripts/docs/build_pages.py` from the page list in that script, `FEATURES.md` (phases) and `docs/team/OWNERSHIP_MATRIX.md` (owners): edit those, then re-run the script. MENO Hub shows this catalogue on its Product map with live status.",
 "",
 "- **Phase**: the phase in which the page is complete (latest phase among its features). Pages can appear earlier with partial functionality.",
-"- **Backend / Frontend**: owners of the page's first feature prefix. QA for every page: Ashok.",
+"- **Backend / Frontend / QA**: owners of the page's first feature prefix (QA is never the person who built it). Frontend is split between Meyyarivu, Nitheesh and Ashok.",
 "- **Roles**: SA Super Admin · OW Business Owner · BM Branch Manager · PH Pharmacist · BO Billing Operator · IM Inventory Manager · AC Accountant · WM Wholesale Manager · SR Sales Representative · AU Auditor · All = every signed-in user. Access is enforced by permissions, not by role names (ROLES_AND_DASHBOARDS.md).",
 "- **Validation**: every page follows `docs/architecture/VALIDATION_AND_BUSINESS_RULES.md`.",
 ""]
 total = 0
+fe_count = {}
 for title, intro, pages, note in S:
     out += [f"## {title}", ""]
     if intro: out += [intro, ""]
-    out += ["| Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles |", "|---|---|---|---|---|---|---|---|"]
+    out += ["| Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles | QA |", "|---|---|---|---|---|---|---|---|---|"]
     for name, route, what, ids, roles in pages:
         idl = ids.split()
-        be, fe = owners(idl)
-        out.append(f"| {name} | `{route}` | {what} | {', '.join(idl)} | {phase(idl)} | {be} | {fe} | {roles} |")
+        be, fe, qa = owners(idl)
+        fe_count[fe] = fe_count.get(fe, 0) + 1
+        out.append(f"| {name} | `{route}` | {what} | {', '.join(idl)} | {phase(idl)} | {be} | {fe} | {roles} | {qa} |")
         total += 1
     out.append("")
     if note: out += [note, ""]
-out.insert(3, f"**{total} pages** in {len(S)} sections.")
+out.insert(3, f"**{total} pages** in {len(S)} sections. Frontend: " + " · ".join(f"{k} {v}" for k, v in sorted(fe_count.items(), key=lambda x: -x[1])) + ".")
 out.insert(3, "")
 routes = {r[1].split("?")[0] for _, _, ps, _ in S for r in ps}
 nav_missing = []

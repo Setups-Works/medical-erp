@@ -42,7 +42,7 @@ export function ActivityFeed({ items, users, boards }: { items?: ActivityT[]; us
   );
 }
 
-export function TaskRows({ tasks, users, boards }: { tasks?: TaskT[]; users: Map<string, UserT>; boards: Map<string, BoardT> }) {
+export function TaskRows({ tasks, users, boards, steps }: { tasks?: TaskT[]; users: Map<string, UserT>; boards: Map<string, BoardT>; steps?: Map<string, number> }) {
   if (!tasks) return null;
   if (!tasks.length) return <Empty>No tasks here.</Empty>;
   return (
@@ -54,10 +54,17 @@ export function TaskRows({ tasks, users, boards }: { tasks?: TaskT[]; users: Map
         return (
           <li key={t.id}>
             <Link href={`/boards/${t.boardId}?task=${t.id}`} className="flex items-center gap-3 rounded-ctl px-2 py-2.5 hover:bg-hover">
-              <span className="w-12 shrink-0 font-mono text-[12px] tabular-nums text-ink-4">#{t.number}</span>
+              {steps ? (
+                <span className="w-16 shrink-0 font-mono text-[12px] tabular-nums text-ink-3" title={`Task #${t.number}`}>
+                  Step {steps.get(t.id) ?? "–"}
+                </span>
+              ) : (
+                <span className="w-12 shrink-0 font-mono text-[12px] tabular-nums text-ink-4">#{t.number}</span>
+              )}
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[13.5px] text-ink"><Inline text={t.title} /></span>
                 <span className="text-[12px] text-ink-4">
+                  {steps && <span className="font-mono">#{t.number} · </span>}
                   {b?.name} · {col}
                 </span>
               </span>

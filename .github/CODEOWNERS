@@ -51,25 +51,25 @@
 /apps/web/src/features/purchase/        @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/inventory/       @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/pos/             @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/returns/         @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/wholesale/       @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/pricing/         @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/gst/             @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/compliance/      @meyyarivu-gh @nitheeshdr
-# Master data (Prakalya)
-/apps/web/src/features/catalog/         @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/parties/         @prakalya-gh @meyyarivu-gh
-# Admin, finance, dashboards, reports, CRM (Nitheesh)
+# Admin, finance, dashboards, CRM (Nitheesh)
 /apps/web/src/features/company/         @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/branches/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/users/           @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/settings/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/admin/           @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/dashboard/       @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/reports/         @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/accounting/      @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/payments/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/crm/             @nitheeshdr @meyyarivu-gh
+# Medicine master, parties, returns, compliance, reports (Ashok)
+/apps/web/src/features/catalog/         @ashok-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/parties/         @ashok-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/returns/         @ashok-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/compliance/      @ashok-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/reports/         @ashok-gh @meyyarivu-gh @nitheeshdr
 /apps/web/tests/e2e/                    @ashok-gh @meyyarivu-gh
 
 # Desktop

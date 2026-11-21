@@ -65,5 +65,5 @@
 
 ## P7
 - [ ] [nitheesh] Mobile app ADR (Expo, shared packages) and field-sales module design
-- [ ] [prakalya] Pricing and plans for public launch; subscription billing live
+- [ ] [nitheesh] Pricing and plans for public launch; subscription billing live
 - [ ] [nitheesh] Public launch checklist: marketing site, support channel, status page

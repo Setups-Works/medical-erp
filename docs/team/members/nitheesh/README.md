@@ -1,4 +1,4 @@
-# Nitheesh — Product Owner, Technical Lead & Project Manager
+# Nitheesh — Tech Lead & Full-stack Engineer
 
 ## Your job in one line
 
@@ -8,7 +8,7 @@
 
 - **Product & backlog:** final say on scope and priority; you approve every sprint plan (Prakalya grooms the backlog).
 - **People:** daily stand-up, 1:1 every two weeks with each member, mentoring, and rebalancing work when someone is blocked or overloaded.
-- **Quality gates:** you are the **second reviewer on every path** (`* @nitheesh` in CODEOWNERS), and the release go/no-go is yours.
+- **Quality gates:** you are the **second reviewer on every path** (`* @nitheesh` in CODEOWNERS), and the release go/no-go is yours. You give the final QA sign-off. On the frontend you are one of three (with Meyyarivu and Ashok) who build every screen.
 - **Delivery:** phase gates (`docs/planning/PHASES.md`), `CURRENT_STATE.md`, risks and decisions log.
 - **Budget & access:** Azure spend (with Jeeva), production access, secrets.
 
@@ -16,10 +16,10 @@
 
 Full split: [OWNERSHIP_MATRIX.md](../../OWNERSHIP_MATRIX.md).
 
-- **Backend + frontend (full stack):** platform & admin (PLT, ADM), finance (ACC, ACX), dashboards (DSH), reports & analytics (RPT, ANX), CRM & engagement (CRM, ENG)
+- **Backend + frontend (full stack):** platform & admin (PLT, ADM), finance (ACC, ACX), dashboards (DSH), CRM & engagement (CRM, ENG)
   - Backend modules: `auth`, `tenancy`, `identity`, `subscription`, `audit`, `files`, `sync`, `notification`, `payment`, `accounting`, `reporting`, `fieldsales`, plus `config/ security/ common/ tenancy/ integrations/`
-  - Web features: `company`, `branches`, `users`, `settings`, `admin`, `dashboard`, `reports`, `accounting`, `payments`, `crm`
-- **Backend only:** auth/onboarding (AUT), navigation (NAV), desktop sync (DSK), notifications (NTF), integrations (INT), mobile (MOB). Meyyarivu builds those screens.
+  - Web features: `company`, `branches`, `users`, `settings`, `admin`, `dashboard`, `accounting`, `payments`, `crm`
+- **Backend only:** reports & analytics (RPT, ANX; Ashok builds those screens), auth/onboarding (AUT), navigation (NAV), desktop sync (DSK), notifications (NTF), integrations (INT), mobile (MOB); Meyyarivu builds those screens.
 - Confirms every ⚠ compliance rule with qualified professionals (Prakalya researches); vendor choices (GSP, WhatsApp/SMS), privacy notice, pilot onboarding, launch pricing
 - `AGENTS.md`, `docs/architecture/`, `docs/decisions/`, `docs/planning/`, `contracts/`, `packages/billing-engine`, `packages/types`, `packages/api-client`
 - Final approver for: new dependencies, module dependency changes, migrations touching money/stock tables, `.github/CODEOWNERS`, `docs/team/OWNERSHIP_MATRIX.md

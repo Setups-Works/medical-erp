@@ -40,3 +40,8 @@ apps/desktop/build/
 infrastructure/docker/data/
 !.env.*.example
 !**/.env.*.example
+
+# Vercel CLI link
+.vercel/
+.vercel
+.env*

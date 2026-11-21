@@ -81,7 +81,7 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 |---|---|
 | `catalog`, `party`, number series, tenant settings | Kamesh |
 | `files` module (Blob/MinIO signed URLs), company/branch, edition guard | Nitheesh |
-| Medicine, supplier, customer and doctor master screens | Prakalya (FE) |
+| Medicine, supplier, customer and doctor master screens | Ashok (FE) |
 | Company, branch, settings, number-series screens; onboarding wizard backend | Nitheesh |
 | Shared item/party search combobox, barcode input, onboarding wizard + checklist screens; UI review of masters | Meyyarivu |
 | Seed data scripts, backups on staging, Grafana + Loki | Jeeva |
@@ -101,10 +101,11 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 |---|---|
 | `inventory` ledger, batches, adjustments, reconciliation job | Kamesh |
 | `purchase` posting (PO, GRN, verification), `pricing` + `taxation` engines passing test vectors | Kamesh |
-| `packages/billing-engine` (TS) passing same vectors; import centre; `reporting` framework + reports centre + inventory dashboard | Nitheesh |
+| `packages/billing-engine` (TS) passing same vectors; import centre; `reporting` framework + inventory dashboard | Nitheesh |
+| Reports centre screens (stock, expiry, purchase) | Ashok (FE) |
 | Purchase entry grid (keyboard), import mapping UI, stock & expiry screens | Meyyarivu |
 | Pricing/scheme screens, purchase dashboard, GRN/verification screens | Meyyarivu |
-| Medicine export/history, supplier price list screens | Prakalya (FE) |
+| Medicine export/history, supplier price list screens | Ashok (FE) |
 | Parity CI job (Java vs TS vectors); prod VM provisioned (not public) | Jeeva |
 | Critical scenarios 1, 2, 3, 5 (TEST_STRATEGY), stock reconciliation tests | Ashok |
 | Validation sessions with a real pharmacy on purchase flow | Prakalya (BA) |
@@ -123,8 +124,9 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 | `sales` invoice posting with FEFO, concurrency-safe consumption, idempotency | Kamesh |
 | `returns` (with inspection), `compliance` (H1 register, prescriptions, restricted-medicine guard) | Kamesh |
 | Electron shell: window, printing (thermal/A4), scanner, auto-update | Nitheesh + Jeeva |
-| POS screen (keyboard map), invoice list, print templates, returns UI, prescription + compliance screens | Meyyarivu |
-| Role-based dashboards + widget library, sales registers, reports centre, admin settings (payment, printer, notifications), `notification` module | Nitheesh |
+| POS screen (keyboard map), invoice list, print templates, prescription capture | Meyyarivu |
+| Returns UI, compliance registers, sales registers and reports | Ashok (FE) |
+| Role-based dashboards + widget library, admin settings (payment, printer, notifications), `notification` module | Nitheesh |
 | Windows installer signing + update channel | Jeeva |
 | Concurrency test (scenario 6), duplicate request (11), H1 register checks, performance baseline | Ashok |
 | UAT scripts for retail, training notes | Prakalya (BA) |
@@ -144,7 +146,7 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 | Wholesale orders → invoice, credit control, price lists, e-invoice integration | Kamesh |
 | `payment`, `accounting` auto-posting, outstanding/ageing (backend + screens), finance & wholesale dashboards, customer history | Nitheesh |
 | Wholesale screens (orders, pricing, schemes, credit, dispatch), transfers, e-invoice screens, sync-status UI | Meyyarivu |
-| Customer groups and statements screens | Prakalya (FE) |
+| Customer groups and statements screens | Ashok (FE) |
 | Production go-live: hardening, backups + restore drill, alerts, runbooks | Jeeva |
 | Offline scenario 12, security tests (OWASP top 10, tenant), load test, full regression automation | Ashok |
 | Pilot customer selection, onboarding guide, data migration checklist | Prakalya (BA) |

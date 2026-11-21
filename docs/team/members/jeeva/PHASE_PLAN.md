@@ -1,5 +1,7 @@
 # Jeeva — phase plan
 
+Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md).
+
 ## P0 Foundation
 - [ ] GitHub org/repo `meno`, branches `main` + `develop`, protection rules, CODEOWNERS, labels, Projects board
 - [ ] Azure: subscription check, resource group `rg-meno-staging`, budget alerts
@@ -26,6 +28,7 @@
 - [ ] electron-builder: Windows NSIS installer, code signing plan, auto-update feed (GitHub Releases)
 - [ ] Release workflow: tag → images + desktop build → changelog
 - [ ] Performance test environment for Ashok
+- [ ] Compare GSP/IRP providers (cost, API, sandbox) and share with Nitheesh
 
 ## P5 Wholesale, finance, offline
 - [ ] Production hardening: firewall, fail2ban, SSH keys only, TLS A+, rate limits in Nginx, secrets rotation

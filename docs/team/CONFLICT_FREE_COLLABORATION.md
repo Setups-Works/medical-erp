@@ -20,7 +20,7 @@ sequenceDiagram
     participant N as Nitheesh (approves)
     participant P as Prakalya (BA)
     participant K as Kamesh (backend)
-    participant F as Frontend (Meyyarivu or Prakalya-FE)
+    participant F as Frontend (Meyyarivu, Nitheesh or Ashok)
     participant A as Ashok (QA)
     P->>N: story + acceptance criteria
     N->>K: assigned in sprint
@@ -44,9 +44,9 @@ Changing a merged contract = a new small PR approved by Kamesh and the frontend 
 | Path | Owner |
 |---|---|
 | `packages/ui/**`, `apps/web/src/{components,lib,hooks,stores,config,styles}/**`, root layout | Meyyarivu |
-| `features/{auth,catalog,purchase,inventory,pos,returns,wholesale,pricing,gst,compliance}` + their routes | Meyyarivu |
-| `features/parties` + its routes | Prakalya |
-| `features/{company,branches,users,settings,admin,dashboard,reports,accounting,payments,crm}` + their routes | Nitheesh |
+| `features/{auth,purchase,inventory,pos,wholesale,pricing,gst}` + their routes | Meyyarivu |
+| `features/{company,branches,users,settings,admin,dashboard,accounting,payments,crm}` + their routes | Nitheesh |
+| `features/{catalog,parties,returns,compliance,reports}` + their routes | Ashok |
 | `apps/web/src/lib/query/keys.ts` | shared — **append only**, one line per key group, in your own section |
 | Navigation menu config (`config/nav.ts`) | shared — append your entries in your section |
 

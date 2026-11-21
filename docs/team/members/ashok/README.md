@@ -1,8 +1,8 @@
-# Ashok — QA Engineer
+# Ashok — QA Lead + Frontend
 
 ## Your job in one line
 
-Prove that money, stock, validation and tenant isolation are always right, and give an honest go/no-go for every release. You do QA only: you test every module that Kamesh, Nitheesh, Meyyarivu and Prakalya build.
+Prove that money, stock, validation and tenant isolation are always right, and give an honest go/no-go for every release. You are the **QA lead**: you own the test strategy, the 15 critical scenarios, the release QA report, and QA for the core modules (pricing, purchase, inventory, POS, wholesale, GST, payments, accounting, platform, auth, desktop, integrations). Meyyarivu, Prakalya and Nitheesh also run QA for the areas they didn't build; you review their test cases and keep one standard.
 
 ## You own (CODEOWNER)
 
@@ -12,6 +12,15 @@ Prove that money, stock, validation and tenant isolation are always right, and g
 - `contracts/test-vectors/` **format** and runner (content with Prakalya)
 - API collections (`docs/testing/api-collections/`, Bruno or Postman)
 
+**Frontend** (prefixes CAT, PTY, RET, CMP, RPT, ANX in [OWNERSHIP_MATRIX.md](../../OWNERSHIP_MATRIX.md))
+- `apps/web/src/features/catalog/`: medicine master, generics/salts, brands, manufacturers, units, barcodes, export/history (backend: Kamesh)
+- `apps/web/src/features/parties/`: suppliers, customers, doctors, customer groups, statements, supplier price lists (backend: Kamesh)
+- `apps/web/src/features/returns/`: sales and purchase returns, inspection, credit/debit notes (backend: Kamesh)
+- `apps/web/src/features/compliance/`: Schedule H/H1/X registers, prescription register, narcotic stock (backend: Kamesh)
+- `apps/web/src/features/reports/`: reports centre and analytics, on the `ReportPage` pattern (backend: Nitheesh)
+
+Use Meyyarivu's `packages/ui` components and page patterns; read `apps/web/AGENTS.md` and `docs/design/DESIGN_LANGUAGE.md` before your first screen. **You don't QA your own screens:** Prakalya runs QA for CAT, PTY, RET and CMP, Meyyarivu for RPT and ANX.
+
 ## Handoffs
 
 | You receive | From | You give | To |
@@ -19,6 +28,7 @@ Prove that money, stock, validation and tenant isolation are always right, and g
 | Stories + acceptance criteria | Prakalya | Test cases (before dev starts) | Developers |
 | Features on staging | Team | Defects with steps, expected vs actual, evidence | Owner of the feature |
 | Release candidate | Nitheesh | QA report + release recommendation | Nitheesh |
+| Contract PRs (OpenAPI) for masters, parties, returns, compliance; report APIs | Kamesh; Nitheesh | Your screens with `data-testid`s | Prakalya / Meyyarivu (QA), Prakalya (UAT) |
 
 ## Your AI agent
 

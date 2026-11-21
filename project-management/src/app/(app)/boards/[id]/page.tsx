@@ -6,6 +6,7 @@ import { Suspense, useMemo, useState } from "react";
 import { Comments } from "@/components/comments";
 import { Kanban } from "@/components/kanban";
 import { useLive } from "@/components/live";
+import { NextUp } from "@/components/next-up";
 import { PageHeader } from "@/components/page";
 import { TaskDialog } from "@/components/task-dialog";
 import { Avatar, AvatarStack, Badge, Button, Dialog, Input, PRIORITY, Picker, Progress, Skeleton, labelTint } from "@/components/ui";
@@ -88,6 +89,8 @@ function Board() {
           {done}/{tasks.length} done
         </span>
       </div>
+
+      <NextUp tasks={tasks} users={userMap} meId={me?.id} onOpen={setTask} />
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <div className="relative w-full max-w-64">

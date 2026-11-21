@@ -107,11 +107,11 @@ Environment templates for every environment: [infrastructure/env/](infrastructur
 
 | Member | Role | Owns |
 |---|---|---|
-| Nitheesh | Product Owner, Tech Lead & PM: backend + frontend | Platform & admin, finance, dashboards, reports, CRM; architecture; releases |
+| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | Platform & admin, finance, dashboards, CRM, reports backend; architecture; releases |
 | Kamesh | Backend Engineer | Catalog, parties, pricing, purchase, inventory, sales, returns, compliance, GST modules |
-| Meyyarivu | Frontend Lead | Design system, app shell, POS, medicine master, purchase, inventory, wholesale, returns, GST and compliance screens |
-| Prakalya | Business Analyst + Frontend | Requirements, stories, workflows, supplier/customer/doctor screens |
-| Ashok | QA Engineer | Test strategy, QA for every module, critical scenarios, release recommendation |
+| Meyyarivu | Frontend Lead + QA | Design system, app shell, POS, purchase, inventory, wholesale and GST screens; QA for Nitheesh's and Ashok's screens |
+| Prakalya | Business Analyst + QA (part-time) | Requirements, stories, workflows, UAT; QA for masters, parties, returns, compliance, CRM |
+| Ashok | QA Lead + Frontend | Test strategy, QA for core modules, critical scenarios, release recommendation; medicine master, parties, returns, compliance and reports screens |
 | Jeeva | DevOps Engineer | Infrastructure, CI/CD, monitoring, backups, desktop packaging |
 
 Single source of truth: [OWNERSHIP_MATRIX.md](docs/team/OWNERSHIP_MATRIX.md) · RACI: [TEAM_AND_OWNERSHIP.md](docs/team/TEAM_AND_OWNERSHIP.md).

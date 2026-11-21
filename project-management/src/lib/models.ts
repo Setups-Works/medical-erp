@@ -40,6 +40,8 @@ const taskSchema = new Schema(
     boardId: { type: ObjectId, ref: "Board", required: true, index: true },
     column: { type: String, required: true },
     order: { type: Number, default: 0 },
+    // Suggested work order across the whole plan (set by the seed from the docs); 0 = added by hand
+    rank: { type: Number, default: 0 },
     number: { type: Number, required: true, unique: true },
     title: { type: String, required: true },
     description: { type: String, default: "" },

@@ -125,6 +125,7 @@ export default function PagesPage() {
                       <p className="font-mono">{String(p.meta.phase)}</p>
                       <p>
                         BE {String(p.meta.backend)} · FE {String(p.meta.frontend)}
+                        {p.meta.qa ? ` · QA ${String(p.meta.qa)}` : ""}
                       </p>
                       <p className="truncate text-ink-4" title={String(p.meta.roles)}>
                         {String(p.meta.roles)}
