@@ -19,7 +19,6 @@
 
 ## Known decisions pending
 
-- **ADR-0009** (Problem Details, no envelope): proposed with a recommendation; decide at the Sprint 0 architecture review.
 - **ADR-0001 repo name**: ADR says `meno`, GitHub repo is `Setups-Works/medical-erp`; decide at the review.
 - GSP/IRP provider for e-invoice (P5) — Jeeva compares providers, Nitheesh decides.
 - WhatsApp Business provider (P5).
