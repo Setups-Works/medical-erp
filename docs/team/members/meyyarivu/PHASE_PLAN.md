@@ -3,10 +3,10 @@
 Frontend lead. Feature tasks for POS, PUR, INV, IJX, MKT, WHS, DOC, PRC, GST, AUT, NAV, NTF, DSK, MOB screens come from FEATURES.md in MENO Hub; this list is the foundation work around them. You also run the QA tasks for DSH, ADM (Nitheesh's screens) and RPT, ANX (Ashok's screens). Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md).
 
 ## P0 Foundation
-- [ ] Learn/refresh: Next.js App Router (client-side), TanStack Query, RHF + Zod, shadcn/ui, Tailwind v4
-- [ ] Read `docs/design/DESIGN_LANGUAGE.md`; wireframes: app shell, POS, purchase grid, list/form/report patterns
-- [ ] POS keyboard map proposal (`docs/design/POS_KEYBOARD.md`)
-- [ ] Pair sessions with Ashok and Nitheesh on the frontend stack
+- [x] Learn/refresh: Next.js App Router (client-side), TanStack Query, RHF + Zod, shadcn/ui, Tailwind v4
+- [x] Read `docs/design/DESIGN_LANGUAGE.md`; wireframes: app shell, POS, purchase grid, list/form/report patterns
+- [x] POS keyboard map proposal (`docs/design/POS_KEYBOARD.md`)
+- [x] Pair sessions with Ashok and Nitheesh on the frontend stack
 
 ## P1 Platform core
 - [ ] Next.js scaffold (static export), Tailwind v4, tokens in `packages/ui/src/tokens`
