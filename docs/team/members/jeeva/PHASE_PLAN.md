@@ -3,10 +3,10 @@
 Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md).
 
 ## P0 Foundation
-- [ ] GitHub org/repo `meno`, branches `main` + `develop`, protection rules, CODEOWNERS, labels, Projects board
-- [ ] Azure: subscription check, resource group `rg-meno-staging`, budget alerts
-- [ ] Design docs: CI pipeline, environments, naming (`docs/deployment/ENVIRONMENTS.md`)
-- [ ] Learn: Docker, Compose, GitHub Actions, Nginx, Linux basics, Azure CLI/Bicep
+- [x] GitHub org/repo `meno`, branches `main` + `develop`, protection rules, CODEOWNERS, labels, Projects board
+- [x] Azure: subscription check, resource group `rg-meno-staging`, budget alerts
+- [x] Design docs: CI pipeline, environments, naming (`docs/deployment/ENVIRONMENTS.md`)
+- [x] Learn: Docker, Compose, GitHub Actions, Nginx, Linux basics, Azure CLI/Bicep
 
 ## P1 Platform core
 - [ ] `docker-compose.yml`: postgres, redis, minio, mailpit (+ api, web profiles)
