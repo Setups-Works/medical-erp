@@ -31,6 +31,8 @@ When every task is Done, MENO is in production.
 
 After you edit those docs, run `npm run seed` to import new items. It never duplicates or overwrites existing tasks.
 
+AI agents work tasks by number with `npm run agent-task -- <show|start|check|comment|review> <n>` (acts as `HUB_AGENT_AS`; never moves to Done). See `../docs/team/AGENT_TASK_WORKFLOW.md`.
+
 Without `MONGODB_URI` (development only) the app starts an in-memory MongoDB; data is lost on restart.
 
 ### Troubleshooting
