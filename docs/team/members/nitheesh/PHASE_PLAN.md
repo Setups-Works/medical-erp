@@ -24,6 +24,7 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [ ] `files` module (signed URLs, MinIO/Azure Blob adapter)
 - [ ] Company, branch and settings screens (web `company/`, `branches/`, `settings/`)
 - [ ] Number series + tenant settings endpoints and screens
+- [ ] Decide the Indian medicine data source and licence (CAT-10, INT-11) from Jeeva's comparison and Prakalya's hit-rate check; record it as an ADR
 
 ## P3 Purchase & inventory
 - [ ] `packages/billing-engine` (decimal.js) passing all test vectors, with Kamesh's Java engines

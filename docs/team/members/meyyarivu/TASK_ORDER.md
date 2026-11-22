@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**177 tasks** · P0: 4 · P1: 9 · P2: 7 · P3: 33 · P4: 42 · P5: 49 · P6: 21 · P7: 12
+**187 tasks** · P0: 4 · P1: 9 · P2: 7 · P3: 33 · P4: 42 · P5: 53 · P6: 24 · P7: 15
 
 ## P0 · Foundation (4)
 
@@ -127,7 +127,7 @@
 | 94 | QA: Analytics · P4 (1 feature) | QA | — |
 | 95 | QA: Administration settings · P4 (3 features) | QA | — |
 
-## P5 · Wholesale, finance, offline (49)
+## P5 · Wholesale, finance, offline (53)
 
 | Step | Task | Type | With |
 |---|---|---|---|
@@ -165,61 +165,71 @@
 | 127 | POS-08 UPI QR on screen / on bill (static VPA QR with amount) | Feature | Kamesh |
 | 128 | POS-17 Repeat last bill for a customer (chronic refill) | Feature | Kamesh |
 | 129 | POS-19 Estimate / quotation convertible to bill | Feature | Kamesh |
-| 130 | WHS-05 Delivery challan, dispatch, delivery tracking (packed, dispatched, delivered) | Feature | Kamesh |
-| 131 | WHS-07 E-way bill generation for consignments above threshold (verify) | Feature | Kamesh |
-| 132 | WHS-08 Retailer-wise / item-wise scheme overrides | Feature | Kamesh |
-| 133 | WHS-09 Salesman assignment and commission report | Feature | Kamesh |
-| 134 | WHS-13 Retailer claims: short supply, damage, rate difference; resolved by credit note | Feature | Kamesh |
-| 135 | DOC-05 Document print designer (choose fields, logo, terms, copies) | Feature | Kamesh |
-| 136 | NTF-03 WhatsApp Business API: invoice share, payment reminders, refill reminders (verify) template approval & cost | Feature | Nitheesh |
-| 137 | NTF-04 SMS (DLT-registered templates) (verify) | Feature | Nitheesh |
-| 138 | DSK-06 Local backup export of offline data (emergency) | Feature | Nitheesh, Jeeva |
-| 139 | IJX-03 Batch category master (e.g. "cold chain", "high value") for reporting | Feature | Kamesh |
-| 140 | POS-13 Cash drawer open, customer display (pole) | Feature | Kamesh |
-| 141 | QA: Role dashboards · P5 (2 features) | QA | — |
-| 142 | QA: Reports · P5 (3 features) | QA | — |
-| 143 | QA: Analytics · P5 (3 features) | QA | — |
-| 144 | QA: Administration settings · P5 (3 features) | QA | — |
+| 130 | POS-23 One-click generic conversion: switch every branded line on a bill to an in-stock generic with the same salts + strength (CAT-15); show patient saving and margin per line; pharmacist confirms each swap; extends CAT-09 / POS-16 (verify) substitution rules | Feature | Kamesh |
+| 131 | POS-24 Counter recommendations: among same-composition alternatives, rank by near-expiry batch and margin (configurable weights, never above MRP) | Feature | Kamesh |
+| 132 | POS-25 Invoice verification QR: unique QR on every printed invoice opening a read-only verification page (number, date, total, store); no patient data | Feature | Kamesh |
+| 133 | POS-26 Service billing: non-stock service items (BP / sugar check, injection charge, consultation fee, delivery charge) with own SAC and GST, no stock movement (verify) SAC / GST rates | Feature | Kamesh |
+| 134 | WHS-05 Delivery challan, dispatch, delivery tracking (packed, dispatched, delivered) | Feature | Kamesh |
+| 135 | WHS-07 E-way bill generation for consignments above threshold (verify) | Feature | Kamesh |
+| 136 | WHS-08 Retailer-wise / item-wise scheme overrides | Feature | Kamesh |
+| 137 | WHS-09 Salesman assignment and commission report | Feature | Kamesh |
+| 138 | WHS-13 Retailer claims: short supply, damage, rate difference; resolved by credit note | Feature | Kamesh |
+| 139 | DOC-05 Document print designer (choose fields, logo, terms, copies) | Feature | Kamesh |
+| 140 | NTF-03 WhatsApp Business API: invoice share, payment reminders, refill reminders (verify) template approval & cost | Feature | Nitheesh |
+| 141 | NTF-04 SMS (DLT-registered templates) (verify) | Feature | Nitheesh |
+| 142 | DSK-06 Local backup export of offline data (emergency) | Feature | Nitheesh, Jeeva |
+| 143 | IJX-03 Batch category master (e.g. "cold chain", "high value") for reporting | Feature | Kamesh |
+| 144 | POS-13 Cash drawer open, customer display (pole) | Feature | Kamesh |
+| 145 | QA: Role dashboards · P5 (2 features) | QA | — |
+| 146 | QA: Reports · P5 (3 features) | QA | — |
+| 147 | QA: Analytics · P5 (3 features) | QA | — |
+| 148 | QA: Administration settings · P5 (3 features) | QA | — |
 
-## P6 · Pilot & GST returns (21)
-
-| Step | Task | Type | With |
-|---|---|---|---|
-| 145 | UX fixes from pilot; POS speed tuning; GST returns screens | Groundwork | — |
-| 146 | GST-03 GSTR-1 data export (B2B, B2C large/small, CDNR, HSN summary) in portal JSON/Excel format | Feature | Kamesh |
-| 147 | GST-04 GSTR-3B summary | Feature | Kamesh |
-| 148 | GST-10 Input tax credit register from purchases | Feature | Kamesh |
-| 149 | MKT-03 Retailer → distributor online ordering (ERP-to-ERP): a retailer on MENO sends a PO that arrives as a sales order at a distributor on MENO, with live stock, rates and schemes; item codes, HSN and GST mapped automatically | Feature | Kamesh |
-| 150 | MKT-10 Consolidated multi-branch dashboard for chains | Feature | Kamesh |
-| 151 | WHS-11 Routes and beats (web): retailers per route, visit days | Feature | Kamesh |
-| 152 | WHS-12 Delivery planning: schedule dispatches by route/vehicle, pick lists per trip | Feature | Kamesh |
-| 153 | WHS-14 Scheme claims: reconcile schemes given to retailers with manufacturer claims | Feature | Kamesh |
-| 154 | DOC-03 Commission vouchers for salesmen / agents (sales and purchase side) | Feature | Kamesh |
-| 155 | GST-05 GSTR-2B reconciliation with purchases (import 2B JSON) | Feature | Kamesh |
-| 156 | GST-07 Composition-scheme dealer support (bill of supply) (verify) | Feature | Kamesh |
-| 157 | PUR-10 Scan supplier invoice (image/PDF) attach to purchase; OCR later | Feature | Kamesh |
-| 158 | INV-14 Cold-chain items flag and storage reports | Feature | Kamesh |
-| 159 | IJX-02 Stock journal (convert/repack: e.g. bulk into loose packs) | Feature | Kamesh |
-| 160 | MKT-07 Expiry-based promotions (auto-suggested discount on near-expiry batches) | Feature | Kamesh |
-| 161 | POS-18 Home delivery orders with delivery status | Feature | Kamesh |
-| 162 | QA: Role dashboards · P6 (2 features) | QA | — |
-| 163 | QA: Reports · P6 (2 features) | QA | — |
-| 164 | QA: Analytics · P6 (2 features) | QA | — |
-| 165 | QA: Administration settings · P6 (4 features) | QA | — |
-
-## P7 · Growth (12)
+## P6 · Pilot & GST returns (24)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 166 | Share `packages/ui` primitives with mobile (Expo) | Groundwork | — |
-| 167 | MOB-01 Owner app: dashboard, approvals, alerts | Feature | Nitheesh |
-| 168 | MOB-02 Salesman app: routes/beats, retailer visit, take order offline, schemes, credit status | Feature | Nitheesh |
-| 169 | MOB-03 Collection app: record payments against invoices, receipt share | Feature | Nitheesh |
-| 170 | MKT-09 AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | Feature | Kamesh |
-| 171 | WHS-10 Retailer self-ordering portal (web) | Feature | Kamesh |
-| 172 | GST-08 TCS/TDS fields where applicable (verify) | Feature | Kamesh |
-| 173 | MOB-04 Delivery app: delivery proof (photo/signature), returns pickup | Feature | Nitheesh |
-| 174 | MOB-05 Camera barcode scan for stock count | Feature | Nitheesh |
-| 175 | QA: Reports · P7 (1 feature) | QA | — |
-| 176 | QA: Analytics · P7 (1 feature) | QA | — |
-| 177 | QA: Administration settings · P7 (1 feature) | QA | — |
+| 149 | UX fixes from pilot; POS speed tuning; GST returns screens | Groundwork | — |
+| 150 | GST-03 GSTR-1 data export (B2B, B2C large/small, CDNR, HSN summary) in portal JSON/Excel format | Feature | Kamesh |
+| 151 | GST-04 GSTR-3B summary | Feature | Kamesh |
+| 152 | GST-10 Input tax credit register from purchases | Feature | Kamesh |
+| 153 | PUR-16 PDF / scanned purchase bill import: read lines from a distributor PDF or photo into a draft purchase that is reviewed before posting (brings MKT-09 forward for purchases) | Feature | Kamesh |
+| 154 | PUR-17 Optimal stock levels: min / max per item and branch computed from sales velocity, lead time and expiry risk; request fulfilment rate (short-book hits vs misses) | Feature | Kamesh |
+| 155 | MKT-03 Retailer → distributor online ordering (ERP-to-ERP): a retailer on MENO sends a PO that arrives as a sales order at a distributor on MENO, with live stock, rates and schemes; item codes, HSN and GST mapped automatically | Feature | Kamesh |
+| 156 | MKT-10 Consolidated multi-branch dashboard for chains | Feature | Kamesh |
+| 157 | WHS-11 Routes and beats (web): retailers per route, visit days | Feature | Kamesh |
+| 158 | WHS-12 Delivery planning: schedule dispatches by route/vehicle, pick lists per trip | Feature | Kamesh |
+| 159 | WHS-14 Scheme claims: reconcile schemes given to retailers with manufacturer claims | Feature | Kamesh |
+| 160 | DOC-03 Commission vouchers for salesmen / agents (sales and purchase side) | Feature | Kamesh |
+| 161 | GST-05 GSTR-2B reconciliation with purchases (import 2B JSON) | Feature | Kamesh |
+| 162 | GST-07 Composition-scheme dealer support (bill of supply) (verify) | Feature | Kamesh |
+| 163 | PUR-10 Scan supplier invoice (image/PDF) attach to purchase; OCR later | Feature | Kamesh |
+| 164 | INV-14 Cold-chain items flag and storage reports | Feature | Kamesh |
+| 165 | IJX-02 Stock journal (convert/repack: e.g. bulk into loose packs) | Feature | Kamesh |
+| 166 | MKT-07 Expiry-based promotions (auto-suggested discount on near-expiry batches) | Feature | Kamesh |
+| 167 | POS-18 Home delivery orders with delivery status | Feature | Kamesh |
+| 168 | QA: Role dashboards · P6 (2 features) | QA | — |
+| 169 | QA: Reports · P6 (2 features) | QA | — |
+| 170 | QA: Analytics · P6 (2 features) | QA | — |
+| 171 | QA: Administration settings · P6 (4 features) | QA | — |
+| 172 | QA: Online channels (store page, customer app, marketplaces) · P6 (1 feature) | QA | — |
+
+## P7 · Growth (15)
+
+| Step | Task | Type | With |
+|---|---|---|---|
+| 173 | Share `packages/ui` primitives with mobile (Expo) | Groundwork | — |
+| 174 | MOB-01 Owner app: dashboard, approvals, alerts | Feature | Nitheesh |
+| 175 | MOB-02 Salesman app: routes/beats, retailer visit, take order offline, schemes, credit status | Feature | Nitheesh |
+| 176 | MOB-03 Collection app: record payments against invoices, receipt share | Feature | Nitheesh |
+| 177 | PUR-18 Distributor marketplace: compare rates, schemes and stock across connected distributors and place POs from one screen (extends MKT-03 beyond MENO-to-MENO) (verify) partner agreements | Feature | Kamesh |
+| 178 | MKT-09 AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | Feature | Kamesh |
+| 179 | WHS-10 Retailer self-ordering portal (web) | Feature | Kamesh |
+| 180 | GST-08 TCS/TDS fields where applicable (verify) | Feature | Kamesh |
+| 181 | NTF-06 Pill / dose-time reminders to patients from the prescription schedule, opt-in only (verify) consent, DPDP Act | Feature | Nitheesh |
+| 182 | MOB-04 Delivery app: delivery proof (photo/signature), returns pickup | Feature | Nitheesh |
+| 183 | MOB-05 Camera barcode scan for stock count | Feature | Nitheesh |
+| 184 | QA: Reports · P7 (1 feature) | QA | — |
+| 185 | QA: Analytics · P7 (1 feature) | QA | — |
+| 186 | QA: Administration settings · P7 (2 features) | QA | — |
+| 187 | QA: Online channels (store page, customer app, marketplaces) · P7 (3 features) | QA | — |

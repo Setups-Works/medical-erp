@@ -22,3 +22,15 @@ Checks that MENO covers every capability a pharmacy retail + wholesale ERP must 
 | Centralized chain dashboard | MKT-10, RPT-10, RPT-01 | Consolidated multi-branch dashboard |
 | Complaints & customer care | CRM-02, CRM-01 | Added after the sidebar review |
 | Navigation | NAV-01, NAV-02 | Sidebar from NAVIGATION.md, command search |
+| Generic substitution | CAT-09, CAT-15, POS-16, POS-23, POS-24 | Same-salt alternatives, one-click generic conversion; added after the competitor review |
+| Service billing | POS-26 | Non-stock services with SAC |
+| Supplier terms | PTY-11, PTY-14, PUR-16, PUR-18 | Rate contracts, PDF bill import, distributor marketplace |
+| Payments & reconciliation | POS-07, POS-08, ACC-07, ACC-11, ACC-12, ACC-13 | Gateway, dynamic UPI, auto reconciliation |
+| Home delivery & fleet | POS-18, DLV-01, DLV-02, DLV-03, MOB-04 | Rider assignment, tracking, fleet |
+| Online channels | INT-06, OMN-01, OMN-02, OMN-03, OMN-04 | Store page, customer app, ONDC / marketplaces, WhatsApp orders |
+| Loyalty & promotions | PTY-08, CRM-04, CRM-05, CRM-08, CRM-09 | Points, membership plans, vouchers, flash sales |
+| Healthcare integrations | INT-07, INT-08, INT-09 | ABHA, EMR, HMIS |
+| Access security | PLT-07, PLT-11, PLT-20 | Permissions, device registration, network allowlist |
+| AI & staff training | PLT-21, ANX-05, MKT-09, ADM-13 | Assistant, insights, training |
+| Product data & barcode lookup (India) | CAT-10, INT-11, INT-12, CAT-22, CAT-23, CAT-24, CAT-04 | Indian medicine database: unknown-barcode lookup, create-form pre-fill |
+| Drug reference | INT-10, CAT-21 | openFDA labels by salt, reference only |

@@ -215,10 +215,27 @@ export const FEATURE_META: Record<string, FeatureMeta> = {
   ADM: { module: "integrations", web: "admin/integrations", be: "kamesh", fe: "prakalya", extra: "jeeva" },
 };
 
+/** Per-feature exceptions to the prefix owners ("Feature overrides" table in OWNERSHIP_MATRIX.md). */
+const FEATURE_OVERRIDE: Record<string, Pick<FeatureMeta, "be" | "fe" | "extra">> = {};
+
+/** Owners and module info for one feature: its prefix row, with any per-feature override applied. */
+function metaFor(id: string): FeatureMeta | undefined {
+  const m = FEATURE_META[id.slice(0, 3)];
+  const o = FEATURE_OVERRIDE[id];
+  return m && o ? { ...m, ...o } : m;
+}
+
 /** Overrides FEATURE_META with docs/team/OWNERSHIP_MATRIX.md (the single source of truth). */
 export function applyOwnershipMatrix(md: string) {
   for (const line of md.split("\n")) {
     const c = line.split("|").map((x) => x.trim());
+    // Feature override row: | CAT-24 | backend | frontend | extra | reason |
+    if (/^[A-Z]{3}-\d{2}$/.test(c[1] ?? "") && c.length >= 6) {
+      const slug = (v?: string) => (v ? (v.toLowerCase() as Slug) : null);
+      // An override replaces all builders, so an empty Extra clears the prefix's extra owner.
+      FEATURE_OVERRIDE[c[1]] = { be: slug(c[2]) ?? "kamesh", fe: slug(c[3]), extra: slug(c[4]) ?? undefined };
+      continue;
+    }
     if (c.length < 8 || !/^[A-Z]{3}$/.test(c[1])) continue;
     const be = c[4].toLowerCase() as Slug;
     const fe = (c[5].toLowerCase() || null) as Slug | null;
@@ -234,7 +251,7 @@ export function qaOwner(prefix: string): Slug {
 }
 
 export function featureOwners(id: string): Slug[] {
-  const m = FEATURE_META[id.slice(0, 3)];
+  const m = metaFor(id);
   if (!m) return ["kamesh"];
   return [...new Set([m.be, ...(m.fe ? [m.fe] : []), ...(m.extra ? [m.extra] : [])])];
 }
@@ -243,7 +260,7 @@ const EDITION: Record<string, string> = { R: "Retail", W: "Wholesale", B: "Both 
 const PRIORITY: Record<string, string> = { M: "Must (MVP)", S: "Should", C: "Could (later)" };
 
 export function featureTask(f: { id: string; title: string; edition: string; phase: string; priority: string; section: string }, phase?: PhaseInfo): Content {
-  const m = FEATURE_META[f.id.slice(0, 3)];
+  const m = metaFor(f.id);
   const verify = /\(verify\)/.test(f.title);
   const money = /GST|PRC|ACC|ACX|POS|PUR|RET|WHS|DOC/.test(f.id.slice(0, 3));
   const owners = featureOwners(f.id);
