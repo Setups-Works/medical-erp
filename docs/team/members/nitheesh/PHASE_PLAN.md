@@ -37,6 +37,7 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [ ] Role-based landing + retail dashboard + widget library (web `dashboard/`)
 - [ ] `notification` module: email + in-app, alert rules
 - [ ] Admin settings screens: payment, printer, notification settings (web `admin/`)
+- [ ] Decide the licensing rules (grace days, what restricted mode blocks, soft vs hard invoice limit, first plans and prices) and accept ADR-0015 before LIC work starts in P5 (`docs/architecture/LICENSING.md`)
 
 ## P5 Wholesale, finance, offline
 - [ ] `modules/sync` (device registration, number-series blocks, push/pull, conflicts) + desktop SQLCipher store and sync engine

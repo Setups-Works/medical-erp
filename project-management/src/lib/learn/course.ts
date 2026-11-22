@@ -21,6 +21,7 @@ export const MODULES = [
   "7 · Offline & teamwork",
   "8 · Full catalogue",
   "9 · External data",
+  "10 · Selling MENO",
 ] as const;
 
 export const LESSONS: LessonMeta[] = [
@@ -213,6 +214,16 @@ export const LESSONS: LessonMeta[] = [
     minutes: 45,
     goals: ["Call DrugDB search and product details", "Read the Kaggle A–Z dataset columns", "Map both onto the medicine form", "Explain each source's licence and limits"],
     sources: ["https://drugdb.in/developers", "https://drugdb.in/terms", "https://www.kaggle.com/datasets/shudhanshusingh/az-medicine-dataset-of-india", "docs/product/FEATURES.md §22.6"],
+  },
+  {
+    slug: "licensing",
+    day: 20,
+    module: MODULES[9],
+    title: "Licensing: how MENO is sold and switched on",
+    summary: "Plans, license keys, activation, signed certificates for the offline desktop, the expiry lifecycle and how every module checks entitlements. With a live key generator and lifecycle simulator.",
+    minutes: 60,
+    goals: ["Explain plan vs license vs key vs certificate", "Generate and validate a key, and say why it is stored hashed", "Walk a license from issue to expiry and grace", "Call EntitlementGuard in the right place"],
+    sources: ["docs/architecture/LICENSING.md", "docs/decisions/0015-license-keys-signed-certificates.md", "docs/product/FEATURES.md §23"],
   },
 ];
 

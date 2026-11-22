@@ -18,3 +18,4 @@ An ADR records one significant decision: context, decision, consequences. Write 
 | [0012](0012-design-language.md) | Paper-and-ink design language on shadcn/ui | Accepted |
 | [0013](0013-postgresql-system-of-record.md) | PostgreSQL is the only product database | Accepted |
 | [0014](0014-configuration-over-hardcoding.md) | Configuration over hard-coding, four-layer validation | Accepted |
+| [0015](0015-license-keys-signed-certificates.md) | License keys + server-side licenses + Ed25519-signed certificates | Proposed |
