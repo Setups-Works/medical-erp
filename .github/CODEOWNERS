@@ -38,6 +38,8 @@
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/notification/    @nitheeshdr @kamesh-gh
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/payment/         @nitheeshdr @kamesh-gh
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/accounting/      @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/delivery/        @nitheeshdr @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/channels/        @nitheeshdr @kamesh-gh
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/reporting/       @nitheeshdr @kamesh-gh
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/fieldsales/      @nitheeshdr @kamesh-gh
 /backend/meno-api/src/main/resources/db/migration/                            @kamesh-gh @nitheeshdr
@@ -64,6 +66,8 @@
 /apps/web/src/features/accounting/      @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/payments/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/crm/             @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/delivery/        @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/channels/        @nitheeshdr @meyyarivu-gh
 # Medicine master, parties, returns, compliance, reports (Ashok)
 /apps/web/src/features/catalog/         @ashok-gh @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/parties/         @ashok-gh @meyyarivu-gh @nitheeshdr

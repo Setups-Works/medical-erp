@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**37 tasks** · P0: 5 · P1: 3 · P2: 4 · P3: 4 · P4: 6 · P5: 6 · P6: 7 · P7: 2
+**38 tasks** · P0: 5 · P1: 3 · P2: 5 · P3: 4 · P4: 6 · P5: 6 · P6: 7 · P7: 2
 
 ## P0 · Foundation (5)
 
@@ -25,61 +25,62 @@
 | 7 | Validation catalogue for masters (GSTIN, DL, phone, PAN, pin code, HSN) in FRS | Groundwork | — |
 | 8 | UAT P1 on staging | Groundwork | — |
 
-## P2 · Masters (4)
+## P2 · Masters (5)
 
 | Step | Task | Type | With |
 |---|---|---|---|
 | 9 | FRS Purchase + Inventory + Schemes; confirm ⚠ rules in CALCULATIONS.md with a CA/pharmacist | Groundwork | — |
-| 10 | Collect real (anonymised) distributor purchase files and sample bills for testing | Readiness | — |
-| 11 | QA: Medicine master · P2 (10 features) | QA | — |
-| 12 | QA: Suppliers, customers, doctors · P2 (3 features) | QA | — |
+| 10 | Check shortlisted Indian medicine data sources against 100 items from a pharmacy's real bills (found by name? by barcode? salts, strength, pack correct?); report the hit rate to Nitheesh | Groundwork | — |
+| 11 | Collect real (anonymised) distributor purchase files and sample bills for testing | Readiness | — |
+| 12 | QA: Medicine master · P2 (10 features) | QA | — |
+| 13 | QA: Suppliers, customers, doctors · P2 (3 features) | QA | — |
 
 ## P3 · Purchase & inventory (4)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 13 | FRS POS, returns, Schedule H1 register fields, print formats; workflow diagrams | Groundwork | — |
-| 14 | UAT P3 with a real pharmacy's purchase bills | Groundwork | — |
-| 15 | QA: Medicine master · P3 (6 features) | QA | — |
-| 16 | QA: Suppliers, customers, doctors · P3 (2 features) | QA | — |
+| 14 | FRS POS, returns, Schedule H1 register fields, print formats; workflow diagrams | Groundwork | — |
+| 15 | UAT P3 with a real pharmacy's purchase bills | Groundwork | — |
+| 16 | QA: Medicine master · P3 (8 features) | QA | — |
+| 17 | QA: Suppliers, customers, doctors · P3 (2 features) | QA | — |
 
 ## P4 · Retail POS & returns (6)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 17 | FRS Wholesale + Accounting; retail UAT scripts, training notes | Groundwork | — |
-| 18 | Retail UAT with a real pharmacist, signed off | Readiness | — |
-| 19 | QA: Medicine master · P4 (3 features) | QA | — |
-| 20 | QA: Suppliers, customers, doctors · P4 (1 feature) | QA | — |
-| 21 | QA: Returns · P4 (6 features) | QA | — |
-| 22 | QA: Pharmacy compliance · P4 (6 features) | QA | — |
+| 18 | FRS Wholesale + Accounting; retail UAT scripts, training notes | Groundwork | — |
+| 19 | Retail UAT with a real pharmacist, signed off | Readiness | — |
+| 20 | QA: Medicine master · P4 (4 features) | QA | — |
+| 21 | QA: Suppliers, customers, doctors · P4 (1 feature) | QA | — |
+| 22 | QA: Returns · P4 (6 features) | QA | — |
+| 23 | QA: Pharmacy compliance · P4 (6 features) | QA | — |
 
 ## P5 · Wholesale, finance, offline (6)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 23 | UAT wholesale, accounting, offline; pilot customer selection, onboarding + data-migration templates; DPDP notice draft | Groundwork | — |
-| 24 | Pilot customer agreements, onboarding checklist and data-migration templates ready | Readiness | — |
-| 25 | QA: Suppliers, customers, doctors · P5 (5 features) | QA | — |
-| 26 | QA: Returns · P5 (2 features) | QA | — |
-| 27 | QA: Pharmacy compliance · P5 (2 features) | QA | — |
-| 28 | QA: CRM & customer care · P5 (1 feature) | QA | — |
+| 24 | UAT wholesale, accounting, offline; pilot customer selection, onboarding + data-migration templates; DPDP notice draft | Groundwork | — |
+| 25 | Pilot customer agreements, onboarding checklist and data-migration templates ready | Readiness | — |
+| 26 | QA: Suppliers, customers, doctors · P5 (6 features) | QA | — |
+| 27 | QA: Returns · P5 (2 features) | QA | — |
+| 28 | QA: Pharmacy compliance · P5 (2 features) | QA | — |
+| 29 | QA: CRM & customer care · P5 (1 feature) | QA | — |
 
 ## P6 · Pilot & GST returns (7)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 29 | Pilot onboarding, weekly feedback calls, triage into Hub tasks; GSTR validation with pilot's CA | Groundwork | — |
-| 30 | Validate GSTR-1/3B exports with each pilot's accountant | Readiness | — |
-| 31 | QA: Medicine master · P6 (1 feature) | QA | — |
-| 32 | QA: Suppliers, customers, doctors · P6 (2 features) | QA | — |
-| 33 | QA: Pharmacy compliance · P6 (3 features) | QA | — |
-| 34 | QA: CRM & customer care · P6 (4 features) | QA | — |
-| 35 | QA: Engagement (campaigns) · P6 (1 feature) | QA | — |
+| 30 | Pilot onboarding, weekly feedback calls, triage into Hub tasks; GSTR validation with pilot's CA | Groundwork | — |
+| 31 | Validate GSTR-1/3B exports with each pilot's accountant | Readiness | — |
+| 32 | QA: Medicine master · P6 (2 features) | QA | — |
+| 33 | QA: Suppliers, customers, doctors · P6 (2 features) | QA | — |
+| 34 | QA: Pharmacy compliance · P6 (3 features) | QA | — |
+| 35 | QA: CRM & customer care · P6 (5 features) | QA | — |
+| 36 | QA: Engagement (campaigns) · P6 (1 feature) | QA | — |
 
 ## P7 · Growth (2)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 36 | QA: CRM & customer care · P7 (2 features) | QA | — |
-| 37 | QA: Engagement (campaigns) · P7 (1 feature) | QA | — |
+| 37 | QA: CRM & customer care · P7 (3 features) | QA | — |
+| 38 | QA: Engagement (campaigns) · P7 (1 feature) | QA | — |

@@ -14,6 +14,8 @@ import { Masters } from "./lessons/masters";
 import { GstCalculations } from "./lessons/maths";
 import { Inventory, Purchase, RetailBilling, Returns, WholesaleBilling } from "./lessons/operations";
 import { PharmacyBasics, WhatIsMeno } from "./lessons/product";
+import { DrugReference } from "./lessons/reference";
+import { IndianMedicineData } from "./lessons/indian-data";
 
 const BODIES: Record<string, () => React.ReactNode> = {
   "what-is-meno": WhatIsMeno,
@@ -33,6 +35,8 @@ const BODIES: Record<string, () => React.ReactNode> = {
   "offline-sync": OfflineSync,
   "how-we-work": HowWeWork,
   "feature-catalogue": FeatureCatalogue,
+  "drug-reference-openfda": DrugReference,
+  "indian-medicine-data": IndianMedicineData,
 };
 
 /* "Taught" ticks are a per-viewer convenience, so browser storage is enough (and optional). */

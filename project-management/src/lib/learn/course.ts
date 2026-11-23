@@ -20,6 +20,7 @@ export const MODULES = [
   "6 · Finance & compliance",
   "7 · Offline & teamwork",
   "8 · Full catalogue",
+  "9 · External data",
 ] as const;
 
 export const LESSONS: LessonMeta[] = [
@@ -192,6 +193,26 @@ export const LESSONS: LessonMeta[] = [
     minutes: 60,
     goals: ["Find any feature by its ID", "Know which page builds which feature", "Use the catalogue to plan your own work"],
     sources: ["docs/product/FEATURES.md", "docs/product/PAGES.md"],
+  },
+  {
+    slug: "drug-reference-openfda",
+    day: 18,
+    module: MODULES[8],
+    title: "Drug reference data: openFDA",
+    summary: "The FDA drug label API, why an India-only product uses it only as salt-level reference, and where Indian product data and barcode lookup come from instead. With a live search.",
+    minutes: 45,
+    goals: ["Write an openFDA label query by brand, salt and barcode", "Read the response and its openfda block", "Explain why Indian names and barcodes miss", "Know which source fills product create and barcode lookup in MENO"],
+    sources: ["https://open.fda.gov/apis/drug/label/", "docs/product/FEATURES.md §22.6"],
+  },
+  {
+    slug: "indian-medicine-data",
+    day: 19,
+    module: MODULES[8],
+    title: "Indian medicine data: DrugDB API and the A–Z dataset",
+    summary: "Two candidate sources for filling the medicine form with Indian products: what they return, what they can't fill, their terms, and questions for the team.",
+    minutes: 45,
+    goals: ["Call DrugDB search and product details", "Read the Kaggle A–Z dataset columns", "Map both onto the medicine form", "Explain each source's licence and limits"],
+    sources: ["https://drugdb.in/developers", "https://drugdb.in/terms", "https://www.kaggle.com/datasets/shudhanshusingh/az-medicine-dataset-of-india", "docs/product/FEATURES.md §22.6"],
   },
 ];
 

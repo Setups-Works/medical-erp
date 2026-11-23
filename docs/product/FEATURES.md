@@ -473,6 +473,77 @@ Added after mapping every page in [PAGES.md](PAGES.md) to a feature. Each page i
 | ADM-11 | Help centre and support tickets to the MENO team | B | P6 | S |
 | ADM-12 | API keys and webhooks management (with INT-05) | B | P7 | C |
 
+## 22. Competitor-gap additions (eVitalRx feature list, 2026-11-22)
+
+Added after comparing a published competitor feature list with this catalogue: these are the features it covered only partly or not at all. Phases and priorities are proposals for Prakalya to confirm; most are P6–P7 so the MVP (below) does not grow. Items marked ⚠ touch regulated areas and need the rule confirmed in `docs/compliance/COMPLIANCE.md` before build.
+
+### 22.1 Billing & POS
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| POS-23 | **One-click generic conversion**: switch every branded line on a bill to an in-stock generic with the same salts + strength (CAT-15); show patient saving and margin per line; pharmacist confirms each swap; extends CAT-09 / POS-16 ⚠ substitution rules | R | P5 | S |
+| POS-24 | Counter recommendations: among same-composition alternatives, rank by near-expiry batch and margin (configurable weights, never above MRP) | R | P5 | S |
+| POS-25 | Invoice verification QR: unique QR on every printed invoice opening a read-only verification page (number, date, total, store); no patient data | B | P5 | S |
+| POS-26 | Service billing: non-stock service items (BP / sugar check, injection charge, consultation fee, delivery charge) with own SAC and GST, no stock movement ⚠ SAC / GST rates | R | P5 | S |
+
+### 22.2 Inventory & purchasing
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| PUR-16 | PDF / scanned purchase bill import: read lines from a distributor PDF or photo into a draft purchase that is reviewed before posting (brings MKT-09 forward for purchases) | B | P6 | S |
+| PUR-17 | Optimal stock levels: min / max per item and branch computed from sales velocity, lead time and expiry risk; request fulfilment rate (short-book hits vs misses) | B | P6 | S |
+| PUR-18 | Distributor marketplace: compare rates, schemes and stock across connected distributors and place POs from one screen (extends MKT-03 beyond MENO-to-MENO) ⚠ partner agreements | R | P7 | C |
+| PTY-14 | **Distributor rate contracts** (terms of trade): agreed rate, scheme, discount and credit days per supplier + item, valid from / to; purchase entry flags deviations (extends PTY-11) | B | P5 | S |
+
+### 22.3 Customer engagement, delivery & online channels (`crm`, `delivery`, `channels`)
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| NTF-06 | Pill / dose-time reminders to patients from the prescription schedule, opt-in only ⚠ consent, DPDP Act | R | P7 | C |
+| CRM-08 | Paid membership plans: fee, validity, benefits (discount %, free delivery), renewal reminders | R | P6 | C |
+| CRM-09 | Gift vouchers (issue, redeem, balance, expiry) and time-boxed flash-sale prices ⚠ voucher accounting / GST | R | P7 | C |
+| DLV-01 | Home-delivery orders with rider assignment, status, cash-on-delivery collection and rider settlement (extends POS-18) | R | P6 | S |
+| DLV-02 | Live order tracking link for the customer (rider location from the delivery app, MOB-04) | R | P7 | C |
+| DLV-03 | Fleet management: riders, vehicles, shifts, delivery zones and charges, rider performance | B | P7 | C |
+| OMN-01 | Store web page per branch: address, hours, contact, order via WhatsApp | R | P7 | C |
+| OMN-02 | White-label customer app: order with prescription upload, reorder, track ⚠ online sale of medicines rules | R | P7 | C |
+| OMN-03 | Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) ⚠ online sale of medicines rules | R | P7 | C |
+| OMN-04 | WhatsApp ordering: customer sends an order or prescription on WhatsApp, it lands as a draft bill at the counter | R | P6 | S |
+
+### 22.4 Payments
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| ACC-12 | Payment gateway integration: dynamic UPI QR, card and wallet with automatic confirmation on the bill (webhook, idempotent) ⚠ provider choice | B | P6 | S |
+| ACC-13 | Auto payment reconciliation: match gateway / UPI settlements and bank credits to bills and receipts; unmatched items go to a review queue | B | P6 | S |
+
+### 22.5 Platform, AI & healthcare integrations
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| PLT-20 | Network (IP) allowlist per branch: restrict sign-in for chosen roles to the shop's network; denied attempts logged | B | P5 | S |
+| PLT-21 | AI assistant: plain-language, read-only questions over the tenant's own data ("what expires next month?"), permission-aware ⚠ no patient data to an external AI without consent | B | P7 | C |
+| INT-07 | ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions ⚠ ABDM certification | R | P7 | C |
+| INT-08 | EMR integration: receive prescriptions from clinic software | R | P7 | C |
+| INT-09 | Hospital software (HMIS) integration: hospital pharmacy billing against patient / IP number, ward indents | B | P7 | C |
+| ADM-13 | Staff training: in-app lessons and quizzes per role, completion certificates | B | P7 | C |
+
+### 22.6 Product data: Indian medicine database first, openFDA as drug reference
+
+**MENO is for Indian pharmacies only.** Product create and barcode lookup therefore rely on an **Indian medicine data source** (Indian brands, salts, strengths, strip packs, manufacturers, `890…` EAN-13 barcodes), chosen and licensed under CAT-10. The source is not decided yet: candidates are the DrugDB API (drugdb.in, free trial for evaluation, paid plan for production, no bulk storing), the Kaggle "A–Z Medicine Dataset of India" (2.5 lakh rows, Nov 2022 snapshot, CC BY-SA 4.0), GS1 India's product data service (barcode-based), other licensed Indian drug databases, and government lists (NPPA ceiling prices, CDSCO approvals) for cross-checking ⚠ coverage, cost and licence to be compared.
+
+openFDA (`https://api.fda.gov/drug/label.json` and `drug/ndc.json`) is the US FDA's free, public-domain (CC0) drug data. It has US names (acetaminophen, not paracetamol), US products and US barcodes, so it rarely matches an Indian pack. MENO uses it **only as salt-level drug reference** (uses, dosage, warnings, interactions are the same molecule everywhere), never for product create, barcode lookup, HSN, GST, schedule, MRP or pack. Teaching lesson: MENO Hub → Learn → "Drug reference data: openFDA".
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| INT-11 | **Indian medicine data adapter** in `integrations`: server-side client for the source chosen under CAT-10 (lookup by EAN-13 barcode, brand and salt), key in secrets, shared cache, records source + source id + fetched date on anything it fills ⚠ provider and licence | B | P3 | S |
+| INT-12 | **DrugDB API adapter** (first provider behind INT-11, if the P2 decision picks DrugDB): server-side client for `GET https://drugdb.in/v1/search?q=` and `GET /v1/products/{product_id}`, `X-Api-Key` from secrets (paid plan for production; the trial and keyless visitor access are for evaluation only), one reused HTTP client, 5 s timeout, product details cached 1 h with ETag / `If-None-Match`, search never cached, 429 (`Retry-After`) and 403 (plan ended) mapped to a friendly "reference unavailable", never bulk-stores the catalogue (DrugDB terms), records `source = drugdb` + `product_id` (DDID…) on items it fills. Taught in Hub → Learn → Day 19 ⚠ paid plan + terms confirmed | B | P3 | S |
+| CAT-24 | **Medicine search-as-you-type on the item create form** (feeds CAT-23): search box with a dropdown of DrugDB matches after a 200 ms pause, previous request cancelled, ↑ ↓ Enter Esc keyboard control, each row shows name, composition, pack, manufacturer, MRP; DrugDB's `fuzzy` / `searched_as` / `unit_ignored` / `ignored` notes shown to the user; picking a row pre-fills name, composition, manufacturer, dosage form and pack (each marked and editable), MRP shown as a hint only, barcode / HSN / GST / schedule left for the user; works by hand if DrugDB is down. Calls only meno-api, never DrugDB directly | B | P3 | S |
+| CAT-22 | **Barcode lookup for unknown items**: when a scanned barcode is not in the tenant catalogue, look up own barcodes (CAT-04) → Indian medicine data (CAT-10 / INT-11); a hit pre-fills a draft item, a miss opens quick-create with the barcode filled. Never blocks billing | B | P4 | S |
+| CAT-23 | **Pre-fill the medicine create form** from Indian medicine data: search by brand, salt or barcode and fill name, brand, salts + strengths, manufacturer, dosage form, pack and loose units; each pre-filled field marked and editable; save blocked until HSN, GST, schedule and pack are confirmed by the user ⚠ | B | P3 | S |
+| INT-10 | openFDA adapter in `integrations` (reference only): server-side client for the drug label endpoint, optional API key from secrets, cache by label `set_id` (weekly updates), handles 404 "no matches" and 429; only needed for CAT-21 | B | P6 | C |
+| CAT-21 | **Drug reference panel** on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up **by salt** with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" ⚠ pharmacist review | B | P6 | C |
+
 ---
 
 ### MVP definition (Pilot release, end of P5)

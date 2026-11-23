@@ -19,6 +19,7 @@ Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORD
 - [ ] Observability: Prometheus, Grafana dashboards (JVM, HTTP, DB), Loki logs, Sentry projects
 - [ ] Daily `pg_dump` backup to Blob + 7/4/3 retention (daily/weekly/monthly); restore script
 - [ ] Seed/reset staging data job
+- [ ] Compare Indian medicine data sources for CAT-10 / INT-11 (DrugDB API paid-plan quote, Kaggle A–Z dataset licence, GS1 India DataKart, other licensed drug databases, NPPA / CDSCO lists): coverage, barcode lookup, API, update frequency, cost, licence terms; share with Nitheesh (start from Hub → Learn → Day 19)
 
 ## P3 Purchase & inventory
 - [ ] Test-vector parity CI job (Java + TS)

@@ -15,6 +15,7 @@ Legend: **[BA]** business analysis · **[QA]** testing. You work **part-time: ab
 
 ## P2 Masters
 - [ ] [BA] FRS Purchase + Inventory + Schemes; confirm ⚠ rules in CALCULATIONS.md with a CA/pharmacist
+- [ ] [BA] Check shortlisted Indian medicine data sources against 100 items from a pharmacy's real bills (found by name? by barcode? salts, strength, pack correct?); report the hit rate to Nitheesh
 
 ## P3 Purchase & inventory
 - [ ] [BA] FRS POS, returns, Schedule H1 register fields, print formats; workflow diagrams
