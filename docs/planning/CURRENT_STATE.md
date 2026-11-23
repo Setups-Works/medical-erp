@@ -22,4 +22,5 @@
 - GSP/IRP provider for e-invoice (P5) — Jeeva compares providers, Nitheesh decides.
 - WhatsApp Business provider (P5).
 - Indian medicine data source & licence (CAT-10, INT-11): Jeeva compares, Prakalya checks hit rate on real bills, Nitheesh decides (P2). openFDA is reference only (CAT-21), not a product source.
+- Licensing (ADR-0015, Proposed): grace length, restricted-mode rules, soft vs hard invoice limit, plan prices. Nitheesh decides before LIC-06.
 - Rules marked ⚠ VERIFY in `docs/architecture/CALCULATIONS.md`.

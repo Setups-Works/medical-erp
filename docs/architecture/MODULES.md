@@ -9,7 +9,7 @@ Base-plan names are kept as **sub-domains** inside fewer, larger modules so begi
 | `auth` | refresh_token, login_attempt, device | auth | `AuthFacade.currentUser()` | `UserLoggedIn` | identity, tenancy | 1 |
 | `tenancy` | tenant, company, branch, financial_year, number_series, tenant_setting | company, branch | `TenantContext`, `BranchFacade` | `BranchCreated` | — | 1 |
 | `identity` | app_user, role, permission, role_permission, user_branch | users, roles | `PermissionChecker` | `UserInvited` | tenancy | 1 |
-| `subscription` | plan, tenant_subscription, usage | subscription | `EditionGuard.require(WHOLESALE)` | `PlanChanged` | tenancy | 5 |
+| `subscription` | plan, license, license_event, license_activation_attempt, usage (LICENSING.md) | subscription, licensing | `EntitlementGuard.requireEdition/Feature/Capacity/Writable`, `EditionGuard.require(WHOLESALE)` | `LicenseActivated`, `LicenseChanged`, `PlanChanged` | tenancy | 5 |
 | `audit` | audit_log | audit | `AuditRecorder` | — | — | 1 |
 | `notification` | notification, template, channel_config | notifications | `Notifier.send(...)` | — | tenancy | 4 |
 | `files` | stored_file | — | `FileStore.put/get` (signed URLs) | — | — | 2 |

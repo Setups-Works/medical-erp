@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**196 tasks** · P0: 5 · P1: 9 · P2: 22 · P3: 31 · P4: 46 · P5: 43 · P6: 26 · P7: 14
+**198 tasks** · P0: 5 · P1: 9 · P2: 22 · P3: 31 · P4: 46 · P5: 44 · P6: 27 · P7: 14
 
 ## P0 · Foundation (5)
 
@@ -145,7 +145,7 @@
 | 112 | QA: Notifications · P4 (3 features) | QA | — |
 | 113 | QA: Desktop app & offline · P4 (3 features) | QA | — |
 
-## P5 · Wholesale, finance, offline (43)
+## P5 · Wholesale, finance, offline (44)
 
 | Step | Task | Type | With |
 |---|---|---|---|
@@ -178,67 +178,69 @@
 | 140 | Critical scenario #12: Desktop offline 3 days, 500 bills, reconnect → all synced once, conflicts flagged | Critical scenario | — |
 | 141 | Critical scenario #15: Vouchers always balance; trial balance totals equal | Critical scenario | — |
 | 142 | QA: Platform & administration · P5 (6 features) | QA | — |
-| 143 | QA: Pricing, schemes, discounts · P5 (4 features) | QA | — |
-| 144 | QA: Purchase · P5 (4 features) | QA | — |
-| 145 | QA: Inventory · P5 (6 features) | QA | — |
-| 146 | QA: Inventory journals · P5 (2 features) | QA | — |
-| 147 | QA: Pharmacy operations (short book, ordering, warehouses) · P5 (2 features) | QA | — |
-| 148 | QA: Retail POS & invoices · P5 (10 features) | QA | — |
-| 149 | QA: Wholesale · P5 (10 features) | QA | — |
-| 150 | QA: Sales & purchase document cycle · P5 (2 features) | QA | — |
-| 151 | QA: GST & statutory · P5 (1 feature) | QA | — |
-| 152 | QA: Payments & accounting · P5 (7 features) | QA | — |
-| 153 | QA: Full books & finance · P5 (9 features) | QA | — |
-| 154 | QA: Notifications · P5 (2 features) | QA | — |
-| 155 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P5 (2 features) | QA | — |
-| 156 | QA: Desktop app & offline · P5 (3 features) | QA | — |
+| 143 | QA: Licensing: plans, license keys, entitlements · P5 (9 features) | QA | — |
+| 144 | QA: Pricing, schemes, discounts · P5 (4 features) | QA | — |
+| 145 | QA: Purchase · P5 (4 features) | QA | — |
+| 146 | QA: Inventory · P5 (6 features) | QA | — |
+| 147 | QA: Inventory journals · P5 (2 features) | QA | — |
+| 148 | QA: Pharmacy operations (short book, ordering, warehouses) · P5 (2 features) | QA | — |
+| 149 | QA: Retail POS & invoices · P5 (10 features) | QA | — |
+| 150 | QA: Wholesale · P5 (10 features) | QA | — |
+| 151 | QA: Sales & purchase document cycle · P5 (2 features) | QA | — |
+| 152 | QA: GST & statutory · P5 (1 feature) | QA | — |
+| 153 | QA: Payments & accounting · P5 (7 features) | QA | — |
+| 154 | QA: Full books & finance · P5 (9 features) | QA | — |
+| 155 | QA: Notifications · P5 (2 features) | QA | — |
+| 156 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P5 (2 features) | QA | — |
+| 157 | QA: Desktop app & offline · P5 (3 features) | QA | — |
 
-## P6 · Pilot & GST returns (26)
+## P6 · Pilot & GST returns (27)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 157 | GSTR export validation, pilot defect triage, release reports | Groundwork | — |
-| 158 | RPT-08 GST reports (see §12) | Feature | Nitheesh |
-| 159 | PTY-09 Patient refill reminders (chronic medicines) via WhatsApp/SMS | Feature | Kamesh |
-| 160 | CMP-02 Schedule X / narcotic register with stricter controls (duplicate Rx retention) | Feature | Kamesh |
-| 161 | CMP-10 Controlled stock register: restricted items inward/outward with running balance (verify) | Feature | Kamesh |
-| 162 | CMP-11 Regulatory audit: compliance activity log and inspection pack export (verify) | Feature | Kamesh |
-| 163 | RPT-10 Branch comparison | Feature | Nitheesh |
-| 164 | ANX-03 Customer, product and vendor performance reports (top, declining, dormant) | Feature | Nitheesh |
-| 165 | CAT-13 Item images | Feature | Kamesh |
-| 166 | CAT-21 Drug reference panel on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up by salt with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" (verify) pharmacist review | Feature | Kamesh |
-| 167 | PTY-08 Customer loyalty points / membership discount | Feature | Kamesh |
-| 168 | ANX-05 Smart insights card on dashboard (plain-language highlights: "Sales of X down 30 % vs last month") | Feature | Nitheesh |
-| 169 | Weekly pilot regression run and release report | Readiness | — |
-| 170 | QA: Platform & administration · P6 (3 features) | QA | — |
-| 171 | QA: Purchase · P6 (3 features) | QA | — |
-| 172 | QA: Inventory · P6 (1 feature) | QA | — |
-| 173 | QA: Inventory journals · P6 (1 feature) | QA | — |
-| 174 | QA: Pharmacy operations (short book, ordering, warehouses) · P6 (3 features) | QA | — |
-| 175 | QA: Retail POS & invoices · P6 (1 feature) | QA | — |
-| 176 | QA: Wholesale · P6 (3 features) | QA | — |
-| 177 | QA: Sales & purchase document cycle · P6 (1 feature) | QA | — |
-| 178 | QA: GST & statutory · P6 (5 features) | QA | — |
-| 179 | QA: Payments & accounting · P6 (5 features) | QA | — |
-| 180 | QA: Full books & finance · P6 (7 features) | QA | — |
-| 181 | QA: Home delivery & fleet · P6 (1 feature) | QA | — |
-| 182 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P6 (2 features) | QA | — |
+| 158 | GSTR export validation, pilot defect triage, release reports | Groundwork | — |
+| 159 | RPT-08 GST reports (see §12) | Feature | Nitheesh |
+| 160 | PTY-09 Patient refill reminders (chronic medicines) via WhatsApp/SMS | Feature | Kamesh |
+| 161 | CMP-02 Schedule X / narcotic register with stricter controls (duplicate Rx retention) | Feature | Kamesh |
+| 162 | CMP-10 Controlled stock register: restricted items inward/outward with running balance (verify) | Feature | Kamesh |
+| 163 | CMP-11 Regulatory audit: compliance activity log and inspection pack export (verify) | Feature | Kamesh |
+| 164 | RPT-10 Branch comparison | Feature | Nitheesh |
+| 165 | ANX-03 Customer, product and vendor performance reports (top, declining, dormant) | Feature | Nitheesh |
+| 166 | CAT-13 Item images | Feature | Kamesh |
+| 167 | CAT-21 Drug reference panel on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up by salt with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" (verify) pharmacist review | Feature | Kamesh |
+| 168 | PTY-08 Customer loyalty points / membership discount | Feature | Kamesh |
+| 169 | ANX-05 Smart insights card on dashboard (plain-language highlights: "Sales of X down 30 % vs last month") | Feature | Nitheesh |
+| 170 | Weekly pilot regression run and release report | Readiness | — |
+| 171 | QA: Platform & administration · P6 (3 features) | QA | — |
+| 172 | QA: Licensing: plans, license keys, entitlements · P6 (2 features) | QA | — |
+| 173 | QA: Purchase · P6 (3 features) | QA | — |
+| 174 | QA: Inventory · P6 (1 feature) | QA | — |
+| 175 | QA: Inventory journals · P6 (1 feature) | QA | — |
+| 176 | QA: Pharmacy operations (short book, ordering, warehouses) · P6 (3 features) | QA | — |
+| 177 | QA: Retail POS & invoices · P6 (1 feature) | QA | — |
+| 178 | QA: Wholesale · P6 (3 features) | QA | — |
+| 179 | QA: Sales & purchase document cycle · P6 (1 feature) | QA | — |
+| 180 | QA: GST & statutory · P6 (5 features) | QA | — |
+| 181 | QA: Payments & accounting · P6 (5 features) | QA | — |
+| 182 | QA: Full books & finance · P6 (7 features) | QA | — |
+| 183 | QA: Home delivery & fleet · P6 (1 feature) | QA | — |
+| 184 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P6 (2 features) | QA | — |
 
 ## P7 · Growth (14)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 183 | Mobile test strategy | Groundwork | — |
-| 184 | RPT-12 Sales forecasting & smart reorder (ML) | Feature | Nitheesh |
-| 185 | ANX-04 Customer & product intelligence: purchase frequency, refill prediction, churn risk | Feature | Nitheesh |
-| 186 | QA: Platform & administration · P7 (2 features) | QA | — |
-| 187 | QA: Purchase · P7 (1 feature) | QA | — |
-| 188 | QA: Pharmacy operations (short book, ordering, warehouses) · P7 (1 feature) | QA | — |
-| 189 | QA: Wholesale · P7 (1 feature) | QA | — |
-| 190 | QA: GST & statutory · P7 (1 feature) | QA | — |
-| 191 | QA: Payments & accounting · P7 (1 feature) | QA | — |
-| 192 | QA: Full books & finance · P7 (1 feature) | QA | — |
-| 193 | QA: Notifications · P7 (1 feature) | QA | — |
-| 194 | QA: Home delivery & fleet · P7 (2 features) | QA | — |
-| 195 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P7 (5 features) | QA | — |
-| 196 | QA: Mobile (P7) · P7 (5 features) | QA | — |
+| 185 | Mobile test strategy | Groundwork | — |
+| 186 | RPT-12 Sales forecasting & smart reorder (ML) | Feature | Nitheesh |
+| 187 | ANX-04 Customer & product intelligence: purchase frequency, refill prediction, churn risk | Feature | Nitheesh |
+| 188 | QA: Platform & administration · P7 (2 features) | QA | — |
+| 189 | QA: Purchase · P7 (1 feature) | QA | — |
+| 190 | QA: Pharmacy operations (short book, ordering, warehouses) · P7 (1 feature) | QA | — |
+| 191 | QA: Wholesale · P7 (1 feature) | QA | — |
+| 192 | QA: GST & statutory · P7 (1 feature) | QA | — |
+| 193 | QA: Payments & accounting · P7 (1 feature) | QA | — |
+| 194 | QA: Full books & finance · P7 (1 feature) | QA | — |
+| 195 | QA: Notifications · P7 (1 feature) | QA | — |
+| 196 | QA: Home delivery & fleet · P7 (2 features) | QA | — |
+| 197 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P7 (5 features) | QA | — |
+| 198 | QA: Mobile (P7) · P7 (5 features) | QA | — |

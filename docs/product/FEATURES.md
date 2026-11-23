@@ -544,8 +544,26 @@ openFDA (`https://api.fda.gov/drug/label.json` and `drug/ndc.json`) is the US FD
 | INT-10 | openFDA adapter in `integrations` (reference only): server-side client for the drug label endpoint, optional API key from secrets, cache by label `set_id` (weekly updates), handles 404 "no matches" and 429; only needed for CAT-21 | B | P6 | C |
 | CAT-21 | **Drug reference panel** on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up **by salt** with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" ⚠ pharmacist review | B | P6 | C |
 
+## 23. Licensing: license keys, plans and entitlements (`subscription`)
+
+How MENO is sold: the MENO team (super admin) creates a license for a buyer, the buyer enters its key once, and MENO enforces the plan's edition, limits and expiry. Design: [LICENSING.md](../architecture/LICENSING.md), [ADR-0015](../decisions/0015-license-keys-signed-certificates.md). Builds on PLT-14 (plans, edition gating) and PLT-15 (super-admin console). Teaching lesson: MENO Hub → Learn → "Licensing". ⚠ grace length, restricted-mode rules, invoice limit type and prices are confirmed by Nitheesh before LIC-06.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| LIC-01 | **Plan catalogue** (super admin): plans as data: code, name, edition, limits (users, branches, devices, invoices per month), features, duration, grace days, list price; effective-dated; never hard-coded | B | P5 | M |
+| LIC-02 | **Issue a license key** (super admin): buyer name, GSTIN, email, phone, plan, start and expiry, trial flag, limit overrides, notes → key `MENO-XXXXX-XXXXX-XXXXX-XXXXX` (Crockford Base32, 95 random bits, Luhn mod-32 check), stored only as an HMAC hash, shown once, PDF / email to the buyer; `Idempotency-Key`; plan limits snapshotted onto the license | B | P5 | M |
+| LIC-03 | **Activate a license key** (business owner) in onboarding (`/onboarding/license`) or Settings → License: check character validated in the browser, server binds the license to the tenant, rate-limited (5 tries / 15 min), same message for unknown and already-used keys, every attempt recorded | B | P5 | M |
+| LIC-04 | **Signed license certificate**: Ed25519-signed JWS with plan, edition, limits, features, dates and tenant; 7-day lifetime; returned on activation, login and sync; private key in secrets with `kid` rotation; public keys bundled in web and desktop | B | P5 | M |
+| LIC-05 | **Entitlement enforcement**: `EntitlementGuard` (edition, feature, capacity, writable) checked server-side before creating users, branches, devices and documents; RFC 9457 codes `license_expired`, `license_limit_reached`, `license_edition`, `license_feature`; UI hides or explains | B | P5 | M |
+| LIC-06 | **Expiry lifecycle**: computed states valid → expiring (reminders 30/15/7/1 days) → grace → expired; restricted mode after grace blocks new documents, users, branches and devices but always allows sign-in, viewing, reports, export, payments received and sync of bills made before the grace end; no data is ever deleted ⚠ | B | P5 | M |
+| LIC-07 | **Desktop offline license**: cached certificate verified offline (signature, tenant, lifetime), clock-rollback check against the last server time seen, device activation counted against the device limit, restricted mode applied offline | R | P5 | M |
+| LIC-08 | **Super-admin license console** (`/platform/licenses`): list and filters (status, plan, expiring before), detail with history and activations; extend, change plan, suspend, resume, revoke, re-issue key, transfer to another tenant; every action needs a reason, is audited, and requires 2FA | B | P5 | M |
+| LIC-09 | **Tenant license page** (`/admin/license`): plan, edition, start and expiry, days left, limits with usage bars, masked key, history, renew / upgrade contact | B | P5 | S |
+| LIC-10 | **Renew or upgrade with a new key** on an active tenant: the new license takes over on its start date, the old one ends; stacking and pro-rata rules ⚠ | B | P6 | S |
+| LIC-11 | License sale invoices: GST invoice to the buyer for each license, linked to platform billing (ADM-10) ⚠ | B | P6 | C |
+
 ---
 
 ### MVP definition (Pilot release, end of P5)
 
-Platform admin, masters, purchase (+ CSV import), batch inventory with expiry, retail POS (online + offline desktop), returns incl. expiry returns, Schedule H1 register, payments & outstanding, wholesale orders/invoices with credit and e-invoice, core reports, notifications by email + WhatsApp share link, Azure deployment with backups and monitoring.
+Platform admin, licensing (LIC-01 … LIC-08), masters, purchase (+ CSV import), batch inventory with expiry, retail POS (online + offline desktop), returns incl. expiry returns, Schedule H1 register, payments & outstanding, wholesale orders/invoices with credit and e-invoice, core reports, notifications by email + WhatsApp share link, Azure deployment with backups and monitoring.
