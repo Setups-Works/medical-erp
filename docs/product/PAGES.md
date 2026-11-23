@@ -25,6 +25,7 @@ Public and first-run pages.
 | Initial configuration | `/onboarding/configuration` | Tax, invoice series, currency, units, rounding | AUT-02, PLT-05, CAT-17 | P2 | Nitheesh | Meyyarivu | OW | Ashok |
 | Books setup | `/onboarding/books` | Chart of accounts, bank accounts, financial year, opening balances | ACX-11, ACX-15 | P5 | Nitheesh | Nitheesh | OW AC | Ashok |
 | Subscription selection | `/onboarding/plan` | Choose plan / trial | PLT-14 | P6 | Nitheesh | Nitheesh | OW | Ashok |
+| Enter license key | `/onboarding/license` | Type the license key bought from MENO; shows plan, edition and expiry once activated | LIC-03, LIC-04 | P5 | Nitheesh | Nitheesh | OW | Ashok |
 | Onboarding checklist | `/onboarding` | Setup steps with progress until ready to bill | AUT-03 | P2 | Nitheesh | Meyyarivu | OW BM | Ashok |
 
 ## B. Dashboards & overview
@@ -42,6 +43,10 @@ Each role lands on its own dashboard (ROLES_AND_DASHBOARDS.md). Widgets come fro
 | Notifications | `/notifications` | Alerts and reminders | NTF-01, NTF-05 | P4 | Nitheesh | Meyyarivu | All | Ashok |
 | Activity timeline | `/activity` | Recent user activities | DSH-07 | P4 | Nitheesh | Nitheesh | OW BM AU | Meyyarivu |
 | Platform dashboard | `/platform` | Tenants, plans, usage, health (super admin) | DSH-09, PLT-15 | P6 | Nitheesh | Nitheesh | SA | Meyyarivu |
+| Plans | `/platform/plans` | Plan catalogue: edition, limits, features, duration, grace, price | LIC-01 | P5 | Nitheesh | Nitheesh | SA | Ashok |
+| Licenses | `/platform/licenses` | All licenses with status, plan, buyer, expiry; filters for expiring and suspended | LIC-08 | P5 | Nitheesh | Nitheesh | SA | Ashok |
+| New license | `/platform/licenses/new` | Create a license for a buyer; the key is shown once, with PDF / email | LIC-02 | P5 | Nitheesh | Nitheesh | SA | Ashok |
+| License detail | `/platform/licenses/[id]` | History, activations, extend / change plan / suspend / revoke / re-issue key | LIC-08, LIC-10 | P5 | Nitheesh | Nitheesh | SA | Ashok |
 
 Dashboard widgets (DSH-08): today's sales, today's purchases, gross margin, net sales, total invoices, cash collection, credit sales, outstanding receivables, supplier payables, low-stock medicines, near-expiry batches, expired stock, fast-moving medicines, slow-moving medicines, branch performance. Each widget checks permissions and reads its numbers from the reporting module; no widget computes money in the browser.
 
@@ -373,6 +378,7 @@ Every report: date range, filters, server pagination, export (Excel / PDF / CSV)
 | Backup management | `/admin/backups` | Backup status, tenant data download | ADM-08 | P6 | Nitheesh | Nitheesh | OW | Meyyarivu |
 | Data retention | `/admin/retention` | Retention policies | ADM-09 | P6 | Nitheesh | Nitheesh | OW | Meyyarivu |
 | Subscription management | `/admin/subscription` | SaaS plans | PLT-14 | P6 | Nitheesh | Nitheesh | OW SA | Ashok |
+| License & plan | `/admin/license` | Current plan, expiry, limits with usage, masked key, enter a renewal key | LIC-09, LIC-10, LIC-06 | P5 | Nitheesh | Nitheesh | OW | Ashok |
 | Billing & invoices | `/admin/billing` | Platform billing | ADM-10 | P6 | Nitheesh | Nitheesh | OW SA | Meyyarivu |
 | Settings home | `/admin` | Tiles for every administration page below | PLT-13 | P2 | Nitheesh | Nitheesh | OW BM | Ashok |
 | Help & support | `/help` | Help centre and support tickets | ADM-11 | P6 | Nitheesh | Nitheesh | All | Meyyarivu |

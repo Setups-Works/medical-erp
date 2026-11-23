@@ -67,6 +67,7 @@
 /apps/web/src/features/payments/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/crm/             @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/delivery/        @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/platform/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/channels/        @nitheeshdr @meyyarivu-gh
 # Medicine master, parties, returns, compliance, reports (Ashok)
 /apps/web/src/features/catalog/         @ashok-gh @meyyarivu-gh @nitheeshdr

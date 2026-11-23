@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**67 tasks** · P0: 5 · P1: 7 · P2: 6 · P3: 5 · P4: 8 · P5: 21 · P6: 6 · P7: 9
+**68 tasks** · P0: 5 · P1: 7 · P2: 6 · P3: 5 · P4: 8 · P5: 22 · P6: 6 · P7: 9
 
 ## P0 · Foundation (5)
 
@@ -63,7 +63,7 @@
 | 30 | DSK-04 USB/HID barcode scanner support, weighing scale (later) | Feature | Nitheesh, Meyyarivu |
 | 31 | Windows installer for the desktop app with code signing and an auto-update channel | Readiness | — |
 
-## P5 · Wholesale, finance, offline (21)
+## P5 · Wholesale, finance, offline (22)
 
 | Step | Task | Type | With |
 |---|---|---|---|
@@ -71,45 +71,46 @@
 | 33 | Restore drill (documented, timed), disaster-recovery runbook | Groundwork | — |
 | 34 | Alerts: API down, 5xx rate, DB CPU/storage, backup failed, cert expiry, device not syncing | Groundwork | — |
 | 35 | Go-live checklist | Groundwork | — |
-| 36 | INT-01 GST IRP / GSP for e-invoice & e-way bill (verify) provider choice | Feature | Nitheesh |
-| 37 | DSK-02 Offline SQLite store, sync engine, status bar indicator | Feature | Nitheesh, Meyyarivu |
-| 38 | DSK-05 Device registration & revoke, local data encryption | Feature | Nitheesh, Meyyarivu |
-| 39 | INT-02 WhatsApp Business provider, SMS provider | Feature | Nitheesh |
-| 40 | DSK-06 Local backup export of offline data (emergency) | Feature | Nitheesh, Meyyarivu |
-| 41 | Production hardening: firewall, SSH keys only, fail2ban, TLS A+, Nginx rate limits, security headers | Readiness | — |
-| 42 | Monthly restore drill done and timed (RTO ≤ 4 h); result in `docs/runbooks/restore-drill-log.md` | Readiness | — |
-| 43 | Alerts tested end to end: API down, 5xx rate, DB storage, backup failed, cert expiry, device not syncing | Readiness | — |
-| 44 | Production go-live: deploy `v1.0.0`, smoke test, monitoring on, rollback plan rehearsed | Readiness | — |
-| 45 | Write and rehearse runbook: deploy.md | Runbook | — |
-| 46 | Write and rehearse runbook: rollback.md | Runbook | — |
-| 47 | Write and rehearse runbook: restore-database.md | Runbook | — |
-| 48 | Write and rehearse runbook: rotate-secrets.md | Runbook | — |
-| 49 | Write and rehearse runbook: api-down.md | Runbook | — |
-| 50 | Write and rehearse runbook: disk-full.md | Runbook | — |
-| 51 | Write and rehearse runbook: revoke-device.md | Runbook | — |
-| 52 | Write and rehearse runbook: incident-template.md | Runbook | — |
+| 36 | LIC-07 Desktop offline license: cached certificate verified offline (signature, tenant, lifetime), clock-rollback check against the last server time seen, device activation counted against the device limit, restricted mode applied offline | Feature | Nitheesh, Meyyarivu |
+| 37 | INT-01 GST IRP / GSP for e-invoice & e-way bill (verify) provider choice | Feature | Nitheesh |
+| 38 | DSK-02 Offline SQLite store, sync engine, status bar indicator | Feature | Nitheesh, Meyyarivu |
+| 39 | DSK-05 Device registration & revoke, local data encryption | Feature | Nitheesh, Meyyarivu |
+| 40 | INT-02 WhatsApp Business provider, SMS provider | Feature | Nitheesh |
+| 41 | DSK-06 Local backup export of offline data (emergency) | Feature | Nitheesh, Meyyarivu |
+| 42 | Production hardening: firewall, SSH keys only, fail2ban, TLS A+, Nginx rate limits, security headers | Readiness | — |
+| 43 | Monthly restore drill done and timed (RTO ≤ 4 h); result in `docs/runbooks/restore-drill-log.md` | Readiness | — |
+| 44 | Alerts tested end to end: API down, 5xx rate, DB storage, backup failed, cert expiry, device not syncing | Readiness | — |
+| 45 | Production go-live: deploy `v1.0.0`, smoke test, monitoring on, rollback plan rehearsed | Readiness | — |
+| 46 | Write and rehearse runbook: deploy.md | Runbook | — |
+| 47 | Write and rehearse runbook: rollback.md | Runbook | — |
+| 48 | Write and rehearse runbook: restore-database.md | Runbook | — |
+| 49 | Write and rehearse runbook: rotate-secrets.md | Runbook | — |
+| 50 | Write and rehearse runbook: api-down.md | Runbook | — |
+| 51 | Write and rehearse runbook: disk-full.md | Runbook | — |
+| 52 | Write and rehearse runbook: revoke-device.md | Runbook | — |
+| 53 | Write and rehearse runbook: incident-template.md | Runbook | — |
 
 ## P6 · Pilot & GST returns (6)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 53 | On-call rota, incident runbooks, monthly cost & uptime report | Groundwork | — |
-| 54 | Scale plan if pilot grows (bigger VM / Container Apps ADR) | Groundwork | — |
-| 55 | OMN-04 WhatsApp ordering: customer sends an order or prescription on WhatsApp, it lands as a draft bill at the counter | Feature | Nitheesh |
-| 56 | INT-03 Tally export | Feature | Nitheesh |
-| 57 | INT-10 openFDA adapter in `integrations` (reference only): server-side client for the drug label endpoint, optional API key from secrets, cache by label `set_id` (weekly updates), handles 404 "no matches" and 429; only needed for CAT-21 | Feature | Nitheesh |
-| 58 | Monthly cost and uptime report; scale plan if the pilot grows | Readiness | — |
+| 54 | On-call rota, incident runbooks, monthly cost & uptime report | Groundwork | — |
+| 55 | Scale plan if pilot grows (bigger VM / Container Apps ADR) | Groundwork | — |
+| 56 | OMN-04 WhatsApp ordering: customer sends an order or prescription on WhatsApp, it lands as a draft bill at the counter | Feature | Nitheesh |
+| 57 | INT-03 Tally export | Feature | Nitheesh |
+| 58 | INT-10 openFDA adapter in `integrations` (reference only): server-side client for the drug label endpoint, optional API key from secrets, cache by label `set_id` (weekly updates), handles 404 "no matches" and 429; only needed for CAT-21 | Feature | Nitheesh |
+| 59 | Monthly cost and uptime report; scale plan if the pilot grows | Readiness | — |
 
 ## P7 · Growth (9)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 59 | Mobile build pipeline (EAS), environment for public API | Groundwork | — |
-| 60 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Nitheesh |
-| 61 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Nitheesh |
-| 62 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Nitheesh |
-| 63 | INT-05 Public API + webhooks for partners | Feature | Nitheesh |
-| 64 | INT-06 Online pharmacy / e-commerce order intake | Feature | Nitheesh |
-| 65 | INT-07 ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions (verify) ABDM certification | Feature | Nitheesh |
-| 66 | INT-08 EMR integration: receive prescriptions from clinic software | Feature | Nitheesh |
-| 67 | INT-09 Hospital software (HMIS) integration: hospital pharmacy billing against patient / IP number, ward indents | Feature | Nitheesh |
+| 60 | Mobile build pipeline (EAS), environment for public API | Groundwork | — |
+| 61 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Nitheesh |
+| 62 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Nitheesh |
+| 63 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Nitheesh |
+| 64 | INT-05 Public API + webhooks for partners | Feature | Nitheesh |
+| 65 | INT-06 Online pharmacy / e-commerce order intake | Feature | Nitheesh |
+| 66 | INT-07 ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions (verify) ABDM certification | Feature | Nitheesh |
+| 67 | INT-08 EMR integration: receive prescriptions from clinic software | Feature | Nitheesh |
+| 68 | INT-09 Hospital software (HMIS) integration: hospital pharmacy billing against patient / IP number, ward indents | Feature | Nitheesh |

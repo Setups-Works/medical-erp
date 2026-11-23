@@ -111,6 +111,12 @@ Common line columns: `id, doc_id, line_no, item_id, batch_id, qty, free_qty, rat
 - `device(id, tenant_id, branch_id, name, status, registered_by, last_sync_at)`, `sync_conflict(...)`
 - `event_publication` (Spring Modulith registry)
 
+### subscription (licensing, `docs/architecture/LICENSING.md`, ADR-0015)
+- `plan(id, code unique, name, edition, limits jsonb, features text[], duration_months, grace_days, list_price numeric(18,4), currency, is_active, valid_from, valid_to)` — platform data
+- `license(id, key_hash bytea unique, key_last4, plan_id, buyer_name, buyer_gstin, buyer_email, buyer_phone, edition, limits jsonb, features text[], starts_at, expires_at, grace_days, is_trial, status[ISSUED|ACTIVE|SUSPENDED|REVOKED], tenant_id null, activated_at, activated_by, notes, version)` — key stored only as HMAC hash; plan limits snapshotted; one ACTIVE license per tenant (partial unique); RLS lets a tenant read only its own row; expiring / grace / expired are computed from dates, never stored
+- `license_event(id, license_id, type, before jsonb, after jsonb, reason, by_user, at)` — **insert-only** history
+- `license_activation_attempt(id, ip_hash, tenant_id, key_last4, success, at)` — rate limiting and abuse review
+
 ### configuration (no hard-coding, ADR-0014)
 - `state(code, name, gst_state_code)` · `tax_rate(id, rate, cess, valid_from, valid_to)` · `hsn_tax(hsn, tax_rate_id, valid_from, valid_to)`
 - `unit(id, tenant_id, code, name, allows_decimal)` · `unit_conversion(item_id, from_unit, to_unit, factor)`

@@ -34,6 +34,7 @@ See [MULTI_TENANCY.md](../architecture/MULTI_TENANCY.md). Any cross-tenant read 
 - Electron: `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`, narrow preload API, signed installers, update feed over HTTPS with signature check.
 - Dependencies: Dependabot + `mvn dependency-check`/Trivy + `pnpm audit` in CI; CodeQL.
 - Secrets: GitHub Environments + VM `.env` (root-only, 600); rotation runbook. Never in git, never in logs.
+- Licensing (LICENSING.md, ADR-0015): license keys stored only as `HMAC-SHA256(pepper, key)`, shown once, logged as last 4 characters only; activation rate-limited; Ed25519 certificate-signing key and the HMAC pepper are secrets with a rotation runbook (`kid`); the server always re-checks the license in the database, the certificate is for offline use and display only.
 
 ## Infrastructure
 

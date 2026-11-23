@@ -45,6 +45,7 @@ Rules of the split:
 | INT | Integrations (GSP, WhatsApp, SMS, Tally) | integrations | nitheesh | | admin | jeeva | ashok |
 | DSK | Desktop app & offline | sync | nitheesh | meyyarivu | (desktop renderer) | jeeva | ashok |
 | MOB | Mobile (P7) | fieldsales | nitheesh | meyyarivu | apps/mobile | | ashok |
+| LIC | Licensing: plans, license keys, entitlements | subscription | nitheesh | nitheesh | platform, admin | | ashok |
 | DLV | Home delivery & fleet | delivery | nitheesh | nitheesh | delivery | | ashok |
 | OMN | Online channels (store page, customer app, marketplaces) | channels, integrations | nitheesh | nitheesh | channels | jeeva | meyyarivu |
 
@@ -56,6 +57,7 @@ A few features are built by someone other than their prefix's owners. MENO Hub a
 |---|---|---|---|---|
 | INT-12 | nitheesh | | | DrugDB adapter: Nitheesh built the Learn prototype (Day 19) and owns the source decision |
 | CAT-24 | nitheesh | nitheesh | | Medicine search-as-you-type on the item form, from the same prototype |
+| LIC-07 | nitheesh | meyyarivu | jeeva | Desktop offline license: certificate check in the desktop renderer (Meyyarivu), public-key bundling in the build (Jeeva) |
 
 Compliance rules (⚠ items in COMPLIANCE.md) are confirmed by **Nitheesh** with qualified professionals; Prakalya does the research.
 
@@ -65,7 +67,7 @@ QA: the Hub creates one QA task per prefix per phase ("QA: Purchase · P3") list
 
 | QA owner | Prefixes they test |
 |---|---|
-| Ashok (QA lead) | PRC, PUR, INV, IJX, MKT, POS, WHS, DOC, GST, ACC, ACX, AUT, NAV, NTF, INT, DSK, MOB, PLT, DLV + 15 critical scenarios |
+| Ashok (QA lead) | PRC, PUR, INV, IJX, MKT, POS, WHS, DOC, GST, ACC, ACX, AUT, NAV, NTF, INT, DSK, MOB, PLT, DLV, LIC + 15 critical scenarios |
 | Meyyarivu | DSH, ADM, OMN (Nitheesh's screens) and RPT, ANX (Ashok's screens) |
 | Prakalya | CAT, PTY, RET, CMP (Ashok's screens; she wrote their stories) and CRM, ENG (Nitheesh's screens) |
 | Nitheesh | Final QA sign-off on every release |
@@ -82,5 +84,5 @@ QA: the Hub creates one QA task per prefix per phase ("QA: Purchase · P3") list
 | Owner | `apps/web/src/features/` |
 |---|---|
 | Meyyarivu | auth, purchase, inventory, pos, wholesale, pricing, gst + app shell, `packages/ui`, page patterns |
-| Nitheesh | company, branches, users, settings, admin, dashboard, accounting, payments, crm, delivery, channels |
+| Nitheesh | company, branches, users, settings, admin, dashboard, accounting, payments, crm, delivery, channels, platform |
 | Ashok | catalog, parties, returns, compliance, reports |
