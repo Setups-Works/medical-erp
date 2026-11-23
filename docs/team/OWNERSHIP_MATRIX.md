@@ -45,6 +45,17 @@ Rules of the split:
 | INT | Integrations (GSP, WhatsApp, SMS, Tally) | integrations | nitheesh | | admin | jeeva | ashok |
 | DSK | Desktop app & offline | sync | nitheesh | meyyarivu | (desktop renderer) | jeeva | ashok |
 | MOB | Mobile (P7) | fieldsales | nitheesh | meyyarivu | apps/mobile | | ashok |
+| DLV | Home delivery & fleet | delivery | nitheesh | nitheesh | delivery | | ashok |
+| OMN | Online channels (store page, customer app, marketplaces) | channels, integrations | nitheesh | nitheesh | channels | jeeva | meyyarivu |
+
+## Feature overrides
+
+A few features are built by someone other than their prefix's owners. MENO Hub assigns these rows instead of the prefix row; QA still follows the prefix's QA column (so the builder never tests their own work).
+
+| Feature | Backend | Frontend | Extra | Why |
+|---|---|---|---|---|
+| INT-12 | nitheesh | | | DrugDB adapter: Nitheesh built the Learn prototype (Day 19) and owns the source decision |
+| CAT-24 | nitheesh | nitheesh | | Medicine search-as-you-type on the item form, from the same prototype |
 
 Compliance rules (⚠ items in COMPLIANCE.md) are confirmed by **Nitheesh** with qualified professionals; Prakalya does the research.
 
@@ -54,8 +65,8 @@ QA: the Hub creates one QA task per prefix per phase ("QA: Purchase · P3") list
 
 | QA owner | Prefixes they test |
 |---|---|
-| Ashok (QA lead) | PRC, PUR, INV, IJX, MKT, POS, WHS, DOC, GST, ACC, ACX, AUT, NAV, NTF, INT, DSK, MOB, PLT + 15 critical scenarios |
-| Meyyarivu | DSH, ADM (Nitheesh's screens) and RPT, ANX (Ashok's screens) |
+| Ashok (QA lead) | PRC, PUR, INV, IJX, MKT, POS, WHS, DOC, GST, ACC, ACX, AUT, NAV, NTF, INT, DSK, MOB, PLT, DLV + 15 critical scenarios |
+| Meyyarivu | DSH, ADM, OMN (Nitheesh's screens) and RPT, ANX (Ashok's screens) |
 | Prakalya | CAT, PTY, RET, CMP (Ashok's screens; she wrote their stories) and CRM, ENG (Nitheesh's screens) |
 | Nitheesh | Final QA sign-off on every release |
 
@@ -64,12 +75,12 @@ QA: the Hub creates one QA task per prefix per phase ("QA: Purchase · P3") list
 | Owner | Modules (`backend/meno-api/.../modules/`) |
 |---|---|
 | Kamesh | catalog, party, pricing, purchase, inventory, sales, returns, compliance, taxation |
-| Nitheesh | auth, tenancy, identity, subscription, audit, files, sync, notification, payment, accounting, reporting, fieldsales + `config/ security/ common/ tenancy/ integrations/` |
+| Nitheesh | auth, tenancy, identity, subscription, audit, files, sync, notification, payment, accounting, reporting, fieldsales, delivery, channels + `config/ security/ common/ tenancy/ integrations/` |
 
 ## Web feature folders by owner
 
 | Owner | `apps/web/src/features/` |
 |---|---|
 | Meyyarivu | auth, purchase, inventory, pos, wholesale, pricing, gst + app shell, `packages/ui`, page patterns |
-| Nitheesh | company, branches, users, settings, admin, dashboard, accounting, payments, crm |
+| Nitheesh | company, branches, users, settings, admin, dashboard, accounting, payments, crm, delivery, channels |
 | Ashok | catalog, parties, returns, compliance, reports |
