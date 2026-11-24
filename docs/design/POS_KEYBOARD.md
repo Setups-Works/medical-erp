@@ -3,7 +3,8 @@
 | Key | Action | Notes |
 |---|---|---|
 | `F2` | Focus item search | Default focus after every action |
-| `F3` | Select / add customer | Phone number search first |
+| `F3` | Select / add customer | Phone number search first; an unknown 10-digit mobile offers "Add as new customer" (POS-31) |
+| `Alt+N` | New customer dialog | Saves to the customer master and selects it on the bill; `Ctrl+S` / `Enter` saves, `Esc` closes (POS-31) |
 | `F4` | Doctor & prescription | Mandatory dialog for H1/X items |
 | `F6` | Hold bill | |
 | `F7` | Recall held bill | |

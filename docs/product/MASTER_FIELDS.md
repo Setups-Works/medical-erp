@@ -85,6 +85,8 @@
 
 Same tabs as the supplier. Differences only:
 
+> **Walk-in customers are not master records.** A walk-in bill keeps the buyer's name and phone (if given) on the bill itself (POS-30, DOCUMENT_FIELDS §2). The cashier can tick "Save as customer" to create a Retail (person) customer from those details; the customer list can show repeat walk-in mobiles to convert. The POS can also add or edit a retail customer directly (POS-31); it writes to this same master, with the Books, Patient and Others fields it shows, and the rest is completed here.
+
 | Tab | Field | Type / options | Req. | Notes and rule | Status |
 |---|---|---|---|---|---|
 | Books | Customer type | API: Retail (person), Retailer (pharmacy), Hospital, Clinic, Institution, Doctor | Y | Type decides required fields: a retailer needs GSTIN (if registered) and drug licence; a person needs only a phone | Plan PTY-02, PTY-03 · **New PTY-16** |

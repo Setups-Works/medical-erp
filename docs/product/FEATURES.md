@@ -767,6 +767,15 @@ Threats: [THREAT_MODEL.md](../security/THREAT_MODEL.md) · controls: [SECURITY.m
 | SEC-17 | **Patient-data vault**: prescriptions and patient fields in a separate encrypted store, access logged with purpose, retention auto-delete after the legal period ⚠ | R | P4 | M |
 | SEC-18 | **Trust centre and security pack**: public trust page, security whitepaper, VAPT summary, DPA template, sub-processor list, ready answers to security questionnaires | B | P6 | C |
 
+## 33. Walk-in and counter customers (24-11-2026)
+
+A walk-in bill must stay fast (no details needed for an OTC sale), but the counter often has the buyer's name and phone, and Schedule H1 / X needs the patient's name (R-18). Walk-in details are stored **on the bill**, not as a customer, unless the cashier chooses to save them. Field rules: [DOCUMENT_FIELDS.md](DOCUMENT_FIELDS.md) §2.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| POS-30 | **Walk-in customer details**: optional name, mobile, age, gender and address on a walk-in bill, stored as a snapshot on the bill (no customer record); patient name required when the bill has a Schedule H1 / X line; a mobile that matches a saved customer offers to link the bill; "Save as customer" creates a Retail (person) customer; walk-in mobiles with repeat visits listed for conversion (CRM-10); printed on the bill; searchable by mobile for returns and reprints; DPDP notice and consent before storing the mobile ⚠ | R | P4 | M |
+| POS-31 | **Add and edit a customer from POS**: F3 picker shows "+ New customer" (Alt+N), and a typed unknown mobile offers "Add as new customer"; dialog with mobile, name, age, gender, address + PIN, regular doctor, allergies; saves a Retail (person) customer into the **same customer master** and selects it on the bill; "Edit customer" on the selected customer; duplicate mobile offers the existing customer instead; walk-in details already typed are carried into the dialog; consent recorded ⚠; old bills keep their snapshot | R | P4 | M |
+
 ---
 
 ### MVP definition (Pilot release, end of P5)

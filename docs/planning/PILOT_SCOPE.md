@@ -8,7 +8,7 @@ Everything else (255 features: Should, Could, P6–P7) is **after the pilot**. E
 
 Goal: a single Tamil Nadu medical shop bills every sale in MENO for 30 days, online and offline, with correct GST, stock and Schedule H1 records, and closes the month without the old software.
 
-**145 features.** Exit criteria: the 15 critical scenarios in TEST_STRATEGY.md pass; all test vectors pass in Java and the offline engine; the CA has confirmed the GST and rounding rules used; the pharmacist has confirmed the Schedule H/H1 workflow; one restore drill done.
+**147 features.** Exit criteria: the 15 critical scenarios in TEST_STRATEGY.md pass; all test vectors pass in Java and the offline engine; the CA has confirmed the GST and rounding rules used; the pharmacist has confirmed the Schedule H/H1 workflow; one restore drill done.
 
 | ID | Feature | Ed. | Phase | Area |
 |---|---|---|---|---|
@@ -157,6 +157,8 @@ Goal: a single Tamil Nadu medical shop bills every sale in MENO for 30 days, onl
 | SEC-10 | API and edge protection | B | P4 | 32. Security (`security`, 24-11-2026) |
 | SEC-14 | Secure SDLC gates | B | P1 | 32. Security (`security`, 24-11-2026) |
 | SEC-17 | Patient-data vault | R | P4 | 32. Security (`security`, 24-11-2026) |
+| POS-30 | Walk-in customer details | R | P4 | 33. Walk-in and counter customers (24-11 |
+| POS-31 | Add and edit a customer from POS | R | P4 | 33. Walk-in and counter customers (24-11 |
 
 ## Pilot B — wholesale and finance
 

@@ -132,7 +132,7 @@ Common header columns: `id, tenant_id, branch_id, fy_id, doc_no, doc_date, party
 Common line columns: `id, doc_id, line_no, item_id, batch_id, qty, free_qty, rate, mrp, discount_pct, scheme_id, taxable, gst_rate, cgst, sgst, igst, line_total, item_snapshot jsonb`.
 
 - `purchase_invoice(+supplier_invoice_no, supplier_invoice_date)` / `purchase_line`
-- `sales_invoice(+sale_type[RETAIL|WHOLESALE], customer_name, doctor_id, prescription_id, device_id, origin[ONLINE|OFFLINE], einvoice_irn, order_no, order_date, lr_no, lr_date, transporter_id, vehicle_no, cases, weight, due_date, salesman_id, terms_id)` / `sales_line(+section[SALE|REPLACEMENT], replaces_claim_id null)`
+- `sales_invoice(+sale_type[RETAIL|WHOLESALE], customer_name, walkin jsonb null {name, mobile, age, gender, address, consent_at} (POS-30; only when party_id is the walk-in customer; index on (tenant_id, walkin->>'mobile')), doctor_id, prescription_id, device_id, origin[ONLINE|OFFLINE], einvoice_irn, order_no, order_date, lr_no, lr_date, transporter_id, vehicle_no, cases, weight, due_date, salesman_id, terms_id)` / `sales_line(+section[SALE|REPLACEMENT], replaces_claim_id null)`
 - `document_charge(id, tenant_id, document_type, document_id, kind[FREIGHT|INSURANCE|PACKING|OTHER], amount, gst_rate, cgst, sgst, igst, ledger_id)` (DOC-06)
 - `credit_note(+invoice_id null, kind[SALES_RETURN|BRK_EXP_RETURN|RATE_DIFF], printed_with_invoice boolean)` — combined bill links (WHS-15)
 - `sales_return`, `purchase_return`, `expiry_return` (+lines), `credit_note`, `debit_note`

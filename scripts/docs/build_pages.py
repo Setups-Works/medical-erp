@@ -448,7 +448,7 @@ sec("R. Desktop and mobile app screens", "Screens that live in the Electron desk
 
 # Features that are behaviour inside an existing screen: attach them so every feature has a home page.
 EXTRA = {
- "/sales/pos": "INV-18 POS-04 POS-05 POS-08 POS-16 POS-17 POS-23 POS-24 POS-26 INV-03 PRC-06 PRC-07 PRC-08 MKT-02 MKT-05 MKT-07 CMP-13 GST-01 CAT-21 CAT-22",
+ "/sales/pos": "INV-18 POS-04 POS-05 POS-30 POS-31 POS-08 POS-16 POS-17 POS-23 POS-24 POS-26 INV-03 PRC-06 PRC-07 PRC-08 MKT-02 MKT-05 MKT-07 CMP-13 GST-01 CAT-21 CAT-22",
  "/sales/invoices/[id]/print": "POS-25 POS-27",
  "/sales/invoices/new": "GST-07 GST-08 PTY-27",
  "/sales/returns/new": "RET-09",

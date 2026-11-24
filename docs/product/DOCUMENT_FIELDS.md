@@ -57,7 +57,8 @@
 
 | Field | Req. | Validation / logic |
 |---|---|---|
-| Customer | Y (walk-in default) | Quick-add by phone (POS-05); credit only for a registered customer |
+| Customer | Y (walk-in default) | Quick-add by phone (POS-05); add or edit a customer from POS without leaving the bill (POS-31: F3 → + New customer or Alt+N; mobile 10 digits 6–9 and unique per tenant, name 1–100, age 0–120, PIN 6 digits, consent ⚠); saves to the customer master; credit only for a registered customer |
+| Walk-in details | C | Only when the customer is walk-in (POS-30). Name 1–100 chars, mobile 10 digits starting 6–9, age 0–120, gender, address; all optional, except **patient name when any line is Schedule H1 / X** (R-18). Stored as `sales_invoice.walkin` snapshot, never as a `customer` row. A mobile matching a saved customer → offer to link the bill to that customer. "Save as customer" (needs name + mobile) creates a Retail (person) customer and links the bill. Consent to store the mobile recorded with time ⚠ (DPDP). Printed in "Billed to" |
 | Doctor + prescription no. + Rx image | C | Required when any line is Schedule H/H1/X (POS-06); H1 also needs the patient name for the register; prescriber name and address are required, patient address optional (CMP-01, RESEARCHED_ANSWERS R-18) |
 | Pharmacist on duty | Y | Logged-in registered pharmacist or selected (CMP-04) ⚠ |
 | Counter / shift / device | auto | Open shift required (POS-14) |

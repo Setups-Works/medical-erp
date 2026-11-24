@@ -193,7 +193,7 @@ Default batch selection is FEFO; authorised users may override with a recorded r
 
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles | QA |
 |---|---|---|---|---|---|---|---|---|
-| POS billing | `/sales/pos` | Main fast billing interface; full line columns (pack, mfr, HSN, MRP, disc, taxable, GST) | POS-01, POS-02, POS-03, POS-07, POS-22, POS-28, PRC-14, INV-18, POS-04, POS-05, POS-08, POS-16, POS-17, POS-23, POS-24, POS-26, INV-03, PRC-06, PRC-07, PRC-08, MKT-02, MKT-05, MKT-07, CMP-13, GST-01, CAT-21, CAT-22 | P6 | Kamesh | Meyyarivu | OW BM PH BO | Ashok |
+| POS billing | `/sales/pos` | Main fast billing interface; full line columns (pack, mfr, HSN, MRP, disc, taxable, GST) | POS-01, POS-02, POS-03, POS-07, POS-22, POS-28, PRC-14, INV-18, POS-04, POS-05, POS-30, POS-31, POS-08, POS-16, POS-17, POS-23, POS-24, POS-26, INV-03, PRC-06, PRC-07, PRC-08, MKT-02, MKT-05, MKT-07, CMP-13, GST-01, CAT-21, CAT-22 | P6 | Kamesh | Meyyarivu | OW BM PH BO | Ashok |
 | New sales invoice | `/sales/invoices/new` | Create invoice (non-POS) | POS-10, WHS-03, GST-07, GST-08, PTY-27 | P7 | Kamesh | Meyyarivu | OW BM PH BO | Ashok |
 | Sales invoice list | `/sales/invoices` | Invoice history | POS-20 | P4 | Kamesh | Meyyarivu | OW BM PH BO AC AU | Ashok |
 | Invoice details | `/sales/invoices/[id]` | Complete invoice, reprint, share | POS-20, POS-11 | P4 | Kamesh | Meyyarivu | OW BM PH BO AC AU | Ashok |
