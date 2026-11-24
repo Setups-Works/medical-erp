@@ -268,7 +268,7 @@
 
 ## 18. Non-functional features (everyone)
 
-Backups with tested restore · monitoring and alerts · audit trail · rate limiting · RBAC everywhere · accessibility (keyboard, contrast) · Light/Dark themes · printable layouts · < 2 s page loads on a 4 GB counter PC · data export for the tenant · documented SLAs.
+Backups with tested restore · monitoring and alerts · audit trail · rate limiting · RBAC everywhere · accessibility (keyboard, contrast) · Light/Dark themes · printable layouts · < 2 s page loads on a 4 GB counter PC · data export for the tenant · documented SLAs. Measurable targets, tiers and controls: [ENTERPRISE_READINESS.md](../architecture/ENTERPRISE_READINESS.md) and §31.
 
 ## 19. Market-parity features (from competitor and accounting-product research)
 
@@ -561,6 +561,211 @@ How MENO is sold: the MENO team (super admin) creates a license for a buyer, the
 | LIC-09 | **Tenant license page** (`/admin/license`): plan, edition, start and expiry, days left, limits with usage bars, masked key, history, renew / upgrade contact | B | P5 | S |
 | LIC-10 | **Renew or upgrade with a new key** on an active tenant: the new license takes over on its start date, the old one ends; stacking and pro-rata rules ⚠ | B | P6 | S |
 | LIC-11 | License sale invoices: GST invoice to the buyer for each license, linked to platform billing (ADM-10) ⚠ | B | P6 | C |
+
+## 24. Master field completeness (supplier, customer, product)
+
+Field-by-field specification: [MASTER_FIELDS.md](MASTER_FIELDS.md). Added on 24-11-2026 after comparing MENO's master screens with a general-purpose Indian ERP; pharmacy-only fields (licences, schedule, salt, storage) are kept on top. ⚠ rows need CA or pharmacist confirmation.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| PTY-15 | **GSTIN fetch** on supplier and customer forms: verify a GSTIN and fill legal/trade name, state, address and GST status (Active / Cancelled / Suspended); cancelled GSTIN warns at purchase and sale ⚠ GSP provider and cost | B | P3 | S |
+| PTY-16 | Party identity fields: print name, party code (auto from series), party type (supplier: manufacturer, distributor, stockist, C&F; customer: retail, retailer, hospital, clinic, institution, doctor) and party group, all options from the API | B | P2 | M |
+| PTY-17 | **Multiple contacts** per party: type (primary, accounts, orders, sales rep), person, designation, email, mobile, office no.; exactly one primary | B | P2 | M |
+| PTY-18 | **Multiple addresses** per party (billing, shipping, godown) with PIN code auto-fill of state, district and city; billing state must match the GSTIN state | B | P2 | M |
+| PTY-19 | Party licences as rows: drug licence form + number + valid from/to + scan upload, FSSAI licence, NDPS licence; expiry reminders 30/15/7 days ⚠ | B | P2 | M |
+| PTY-20 | **Multiple bank accounts** per party with IFSC validation and auto-fill, UPI ID, masked and encrypted account no.; bank-detail changes need approval (maker-checker) and are audited | B | P3 | M |
+| PTY-21 | Per-party **payment reminders**: schedule (N days before due, on due date, custom) and channels (email, WhatsApp, SMS); supplier reminders are for us, customer reminders go to the customer | B | P5 | S |
+| PTY-22 | Party income-tax fields: PAN (matches GSTIN), related-party flag, TDS/TCS applicable + section from `tds_section`; related-party transactions report ⚠ | B | P5 | S |
+| PTY-23 | **MSME (Udyam) details** for suppliers: category (micro / small / medium / not applicable), Udyam no., certificate; MSME payables due-date tracking and overdue report ⚠ CA to confirm payment limit and tax effect | B | P5 | S |
+| PTY-24 | Party GST fields: registration type (regular, composition, unregistered, SEZ, overseas) and default rate mode on their bills (exclusive / inclusive of GST); composition and unregistered suppliers give no input tax credit | B | P2 | M |
+| PTY-25 | **One party in both roles** (customer and supplier) with a single ledger and netted outstanding ⚠ CA | B | P5 | C |
+| PTY-26 | Transporter master and party defaults (transporter, mode, vehicle type) used by GRN, delivery and e-way bill | B | P5 | S |
+| PTY-27 | Party default discounts (discount %, cash discount %, special discount %) copied to purchase and sale documents | B | P3 | S |
+| PTY-28 | Agent master and party agent/salesman with commission %; commission report | W | P6 | S |
+| PTY-29 | Interest on overdue: % and basis (simple 365 / 360 days, compound monthly) per party; interest calculation report and optional interest debit note ⚠ | B | P6 | C |
+| PTY-30 | Retail patient profile on the customer: age or date of birth, gender, allergies, chronic conditions, regular doctor, ABHA no.; permission-gated, never logged, consent recorded ⚠ | R | P4 | S |
+| CAT-25 | Product identity and control fields: product code, print name, department, 2-level category and therapeutic class trees, nature of product (finished goods, consumable, service, asset), shelf life, warranty (devices), barcode / batch / active toggles (pharma items always batch-enabled), remarks | B | P2 | M |
+| CAT-26 | Bundles / kits: one sellable line made of component items, stock taken from components | B | P5 | C |
+| CAT-27 | Product stock defaults: lead time, default in/out warehouse, ranked preferred vendors (used by PO and reorder) | B | P3 | S |
+| PRC-12 | Product price defaults: discount received %, discount allowed %, maximum discount % per item (lower of item and role cap wins) | B | P3 | M |
+| PRC-13 | Minimum / maximum mark-up % per item (warn below cost + min mark-up, block below cost ⚠ policy) and product commission % | B | P5 | S |
+| PLT-22 | Reference data: PIN code directory (state, district, city) and IFSC directory (bank, branch), loaded from public sources with scheduled refresh ⚠ licence check | B | P2 | M |
+
+## 25. Transaction logic and pharmacy controls (audit of 24-11-2026)
+
+Field, validation and posting specification for every document: [DOCUMENT_FIELDS.md](DOCUMENT_FIELDS.md); formulas: [CALCULATIONS.md](../architecture/CALCULATIONS.md) §6a–§20. These close gaps found when the whole plan was checked against a complete medical-billing ERP.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| PLT-23 | **Period lock**: close a month or a date range per company; no posting, back-dating or reversal into a locked period; unlock needs permission + reason and is audited | B | P5 | M |
+| PLT-24 | Attachments on any document or master (supplier bill, Rx, licence scan, delivery proof): type and size rules from settings, virus scan, retention per ADM-09 | B | P3 | M |
+| ACC-14 | **Cheque bounce**: reverse the receipt, re-open the invoices, optional bank-charge debit note, flag the party and notify | B | P5 | M |
+| ACC-15 | Financial (rate-difference) credit / debit notes without stock, GST at the original invoice rate ⚠ | B | P5 | S |
+| CMP-12 | **NPPA / DPCO ceiling price check**: ceiling price table (effective-dated); warn at purchase when batch MRP exceeds the ceiling, block sale once confirmed ⚠ source and update process | B | P4 | S |
+| CMP-13 | Patient safety warnings at POS: allergy match with the patient profile, duplicate-therapy and interaction alerts from the drug reference; pharmacist acknowledges and it is logged ⚠ pharmacist review | R | P6 | S |
+| CMP-14 | Expired / damaged stock destruction record: batches, quantities, date, method, witnesses, linked to the write-off adjustment ⚠ | B | P5 | S |
+| INV-19 | Batch MRP revision (price change notified by the manufacturer): new MRP from a date, relabel note, old stock rule, full audit | B | P4 | S |
+| INV-20 | Batch block / recall: block a batch across branches with a reason; traceability list of who bought it (RPT-14) and supplier return | B | P4 | M |
+| RET-09 | Counter return without the original bill, only when the store policy setting allows it, at the lower of last selling price and MRP, with approval ⚠ | R | P4 | C |
+| GST-12 | Reverse charge (RCM) on applicable inward supplies (e.g. some services) with self-invoice and liability posting ⚠ | B | P6 | S |
+| GST-13 | GSTR-9 annual summary data from posted documents ⚠ | B | P6 | S |
+| GST-14 | Invoice Management System (IMS) workflow on inward invoices (accept / reject / pending) feeding GSTR-2B matching ⚠ current GSTN process | B | P6 | S |
+| POS-27 | Reprint marking: reprints show "Duplicate copy" with reprint count, user and time audited | B | P4 | M |
+| PTY-31 | Party merge (duplicate cleanup) with ledgers, documents and history preserved | B | P5 | S |
+| PTY-32 | Doctor master fields: qualification, registration no. + state council (unique together), specialisation, clinic, address with PIN auto-fill | R | P4 | M |
+| INT-13 | Insurance / TPA / corporate credit billing for hospital pharmacies: payer master, co-pay split, claim status | B | P7 | C |
+
+## 26. Invoice completeness (distributor bill review, 24-11-2026)
+
+Compared with a typical distributor's printed tax invoice. Fields and print layout: [DOCUMENT_FIELDS.md](DOCUMENT_FIELDS.md) §2, §3, §3a; maths: [CALCULATIONS.md](../architecture/CALCULATIONS.md) §22. Demo: MENO Hub → Learn → Day 21 → Wholesale invoice.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| WHS-15 | **Combined distributor bill**: one printed document with sections Sales, Less sales return, Less breakage / expiry return, Add replacement; each return section is a credit note with its own number linked to the invoice, replacement lines are invoice lines (RET-07), the settlement is netted ⚠ CA | W | P5 | M |
+| WHS-16 | Dispatch details on invoices: order no. + date, L.R. no. + date, transporter, vehicle no., number of cases, weight; printed and passed to the e-way bill | W | P5 | M |
+| DOC-06 | **Additional charges** on sales and purchase invoices (freight, insurance, packing, other): amount, GST treatment from the setting `billing.charges_gst` ⚠, posted to its own ledger; on purchase, allocated into landed cost (PUR-06) | B | P5 | M |
+| DOC-07 | **Invoice print content standard**: both parties' DL nos., GSTINs and state codes, invoice / order / L.R. / due date, line columns (S. no., product, packing, manufacturer, HSN, batch, expiry, qty, free, MRP, rate, disc %, GST %, amount), section headings, tax summary by rate, sub total, item discount, returns, taxable, tax heads, charges, round off, grand total, amount in words, terms from the terms master, declaration, E.&O.E., checked by, authorised signatory, bank / UPI QR, page x of y with carried-forward totals | B | P4 | M |
+| POS-28 | **POS line columns**: item with pack, manufacturer, HSN and schedule badge; batch · expiry; qty; MRP; disc % and ₹; taxable; GST % and ₹; amount; column set configurable per counter (narrow screens hide optional columns) | R | P4 | M |
+| PRC-14 | Totals breakdown on every invoice: sub total, item discount, bill discount, returns, taxable value, CGST / SGST / IGST / cess, charges, round off, grand total, each shown separately and never merged | B | P4 | M |
+
+## 27. Competitor-parity additions (Marg ERP, VarthagamSoft audit, 24-11-2026)
+
+Audit, sources and coverage table: [research/COMPETITOR_AUDIT.md](research/COMPETITOR_AUDIT.md). Each row closes a gap where a leading Indian pharmacy product offers something MENO did not plan.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| CAT-28 | **Discontinued items**: flag with date and reason; blocks new purchase, PO and sale; returns allowed per setting; shown in search with a badge; replacement item suggested | B | P3 | M |
+| PLT-25 | **Master bulk update**: filter items or parties, change chosen fields (rack, category, discount caps, reorder levels, price list, salesman, HSN) with preview, approval above a count, full audit | B | P3 | S |
+| PLT-26 | **Migration importers** for exports of popular software (Marg, Tally, Busy, Vyapar, GoFrugal): items, parties, opening stock by batch, outstanding bills, ledgers with opening balances; dry run with error report | B | P5 | M |
+| PLT-27 | **Accountant (CA) access**: invite an external accountant with a read-only books + GST scope, time-boxed, export allowed, every view audited | B | P5 | S |
+| PUR-19 | **Merge purchase orders**: receive several open POs of one supplier into one purchase invoice or challan; pending-PO-lines report per supplier and item | B | P4 | S |
+| WHS-17 | **Stock & sales statement (secondary sales)** per manufacturer / company: opening, purchase, purchase return, sales, sales return, free, closing by item for a month; Excel / PDF / email to the company or C&F | W | P5 | M |
+| WHS-18 | **Sub-stockist accounting**: sub-stockist party type, stock sent on sub-stockist terms, their secondary sales and claims, settlement | W | P6 | S |
+| WHS-19 | **Dispatch checking (item checker)**: scan every item and batch against the invoice before dispatch on web or phone, mismatch alerts, several checkers in parallel, checker name on the packing slip; same scan for GRN check-in with rack allocation | W | P5 | M |
+| WHS-20 | **Packing slip, parcel and dispatch register**: packing slip per case, parcel register, L.R. update after dispatch, delivery acknowledgement (POD) report | W | P5 | S |
+| WHS-21 | **Collection tagging**: assign outstanding bills to salesmen or collectors, print a collection sheet, record collections against it, assigned-vs-collected report | W | P5 | S |
+| ACC-16 | **Cheque management**: cheque book master per bank account, cheque leaf printing in bank formats, cheque number sequence and tracking, cancelled / void leaves, issued-cheque register | B | P5 | S |
+| RPT-17 | Outstanding by **area, route, salesman** and **as-on-date / age-wise** for receivables and payables, shareable as PDF / WhatsApp | B | P5 | M |
+| RPT-18 | **Exception (bill audit) report**: edited drafts, cancelled, back-dated, reprinted, below-cost, above-cap discount, FEFO overrides, negative-stock attempts, by user and day | B | P5 | M |
+| ANX-08 | **Staff performance**: sales, bills, average bill value, discounts given, returns, cancellations by user, salesman, counter and outlet | B | P5 | S |
+| DOC-08 | **Print formats**: laser A4 / A5, dot-matrix on pre-printed stationery (fixed positions, carry-forward per page), thermal 2" / 3"; template chosen per document type, counter and party | B | P4 | M |
+| INV-21 | **Dosage labels**: print a medicine label with patient name, dose, frequency, timing and instructions from the bill line ⚠ pharmacist review of wording | R | P5 | S |
+| POS-29 | **Multi-firm billing**: one counter billing under different firms (companies / GSTINs) of the same tenant; firm picked per bill or by item rule; separate series, books and stock (extends PLT-02) | B | P5 | S |
+| GST-15 | **GST rate change roll-over**: effective-dated bulk HSN rate change, drafts and open orders re-priced on the change date, MRP relabel prompts for old stock, before/after report ⚠ confirm rates with CA | B | P3 | M |
+| NTF-07 | **Owner daily digest**: end-of-day email / WhatsApp with sales, collections, purchases, cash, low stock, near expiry, overdue and exceptions | B | P5 | S |
+| MOB-06 | Android quick-billing app for small shops with Bluetooth thermal printer, barcode by camera, offline queue | R | P7 | C |
+| INT-14 | **Hospital (IP) pharmacy**: ward indents, issue against admission, returns from ward, consolidated IP bill to the hospital system (extends INT-09) | B | P7 | C |
+
+## 28. Onboarding and account setup (24-11-2026)
+
+Full flow, fields and rules: [ONBOARDING.md](ONBOARDING.md) (with what Marg, Vyapar, eVitalRx, GoFrugal and VarthagamSoft do at set-up). Extends PLT-01, AUT-02, AUT-03, ACX-11, LIC-03.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| AUT-04 | **Sign-up and verification**: owner name, mobile OTP, email link, password policy, business name, state, partner code, trial / demo / license choice, DPDP notice acceptance stored with version; rate limits and bot checks | B | P1 | M |
+| AUT-05 | **Business profile step**: business type (retail, wholesale, both, hospital, chain), branches, catalogue size, current software, language; tailors the remaining steps and menus | B | P2 | M |
+| AUT-06 | **GSTIN-first company step**: fetch fills legal name, address, state and registration type; state locked to the GSTIN; composition → Bill of Supply; PAN check; logo | B | P2 | M |
+| AUT-07 | **Licences and pharmacist step**: retail / wholesale drug licences with expiry and scans, FSSAI, NDPS, pharmacist in charge with registration and council | B | P2 | M |
+| AUT-08 | **Invoice look set-up with live preview**: paper size, logo, header, terms, bank details, UPI QR, signature, declaration, series preview | B | P2 | M |
+| AUT-09 | **Team step**: invite staff by mobile or email with role and branch; counter PIN on first login | B | P2 | S |
+| AUT-10 | **Data step**: start fresh, Excel templates or migrate from current software; dry run, review and approve before commit; masters → opening stock by batch → outstanding → ledger openings | B | P3 | M |
+| AUT-11 | **Devices step**: desktop download, device registration, printer test page, barcode scan test, cash drawer test | R | P4 | S |
+| AUT-12 | **Practice mode**: separate practice company with sample data and a guided first-bill tour; practice bills marked "not a tax invoice" and excluded from all reports | B | P4 | S |
+| AUT-13 | **Go-live**: readiness checks (GST, licences, books balanced, preferences, printer, stock, plan, email), go-live date, practice data removed, opening balances locked, series start | B | P3 | M |
+| AUT-14 | **Assisted onboarding**: book a set-up call, chat, owner-granted time-boxed support access (view / assist) with full audit; partner (implementer) linking with the same consent | B | P5 | S |
+| AUT-15 | **Resume and progress**: every step saved on Next, resume on sign-in, checklist on the dashboard until go-live, reminders to finish | B | P2 | M |
+| PLT-28 | **Onboarding pipeline** (super admin): tenants by step, days stuck, trial days left, nudges, sign-up → go-live → first-100-bills funnel | B | P5 | S |
+
+## 29. Five-product parity: Marg, Vyapar, eVitalRx, GoFrugal, VarthagamSoft (24-11-2026)
+
+Feature-by-feature matrix and sources: [research/COMPETITOR_AUDIT.md](research/COMPETITOR_AUDIT.md) §6. Every list below (offer types, segment rules, custom-field types, target periods, reminder schedules) is configuration, never hard-coded (ADR-0014).
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| PLT-29 | **Head-office control for chains**: items, HSN / GST, prices, offers, users and settings managed centrally and pushed to outlets; which fields an outlet may override is a setting; push log per outlet | B | P5 | M |
+| PLT-30 | **Custom fields** on items, parties and documents: type (text, number, date, list), required, searchable, printable; defined per tenant | B | P5 | S |
+| PLT-31 | **Clone set-up**: copy settings, series, print templates, roles and optionally masters from one company or branch to a new one | B | P5 | S |
+| PUR-20 | **Chain indents**: outlets raise indents (manual or from min / max); head office consolidates them into supplier POs or fulfils from the warehouse by stock transfer; indent status per outlet | B | P5 | M |
+| PUR-21 | **Purchase inbox**: a dedicated email address or connected mailbox receives distributor CSV / PDF bills, auto-creates draft purchases with item mapping, flags rate changes | B | P5 | S |
+| INV-22 | **Stock reallocation**: suggests moving non-moving or short-expiry stock to branches with demand or to the warehouse; one click creates the transfer | B | P5 | S |
+| WHS-22 | **Sales targets and incentives**: targets by salesman, area, company or product for a period; achievement tracking; incentive slabs; leaderboard | W | P6 | S |
+| PTY-33 | **Party self-registration link**: send a link; the retailer or customer fills GSTIN, licences, address and contacts; staff review and approve before the party is active | B | P5 | S |
+| PTY-34 | **Credit rules beyond amount**: limit by value, number of open bills and oldest bill age; over-limit approval from the owner's phone; average payment days shown at billing | B | P5 | M |
+| PRC-15 | **Offer engine**: bill value, item, item group, category, manufacturer, combo, buy-X-get-Y, accumulated purchase, time-bound (hours / days), customer segment and near-expiry batch offers; priority and stacking rules; usage report | B | P5 | M |
+| CRM-10 | **Customer segments** by rules (chronic, regular, walk-in, lapsed, high value, by medicine class) used for offers, reminders and campaigns | R | P6 | S |
+| CRM-11 | **Notify when available**: record a customer's request for an out-of-stock medicine; message them automatically when stock arrives; feeds the short book | R | P5 | S |
+| CRM-12 | **Greetings automation**: birthday, anniversary and festival messages with templates, consent and opt-out | R | P6 | C |
+| ACX-18 | **Cash-flow forecast**: expected receipts by due date, payables, PDCs and expenses for the next N weeks | B | P6 | S |
+| ADM-14 | **Data health check**: user-run checks (stock vs ledger, unbalanced vouchers, items without HSN, duplicate parties, negative batches) with links to fix | B | P5 | S |
+| RPT-19 | **Customer payment behaviour**: average payment days, delay trend, bills paid after due date per customer and area | B | P5 | S |
+| RPT-20 | **Manufacturer-wise reports**: sales, stock, expiry and returns by manufacturer / company | B | P5 | S |
+| ANX-09 | **Customer retention**: new vs repeat, lapsed customers, refill adherence by month and branch | R | P6 | S |
+| INT-15 | Zoho Books sync (sales, purchases, returns, payments) alongside Tally export | B | P6 | C |
+
+Deliberately **not** adopted: doctor commission per medicine (legal and ethical risk under medical-council and pharma marketing codes ⚠), self-checkout kiosks (prescription medicines need a pharmacist), per-bill pricing (business model, not a feature).
+
+## 30. Ideas from the Ekagraha ERP codebase review (24-11-2026)
+
+Ekagraha is a general Indian ERP (masters, sales, purchase, inventory journals, accounts, assets, reports; 165 screens). Its screens and docs were reviewed for ideas only — no code is reused. Most of its screens already map to MENO (§19 market parity); these six are new.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| PLT-32 | **Excel import templates done properly**: grey hint text in empty cells, cell tooltips (≤ 255 chars), defaults per column, dropdowns fed from a hidden locked master-data tab, Excel validation that stops bad entries while typing, upload error table by row number, re-download of only the failed rows | B | P3 | M |
+| CAT-29 | **Create missing masters on the fly** when adding or importing a product (brand, manufacturer, category, unit): shown as "will be created", reviewed in one list, audited | B | P3 | S |
+| RPT-21 | **Commission and TDS register**: salesman / agent commission vouchers with sales amount, commission %, commission, TDS section, TDS % and TDS amount by period ⚠ CA (TDS on commission) | W | P6 | S |
+| RPT-22 | **Group register**: net sales quantity and amount, profit and growth % vs the previous period by product group, category, brand or manufacturer | B | P5 | S |
+| ANX-10 | **Risk flags**: customers approaching their credit limit and declining customers; dead and declining stock; each with drill-down to bills and items (extends ANX-04) | B | P5 | S |
+| NTF-08 | **WhatsApp usage and cost**: messages by Meta category (utility, marketing, authentication, service), template approval status, cost per branch and month, monthly cap and alert | B | P5 | S |
+
+## 31. Enterprise readiness (24-11-2026)
+
+Targets, tiers and controls: [ENTERPRISE_READINESS.md](../architecture/ENTERPRISE_READINESS.md). These make MENO sellable to chains and large distributors; numbers (SLOs, budgets, policies) live in configuration.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| PLT-33 | **Single sign-on**: SAML 2.0 and OIDC (Microsoft Entra ID, Google Workspace) per tenant, enforce-SSO switch, just-in-time user creation, break-glass owner login | B | P6 | S |
+| PLT-34 | SCIM 2.0 user provisioning and de-provisioning from the customer's directory | B | P7 | C |
+| PLT-35 | **Tenant security policies**: password rules, MFA mandatory per role, idle timeout, session length, device binding for counters | B | P5 | M |
+| PLT-36 | **Field-level encryption and masking** for PAN, bank accounts and patient health data; masked in lists and exports unless permitted; yearly key rotation | B | P5 | M |
+| PLT-37 | **Data residency and exit**: data and backups in Indian regions; tenant exit with full export and deletion certificate listing records kept by law | B | P5 | M |
+| PLT-38 | **Sandbox tenant**: a copy of the customer's masters and settings to try changes and train staff; no GST filings, e-invoices or messages leave it | B | P6 | S |
+| PLT-39 | **Feature flags and release channels**: per-tenant flags, early-access and stable channels, staged desktop rollout with automatic halt on crash rate | B | P4 | M |
+| PLT-40 | **Tenant health page**: device sync lag, failed jobs, e-invoice / e-way queue age, licence and backup state, with fixes | B | P5 | S |
+| PLT-41 | **High availability and disaster recovery**: managed PostgreSQL with point-in-time recovery, second-region backup copy, RPO / RTO per tier, monthly timed restore drill | B | P6 | M |
+| PLT-42 | **Accessibility WCAG 2.1 AA**: audit, contrast and label checks in CI, screen-reader support, public accessibility statement | B | P5 | S |
+| PLT-43 | **Performance budgets in CI**: POS keystroke ≤ 50 ms, item search p95 ≤ 150 ms, bill save p95 ≤ 500 ms, page load ≤ 2 s on a 4 GB PC; failing budget fails the build | B | P4 | M |
+| PLT-44 | **Security assurance**: OWASP ASVS L2 checklist per release, dependency and container scanning, annual VAPT by a CERT-In empanelled auditor, CERT-In 6-hour incident reporting and 180-day log retention ⚠, ISO 27001 readiness | B | P6 | M |
+| ADM-16 | **Status page and maintenance notices**: public status, incident history, maintenance announced 72 h ahead, in-app banner | B | P5 | S |
+| ADM-17 | **Support SLAs**: priority levels, response and resolution timers per tier, escalation, satisfaction rating (extends ADM-11) | B | P5 | S |
+| ADM-18 | **Audit export and SIEM streaming**: audit log as CSV / JSON export and signed webhook stream | B | P6 | S |
+| ADM-19 | **Maker-checker for sensitive settings**: tax settings, number series, posting rules, bank details, price lists need a second approver | B | P5 | M |
+| ADM-20 | **Chain branding**: logo, accent colour, custom domain for portal and customer app, branded emails and WhatsApp templates | B | P6 | C |
+| INT-16 | **Public API platform**: versioned API, OAuth 2.0 client credentials, per-client rate limits, idempotent writes, bulk master endpoints, signed webhooks with retries, developer portal with sandbox (extends INT-05) | B | P6 | S |
+
+## 32. Security (`security`, 24-11-2026)
+
+Threats: [THREAT_MODEL.md](../security/THREAT_MODEL.md) · controls: [SECURITY.md](../security/SECURITY.md) (catalogue mapped to OWASP ASVS L2 and ISO 27001) · decision: [ADR-0016](../decisions/0016-tamper-evident-records-and-device-signing.md). Thresholds, retention periods and rule lists are configuration.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| SEC-01 | **Tamper-evident records**: hash-chained posted documents, statutory registers and audit log per series; signed daily anchors in immutable storage; nightly verifier and auditor "Verify records" report | B | P4 | M |
+| SEC-02 | **Device-signed offline bills**: per-device Ed25519 key in the OS keystore; offline bills signed; server verifies on sync; bad or revoked-device bills quarantined, owner alerted | R | P5 | M |
+| SEC-03 | **Envelope encryption and key management**: per-tenant data keys wrapped by a Key Vault master key, versioned keys, yearly rotation, crypto-shredding on tenant exit | B | P6 | S |
+| SEC-04 | **Secrets management**: all secrets in Key Vault, none on disk or in env files, short-lived DB credentials, rotation schedule, secret scanning in CI | B | P1 | M |
+| SEC-05 | **Insider-fraud detection**: rules for voids, reprints, discounts, returns without bill, write-offs, price edits during shifts, after-hours activity, FEFO overrides, cash shortfalls; thresholds in configuration; alerts and case notes | B | P5 | M |
+| SEC-06 | **Privileged access management**: separate platform-admin realm, hardware-key MFA, just-in-time elevation with approval and expiry, two-person rule for destructive actions, break-glass account with alert | B | P5 | M |
+| SEC-07 | **Security monitoring**: central logs with redaction, detection rules (brute force, token reuse, impossible travel, mass export, cross-tenant attempt, admin outside hours), alerting, 180-day retention in India ⚠ | B | P5 | M |
+| SEC-08 | **Supply-chain security**: pinned dependencies, SBOM per build (CycloneDX), signed container images, protected branches with required reviews, build provenance (SLSA L2) | B | P3 | S |
+| SEC-09 | **Desktop hardening**: code-signed installer and updates, update signature check, sandboxed renderer, app-bundle integrity check, SQLCipher key in OS keystore, idle lock, remote wipe on device revoke | R | P5 | M |
+| SEC-10 | **API and edge protection**: WAF rules, rate limits per IP / user / tenant, request size limits, CORS lockdown, bot checks on public endpoints, abuse alerts | B | P4 | M |
+| SEC-11 | **Data classification and export control**: class per field (restricted-health, restricted-financial, confidential, internal, public); exports watermarked with user and time; approval for restricted data; bulk-export alert | B | P5 | S |
+| SEC-12 | **Tenant security centre**: security score, MFA coverage, admins list, active sessions and devices, recent risky events, recommended actions | B | P5 | S |
+| SEC-13 | **Login protection**: passkeys (WebAuthn) for owners and admins, new-device and new-location alerts, step-up challenge for risky sign-ins | B | P5 | S |
+| SEC-14 | **Secure SDLC gates**: threat-model review per epic, SAST (CodeQL / Semgrep), DAST (ZAP), secret scanning, IaC scanning, security sign-off for auth / money / sync / file PRs, abuse-case tests from THREAT_MODEL.md §5 | B | P1 | M |
+| SEC-15 | **Ransomware-resistant backups**: encrypted, immutable second-region copies with separate credentials, deletion protection, restore drills | B | P5 | M |
+| SEC-16 | **Responsible disclosure**: security.txt, disclosure policy and safe-harbour text, triage SLA, hall of fame; bug bounty later | B | P5 | S |
+| SEC-17 | **Patient-data vault**: prescriptions and patient fields in a separate encrypted store, access logged with purpose, retention auto-delete after the legal period ⚠ | R | P4 | M |
+| SEC-18 | **Trust centre and security pack**: public trust page, security whitepaper, VAPT summary, DPA template, sub-processor list, ready answers to security questionnaires | B | P6 | C |
 
 ---
 

@@ -87,6 +87,7 @@ Every posted document creates a double-entry voucher automatically (ACC-04). A s
 | `DISCOUNT_RECEIVED` | Discount Received | Indirect Incomes | Cash discount on supplier payments |
 | `INTEREST_RECEIVED` | Interest Received | Indirect Incomes | Bank interest |
 | `OTHER_INCOME` | Other Income | Indirect Incomes | Miscellaneous |
+| `FREIGHT_RECOVERED` | Freight & Insurance Recovered | Indirect Incomes | Freight, insurance and packing charged on sales invoices (DOC-06) ⚠ CA |
 | `DISCOUNT_ALLOWED` | Discount Allowed | Indirect Expenses | Bill discounts not inside the line price |
 | `ROUND_OFF` | Round Off | Indirect Expenses | Invoice round-off (PRC-07; nature by sign) |
 | `EXPIRY_LOSS` | Expiry & Breakage Loss | Indirect Expenses | Expired/damaged stock written off (INV-07, MKT-04) |
@@ -108,6 +109,8 @@ Amounts come from the posted document's snapshot. Dr = debit, Cr = credit.
 |---|---|---|
 | Retail cash sale | `CASH` (or `CARD_UPI_CLEARING` per payment line) | `SALES` (taxable), `OUTPUT_CGST`/`SGST` or `IGST`, `OUTPUT_CESS`; `ROUND_OFF` by sign |
 | Credit sale | Customer ledger | as above |
+| Charges on a sales invoice (DOC-06) | (in the party debit above) | `FREIGHT_RECOVERED`; their GST to output GST ledgers ⚠ |
+| Combined bill with returns (WHS-15) | Party (net), `SALES_RETURN` | `SALES`, output GST net, `FREIGHT_RECOVERED`; `ROUND_OFF` by sign (CALCULATIONS §22) |
 | Sales return / credit note | `SALES_RETURN`, output GST ledgers | Customer ledger or `CASH` |
 | Purchase invoice | `PURCHASE`, `INPUT_CGST`/`SGST` or `IGST`, `INPUT_CESS`, `FREIGHT_INWARD` | Supplier ledger; `ROUND_OFF` by sign |
 | Purchase return / debit note | Supplier ledger | `PURCHASE_RETURN`, input GST ledgers |

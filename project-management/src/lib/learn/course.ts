@@ -22,6 +22,7 @@ export const MODULES = [
   "8 · Full catalogue",
   "9 · External data",
   "10 · Selling MENO",
+  "11 · Live demo",
 ] as const;
 
 export const LESSONS: LessonMeta[] = [
@@ -224,6 +225,16 @@ export const LESSONS: LessonMeta[] = [
     minutes: 60,
     goals: ["Explain plan vs license vs key vs certificate", "Generate and validate a key, and say why it is stored hashed", "Walk a license from issue to expiry and grace", "Call EntitlementGuard in the right place"],
     sources: ["docs/architecture/LICENSING.md", "docs/decisions/0015-license-keys-signed-certificates.md", "docs/product/FEATURES.md §23"],
+  },
+  {
+    slug: "erp-walkthrough",
+    day: 21,
+    module: MODULES[10],
+    title: "Live demo: vendor, customer, ledger, product, POS and wholesale invoice",
+    summary: "Click through MENO's first day: add a vendor, a customer, a ledger and a product with every tab and field, bring stock in with a purchase, bill at the POS and on a full wholesale tax invoice, then see the stock, vouchers and ledgers it created. Every field explained.",
+    minutes: 60,
+    goals: ["Demo the masters-first order and say why", "Explain every field on the vendor, customer, ledger, purchase and POS screens", "Run a POS bill with the keyboard (F2, F3, F4, F9, F10)", "Show what one bill writes: stock movement, GST and voucher"],
+    sources: ["docs/product/MASTER_FIELDS.md", "docs/product/MASTERS.md", "docs/architecture/VALIDATION_AND_BUSINESS_RULES.md", "docs/architecture/CHART_OF_ACCOUNTS.md", "docs/design/POS_KEYBOARD.md"],
   },
 ];
 

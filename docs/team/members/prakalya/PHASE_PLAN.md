@@ -11,10 +11,18 @@ Legend: **[BA]** business analysis · **[QA]** testing. You work **part-time: ab
 ## P1 Platform core
 - [ ] [BA] User stories P1 (signup, users, roles, login) + FRS for Masters with every field's validation rule
 - [ ] [BA] Validation catalogue for masters (GSTIN, DL, phone, PAN, pin code, HSN) in FRS
+- [ ] [BA] FRS for onboarding from `docs/product/ONBOARDING.md`: every step, field, block-go-live rule; time a real owner through it on a phone
+- [ ] [BA] FRS for the supplier, customer and product forms from `docs/product/MASTER_FIELDS.md`: acceptance criteria per tab and field (required, options source, validation message, audit)
 - [ ] [BA] UAT P1 on staging
 
 ## P2 Masters
 - [ ] [BA] FRS Purchase + Inventory + Schemes; confirm ⚠ rules in CALCULATIONS.md with a CA/pharmacist
+- [ ] [BA] FRS for every transaction document from `docs/product/DOCUMENT_FIELDS.md` (purchase, POS, wholesale invoice, returns, receipts, transfers, adjustments): header/line fields, pre-save checks, what posting writes
+- [ ] [BA] Research the ⚠ rows added on 24-11-2026 to COMPLIANCE.md (NPPA ceiling prices, MSME payments, TDS on goods, IMS/RCM, inter-branch transfers, stock destruction, returns without bill, patient data) and brief Nitheesh with sources
+- [ ] [BA] Two field visits (one retail, one distributor) using `docs/business-requirements/PHARMACY_VISIT_GUIDE.md`; notes in `docs/workflows/`
+- [ ] [BA] Recompute the 72 draft vectors in `contracts/test-vectors/` by hand (spreadsheet) and record the result in each case's `source`
+- [ ] [BA] Expert sessions with the printed sign-off sheets in `docs/compliance/signoff/` (ca.md, pharmacist.md, lawyer.md; team.md with Nitheesh) on `docs/compliance/RULES_TO_CONFIRM.md`: CA (GST, TDS, MSME, accounts), pharmacist (Schedule H/H1/X, labels, NPPA), lawyer (DPDP, CERT-In, consent); remove each ⚠ at its source with who confirmed it
+- [ ] [BA] Validate COMPETITOR_AUDIT.md with 2 pharmacies using Marg / Varthagam: which §27 features they really use, and anything missing
 - [ ] [BA] Check shortlisted Indian medicine data sources against 100 items from a pharmacy's real bills (found by name? by barcode? salts, strength, pack correct?); report the hit rate to Nitheesh
 
 ## P3 Purchase & inventory

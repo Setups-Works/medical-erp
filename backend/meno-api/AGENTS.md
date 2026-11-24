@@ -1,6 +1,6 @@
 # backend/meno-api — AGENTS.md
 
-Spring Boot 4 / Java 21 modular monolith (ADR-0002). The **only** backend. Owners: Kamesh (business modules, migrations), Nitheesh (platform: `config`, `security`, `common`, `tenancy`, modules `auth`, `tenancy`, `identity`, `files`, `sync`).
+Spring Boot 4 / Java 21 modular monolith (ADR-0002). The **only** backend. **Read [docs/architecture/BACKEND_IMPLEMENTATION.md](../../docs/architecture/BACKEND_IMPLEMENTATION.md) first**: request flow, the 12-step posting pipeline, the Java twin of `@meno/billing-engine`, and per-module tables, endpoints, rules and error codes. Owners: Kamesh (business modules, migrations), Nitheesh (platform: `config`, `security`, `common`, `tenancy`, modules `auth`, `tenancy`, `identity`, `files`, `sync`).
 
 ## Layout
 

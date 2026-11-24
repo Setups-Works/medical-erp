@@ -27,7 +27,8 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [ ] Decide the Indian medicine data source and licence (CAT-10, INT-11) from Jeeva's comparison and Prakalya's hit-rate check; record it as an ADR
 
 ## P3 Purchase & inventory
-- [ ] `packages/billing-engine` (decimal.js) passing all test vectors, with Kamesh's Java engines
+- [x] `packages/billing-engine` (decimal.js) passing all test vectors (72 / 72 on 24-11-2026; `pnpm --filter @meno/billing-engine test`)
+- [ ] Review the billing-engine code and the 52 extended draft vectors; mark vectors confirmed after Prakalya's hand check and the CA session
 - [ ] `reporting` module: report framework (filters, pagination, export, permissions), stock/expiry/purchase report views
 - [ ] Inventory dashboard screens (web `dashboard/`); report API contracts for Ashok's reports centre
 

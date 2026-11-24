@@ -70,7 +70,13 @@ Prakalya maintains the full catalogue in the FRS; these are the baseline rules e
 | Drug licence no. | Required for pharmacies/retailers/suppliers per edition; free text with trimmed length 3–40; expiry date required and in the future for active use ⚠ format per state |
 | Phone (India) | 10 digits starting 6–9 (store E.164 `+91…`) |
 | Email | RFC-compliant, lower-cased, max 254 |
-| PIN code | 6 digits, not starting with 0 |
+| PIN code | 6 digits, not starting with 0; must exist in the PIN directory (PLT-22), which fills state, district and city |
+| IFSC | `^[A-Z]{4}0[A-Z0-9]{6}$`; must exist in the IFSC directory (PLT-22) |
+| Bank account no. | 9–18 digits, entered twice to confirm; stored encrypted, shown as last 4 |
+| Udyam (MSME) no. | `^UDYAM-[A-Z]{2}-[0-9]{2}-[0-9]{7}$` |
+| FSSAI licence no. | 14 digits |
+| UPI ID | `^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$` |
+| Percentages (discount, commission, mark-up, interest) | 0–100, max 2 decimals; mark-up min ≤ max |
 | HSN | 4, 6 or 8 digits; must exist in `hsn_tax` for the document date |
 | Batch number | Required for medicines; 1–30 chars; unique per item + expiry + MRP + branch |
 | Expiry date | Required for medicines; > manufacturing date; purchase entry warns if already within near-expiry days and blocks if expired (unless an expiry-return document) |

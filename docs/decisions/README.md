@@ -19,3 +19,4 @@ An ADR records one significant decision: context, decision, consequences. Write 
 | [0013](0013-postgresql-system-of-record.md) | PostgreSQL is the only product database | Accepted |
 | [0014](0014-configuration-over-hardcoding.md) | Configuration over hard-coding, four-layer validation | Accepted |
 | [0015](0015-license-keys-signed-certificates.md) | License keys + server-side licenses + Ed25519-signed certificates | Proposed |
+| [0016](0016-tamper-evident-records-and-device-signing.md) | Hash-chained posted records and device-signed offline bills | Proposed |

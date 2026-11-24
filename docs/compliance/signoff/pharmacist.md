@@ -1,0 +1,18 @@
+# Sign-off sheet: Pharmacist / drug inspector
+
+> **Generated** by `scripts/docs/build_rules_to_confirm.py`. Print it, go through each answer with the expert, tick Confirm or write the change, then record the result in RESEARCHED_ANSWERS.md and remove the ⚠ at the sources (who + date).
+
+| Answer | Topic | Confidence | Open rules | Proposed answer (first point) | Confirm | Change / note |
+|---|---|---|---|---|---|---|
+| [R-09](../RESEARCHED_ANSWERS.md) | Record retention | confidence A/B | 13 | GST (section 36, CBIC text): keep books and records until 72 months from the due date of the annual return for that year; GSTR-9 is due 31 December after the year (Rule 80), so FY 2025-26 records are kept until 31-12-203… | ☐ | |
+| [R-18](../RESEARCHED_ANSWERS.md) | Schedule H / H1 / X sale and register | confidence B | 4 | Rule 65(9)(a): Schedule H, H1 and X drugs are sold by retail only on prescription. | ☐ | |
+| [R-19](../RESEARCHED_ANSWERS.md) | Cash memo, pharmacist and licence on bills | confidence B | 20 | Rule 65(3): retail supply against a cash or credit memo with the dealer's name, address and sale licence number and a serial number (plus further particulars); carbon copy retained; the licensee declares to the licensing… | ☐ | |
+| [R-20](../RESEARCHED_ANSWERS.md) | Expired and damaged stock | confidence B | 6 | Expired drugs must be kept apart from saleable stock, marked not for sale; disposal per the CDSCO guidance document on disposal of expired / unused drugs (26-05-2025) and the Bio-Medical Waste Management Rules, 2016; ret… | ☐ | |
+| [R-21](../RESEARCHED_ANSWERS.md) | NPPA / DPCO ceiling prices | confidence B | 5 | DPCO 2013: no one may sell a formulation to a consumer above the price in the current price list or the label price, whichever is less; ceiling prices are exclusive of GST (MRP ≤ ceiling + applicable taxes); overcharged … | ☐ | |
+| [R-27](../RESEARCHED_ANSWERS.md) | NDPS / narcotic drugs at retail | confidence B | 4 | NDPS Rules 1985: a "licensed chemist" needs a separate state licence to possess and sell essential narcotic drugs by retail; sale only on prescription and subject to the Drugs Rules. Psychotropic substances may be sold o… | ☐ | |
+| [R-28](../RESEARCHED_ANSWERS.md) | Banned FDCs and recalls | confidence A | 3 | Banned FDCs are prohibited under section 26A of the Drugs and Cosmetics Act by gazette notification; CDSCO keeps the list on its FDC page — latest entries seen: 16 FDCs banned 11-06-2026, 156 FDCs (02-08-2024), 2 restric… | ☐ | |
+| [R-42](../RESEARCHED_ANSWERS.md) | Counter returns without a bill | proposed (pharmacist to confirm) | 2 | Off by default. When a shop turns it on: OTC items only, sealed and unexpired, within N days (default 7), refund at the lower of last selling price and MRP, as a credit note with manager approval; never for Schedule H / … | ☐ | |
+| [R-47](../RESEARCHED_ANSWERS.md) | Pilot-state drug rules (Tamil Nadu) | to collect (pharmacist) | 1 | Pilot state is Tamil Nadu: ask the pharmacist / TN Drugs Control Department for the state's inspection checklist, register formats (H1, NDPS), licence renewal cycle and any state-specific bill print requirements; record … | ☐ | |
+| [R-48](../RESEARCHED_ANSWERS.md) | Drug inspection pack | proposed (pharmacist to confirm) | 1 | One export (CMP-11): drug licences and expiry, pharmacist registration, H1 / X registers for the period, purchase bills of scheduled drugs, stock statement of scheduled drugs, expired-stock segregation and destruction re… | ☐ | |
+
+10 answers. Expert: ____________________  Registration / membership no.: __________  Date: __________  Signature: __________

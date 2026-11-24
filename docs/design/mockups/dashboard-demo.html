@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>MENO · Dashboard demo (static)</title>
+<!-- Static look-and-feel demo only: fake data, no API. Menu follows docs/design/NAVIGATION.md, look follows DESIGN_LANGUAGE.md. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif&display=swap">
+<script>/* lucide icons (ISC licence) inlined from lucide-react so the demo works offline */
+const ICONS={"panel-left":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M9 3v18\"/>","chevrons-up-down":"<path d=\"m7 15 5 5 5-5\"/><path d=\"m7 9 5-5 5 5\"/>","moon":"<path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"/>","menu":"<path d=\"M4 5h16\"/><path d=\"M4 12h16\"/><path d=\"M4 19h16\"/>","search":"<path d=\"m21 21-4.34-4.34\"/><circle cx=\"11\" cy=\"11\" r=\"8\"/>","store":"<path d=\"M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5\"/><path d=\"M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244\"/><path d=\"M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05\"/>","bell":"<path d=\"M10.268 21a2 2 0 0 0 3.464 0\"/><path d=\"M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326\"/>","chevron-right":"<path d=\"m9 18 6-6-6-6\"/>","download":"<path d=\"M12 15V3\"/><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><path d=\"m7 10 5 5 5-5\"/>","plus":"<path d=\"M5 12h14\"/><path d=\"M12 5v14\"/>","receipt":"<path d=\"M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z\"/><path d=\"M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8\"/><path d=\"M12 17.5v-11\"/>","building-2":"<path d=\"M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z\"/><path d=\"M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2\"/><path d=\"M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2\"/><path d=\"M10 6h4\"/><path d=\"M10 10h4\"/><path d=\"M10 14h4\"/><path d=\"M10 18h4\"/>","check":"<path d=\"M20 6 9 17l-5-5\"/>","pause":"<rect x=\"14\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/><rect x=\"5\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/>","cloud-off":"<path d=\"m2 2 20 20\"/><path d=\"M5.782 5.782A7 7 0 0 0 9 19h8.5a4.5 4.5 0 0 0 1.307-.193\"/><path d=\"M21.532 16.5A4.5 4.5 0 0 0 17.5 10h-1.79A7.008 7.008 0 0 0 10 5.07\"/>","percent":"<line x1=\"19\" x2=\"5\" y1=\"5\" y2=\"19\"/><circle cx=\"6.5\" cy=\"6.5\" r=\"2.5\"/><circle cx=\"17.5\" cy=\"17.5\" r=\"2.5\"/>","credit-card":"<rect width=\"20\" height=\"14\" x=\"2\" y=\"5\" rx=\"2\"/><line x1=\"2\" x2=\"22\" y1=\"10\" y2=\"10\"/>","package-minus":"<path d=\"M16 16h6\"/><path d=\"M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14\"/><path d=\"m7.5 4.27 9 5.15\"/><polyline points=\"3.29 7 12 12 20.71 7\"/><line x1=\"12\" x2=\"12\" y1=\"22\" y2=\"12\"/>","file-badge":"<path d=\"M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3.072\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/><path d=\"m6.69 16.479 1.29 4.88a.5.5 0 0 1-.698.591l-1.843-.849a1 1 0 0 0-.88.001l-1.846.85a.5.5 0 0 1-.693-.593l1.29-4.88\"/><circle cx=\"5\" cy=\"14\" r=\"3\"/>","file-spreadsheet":"<path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/><path d=\"M8 13h2\"/><path d=\"M14 13h2\"/><path d=\"M8 17h2\"/><path d=\"M14 17h2\"/>","layout-dashboard":"<rect width=\"7\" height=\"9\" x=\"3\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"5\" x=\"14\" y=\"3\" rx=\"1\"/><rect width=\"7\" height=\"9\" x=\"14\" y=\"12\" rx=\"1\"/><rect width=\"7\" height=\"5\" x=\"3\" y=\"16\" rx=\"1\"/>","shopping-cart":"<circle cx=\"8\" cy=\"21\" r=\"1\"/><circle cx=\"19\" cy=\"21\" r=\"1\"/><path d=\"M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12\"/>","boxes":"<path d=\"M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z\"/><path d=\"m7 16.5-4.74-2.85\"/><path d=\"m7 16.5 5-3\"/><path d=\"M7 16.5v5.17\"/><path d=\"M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z\"/><path d=\"m17 16.5-5-3\"/><path d=\"m17 16.5 4.74-2.85\"/><path d=\"M17 16.5v5.17\"/><path d=\"M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z\"/><path d=\"M12 8 7.26 5.15\"/><path d=\"m12 8 4.74-2.85\"/><path d=\"M12 13.5V8\"/>","database":"<ellipse cx=\"12\" cy=\"5\" rx=\"9\" ry=\"3\"/><path d=\"M3 5V19A9 3 0 0 0 21 19V5\"/><path d=\"M3 12A9 3 0 0 0 21 12\"/>","truck":"<path d=\"M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2\"/><path d=\"M15 18H9\"/><path d=\"M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14\"/><circle cx=\"17\" cy=\"18\" r=\"2\"/><circle cx=\"7\" cy=\"18\" r=\"2\"/>","landmark":"<path d=\"M10 18v-7\"/><path d=\"M11.12 2.198a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949z\"/><path d=\"M14 18v-7\"/><path d=\"M18 18v-7\"/><path d=\"M3 22h18\"/><path d=\"M6 18v-7\"/>","heart-handshake":"<path d=\"M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762\"/>","bar-chart-3":"<path d=\"M3 3v16a2 2 0 0 0 2 2h16\"/><path d=\"M18 17V9\"/><path d=\"M13 17V5\"/><path d=\"M8 17v-3\"/>","shield-check":"<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/><path d=\"m9 12 2 2 4-4\"/>","settings-2":"<path d=\"M14 17H5\"/><path d=\"M19 7h-9\"/><circle cx=\"17\" cy=\"17\" r=\"3\"/><circle cx=\"7\" cy=\"7\" r=\"3\"/>","alert-octagon":"<path d=\"M12 16h.01\"/><path d=\"M12 8v4\"/><path d=\"M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z\"/>","clock":"<path d=\"M12 6v6l4 2\"/><circle cx=\"12\" cy=\"12\" r=\"10\"/>","sun":"<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2\"/><path d=\"M12 20v2\"/><path d=\"m4.93 4.93 1.41 1.41\"/><path d=\"m17.66 17.66 1.41 1.41\"/><path d=\"M2 12h2\"/><path d=\"M20 12h2\"/><path d=\"m6.34 17.66-1.41 1.41\"/><path d=\"m19.07 4.93-1.41 1.41\"/>"};
+window.lucide={createIcons(){document.querySelectorAll("i[data-lucide]").forEach(el=>{const n=el.dataset.lucide;if(!ICONS[n])return;const s=document.createElementNS("http://www.w3.org/2000/svg","svg");s.setAttribute("viewBox","0 0 24 24");s.setAttribute("fill","none");s.setAttribute("stroke","currentColor");s.setAttribute("stroke-linecap","round");s.setAttribute("stroke-linejoin","round");s.setAttribute("aria-hidden","true");s.setAttribute("class","lucide "+(el.getAttribute("class")||""));if(el.getAttribute("style"))s.setAttribute("style",el.getAttribute("style"));s.innerHTML=ICONS[n];el.replaceWith(s);});}};
+</script>
+<style>
+/* Tokens mirror packages/ui/src/tokens/tokens.css (paper and ink). */
+:root{--paper:#ffffff;--side:#f7f7f7;--raised:#ffffff;--sunken:#f0f0f0;--ink:#242424;--ink-2:#5c5c5c;--ink-3:#707070;--ink-4:#8f8f8f;
+--line:#ebebeb;--line-2:#dedede;--line-3:#8f8f8f;--hover:rgba(36,36,36,.05);--press:rgba(36,36,36,.08);
+--critical:#bc2a41;--success:#2d8659;--warning:#c2923a;--coral:#dd7b5e;--data:#2f7ab0;--violet:#7a5ea8;--slate:#6b7480;
+--ease:cubic-bezier(.2,.7,.2,1);--sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Geist Mono",ui-monospace,Menlo,monospace;--brand:"Instrument Serif",Georgia,serif}
+html.dark{--paper:#191919;--side:#202020;--raised:#232323;--sunken:#2b2b2b;--ink:#ebebeb;--ink-2:#b3b3b3;--ink-3:#8a8a8a;--ink-4:#737373;
+--line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.13);--line-3:rgba(255,255,255,.34);--hover:rgba(255,255,255,.05);--press:rgba(255,255,255,.09);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid color-mix(in srgb,var(--data) 55%,transparent);outline-offset:2px}
+svg.lucide{width:16px;height:16px;stroke-width:1.75;flex:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* App shell */
+.app{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh;transition:grid-template-columns .22s var(--ease)}
+.app.rail{grid-template-columns:48px minmax(0,1fr)}
+
+/* Sidebar */
+aside{position:sticky;top:0;height:100vh;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+.sb-head{height:48px;display:flex;align-items:center;gap:8px;padding:0 10px 0 14px;border-bottom:1px solid var(--line)}
+.wordmark{font:28px/1 var(--brand);letter-spacing:-.01em} .wordmark small{font:500 11px var(--sans);color:var(--ink-4);margin-left:6px;letter-spacing:0}
+.icon-btn{width:32px;height:32px;display:grid;place-items:center;border-radius:6px;color:var(--ink-3)} .icon-btn:hover{background:var(--hover);color:var(--ink)}
+.sb-head .icon-btn{margin-left:auto}
+.company{margin:10px;padding:8px 10px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--line-2);background:var(--raised);display:flex;align-items:center;gap:10px;text-align:left;width:calc(100% - 20px)}
+.company .logo{width:28px;height:28px;border-radius:7px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font:600 12px var(--sans);flex:none}
+.company b{display:block;font-weight:600;font-size:13px;line-height:1.2} .company span{font-size:11.5px;color:var(--ink-3)}
+.company svg{margin-left:auto;color:var(--ink-4)}
+nav.menu{flex:1;overflow:auto;padding:4px 8px 16px;scrollbar-width:thin}
+.grp{margin-top:2px}
+.grp-btn{width:100%;height:34px;display:flex;align-items:center;gap:10px;padding:0 8px;border-radius:6px;font-size:13.5px;color:var(--ink-2);text-align:left}
+.grp-btn:hover{background:var(--hover);color:var(--ink)}
+.grp-btn .chev{margin-left:auto;color:var(--ink-4);transition:transform .2s var(--ease);width:14px;height:14px}
+.grp.open>.grp-btn .chev{transform:rotate(90deg)}
+.grp.has-active>.grp-btn{color:var(--ink);font-weight:500}
+.sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows .22s var(--ease)} .grp.open>.sub{grid-template-rows:1fr}
+.sub>div{overflow:hidden}
+.sub ul{list-style:none;margin:2px 0 6px;padding:0 0 0 17px;border-left:1px solid var(--line-2);margin-left:16px}
+.sub li a{display:flex;align-items:center;gap:8px;height:30px;padding:0 8px;border-radius:6px;font-size:13px;color:var(--ink-2);text-decoration:none;white-space:nowrap}
+.sub li a:hover{background:var(--hover);color:var(--ink)}
+.sub li a.active{background:var(--press);color:var(--ink);font-weight:500}
+.sub li a kbd{margin-left:auto;font:500 10.5px var(--mono);color:var(--ink-4)}
+.sub .w{font:600 9.5px var(--mono);color:var(--violet);border:1px solid color-mix(in srgb,var(--violet) 40%,transparent);border-radius:4px;padding:0 4px}
+.sec-h{font:500 11px var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-4);padding:10px 8px 4px}
+.sb-foot{border-top:1px solid var(--line);padding:8px;display:flex;gap:4px;align-items:center}
+.sb-foot .who{display:flex;align-items:center;gap:8px;flex:1;min-width:0;padding:4px 6px;border-radius:6px}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--sunken);display:grid;place-items:center;font:600 11.5px var(--sans);flex:none;box-shadow:inset 0 0 0 1px var(--line-2)}
+.who b{display:block;font-size:12.5px;font-weight:500;line-height:1.2} .who span{font-size:11px;color:var(--ink-3)}
+/* Rail mode: icons only, submenus fly out on hover */
+.app.rail .wordmark small,.app.rail .company,.app.rail .grp-btn .lbl,.app.rail .grp-btn .chev,.app.rail .who div{display:none} .app.rail .who{flex:none;padding:0}
+.app.rail .sb-head{padding:0 8px;justify-content:center} .app.rail .wordmark{display:none} .app.rail .sb-head .icon-btn{margin:0}
+.app.rail nav.menu{padding:8px 6px;overflow:visible} .app.rail .grp-btn{justify-content:center;padding:0}
+.app.rail .sub{display:none}
+.app.rail .grp{position:relative}
+.app.rail .grp.fly>.sub{display:block;position:fixed;left:52px;top:var(--fly-top,60px);background:var(--raised);border-radius:10px;box-shadow:0 0 0 1px var(--line-2),0 12px 32px rgba(0,0,0,.14);padding:6px;z-index:30;min-width:240px;max-height:calc(100vh - var(--fly-top,60px) - 12px);overflow:auto}
+.app.rail .grp.fly>.sub ul{border:0;margin:0;padding:0}
+.app.rail .grp.fly>.sub::before{content:attr(data-title);display:block;font-weight:600;font-size:13px;padding:6px 8px 4px}
+.app.rail .grp.fly>.grp-btn,.app.rail .grp.has-active>.grp-btn{background:var(--press);color:var(--ink)}
+.app.rail .sb-foot{flex-direction:column}
+
+/* Top bar */
+header.top{position:sticky;top:0;z-index:10;height:48px;display:flex;align-items:center;gap:10px;padding:0 18px;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:saturate(1.2);border-bottom:1px solid var(--line)}
+.crumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-3);min-width:0;white-space:nowrap;overflow:hidden}
+.crumb b{color:var(--ink);font-weight:500} .crumb svg{width:13px;height:13px;color:var(--ink-4)}
+.top .sp{flex:1}
+.search{display:flex;align-items:center;gap:8px;height:32px;padding:0 10px;border-radius:8px;background:var(--side);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-4);font-size:13px;width:280px;white-space:nowrap;overflow:hidden}
+.search kbd{margin-left:auto;font:500 11px var(--mono);border:1px solid var(--line-2);border-radius:4px;padding:0 5px}
+.pill-btn{display:flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--line-2);font-size:13px;color:var(--ink-2);white-space:nowrap}
+.pill-btn:hover{background:var(--hover)}
+.sync{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-3);white-space:nowrap} .dot{width:7px;height:7px;border-radius:50%;background:var(--success)}
+.bell{position:relative} .bell i{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 2px var(--paper)}
+.mobile-menu{display:none}
+
+/* Page */
+main{min-width:0}
+.page{max-width:1280px;margin:0 auto;padding:22px 22px 60px}
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin-bottom:18px}
+.ph h1{font:600 clamp(26px,3vw,32px)/1.1 var(--sans);letter-spacing:-.022em;margin:0}
+.ph p{margin:4px 0 0;color:var(--ink-3);font-size:13.5px}
+.ph .actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{height:32px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn.primary{background:var(--ink);color:var(--paper)} .btn.primary:hover{opacity:.9}
+.btn.outline{box-shadow:inset 0 0 0 1px var(--line-2);background:var(--raised)} .btn.outline:hover{background:var(--hover)}
+.btn kbd{font:500 10.5px var(--mono);opacity:.6}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.fp{height:28px;padding:0 12px;border-radius:999px;font-size:12.5px;box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink-2)} .fp:hover{background:var(--hover)}
+.fp.on{background:var(--ink);color:var(--paper);box-shadow:none}
+.card{background:var(--raised);border-radius:12px;box-shadow:inset 0 0 0 1px var(--line);padding:16px 18px;min-width:0}
+.card h3{margin:0;font-size:14px;font-weight:600} .card .h{display:flex;align-items:center;gap:8px;margin-bottom:12px} .card .h a{margin-left:auto;font-size:12.5px;color:var(--data);text-decoration:none}
+.card .h .sub-t{font-size:12.5px;color:var(--ink-4)}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.kpi .l{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-3)} .kpi .l svg{width:14px;height:14px}
+.kpi .v{font:600 clamp(18px,1.7vw,24px)/1.2 var(--mono);white-space:nowrap;letter-spacing:-.02em;margin:8px 0 4px}
+.kpi .d{font-size:12px;color:var(--ink-3)} .up{color:var(--success)} .down{color:var(--critical)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.c8{grid-column:span 8}.c4{grid-column:span 4}.c6{grid-column:span 6}.c12{grid-column:span 12}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--side);color:var(--ink-3);font-weight:500;font-size:12.5px;text-align:left;padding:8px 10px;white-space:nowrap}
+th:first-child{border-radius:6px 0 0 6px} th:last-child{border-radius:0 6px 6px 0}
+td{padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap} tr:last-child td{border-bottom:0} tbody tr:hover td{background:var(--hover)}
+.r{text-align:right} .c{text-align:center}
+.tbl{overflow-x:auto}
+.badge{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 7px;border-radius:4px;font:500 11.5px var(--sans);white-space:nowrap}
+.b-ok{color:var(--success);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--success) 35%,transparent)}
+.b-warn{color:var(--warning);background:color-mix(in srgb,var(--warning) 12%,transparent)}
+.b-crit{color:var(--critical);background:color-mix(in srgb,var(--critical) 10%,transparent)}
+.b-slate{color:var(--slate);background:color-mix(in srgb,var(--slate) 12%,transparent)}
+.b-h{color:var(--data);background:color-mix(in srgb,var(--data) 12%,transparent)} .b-h1{color:var(--violet);background:color-mix(in srgb,var(--violet) 12%,transparent)}
+.badge svg{width:12px;height:12px}
+/* Chart */
+.chart{display:flex;align-items:flex-end;gap:10px;height:190px;padding-top:10px;border-bottom:1px solid var(--line-2)}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:2px;position:relative}
+.pair{display:flex;align-items:flex-end;gap:3px;height:100%;width:100%;max-width:44px} .bar .s,.bar .p{flex:1;border-radius:3px 3px 0 0;min-height:2px} .bar .s{background:var(--ink);opacity:.85} .bar .p{background:var(--line-3);opacity:.55}
+.bar:hover .s{opacity:1} .bar .tip{position:absolute;bottom:calc(100% + 4px);font:500 11px var(--mono);color:var(--ink-2);opacity:0;transition:opacity .14s;white-space:nowrap}
+.bar:hover .tip{opacity:1}
+.xl{display:flex;gap:10px;margin-top:6px} .xl span{flex:1;text-align:center;font-size:11.5px;color:var(--ink-4)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--ink-3)} .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.list{display:grid;gap:0} .row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px} .row:last-child{border-bottom:0}
+.row .m{flex:1;min-width:0} .row .m b{font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .row .m span{font-size:12px;color:var(--ink-3)}
+.meter{height:6px;border-radius:3px;background:var(--sunken);overflow:hidden;margin-top:6px} .meter i{display:block;height:100%;background:var(--ink)}
+.split{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:6px 0 12px;gap:2px} .split i{display:block;height:100%}
+.placeholder{display:grid;place-items:center;text-align:center;padding:60px 20px;color:var(--ink-3)} .placeholder svg{width:28px;height:28px;margin-bottom:8px;color:var(--ink-4)}
+.placeholder h2{color:var(--ink);font-size:18px;margin:0 0 4px}
+.note{font-size:12px;color:var(--ink-4);margin-top:16px;text-align:center}
+.scrim{display:none}
+@media (max-width:1100px){.c8,.c4,.c6{grid-column:span 12} .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.search{width:auto} .search span,.search kbd{display:none} .sync span{display:none}}
+@media (max-width:760px){
+ .app,.app.rail{grid-template-columns:minmax(0,1fr)}
+ aside{position:fixed;left:0;top:0;bottom:0;width:280px;z-index:40;transform:translateX(-100%);transition:transform .22s var(--ease)}
+ .app.mob-open aside{transform:none} .app.mob-open .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:35}
+ .mobile-menu{display:grid} .sb-head .collapse{display:none} .pill-btn .lbl{display:none} .page{padding:16px 14px 40px} header.top{padding:0 10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside aria-label="Main menu">
+    <div class="sb-head">
+      <span class="wordmark">MENO<small>Pharmacy ERP</small></span>
+      <button class="icon-btn collapse" id="collapse" aria-label="Collapse sidebar" title="Collapse (Ctrl B)"><i data-lucide="panel-left"></i></button>
+    </div>
+    <button class="company" aria-label="Switch company or branch">
+      <span class="logo">AM</span>
+      <span><b>Aruna Medicals</b><span id="branchLbl">Anna Nagar · FY 2026-27</span></span>
+      <i data-lucide="chevrons-up-down"></i>
+    </button>
+    <nav class="menu" id="menu"></nav>
+    <div class="sb-foot">
+      <div class="who"><span class="avatar">PR</span><div><b>Priya R.</b><span>Business owner</span></div></div>
+      <button class="icon-btn t" id="theme" aria-label="Toggle light / dark"><i data-lucide="moon"></i></button>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <main>
+    <header class="top">
+      <button class="icon-btn mobile-menu" id="mob" aria-label="Open menu"><i data-lucide="menu"></i></button>
+      <div class="crumb" id="crumb"></div>
+      <div class="sp"></div>
+      <div class="search" role="button" tabindex="0"><i data-lucide="search"></i><span>Search medicine, bill, party…</span><kbd>Ctrl K</kbd></div>
+      <button class="pill-btn" aria-label="Edition"><i data-lucide="store"></i><span class="lbl" id="edLbl">Retail + Wholesale</span></button>
+      <span class="sync" title="Desktop sync status"><span class="dot"></span><span>Synced</span></span>
+      <button class="icon-btn bell" aria-label="Notifications, 4 unread"><i data-lucide="bell"></i><i></i></button>
+    </header>
+    <div class="page" id="page"></div>
+  </main>
+</div>
+
+<script>
+/* Menu: docs/design/NAVIGATION.md. [label, route, shortcut, wholesaleOnly, section] */
+const NAV = [
+ {g:"Dashboard",icon:"layout-dashboard",items:[["Home dashboard","/dashboard","G H"],["Retail dashboard","/dashboard/retail"],["Wholesale dashboard","/dashboard/wholesale","",1],["Inventory dashboard","/dashboard/inventory"],["Financial dashboard","/dashboard/finance"],["Branch dashboard","/dashboard/branches"]]},
+ {g:"Sales",icon:"receipt",items:[["POS Billing","/sales/pos","G P"],["Sales Invoices","/sales/invoices","G I"],["Sales Orders","/sales/orders","G O",1],["Quotations","/sales/quotations"],["Delivery Challans","/sales/challans","",1],["Sales Returns","/sales/returns","G E"],["Credit Notes","/sales/credit-notes"]]},
+ {g:"Purchase",icon:"shopping-cart",items:[["Purchase Orders","/purchase/orders","G Q"],["Purchase Invoices","/purchase/invoices","G U"],["Goods Received","/purchase/grn","G N"],["Purchase Returns","/purchase/returns"],["Debit Notes","/purchase/debit-notes"],["Purchase Import","/purchase/import"]]},
+ {g:"Inventory",icon:"boxes",items:[["Stock Overview","/inventory/stock","G K"],["Batch Management","/inventory/batches"],["Stock Transfers","/inventory/transfers"],["Stock Adjustments","/inventory/adjustments"],["Expiry Management","/inventory/expiry","G X"],["Reorder Management","/inventory/reorder"],["Stock Audit","/inventory/audit"]]},
+ {g:"Masters",icon:"database",items:[
+   ["Medicine Master","/masters/items","G M",0,"Inventory masters"],["Generic / Salt","/masters/salts","",0,"Inventory masters"],["Brands","/masters/brands","",0,"Inventory masters"],["Manufacturers","/masters/manufacturers","",0,"Inventory masters"],["Categories","/masters/categories","",0,"Inventory masters"],["Drug Schedules","/masters/schedules","",0,"Inventory masters"],["Units & Taxes","/masters/units","",0,"Inventory masters"],
+   ["Suppliers","/masters/suppliers","G V",0,"Party masters"],["Customers","/masters/customers","G C",0,"Party masters"],["Customer Groups","/masters/customer-groups","",0,"Party masters"],["Doctors","/masters/doctors","G D",0,"Party masters"],["Salesmen","/masters/salesmen","",1,"Party masters"],
+   ["Ledger Groups","/finance/account-groups","G A",0,"Accounts masters"],["Ledgers","/finance/accounts","G L",0,"Accounts masters"],["Posting Rules","/finance/posting-rules","",0,"Accounts masters"],["TDS / TCS Sections","/finance/tds-sections","",0,"Accounts masters"]]},
+ {g:"Wholesale",icon:"truck",items:[["Distributor Orders","/wholesale/distributor-orders"],["Retailer Orders","/wholesale/retailer-orders","",1],["Bulk Billing","/wholesale/billing","G W",1],["Price Lists","/wholesale/price-lists","",1],["Schemes & Offers","/wholesale/schemes"],["Credit Limits","/wholesale/credit","",1],["Delivery Management","/wholesale/delivery","",1]]},
+ {g:"Finance",icon:"landmark",items:[["Cash & Bank","/finance/cash-book","G B"],["Receipts","/finance/receipts"],["Payments","/finance/payments"],["Expenses","/finance/expenses"],["General Ledger","/finance/ledger"],["Journal Entries","/finance/journal","G J"],["Fixed Assets","/finance/assets"],["Loans","/finance/loans"],["Bank Reconciliation","/finance/bank-reconciliation"],["Financial Statements","/finance/statements"]]},
+ {g:"CRM & Engagement",icon:"heart-handshake",items:[["Prescription Records","/compliance/prescriptions"],["Customer History","/crm/customers"],["Reminders","/crm/reminders"],["Loyalty","/crm/loyalty"],["Complaints","/crm/complaints"],["Notifications","/notifications"]]},
+ {g:"Reports",icon:"bar-chart-3",items:[["Reports Centre","/reports","G R"],["Sales Reports","/reports/sales"],["Purchase Reports","/reports/purchase"],["Stock Reports","/reports/stock"],["Expiry Reports","/reports/expiry"],["Profit Reports","/reports/profit"],["GST Reports","/reports/gst"],["Financial Reports","/reports/financial"]]},
+ {g:"GST & Compliance",icon:"shield-check",items:[["GST Summary","/gst","G T"],["GSTR Preparation","/gst/gstr-1"],["E-invoice & E-way Bill","/gst/e-invoices","",1],["Input Tax Credit","/gst/itc"],["Statutory Registers","/compliance/registers","G Z"],["Drug Licences","/compliance/licences"],["Regulatory Audit","/compliance/audit"]]},
+ {g:"Administration",icon:"settings-2",items:[["Settings Home","/admin","G ,"],["Company Settings","/admin/company"],["Branches & Warehouses","/admin/branches"],["Users & Roles","/admin/users"],["Approval Workflows","/admin/approvals"],["Audit Logs","/admin/audit"],["Integrations","/admin/integrations"],["Subscriptions","/admin/subscription"]]},
+];
+let active = "/dashboard";
+const openGroups = new Set(["Dashboard"]);
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+function renderMenu(){
+  $("menu").innerHTML = NAV.map(g => {
+    let sec = "", lis = "";
+    for (const [label, route, kbd, w, section] of g.items) {
+      if (section && section !== sec) { sec = section; lis += `<li class="sec-h">${section}</li>`; }
+      lis += `<li><a href="#${route}" data-route="${route}" class="${route===active?"active":""}">${esc(label)}${w?' <span class="w" title="Wholesale edition only">W</span>':""}${kbd?`<kbd>${kbd}</kbd>`:""}</a></li>`;
+    }
+    const has = g.items.some(i => i[1]===active);
+    return `<div class="grp ${openGroups.has(g.g)?"open":""} ${has?"has-active":""}" data-g="${esc(g.g)}">
+      <button class="grp-btn" aria-expanded="${openGroups.has(g.g)}" title="${esc(g.g)}"><i data-lucide="${g.icon}"></i><span class="lbl">${esc(g.g)}</span><i data-lucide="chevron-right" class="chev"></i></button>
+      <div class="sub" data-title="${esc(g.g)}"><div><ul>${lis}</ul></div></div></div>`;
+  }).join("");
+  lucide.createIcons();
+}
+$("menu").addEventListener("click", e => {
+  const b = e.target.closest(".grp-btn");
+  if (b && $("app").classList.contains("rail")) return;
+  if (b) { const g = b.parentElement.dataset.g; openGroups.has(g) ? openGroups.delete(g) : openGroups.add(g); renderMenu(); return; }
+  const a = e.target.closest("a[data-route]");
+  if (a) { e.preventDefault(); go(a.dataset.route); $("app").classList.remove("mob-open"); }
+});
+
+function findItem(route){ for (const g of NAV) for (const i of g.items) if (i[1]===route) return {g, i}; return null; }
+function go(route){
+  active = route; const f = findItem(route);
+  if (f) openGroups.add(f.g.g);
+  history.replaceState(null, "", "#" + route);
+  $("crumb").innerHTML = f ? `<span>${esc(f.g.g)}</span>${f.i[4]?`<i data-lucide="chevron-right"></i><span>${f.i[4]}</span>`:""}<i data-lucide="chevron-right"></i><b>${esc(f.i[0])}</b>` : "";
+  $("page").innerHTML = route === "/dashboard" ? dashboard() : placeholder(f);
+  renderMenu(); window.scrollTo(0,0);
+}
+
+const money = n => "₹" + Number(n).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+const short = n => n >= 1e7 ? "₹" + (n/1e7).toFixed(2) + " Cr" : n >= 1e5 ? "₹" + (n/1e5).toFixed(2) + " L" : money(n);
+
+function kpi(icon,label,value,delta,good){ return `<div class="card kpi"><div class="l"><i data-lucide="${icon}"></i>${label}</div><div class="v">${value}</div><div class="d">${delta?`<span class="${good?"up":"down"}">${delta}</span> vs yesterday`:"&nbsp;"}</div></div>`; }
+
+function dashboard(){
+  const days=[["Tue",48210,31200],["Wed",52880,12400],["Thu",45120,28800],["Fri",61340,22100],["Sat",73950,40500],["Sun",38400,0],["Today",57640,26930]];
+  const max=Math.max(...days.map(d=>Math.max(d[1],d[2])));
+  const bars=days.map(d=>`<div class="bar" title="${d[0]}: sales ${money(d[1])}, purchases ${money(d[2])}"><span class="tip">${short(d[1])}</span><div class="pair"><div class="s" style="height:${d[1]/max*100}%"></div><div class="p" style="height:${d[2]/max*100}%"></div></div></div>`).join("");
+  const invoices=[["AM/26-27/000124","10:42 am","Meena Raghavan","UPI",60.00,"Posted"],["AM/26-27/000123","10:31 am","Walk-in","Cash",348.50,"Posted"],["WS/26-27/000017","10:12 am","Sri Balaji Pharmacy","Credit",18452.00,"Posted"],["AM/26-27/000122","09:58 am","K. Arun","Card",1204.75,"Posted"],["AM/26-27/H-0007","09:41 am","Walk-in","—",212.00,"Held"],["AM/26-27/000121","09:30 am","S. Fathima","Cash",96.00,"Pending sync"]];
+  const st={"Posted":"b-ok","Held":"b-slate","Pending sync":"b-slate"};
+  const near=[["Augmentin 625 Duo Tab","AG4417","01/27",24,"b-crit","Expires in 38 days"],["Pan-D Cap","PD2391","02/27",60,"b-warn","Expires in 69 days"],["Telma 40 Tab","TL0912","03/27",45,"b-warn","Expires in 97 days"],["Calpol 500 Tab","CP7710","03/27",120,"b-warn","Expires in 97 days"]];
+  const low=[["Paracip 650 Tab","Strip 15",8,30],["Dolo 650 Tab","Strip 15",12,40],["Shelcal 500 Tab","Strip 15",5,20],["ORS Electral Powder","Sachet",14,50]];
+  const branches=[["Anna Nagar",57640,100],["T. Nagar",44210,77],["Velachery",31980,55],["Warehouse (wholesale)",18452,32]];
+  return `
+  <div class="ph"><div><h1>Good morning, Priya</h1><p>Tuesday, 24 Nov 2026 · all branches · figures update every minute</p></div>
+    <div class="actions"><button class="btn outline"><i data-lucide="download"></i>Export</button><button class="btn outline"><i data-lucide="plus"></i>New purchase</button><button class="btn primary" onclick="go('/sales/pos')"><i data-lucide="receipt"></i>New bill <kbd>G P</kbd></button></div></div>
+  <div class="tools"><button class="fp on">Today</button><button class="fp">Yesterday</button><button class="fp">This week</button><button class="fp">This month</button><button class="fp">FY 2026-27</button><button class="fp"><i data-lucide="building-2" style="width:12px;height:12px;vertical-align:-2px"></i> All branches</button></div>
+  <div class="kpis">
+    ${kpi("indian-rupee","Today's sales",money(57640),"▲ 12.4%",1)}
+    ${kpi("shopping-cart","Purchases",money(26930),"▼ 8.1%",1)}
+    ${kpi("percent","Gross margin","21.8%","▲ 0.6 pts",1)}
+    ${kpi("wallet","Cash collected",money(41260),"▲ 4.2%",1)}
+    ${kpi("arrow-down-left","Receivables",short(468900),"▲ 2.3%",0)}
+    ${kpi("arrow-up-right","Payables",short(312450),"",0)}
+  </div>
+  <div class="grid">
+    <div class="card c8"><div class="h"><h3>Sales and purchases, last 7 days</h3><div class="legend" style="margin-left:auto"><span><i style="background:var(--ink)"></i>Sales</span><span><i style="background:var(--line-3);opacity:.55"></i>Purchases</span></div></div>
+      <div class="chart">${bars}</div><div class="xl">${days.map(d=>`<span>${d[0]}</span>`).join("")}</div></div>
+    <div class="card c4"><div class="h"><h3>Payment modes today</h3></div>
+      <div class="split"><i style="width:46%;background:var(--ink)"></i><i style="width:28%;background:var(--data)"></i><i style="width:14%;background:var(--line-3)"></i><i style="width:12%;background:var(--warning)"></i></div>
+      <div class="list">
+        ${[["UPI","var(--ink)",26514],["Cash","var(--data)",16139],["Card","var(--line-3)",8070],["Credit","var(--warning)",6917]].map(r=>`<div class="row"><i style="width:10px;height:10px;border-radius:2px;background:${r[1]}"></i><div class="m"><b>${r[0]}</b></div><span class="mono">${money(r[2])}</span></div>`).join("")}
+      </div></div>
+
+    <div class="card c6"><div class="h"><h3>Near expiry</h3><span class="sub-t">within 90 days</span><a href="#/inventory/expiry" onclick="go('/inventory/expiry');return false">Expiry management →</a></div>
+      <div class="tbl"><table><thead><tr><th>Medicine</th><th>Batch</th><th class="c">Expiry</th><th class="r">Qty</th><th>Status</th></tr></thead><tbody>
+      ${near.map(r=>`<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="c mono">${r[2]}</td><td class="r mono">${r[3]}</td><td><span class="badge ${r[4]}"><i data-lucide="${r[4]==="b-crit"?"alert-octagon":"clock"}"></i>${r[5]}</span></td></tr>`).join("")}
+      </tbody></table></div></div>
+    <div class="card c6"><div class="h"><h3>Low stock</h3><span class="sub-t">below reorder level</span><a href="#/inventory/reorder" onclick="go('/inventory/reorder');return false">Create order →</a></div>
+      <div class="list">${low.map(r=>`<div class="row"><div class="m"><b>${r[0]}</b><span>${r[1]} · reorder at ${r[3]}</span><div class="meter"><i style="width:${r[2]/r[3]*100}%;background:${r[2]/r[3]<.3?"var(--critical)":"var(--warning)"}"></i></div></div><span class="badge ${r[2]/r[3]<.3?"b-crit":"b-warn"}"><span class="mono">${r[2]}</span>&nbsp;left</span></div>`).join("")}</div></div>
+
+    <div class="card c8"><div class="h"><h3>Recent bills</h3><a href="#/sales/invoices" onclick="go('/sales/invoices');return false">All invoices →</a></div>
+      <div class="tbl"><table><thead><tr><th>Bill no.</th><th>Time</th><th>Customer</th><th>Mode</th><th class="r">Amount</th><th>Status</th></tr></thead><tbody>
+      ${invoices.map(r=>`<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td class="r mono">${money(r[4])}</td><td><span class="badge ${st[r[5]]}">${r[5]==="Posted"?'<i data-lucide="check"></i>':r[5]==="Held"?'<i data-lucide="pause"></i>':'<i data-lucide="cloud-off"></i>'}${r[5]}</span></td></tr>`).join("")}
+      </tbody></table></div></div>
+    <div class="card c4"><div class="h"><h3>Branch performance</h3><span class="sub-t">today</span></div>
+      <div class="list">${branches.map(b=>`<div class="row"><div class="m"><b>${b[0]}</b><div class="meter"><i style="width:${b[2]}%"></i></div></div><span class="mono">${short(b[1])}</span></div>`).join("")}</div></div>
+
+    <div class="card c6"><div class="h"><h3>Needs your approval</h3><span class="badge b-warn">3 pending</span></div>
+      <div class="list">
+        <div class="row"><i data-lucide="percent"></i><div class="m"><b>Discount 15% on AM/26-27/000125</b><span>Requested by Karthik (billing) · cap is 10%</span></div><button class="btn outline">Review</button></div>
+        <div class="row"><i data-lucide="credit-card"></i><div class="m"><b>Credit limit over by ₹4,200</b><span>Sri Balaji Pharmacy · wholesale order SO/26-27/000045</span></div><button class="btn outline">Review</button></div>
+        <div class="row"><i data-lucide="package-minus"></i><div class="m"><b>Stock adjustment −12 strips</b><span>Velachery · damaged in transit · value ₹384.00</span></div><button class="btn outline">Review</button></div>
+      </div></div>
+    <div class="card c6"><div class="h"><h3>Compliance</h3><a href="#/compliance/registers" onclick="go('/compliance/registers');return false">Registers →</a></div>
+      <div class="list">
+        <div class="row"><span class="badge b-h1">H1</span><div class="m"><b>7 Schedule H1 sales today</b><span>All have prescriber and patient details</span></div><span class="badge b-ok"><i data-lucide="check"></i>Complete</span></div>
+        <div class="row"><span class="badge b-h">H</span><div class="m"><b>22 Schedule H sales today</b><span>Prescriptions recorded</span></div><span class="badge b-ok"><i data-lucide="check"></i>Complete</span></div>
+        <div class="row"><i data-lucide="file-badge"></i><div class="m"><b>Drug licence 20B expires 31 Mar 2027</b><span>Anna Nagar · renew 30 days before</span></div><span class="badge b-slate">127 days</span></div>
+        <div class="row"><i data-lucide="file-spreadsheet"></i><div class="m"><b>GSTR-1 for October</b><span>Due 11 Nov · prepared, exported</span></div><span class="badge b-ok"><i data-lucide="check"></i>Done</span></div>
+      </div></div>
+  </div>
+  <p class="note">Static demo · fake data · menu from docs/design/NAVIGATION.md · look from docs/design/DESIGN_LANGUAGE.md</p>`;
+}
+
+function placeholder(f){
+  if (!f) return "";
+  return `<div class="ph"><div><h1>${esc(f.i[0])}</h1><p class="mono">${f.i[1]}</p></div><div class="actions"><button class="btn primary" onclick="go('/dashboard')"><i data-lucide="layout-dashboard"></i>Back to dashboard</button></div></div>
+  <div class="card placeholder"><div><i data-lucide="${f.g.icon}"></i><h2>${esc(f.i[0])} goes here</h2><p>This static demo only draws the home dashboard. The menu item, breadcrumb and route are real.${f.i[3]?" Shown only for wholesale-edition companies.":""}</p></div></div>`;
+}
+
+// Rail mode: show a group's items in a fly-out next to its icon.
+let flyTimer;
+$("menu").addEventListener("mouseover", e => {
+  if (!$("app").classList.contains("rail")) return;
+  const g = e.target.closest(".grp"); if (!g) return;
+  clearTimeout(flyTimer);
+  document.querySelectorAll(".grp.fly").forEach(x => x !== g && x.classList.remove("fly"));
+  if (!g.classList.contains("fly")) { const r = g.querySelector(".grp-btn").getBoundingClientRect(); g.style.setProperty("--fly-top", Math.min(r.top, innerHeight - 200) + "px"); g.classList.add("fly"); }
+});
+$("menu").addEventListener("mouseleave", () => { flyTimer = setTimeout(() => document.querySelectorAll(".grp.fly").forEach(x => x.classList.remove("fly")), 250); });
+$("collapse").onclick = () => { $("app").classList.toggle("rail"); };
+$("mob").onclick = () => $("app").classList.add("mob-open");
+$("scrim").onclick = () => $("app").classList.remove("mob-open");
+$("theme").onclick = () => { document.documentElement.classList.toggle("dark"); };
+addEventListener("keydown", e => { if (e.ctrlKey && e.key.toLowerCase()==="b") { e.preventDefault(); $("app").classList.toggle("rail"); } });
+go(location.hash.slice(1) && findItem(location.hash.slice(1)) ? location.hash.slice(1) : "/dashboard");
+</script>
+</body>
+</html>

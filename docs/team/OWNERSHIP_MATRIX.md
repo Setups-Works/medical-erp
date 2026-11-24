@@ -18,6 +18,7 @@ Rules of the split:
 | Prefix | Area | Backend module(s) | Backend | Frontend | Web feature folder(s) | Extra | QA |
 |---|---|---|---|---|---|---|---|
 | PLT | Platform & administration | tenancy, identity, subscription, audit | nitheesh | nitheesh | company, branches, users, settings, admin | | ashok |
+| SEC | Security | identity, audit, platform | nitheesh | meyyarivu | admin/security | jeeva | ashok |
 | AUT | Authentication & onboarding | auth, tenancy | nitheesh | meyyarivu | auth | | ashok |
 | NAV | Navigation & command search | identity | nitheesh | meyyarivu | (app shell) | | ashok |
 | DSH | Role dashboards | reporting | nitheesh | nitheesh | dashboard | | meyyarivu |
@@ -58,6 +59,31 @@ A few features are built by someone other than their prefix's owners. MENO Hub a
 | INT-12 | nitheesh | | | DrugDB adapter: Nitheesh built the Learn prototype (Day 19) and owns the source decision |
 | CAT-24 | nitheesh | nitheesh | | Medicine search-as-you-type on the item form, from the same prototype |
 | LIC-07 | nitheesh | meyyarivu | jeeva | Desktop offline license: certificate check in the desktop renderer (Meyyarivu), public-key bundling in the build (Jeeva) |
+| PTY-22 | nitheesh | ashok | | Party TDS/TCS and related-party fields feed the accounting module (ACX-06) |
+| PTY-23 | nitheesh | ashok | | MSME payables tracking is an accounting/compliance rule |
+| PTY-25 | nitheesh | ashok | | One party in both roles changes ledger and outstanding logic |
+| PTY-29 | nitheesh | ashok | | Interest on overdue is computed from ledger ageing |
+| PLT-26 | kamesh | ashok | jeeva | Migration importers: parsers in `party`/`catalog` (Kamesh), import screens (Ashok), file storage and jobs (Jeeva) |
+| ACC-16 | nitheesh | nitheesh | | Cheque management belongs to accounting |
+| NTF-07 | nitheesh | meyyarivu | | Owner digest reads reporting numbers; template on the notification screens |
+| AUT-10 | kamesh | meyyarivu | | Data step reuses the import and migration jobs in `party` / `catalog` (Kamesh); onboarding screens stay with Meyyarivu |
+| AUT-11 | nitheesh | meyyarivu | jeeva | Devices step: device registration (Nitheesh), screens (Meyyarivu), installer download links (Jeeva) |
+| PLT-29 | nitheesh | nitheesh | kamesh | Head-office push touches every module's masters (Kamesh for catalog / pricing payloads) |
+| PUR-21 | kamesh | ashok | jeeva | Purchase inbox: parsers (Kamesh), review screen (Ashok), mailbox and storage (Jeeva) |
+| ACX-18 | nitheesh | nitheesh | | Cash-flow forecast reads ledgers |
+| PLT-39 | jeeva | nitheesh | | Feature flags and staged rollout are release engineering |
+| PLT-41 | jeeva | nitheesh | | HA, PITR and restore drills are infrastructure |
+| PLT-43 | ashok | nitheesh | jeeva | Performance budgets: k6 and Playwright tests (Ashok), CI gate (Jeeva) |
+| PLT-44 | jeeva | nitheesh | ashok | Scans, VAPT and incident process (Jeeva), ASVS checks in tests (Ashok) |
+| ADM-16 | jeeva | meyyarivu | | Status page fed by monitoring |
+| SEC-04 | jeeva | | nitheesh | Secrets and Key Vault are infrastructure |
+| SEC-08 | jeeva | | | Supply chain lives in CI |
+| SEC-10 | jeeva | | nitheesh | WAF and edge limits at Nginx / gateway; app limits by Nitheesh |
+| SEC-14 | jeeva | | ashok | CI security gates (Jeeva), abuse-case tests (Ashok) |
+| SEC-15 | jeeva | | | Backups are infrastructure |
+| SEC-09 | nitheesh | meyyarivu | jeeva | Desktop hardening: keystore and signing (Nitheesh), renderer (Meyyarivu), code-signing certificate and update feed (Jeeva) |
+| SEC-02 | nitheesh | meyyarivu | | Device keys and sync verification |
+| PLT-22 | kamesh | | jeeva | PIN and IFSC reference data: loader in `party` (Kamesh), scheduled refresh job (Jeeva) |
 
 Compliance rules (⚠ items in COMPLIANCE.md) are confirmed by **Nitheesh** with qualified professionals; Prakalya does the research.
 

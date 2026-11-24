@@ -1,0 +1,104 @@
+[
+  {
+    "name": "bill discount 50.00 over ['100.00', '200.00', '300.00']",
+    "featureId": "PRC-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "allocateBillDiscount",
+      "amounts": [
+        "100.00",
+        "200.00",
+        "300.00"
+      ],
+      "discount": "50.00",
+      "options": {
+        "tieBreak": "earlier_line"
+      }
+    },
+    "expected": {
+      "shares": [
+        "8.33",
+        "16.67",
+        "25.00"
+      ],
+      "sum": "50.00"
+    }
+  },
+  {
+    "name": "bill discount 10.00 over ['33.60', '118.00', '95.00']",
+    "featureId": "PRC-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "allocateBillDiscount",
+      "amounts": [
+        "33.60",
+        "118.00",
+        "95.00"
+      ],
+      "discount": "10.00",
+      "options": {
+        "tieBreak": "earlier_line"
+      }
+    },
+    "expected": {
+      "shares": [
+        "1.36",
+        "4.79",
+        "3.85"
+      ],
+      "sum": "10.00"
+    }
+  },
+  {
+    "name": "bill discount 1.00 over ['10.00', '10.00', '10.00']",
+    "featureId": "PRC-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "allocateBillDiscount",
+      "amounts": [
+        "10.00",
+        "10.00",
+        "10.00"
+      ],
+      "discount": "1.00",
+      "options": {
+        "tieBreak": "earlier_line"
+      }
+    },
+    "expected": {
+      "shares": [
+        "0.34",
+        "0.33",
+        "0.33"
+      ],
+      "sum": "1.00"
+    }
+  },
+  {
+    "name": "bill discount 100.00 over ['999.99', '0.01']",
+    "featureId": "PRC-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "allocateBillDiscount",
+      "amounts": [
+        "999.99",
+        "0.01"
+      ],
+      "discount": "100.00",
+      "options": {
+        "tieBreak": "earlier_line"
+      }
+    },
+    "expected": {
+      "shares": [
+        "100.00",
+        "0.00"
+      ],
+      "sum": "100.00"
+    }
+  }
+]

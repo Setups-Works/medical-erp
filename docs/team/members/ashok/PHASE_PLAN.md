@@ -13,6 +13,8 @@ QA lead + frontend. Legend: **[FE]** frontend; everything else is QA. Do tasks i
 - [ ] Playwright setup in `apps/web/tests/e2e`, CI job with Jeeva
 - [ ] Auth, roles, tenant isolation test cases; API collection v1
 - [ ] Test vector runner contract (JSON schema) for Java + TS
+- [ ] Review the 20 draft vectors in `contracts/test-vectors/` with Prakalya: recompute by hand, mark confirmed or fix; the P0 "40 vectors" item was ticked but no files existed until 24-11-2026
+- [ ] Test vectors for CALCULATIONS.md §7–§22 with Prakalya: combined distributor bill with returns and charges, loose sale, bill-discount allocation, landed cost and suggested PTR, margin/mark-up, weighted-average valuation, returns, payment allocation, credit check, ageing and interest, reorder, expiry buckets (`contracts/test-vectors/`)
 - [ ] [FE] First screen on Meyyarivu's patterns: report filter bar + ReportPage skeleton (web `reports/`)
 
 ## P2 Masters
@@ -20,6 +22,7 @@ QA lead + frontend. Legend: **[FE]** frontend; everything else is QA. Do tasks i
 - [ ] [FE] Suppliers, customers, doctors: list, add/edit, details (web `parties/`)
 - [ ] Masters test cases + E2E for item/party CRUD (screens you didn't build: Prakalya runs QA on yours)
 - [ ] Validation test suite from VALIDATION_AND_BUSINESS_RULES.md (every rule: valid, invalid, boundary), audit log checks
+- [ ] Master form test cases from MASTER_FIELDS.md: every tab, conditional fields (retailer vs person, MSME, TDS, bank on/off), PIN/IFSC/GSTIN auto-fill, red-dot tab errors
 
 ## P3 Purchase & inventory
 - [ ] Critical scenarios 1, 2, 3, 5 automated (backend scenario tests)

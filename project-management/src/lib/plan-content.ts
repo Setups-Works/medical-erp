@@ -272,6 +272,7 @@ export function featureTask(f: { id: string; title: string; edition: string; pha
     "apps/web/AGENTS.md",
     "docs/architecture/VALIDATION_AND_BUSINESS_RULES.md",
     "docs/product/PAGES.md",
+    ...(/^(PTY|CAT|PRC)/.test(f.id) ? ["docs/product/MASTER_FIELDS.md"] : []),
     ...(money ? ["docs/architecture/CALCULATIONS.md"] : []),
     ...(verify || f.id.startsWith("CMP") ? ["docs/compliance/COMPLIANCE.md"] : []),
     ...(f.id.startsWith("DSK") || f.id === "POS-15" ? ["docs/architecture/OFFLINE_SYNC.md"] : []),

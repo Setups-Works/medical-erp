@@ -2,6 +2,8 @@
 
 > Master data is the reference data every transaction uses. This page lists **every master in MENO**, where it lives in the menu, and who builds it. Menu: [NAVIGATION.md](../design/NAVIGATION.md) (group **Masters**). Pages and phases: [PAGES.md](PAGES.md). Owners: [OWNERSHIP_MATRIX.md](../team/OWNERSHIP_MATRIX.md).
 
+Field-by-field specification of the supplier, customer and product forms (tabs, required fields, options, rules): [MASTER_FIELDS.md](MASTER_FIELDS.md). Transaction documents (fields, checks, posting): [DOCUMENT_FIELDS.md](DOCUMENT_FIELDS.md). First-run set-up: [ONBOARDING.md](ONBOARDING.md).
+
 Rules for every master:
 - Tenant-owned, audited (who/when/before/after), soft-deactivate instead of delete once used on a document.
 - Validated in four layers (VALIDATION_AND_BUSINESS_RULES.md); option lists come from the API, never hard-coded.
@@ -14,7 +16,7 @@ Backend: Kamesh (`catalog`) · Frontend: Ashok · QA: Prakalya
 
 | Master | Route | Features | Phase |
 |---|---|---|---|
-| Medicine / product (also non-pharma: FMCG, surgical, cosmetics) | `/masters/items` | CAT-01 … CAT-05, CAT-09, CAT-14, CAT-20 | P2 |
+| Medicine / product (also non-pharma: FMCG, surgical, cosmetics) | `/masters/items` | CAT-01 … CAT-05, CAT-09, CAT-14, CAT-20, CAT-25 … CAT-27, PRC-12, PRC-13 | P2 |
 | Generic / salt | `/masters/salts` | CAT-15 | P2 |
 | Brand | `/masters/brands` | CAT-16 | P2 |
 | Manufacturer / marketer | `/masters/manufacturers` | CAT-16 | P2 |
@@ -30,10 +32,10 @@ Backend: Kamesh (`party`) · Frontend: Ashok (Meyyarivu for salesmen) · QA: Pra
 
 | Master | Route | Features | Phase |
 |---|---|---|---|
-| Supplier / vendor (GSTIN, drug licence, bank, credit terms) | `/masters/suppliers` | PTY-01 | P2 |
-| Customer (retail and wholesale / retailer) | `/masters/customers` | PTY-02, PTY-03 | P2 |
+| Supplier / vendor (GSTIN, drug licence, bank, credit terms; contacts, addresses, MSME, TDS) | `/masters/suppliers` | PTY-01, PTY-15 … PTY-29 | P2 |
+| Customer (retail and wholesale / retailer; patient profile) | `/masters/customers` | PTY-02, PTY-03, PTY-15 … PTY-30 | P2 |
 | Customer group (retailers, hospitals, individuals) | `/masters/customer-groups` | PTY-12 | P5 |
-| Doctor (registration number) | `/masters/doctors` | PTY-05 | P4 |
+| Doctor (registration number + council, specialisation, clinic) | `/masters/doctors` | PTY-05, PTY-32 | P4 |
 | Salesman (commission) | `/masters/salesmen` | DOC-04, WHS-09 | P6 |
 | Supplier price list | `/masters/suppliers/[id]/prices` | PTY-11 | P3 |
 

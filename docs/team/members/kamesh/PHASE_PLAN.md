@@ -20,7 +20,7 @@ Backend only. Feature tasks for CAT, PTY, PRC, PUR, INV, IJX, MKT, POS, WHS, DOC
 - [ ] Item search endpoint (trigram index, < 150 ms)
 
 ## P3 Purchase & inventory
-- [ ] `taxation` GstCalculator & `pricing` engine passing test vectors (pair with Nitheesh)
+- [ ] `taxation` GstCalculator & `pricing` engine passing test vectors (pair with Nitheesh): Java twin of every `@meno/billing-engine` function listed in `docs/architecture/BACKEND_IMPLEMENTATION.md` §4; `TestVectorsTest` loads all 72 vectors
 - [ ] `inventory`: batch, movement ledger, stock_balance, adjustments, nightly reconciliation job
 - [ ] `purchase`: PO, GRN, verification, invoice entry, posting, reversal, duplicate detection, import pipeline
 
