@@ -10,6 +10,9 @@ Backend only. Feature tasks for CAT, PTY, PRC, PUR, INV, IJX, MKT, POS, WHS, DOC
 - [x] Walk through module template with Nitheesh
 
 ## P1 Platform core
+
+From 25-11-2026 you also build the backend foundation: **backend skeleton (Hub #457), `security/` (#458) and `tenancy/` (#7)**. They are listed in Nitheesh's PHASE_PLAN with a `[kamesh]` tag and show in your TASK_ORDER; Nitheesh reviews them.
+
 - [ ] Help Nitheesh with `identity` and audit; write the permission seed migration for your modules
 - [ ] Validation layer for your modules: Bean Validation DTOs + domain invariants + DB constraints (VALIDATION_AND_BUSINESS_RULES.md)
 - [ ] Cross-tenant tests for every endpoint you add

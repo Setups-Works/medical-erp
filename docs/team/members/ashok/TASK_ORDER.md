@@ -90,7 +90,7 @@
 | 62 | CAT-27 Product stock defaults: lead time, default in/out warehouse, ranked preferred vendors (used by PO and reorder) | Feature | Kamesh |
 | 63 | CAT-29 Create missing masters on the fly when adding or importing a product (brand, manufacturer, category, unit): shown as "will be created", reviewed in one list, audited | Feature | Kamesh |
 | 64 | PTY-11 Supplier price list: agreed / last rates per supplier and item, shown during purchase | Feature | Kamesh |
-| 65 | PTY-15 GSTIN fetch on supplier and customer forms: verify a GSTIN and fill legal/trade name, state, address and GST status (Active / Cancelled / Suspended); cancelled GSTIN warns at purchase and sale (verify) GSP provider and cost | Feature | Kamesh |
+| 65 | PTY-15 GSTIN fetch on supplier and customer forms: verify a GSTIN and fill legal/trade name, state, address and GST status (Active / Cancelled / Suspended); cancelled GSTIN warns at purchase and sale; spec [GSTIN_FETCH.md](GSTIN_FETCH.md), provider adapter INT-17 (verify) GSP provider and cost | Feature | Kamesh |
 | 66 | PTY-27 Party default discounts (discount %, cash discount %, special discount %) copied to purchase and sale documents | Feature | Kamesh |
 | 67 | Calculation parity CI job: Java and TypeScript must pass every test vector | Readiness | Nitheesh |
 | 68 | Critical scenario #1: Purchase invoice (incl. free qty, discounts) creates correct batch stock and landed cost | Critical scenario | — |
@@ -105,7 +105,7 @@
 | 77 | QA: Pharmacy operations (short book, ordering, warehouses) · P3 (1 feature) | QA | — |
 | 78 | QA: Sales & purchase document cycle · P3 (1 feature) | QA | — |
 | 79 | QA: GST & statutory · P3 (3 features) | QA | — |
-| 80 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P3 (3 features) | QA | — |
+| 80 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P3 (4 features) | QA | — |
 | 81 | QA: Security · P3 (1 feature) | QA | — |
 
 ## P4 · Retail POS & returns (49)

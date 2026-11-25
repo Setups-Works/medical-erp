@@ -2,7 +2,7 @@
 
 import * as Popover from "@radix-ui/react-popover";
 import { formatDistanceToNowStrict } from "date-fns";
-import { Activity, Bell, CheckSquare, ChevronDown, Files, GraduationCap, Home, KanbanSquare, ListChecks, LogOut, Map, Menu as MenuIcon, Moon, Settings, Sun, Users } from "lucide-react";
+import { Activity, Bell, CheckSquare, ChevronDown, Compass, Files, GraduationCap, Home, KanbanSquare, ListChecks, LogOut, Map, Menu as MenuIcon, Moon, Settings, Sun, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import { Avatar, AvatarStack, Button, Menu } from "./ui";
 
 const NAV = [
   { href: "/", label: "Home", icon: Home },
+  { href: "/start", label: "Start here", icon: Compass },
   { href: "/my-tasks", label: "My tasks", icon: CheckSquare },
   { href: "/boards", label: "Boards", icon: KanbanSquare },
   { href: "/features", label: "Features", icon: ListChecks },

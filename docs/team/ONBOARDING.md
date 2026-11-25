@@ -3,7 +3,7 @@
 ## Day 1 — understand
 
 1. Read: [README](../../README.md) → [AGENTS.md](../../AGENTS.md) → [VISION](../product/VISION.md) → [GLOSSARY](../product/GLOSSARY.md) → [FEATURES](../product/FEATURES.md) (skim).
-2. Read your folder: `docs/team/members/<you>/README.md` and `PHASE_PLAN.md`.
+2. Read your folder: `docs/team/members/<you>/README.md` and `PHASE_PLAN.md`, then [WHAT_TO_BUILD_FIRST.md](WHAT_TO_BUILD_FIRST.md) (build order and the daily meeting).
 3. Read [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) and [CONFLICT_FREE_COLLABORATION.md](CONFLICT_FREE_COLLABORATION.md).
 4. Watch a pharmacist bill at a counter (visit or video call). Note 5 things that surprised you.
 

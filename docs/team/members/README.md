@@ -1,9 +1,11 @@
 # Team member folders
 
+> New here or unsure what comes first? Read [WHAT_TO_BUILD_FIRST.md](../WHAT_TO_BUILD_FIRST.md): the build order, a six-week calendar and how the daily 1-hour meeting runs.
+
 Each member has a folder with:
 
 - `README.md` — role, what you own (paths), who you hand work to/from, your AI agent, your definition of done.
-- `PHASE_PLAN.md` — exactly what you build in each phase (P0–P7), as checklists. Tick items as they merge.
+- `PHASE_PLAN.md` — exactly what you build in each phase (P0–P7), as checklists. Tick items as they merge. An item written as `- [ ] [kamesh] …` in someone's plan belongs to the named person (the Hub task keeps its number).
 - `TASK_ORDER.md` — **generated**: every task in the order to do it (Step 1, 2, 3…), same as the Step numbers in MENO Hub. Regenerate with `npm run task-order` in `project-management/`.
 - `NOTES.md` (optional, create it yourself) — your learning notes, decisions you want reviewed. Not for secrets.
 

@@ -168,17 +168,19 @@ export function buildDrafts(dir: string): Draft[] {
   // 1. Member plans
   for (const t of TEAM) {
     for (const [i, it] of parseChecklistDoc(read(dir, `team/members/${t.slug}/PHASE_PLAN.md`)).entries()) {
-      const area = it.tag === "frontend" ? "frontend" : it.tag === "qa" ? "qa" : AREA_OF[t.slug];
+      // `- [ ] [kamesh] …` hands one item to someone else; the title (and so the task) stays the same.
+      const owners = it.owners.length ? it.owners : [t.slug];
+      const area = it.tag === "frontend" ? "frontend" : it.tag === "qa" ? "qa" : AREA_OF[owners[0]];
       drafts.push({
         sourceKey: `plan:${t.slug}:${it.phase}:${it.title.slice(0, 120)}`,
         phase: it.phase,
         title: it.title,
         column: col(it.phase, it.done),
-        owners: [t.slug],
+        owners,
         labels: [...new Set([area, ...(it.tag ? [it.tag] : [])])],
         priority: it.phase === "P0" ? "high" : "medium",
         area,
-        content: planTask({ title: it.title, owners: [t.slug], phase: phases[it.phase], done: it.done, source: `docs/team/members/${t.slug}/PHASE_PLAN.md`, area }),
+        content: planTask({ title: it.title, owners, phase: phases[it.phase], done: it.done, source: `docs/team/members/${t.slug}/PHASE_PLAN.md`, area }),
         order: 1000 + i,
       });
     }

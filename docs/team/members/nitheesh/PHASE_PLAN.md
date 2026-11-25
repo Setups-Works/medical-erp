@@ -1,6 +1,6 @@
 # Nitheesh — phase plan
 
-Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md).
+Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md). Items tagged `[kamesh]` were handed to Kamesh on 25-11-2026 (Hub #457 skeleton, #458 security, #7 tenancy); you review them.
 
 Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC, ACX, LIC come from FEATURES.md, plus the backend for DSH, RPT, ANX, CRM, ENG, DLV, OMN (Gokul builds those screens since 25-11-2026) in MENO Hub; this list is the platform and leadership work around them.
 
@@ -13,9 +13,9 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [ ] Onboard Gokul (frontend): GitHub and Hub access, CODEOWNERS handle, walk through OWNERSHIP_MATRIX.md and the gokul/ PHASE_PLAN, review the first PR
 
 ## P1 Platform core
-- [ ] Backend skeleton: Maven project, Spring Modulith, `ArchitectureTest`, `common/error` (Problem Details), `common/web` (page envelope), `common/money`, `common/validation`
-- [ ] `security/`: JWT issue/verify, refresh rotation, cookie handling, `PermissionChecker`
-- [ ] `tenancy/`: `TenantContextFilter`, Hibernate filter, RLS `SET LOCAL` interceptor, `CrossTenantAccessTest` base
+- [ ] [kamesh] Backend skeleton: Maven project, Spring Modulith, `ArchitectureTest`, `common/error` (Problem Details), `common/web` (page envelope), `common/money`, `common/validation`
+- [ ] [kamesh] `security/`: JWT issue/verify, refresh rotation, cookie handling, `PermissionChecker`
+- [ ] [kamesh] `tenancy/`: `TenantContextFilter`, Hibernate filter, RLS `SET LOCAL` interceptor, `CrossTenantAccessTest` base
 - [ ] `identity` + `audit` modules (users, roles, permissions, audit log)
 - [ ] Configuration framework: `tenant_setting`, lookup tables and the `SettingsFacade` (nothing hard-coded, see VALIDATION_AND_BUSINESS_RULES.md)
 - [ ] OpenAPI export → `contracts/openapi/meno-api.yaml` → `packages/api-client` generation script
@@ -26,6 +26,7 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [ ] Company, branch and settings screens (web `company/`, `branches/`, `settings/`)
 - [ ] Number series + tenant settings endpoints and screens
 - [ ] Decide the Indian medicine data source and licence (CAT-10, INT-11) from Jeeva's comparison and Prakalya's hit-rate check; record it as an ADR
+- [ ] Decide the GSTIN verification provider (PTY-15, INT-17) from Jeeva's comparison: update R-31 in RESEARCHED_ANSWERS.md and `docs/product/GSTIN_FETCH.md`, record an ADR
 
 ## P3 Purchase & inventory
 - [x] `packages/billing-engine` (decimal.js) passing all test vectors (72 / 72 on 24-11-2026; `pnpm --filter @meno/billing-engine test`)
