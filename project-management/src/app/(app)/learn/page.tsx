@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Clock, Download } from "lucide-react";
+import { ArrowRight, BookOpen, Check, Clock, Code2, Download } from "lucide-react";
 import Link from "next/link";
 import { useTaught } from "@/components/learn/lesson-view";
 import { PageHeader } from "@/components/page";
@@ -24,6 +24,28 @@ export default function LearnPage() {
           </Link>
         }
       />
+
+      <Link href="/learn/guide" className="at-violet tint mb-4 flex flex-wrap items-center gap-4 rounded-tile px-5 py-4 transition-opacity hover:opacity-90">
+        <BookOpen className="size-6 shrink-0" />
+        <div className="min-w-[200px] flex-1">
+          <p className="text-[15px] font-semibold">New to pharmacy billing? Start with the Learning guide</p>
+          <p className="text-[13px] text-ink-2">Simple English, worked bills, four calculators, a searchable glossary, and every MENO feature and screen.</p>
+        </div>
+        <span className="flex items-center gap-1 text-[13px] font-medium">
+          Open guide <ArrowRight className="size-3.5" />
+        </span>
+      </Link>
+
+      <Link href="/learn/dev-guide" className="card mb-4 flex flex-wrap items-center gap-4 px-5 py-4 transition-opacity hover:opacity-90">
+        <Code2 className="size-6 shrink-0" />
+        <div className="min-w-[200px] flex-1">
+          <p className="text-[15px] font-semibold">Building a screen? Open the Developer guide</p>
+          <p className="text-[13px] text-ink-2">Every field, why it is needed, request and response JSON, errors, and what frontend and backend build for each page.</p>
+        </div>
+        <span className="flex items-center gap-1 text-[13px] font-medium">
+          Open guide <ArrowRight className="size-3.5" />
+        </span>
+      </Link>
 
       <div className="card mb-7 flex flex-wrap items-center gap-4 px-5 py-4">
         <div className="min-w-[200px] flex-1">

@@ -1,0 +1,190 @@
+[
+  {
+    "name": "FIFO allocation of 650.00",
+    "featureId": "ACC-01",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "allocatePayment",
+      "invoices": [
+        {
+          "id": "A",
+          "outstanding": "500.00"
+        },
+        {
+          "id": "B",
+          "outstanding": "300.00"
+        }
+      ],
+      "amount": "650.00",
+      "options": {
+        "order": "fifo"
+      }
+    },
+    "expected": {
+      "allocations": [
+        {
+          "id": "A",
+          "amount": "500.00"
+        },
+        {
+          "id": "B",
+          "amount": "150.00"
+        }
+      ],
+      "onAccount": "0.00"
+    }
+  },
+  {
+    "name": "FIFO allocation of 250.00",
+    "featureId": "ACC-01",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "allocatePayment",
+      "invoices": [
+        {
+          "id": "A",
+          "outstanding": "100.00"
+        }
+      ],
+      "amount": "250.00",
+      "options": {
+        "order": "fifo"
+      }
+    },
+    "expected": {
+      "allocations": [
+        {
+          "id": "A",
+          "amount": "100.00"
+        }
+      ],
+      "onAccount": "150.00"
+    }
+  },
+  {
+    "name": "FIFO allocation of 200.00",
+    "featureId": "ACC-01",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "allocatePayment",
+      "invoices": [
+        {
+          "id": "A",
+          "outstanding": "120.50"
+        },
+        {
+          "id": "B",
+          "outstanding": "79.50"
+        },
+        {
+          "id": "C",
+          "outstanding": "10.00"
+        }
+      ],
+      "amount": "200.00",
+      "options": {
+        "order": "fifo"
+      }
+    },
+    "expected": {
+      "allocations": [
+        {
+          "id": "A",
+          "amount": "120.50"
+        },
+        {
+          "id": "B",
+          "amount": "79.50"
+        }
+      ],
+      "onAccount": "0.00"
+    }
+  },
+  {
+    "name": "change due: tendered ['500.00'] for 452.00",
+    "featureId": "POS-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "changeDue",
+      "tenderedCash": [
+        "500.00"
+      ],
+      "billTotal": "452.00"
+    },
+    "expected": {
+      "change": "48.00"
+    }
+  },
+  {
+    "name": "change due: tendered ['200.00', '100.00'] for 300.00",
+    "featureId": "POS-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "changeDue",
+      "tenderedCash": [
+        "200.00",
+        "100.00"
+      ],
+      "billTotal": "300.00"
+    },
+    "expected": {
+      "change": "0.00"
+    }
+  },
+  {
+    "name": "credit check: exposure vs limit 50000.00",
+    "featureId": "PTY-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "creditCheck",
+      "outstanding": "40000.00",
+      "unposted": "5000.00",
+      "bill": "4000.00",
+      "limit": "50000.00"
+    },
+    "expected": {
+      "exposure": "49000.00",
+      "withinLimit": true
+    }
+  },
+  {
+    "name": "credit check: exposure vs limit 50000.00",
+    "featureId": "PTY-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "creditCheck",
+      "outstanding": "40000.00",
+      "unposted": "5000.00",
+      "bill": "6000.00",
+      "limit": "50000.00"
+    },
+    "expected": {
+      "exposure": "51000.00",
+      "withinLimit": false
+    }
+  },
+  {
+    "name": "credit check: exposure vs limit 0.00",
+    "featureId": "PTY-07",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "creditCheck",
+      "outstanding": "0.00",
+      "unposted": "0.00",
+      "bill": "152.00",
+      "limit": "0.00"
+    },
+    "expected": {
+      "exposure": "152.00",
+      "withinLimit": false
+    }
+  }
+]

@@ -10,6 +10,9 @@ Backend only. Feature tasks for CAT, PTY, PRC, PUR, INV, IJX, MKT, POS, WHS, DOC
 - [x] Walk through module template with Nitheesh
 
 ## P1 Platform core
+
+From 25-11-2026 you also build the backend foundation: **backend skeleton (Hub #457), `security/` (#458) and `tenancy/` (#7)**. They are listed in Nitheesh's PHASE_PLAN with a `[kamesh]` tag and show in your TASK_ORDER; Nitheesh reviews them.
+
 - [ ] Help Nitheesh with `identity` and audit; write the permission seed migration for your modules
 - [ ] Validation layer for your modules: Bean Validation DTOs + domain invariants + DB constraints (VALIDATION_AND_BUSINESS_RULES.md)
 - [ ] Cross-tenant tests for every endpoint you add
@@ -20,7 +23,7 @@ Backend only. Feature tasks for CAT, PTY, PRC, PUR, INV, IJX, MKT, POS, WHS, DOC
 - [ ] Item search endpoint (trigram index, < 150 ms)
 
 ## P3 Purchase & inventory
-- [ ] `taxation` GstCalculator & `pricing` engine passing test vectors (pair with Nitheesh)
+- [ ] `taxation` GstCalculator & `pricing` engine passing test vectors (pair with Nitheesh): Java twin of every `@meno/billing-engine` function listed in `docs/architecture/BACKEND_IMPLEMENTATION.md` §4; `TestVectorsTest` loads all 72 vectors
 - [ ] `inventory`: batch, movement ledger, stock_balance, adjustments, nightly reconciliation job
 - [ ] `purchase`: PO, GRN, verification, invoice entry, posting, reversal, duplicate detection, import pipeline
 

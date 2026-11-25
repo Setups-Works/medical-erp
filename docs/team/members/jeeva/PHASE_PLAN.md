@@ -20,6 +20,7 @@ Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORD
 - [ ] Daily `pg_dump` backup to Blob + 7/4/3 retention (daily/weekly/monthly); restore script
 - [ ] Seed/reset staging data job
 - [ ] Compare Indian medicine data sources for CAT-10 / INT-11 (DrugDB API paid-plan quote, Kaggle A–Z dataset licence, GS1 India DataKart, other licensed drug databases, NPPA / CDSCO lists): coverage, barcode lookup, API, update frequency, cost, licence terms; share with Nitheesh (start from Hub → Learn → Day 19)
+- [ ] Compare GSTIN verification providers for PTY-15 / INT-17 (the GST verify API `api.gstverify.dubey.app` tried in Hub → Learn → Day 22, the GSTIN search of the e-invoice GSP shortlisted for INT-01, verification vendors from R-31): fields returned, cancelled / suspended status, rate limits, uptime, terms, data retention, cost; share with Nitheesh (spec: `docs/product/GSTIN_FETCH.md`)
 
 ## P3 Purchase & inventory
 - [ ] Test-vector parity CI job (Java + TS)

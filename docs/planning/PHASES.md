@@ -60,8 +60,9 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 
 | Deliverable | Owner |
 |---|---|
-| Spring Boot skeleton: modules, Modulith test, error handling, OpenAPI export, Flyway, Testcontainers base | Nitheesh |
-| `tenancy`, `identity`, `auth` (JWT + refresh rotation, cookie), RLS setup, `audit` base, cross-tenant test base, configuration tables + `SettingsFacade` | Nitheesh (+ Kamesh) |
+| Spring Boot skeleton: modules, Modulith test, error handling, Flyway, Testcontainers base | Kamesh (Nitheesh reviews) |
+| `security` (JWT + refresh rotation, cookie, `PermissionChecker`), `tenancy` (tenant filter, RLS setup, cross-tenant test base) | Kamesh (Nitheesh reviews) |
+| `identity`, `auth`, `audit` base, configuration tables + `SettingsFacade`, OpenAPI export → `api-client` | Nitheesh (+ Kamesh) |
 | Next.js skeleton (static export), `packages/ui` (shadcn new-york + tokens), app shell + sidebar (NAVIGATION.md), list/form/report page patterns, login, forgot/reset password, signup | Meyyarivu |
 | Users, roles and permission screens (on Meyyarivu's patterns) | Nitheesh |
 | Docker Compose (postgres, redis, minio, mailpit), Dockerfiles, CI (build/test/lint/scan), staging VM + Nginx + TLS, GHCR | Jeeva |
@@ -101,10 +102,11 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 |---|---|
 | `inventory` ledger, batches, adjustments, reconciliation job | Kamesh |
 | `purchase` posting (PO, GRN, verification), `pricing` + `taxation` engines passing test vectors | Kamesh |
-| `packages/billing-engine` (TS) passing same vectors; import centre; `reporting` framework + inventory dashboard | Nitheesh |
-| Reports centre screens (stock, expiry, purchase) | Ashok (FE) |
+| `packages/billing-engine` (TS) passing same vectors; import centre; `reporting` framework + inventory dashboard API | Nitheesh |
+| Reports centre screens (stock, expiry, purchase), inventory dashboard screens | Gokul |
 | Purchase entry grid (keyboard), import mapping UI, stock & expiry screens | Meyyarivu |
-| Pricing/scheme screens, purchase dashboard, GRN/verification screens | Meyyarivu |
+| Purchase dashboard, GRN/verification screens | Meyyarivu |
+| Pricing/scheme screens | Gokul |
 | Medicine export/history, supplier price list screens | Ashok (FE) |
 | Parity CI job (Java vs TS vectors); prod VM provisioned (not public) | Jeeva |
 | Critical scenarios 1, 2, 3, 5 (TEST_STRATEGY), stock reconciliation tests | Ashok |
@@ -125,8 +127,9 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 | `returns` (with inspection), `compliance` (H1 register, prescriptions, restricted-medicine guard) | Kamesh |
 | Electron shell: window, printing (thermal/A4), scanner, auto-update | Nitheesh + Jeeva |
 | POS screen (keyboard map), invoice list, print templates, prescription capture | Meyyarivu |
-| Returns UI, compliance registers, sales registers and reports | Ashok (FE) |
-| Role-based dashboards + widget library, admin settings (payment, printer, notifications), `notification` module | Nitheesh |
+| Returns UI, compliance registers | Ashok (FE) |
+| Sales registers and reports, role-based dashboards + widget library | Gokul |
+| Dashboard APIs, admin settings (payment, printer, notifications), `notification` module | Nitheesh |
 | Windows installer signing + update channel | Jeeva |
 | Concurrency test (scenario 6), duplicate request (11), H1 register checks, performance baseline | Ashok |
 | UAT scripts for retail, training notes | Prakalya (BA) |
@@ -144,8 +147,9 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 |---|---|
 | Sync module (server) + desktop sync engine & SQLite | Nitheesh |
 | Wholesale orders → invoice, credit control, price lists, e-invoice integration | Kamesh |
-| `payment`, `accounting` auto-posting, outstanding/ageing (backend + screens), finance & wholesale dashboards, customer history | Nitheesh |
-| Wholesale screens (orders, pricing, schemes, credit, dispatch), transfers, e-invoice screens, sync-status UI | Meyyarivu |
+| `payment`, `accounting` auto-posting, outstanding/ageing (backend + screens); dashboard and customer history APIs | Nitheesh |
+| Wholesale screens (orders, credit, dispatch), transfers, sync-status UI | Meyyarivu |
+| Price lists and schemes, e-invoice screens, finance & wholesale dashboards, customer history, outstanding/ageing/GST reports | Gokul |
 | Customer groups and statements screens | Ashok (FE) |
 | Production go-live: hardening, backups + restore drill, alerts, runbooks | Jeeva |
 | Offline scenario 12, security tests (OWASP top 10, tenant), load test, full regression automation | Ashok |

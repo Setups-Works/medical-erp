@@ -1,9 +1,11 @@
 # Team member folders
 
+> New here or unsure what comes first? Read [WHAT_TO_BUILD_FIRST.md](../WHAT_TO_BUILD_FIRST.md): the build order, a six-week calendar and how the daily 1-hour meeting runs.
+
 Each member has a folder with:
 
 - `README.md` — role, what you own (paths), who you hand work to/from, your AI agent, your definition of done.
-- `PHASE_PLAN.md` — exactly what you build in each phase (P0–P7), as checklists. Tick items as they merge.
+- `PHASE_PLAN.md` — exactly what you build in each phase (P0–P7), as checklists. Tick items as they merge. An item written as `- [ ] [kamesh] …` in someone's plan belongs to the named person (the Hub task keeps its number).
 - `TASK_ORDER.md` — **generated**: every task in the order to do it (Step 1, 2, 3…), same as the Step numbers in MENO Hub. Regenerate with `npm run task-order` in `project-management/`.
 - `NOTES.md` (optional, create it yourself) — your learning notes, decisions you want reviewed. Not for secrets.
 
@@ -11,20 +13,22 @@ Each member has a folder with:
 
 | Member | Role | Folder | Main paths owned |
 |---|---|---|---|
-| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | [nitheesh/](nitheesh/README.md) | Platform, finance, dashboards, reports, CRM (full stack); auth/sync/notifications/integrations backend; architecture, contracts |
+| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | [nitheesh/](nitheesh/README.md) | Platform, finance, licensing (full stack); dashboards, reports, CRM, auth, sync, notifications, integrations backend; architecture, contracts |
 | Prakalya | Business Analyst + QA · part-time, ~40 tasks | [prakalya/](prakalya/README.md) | `docs/product`, `docs/business-requirements`, `docs/workflows`, compliance research |
 | Kamesh | Backend Engineer | [kamesh/](kamesh/README.md) | Backend modules catalog, party, pricing, purchase, inventory, sales, returns, compliance, taxation + their migrations |
-| Meyyarivu | Frontend Lead + QA | [meyyarivu/](meyyarivu/README.md) | `packages/ui`, `packages/validation`, `docs/design`, app shell; web auth, purchase, inventory, pos, wholesale, pricing, gst |
-| Ashok | QA Lead + Frontend | [ashok/](ashok/README.md) | `docs/testing`, `apps/web/tests/e2e`, backend `scenarios/` tests, API collections; QA task per module per phase; web catalog, parties, returns, compliance, reports |
+| Meyyarivu | Frontend Lead + QA | [meyyarivu/](meyyarivu/README.md) | `packages/ui`, `packages/validation`, `docs/design`, app shell; web auth, purchase, inventory, pos, wholesale |
+| Ashok | QA Lead + Frontend | [ashok/](ashok/README.md) | `docs/testing`, `apps/web/tests/e2e`, backend `scenarios/` tests, API collections; QA task per module per phase; web catalog, parties, returns, compliance |
 | Jeeva | DevOps Engineer | [jeeva/](jeeva/README.md) | `infrastructure/`, `.github/workflows`, `docker-compose.yml`, Dockerfiles, desktop packaging |
+| Gokul | Frontend Engineer (joined 25-11-2026) | [gokul/](gokul/README.md) | web pricing, gst, dashboard, reports, crm, delivery, channels |
 
-## Frontend split (Meyyarivu, Nitheesh, Ashok take all the screens)
+## Frontend split (Meyyarivu, Nitheesh, Ashok, Gokul take all the screens)
 
 ```
 apps/web/src/features/
-  auth/ purchase/ inventory/ pos/ wholesale/ pricing/ gst/                → Meyyarivu (+ app shell, packages/ui)
-  company/ branches/ users/ settings/ admin/ dashboard/ accounting/ payments/ crm/ → Nitheesh
-  catalog/ parties/ returns/ compliance/ reports/                                  → Ashok
+  auth/ purchase/ inventory/ pos/ wholesale/                          → Meyyarivu (+ app shell, packages/ui)
+  company/ branches/ users/ settings/ admin/ accounting/ payments/ platform/ → Nitheesh
+  catalog/ parties/ returns/ compliance/                               → Ashok
+  pricing/ gst/ dashboard/ reports/ crm/ delivery/ channels/           → Gokul
 ```
 
 Everything is derived from [OWNERSHIP_MATRIX.md](../OWNERSHIP_MATRIX.md); change that file first.

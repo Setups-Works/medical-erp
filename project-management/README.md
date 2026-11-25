@@ -17,7 +17,7 @@ cp .env.example .env.local    # then fill in MONGODB_URI, HUB_SESSION_SECRET, SE
 npm run dev                   # http://localhost:4100
 ```
 
-On the first start with an empty database the app creates the 6 team accounts (emails from `HUB_TEAM_EMAILS`, password `SEED_DEFAULT_PASSWORD`, everyone must change it on first sign-in) and imports the plan from `../docs`:
+On the first start with an empty database the app creates the 7 team accounts (emails from `HUB_TEAM_EMAILS`, password `SEED_DEFAULT_PASSWORD`, everyone must change it on first sign-in) and imports the plan from `../docs`:
 
 - **P0–P7 boards**: every checklist item from `docs/team/members/<name>/PHASE_PLAN.md`, assigned to that member.
 - **Features**: every row of `docs/product/FEATURES.md`, placed on its phase board as a full slice (story → API → screen → QA).

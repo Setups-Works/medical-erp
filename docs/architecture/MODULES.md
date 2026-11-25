@@ -1,5 +1,7 @@
 # Backend module catalogue
 
+Implementation detail per module (endpoints, rules, error codes, events, tests): [BACKEND_IMPLEMENTATION.md](BACKEND_IMPLEMENTATION.md) §6.
+
 Package root: `com.setupsworks.meno.modules.<module>`. Each module has `api / web / service / domain / repository / mapper`. Only `api` is visible to other modules.
 
 Base-plan names are kept as **sub-domains** inside fewer, larger modules so beginners have fewer boundaries to manage.

@@ -1,0 +1,156 @@
+[
+  {
+    "name": "reorder: 60 sold in 30 days, lead 2",
+    "featureId": "PUR-11",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "reorder",
+      "soldUnits": "60",
+      "days": "30",
+      "leadTimeDays": "2",
+      "safetyStock": "5",
+      "maxQty": "60",
+      "onHand": "10",
+      "onOrder": "0",
+      "reserved": "0"
+    },
+    "expected": {
+      "avgDailySale": "2.0000",
+      "reorderPoint": "9",
+      "available": "10",
+      "suggestedQty": "50"
+    }
+  },
+  {
+    "name": "reorder: 300 sold in 30 days, lead 7",
+    "featureId": "PUR-11",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "reorder",
+      "soldUnits": "300",
+      "days": "30",
+      "leadTimeDays": "7",
+      "safetyStock": "20",
+      "maxQty": "200",
+      "onHand": "150",
+      "onOrder": "20",
+      "reserved": "10"
+    },
+    "expected": {
+      "avgDailySale": "10.0000",
+      "reorderPoint": "90",
+      "available": "140",
+      "suggestedQty": "40"
+    }
+  },
+  {
+    "name": "reorder: 0 sold in 30 days, lead 3",
+    "featureId": "PUR-11",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "reorder",
+      "soldUnits": "0",
+      "days": "30",
+      "leadTimeDays": "3",
+      "safetyStock": "0",
+      "maxQty": "20",
+      "onHand": "25",
+      "onOrder": "0",
+      "reserved": "0"
+    },
+    "expected": {
+      "avgDailySale": "0.0000",
+      "reorderPoint": "0",
+      "available": "25",
+      "suggestedQty": "0"
+    }
+  },
+  {
+    "name": "expiry 11/2026 on 2026-11-24, near window 90 days",
+    "featureId": "INV-04",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "expiryStatus",
+      "expiry": "11/2026",
+      "today": "2026-11-24",
+      "nearExpiryDays": "90"
+    },
+    "expected": {
+      "expiryDate": "2026-11-30",
+      "daysLeft": "6",
+      "status": "near_expiry"
+    }
+  },
+  {
+    "name": "expiry 10/2026 on 2026-11-24, near window 90 days",
+    "featureId": "INV-04",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "expiryStatus",
+      "expiry": "10/2026",
+      "today": "2026-11-24",
+      "nearExpiryDays": "90"
+    },
+    "expected": {
+      "expiryDate": "2026-10-31",
+      "daysLeft": "-24",
+      "status": "expired"
+    }
+  },
+  {
+    "name": "expiry 02/2027 on 2026-11-24, near window 90 days",
+    "featureId": "INV-04",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "expiryStatus",
+      "expiry": "02/2027",
+      "today": "2026-11-24",
+      "nearExpiryDays": "90"
+    },
+    "expected": {
+      "expiryDate": "2027-02-28",
+      "daysLeft": "96",
+      "status": "ok"
+    }
+  },
+  {
+    "name": "expiry 08/2027 on 2026-11-24, near window 90 days",
+    "featureId": "INV-04",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "expiryStatus",
+      "expiry": "08/2027",
+      "today": "2026-11-24",
+      "nearExpiryDays": "90"
+    },
+    "expected": {
+      "expiryDate": "2027-08-31",
+      "daysLeft": "280",
+      "status": "ok"
+    }
+  },
+  {
+    "name": "expiry 02/2028 on 2027-12-31, near window 30 days",
+    "featureId": "INV-04",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "expiryStatus",
+      "expiry": "02/2028",
+      "today": "2027-12-31",
+      "nearExpiryDays": "30"
+    },
+    "expected": {
+      "expiryDate": "2028-02-29",
+      "daysLeft": "60",
+      "status": "ok"
+    }
+  }
+]

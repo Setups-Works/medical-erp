@@ -60,7 +60,7 @@ Use the template. Must include: linked issue, what/why, screenshots for UI (ligh
 
 | When | What | Who |
 |---|---|---|
-| Daily 10:00, 15 min | Stand-up (+ "shared files I'll touch") | All, run by Nitheesh |
+| Daily 10:00, 1 h | Team meeting: stand-up, board walk, topic of the day, pairs ([WHAT_TO_BUILD_FIRST.md](WHAT_TO_BUILD_FIRST.md) §4) | All, run by Nitheesh |
 | Sprint day 1 | Planning (2 h): pick Ready issues, assign, confirm contracts needed | All |
 | Weekly Wed | Architecture office hour | Nitheesh + anyone |
 | Weekly Thu | Backlog grooming for next sprint | Prakalya + Nitheesh (+ Ashok) |

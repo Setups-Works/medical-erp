@@ -1,0 +1,167 @@
+[
+  {
+    "name": "combined bill, inter-state (Hub demo: grand total 578.00)",
+    "featureId": "WHS-15",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "combinedBill",
+      "lines": [
+        {
+          "section": "SALE",
+          "rate": "25.60",
+          "qty": "5",
+          "gstRate": "5"
+        },
+        {
+          "section": "SALE",
+          "rate": "168.81",
+          "qty": "2",
+          "discountPct": "2",
+          "gstRate": "18"
+        },
+        {
+          "section": "SALES_RETURN",
+          "rate": "89.90",
+          "qty": "1",
+          "gstRate": "5"
+        },
+        {
+          "section": "BRK_EXP_RETURN",
+          "rate": "25.60",
+          "qty": "1",
+          "gstRate": "5"
+        },
+        {
+          "section": "REPLACEMENT",
+          "rate": "25.60",
+          "qty": "1",
+          "gstRate": "5"
+        }
+      ],
+      "freight": "100.00",
+      "insurance": "25.00",
+      "chargesGstRate": "18",
+      "intraState": false,
+      "options": {
+        "chargesGst": "fixed-rate"
+      }
+    },
+    "expected": {
+      "taxableOut": "484.4676",
+      "taxableReturns": "115.5000",
+      "charges": "125.00",
+      "chargesGst": "22.50",
+      "cgst": "0.00",
+      "sgst": "0.00",
+      "igst": "83.96",
+      "total": "577.9276",
+      "roundOff": "0.07",
+      "grandTotal": "578.00"
+    }
+  },
+  {
+    "name": "combined bill, same lines intra-state",
+    "featureId": "WHS-15",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "combinedBill",
+      "lines": [
+        {
+          "section": "SALE",
+          "rate": "25.60",
+          "qty": "5",
+          "gstRate": "5"
+        },
+        {
+          "section": "SALE",
+          "rate": "168.81",
+          "qty": "2",
+          "discountPct": "2",
+          "gstRate": "18"
+        },
+        {
+          "section": "SALES_RETURN",
+          "rate": "89.90",
+          "qty": "1",
+          "gstRate": "5"
+        },
+        {
+          "section": "BRK_EXP_RETURN",
+          "rate": "25.60",
+          "qty": "1",
+          "gstRate": "5"
+        },
+        {
+          "section": "REPLACEMENT",
+          "rate": "25.60",
+          "qty": "1",
+          "gstRate": "5"
+        }
+      ],
+      "freight": "100.00",
+      "insurance": "25.00",
+      "chargesGstRate": "18",
+      "intraState": true,
+      "options": {
+        "chargesGst": "fixed-rate"
+      }
+    },
+    "expected": {
+      "taxableOut": "484.4676",
+      "taxableReturns": "115.5000",
+      "charges": "125.00",
+      "chargesGst": "22.50",
+      "cgst": "41.98",
+      "sgst": "41.98",
+      "igst": "0.00",
+      "total": "577.9276",
+      "roundOff": "0.07",
+      "grandTotal": "578.00"
+    }
+  },
+  {
+    "name": "combined bill, no returns, no charges",
+    "featureId": "WHS-15",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "combinedBill",
+      "lines": [
+        {
+          "section": "SALE",
+          "rate": "25.60",
+          "qty": "5",
+          "gstRate": "5"
+        },
+        {
+          "section": "SALE",
+          "rate": "168.81",
+          "qty": "2",
+          "discountPct": "2",
+          "gstRate": "18"
+        }
+      ],
+      "freight": "0.00",
+      "insurance": "0.00",
+      "chargesGstRate": "18",
+      "intraState": true,
+      "options": {
+        "chargesGst": "fixed-rate"
+      }
+    },
+    "expected": {
+      "taxableOut": "458.8676",
+      "taxableReturns": "0.0000",
+      "charges": "0.00",
+      "chargesGst": "0.00",
+      "cgst": "32.98",
+      "sgst": "32.98",
+      "igst": "0.00",
+      "total": "524.8276",
+      "roundOff": "0.17",
+      "grandTotal": "525.00"
+    }
+  }
+]

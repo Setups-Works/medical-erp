@@ -1,8 +1,8 @@
 # Nitheesh — phase plan
 
-Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md).
+Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORDER.md). Items tagged `[kamesh]` were handed to Kamesh on 25-11-2026 (Hub #457 skeleton, #458 security, #7 tenancy); you review them.
 
-Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC, ACX, DSH, RPT, ANX, CRM, ENG come from FEATURES.md in MENO Hub; this list is the platform and leadership work around them.
+Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC, ACX, LIC come from FEATURES.md, plus the backend for DSH, RPT, ANX, CRM, ENG, DLV, OMN (Gokul builds those screens since 25-11-2026) in MENO Hub; this list is the platform and leadership work around them.
 
 ## P0 Foundation
 - [x] Monorepo folder structure, AGENTS.md files, architecture docs, ADRs
@@ -10,11 +10,12 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [x] Review BRD for P1–P3 with Prakalya
 - [x] Review ER diagram with Kamesh; review wireframes with Meyyarivu
 - [x] Run architecture review meeting (day 13); approve Sprint 1 backlog
+- [ ] Onboard Gokul (frontend): GitHub and Hub access, CODEOWNERS handle, walk through OWNERSHIP_MATRIX.md and the gokul/ PHASE_PLAN, review the first PR
 
 ## P1 Platform core
-- [ ] Backend skeleton: Maven project, Spring Modulith, `ArchitectureTest`, `common/error` (Problem Details), `common/web` (page envelope), `common/money`, `common/validation`
-- [ ] `security/`: JWT issue/verify, refresh rotation, cookie handling, `PermissionChecker`
-- [ ] `tenancy/`: `TenantContextFilter`, Hibernate filter, RLS `SET LOCAL` interceptor, `CrossTenantAccessTest` base
+- [ ] [kamesh] Backend skeleton: Maven project, Spring Modulith, `ArchitectureTest`, `common/error` (Problem Details), `common/web` (page envelope), `common/money`, `common/validation`
+- [ ] [kamesh] `security/`: JWT issue/verify, refresh rotation, cookie handling, `PermissionChecker`
+- [ ] [kamesh] `tenancy/`: `TenantContextFilter`, Hibernate filter, RLS `SET LOCAL` interceptor, `CrossTenantAccessTest` base
 - [ ] `identity` + `audit` modules (users, roles, permissions, audit log)
 - [ ] Configuration framework: `tenant_setting`, lookup tables and the `SettingsFacade` (nothing hard-coded, see VALIDATION_AND_BUSINESS_RULES.md)
 - [ ] OpenAPI export → `contracts/openapi/meno-api.yaml` → `packages/api-client` generation script
@@ -25,16 +26,18 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [ ] Company, branch and settings screens (web `company/`, `branches/`, `settings/`)
 - [ ] Number series + tenant settings endpoints and screens
 - [ ] Decide the Indian medicine data source and licence (CAT-10, INT-11) from Jeeva's comparison and Prakalya's hit-rate check; record it as an ADR
+- [ ] Decide the GSTIN verification provider (PTY-15, INT-17) from Jeeva's comparison: update R-31 in RESEARCHED_ANSWERS.md and `docs/product/GSTIN_FETCH.md`, record an ADR
 
 ## P3 Purchase & inventory
-- [ ] `packages/billing-engine` (decimal.js) passing all test vectors, with Kamesh's Java engines
+- [x] `packages/billing-engine` (decimal.js) passing all test vectors (72 / 72 on 24-11-2026; `pnpm --filter @meno/billing-engine test`)
+- [ ] Review the billing-engine code and the 52 extended draft vectors; mark vectors confirmed after Prakalya's hand check and the CA session
 - [ ] `reporting` module: report framework (filters, pagination, export, permissions), stock/expiry/purchase report views
-- [ ] Inventory dashboard screens (web `dashboard/`); report API contracts for Ashok's reports centre
+- [ ] Inventory dashboard and report API contracts for Gokul's dashboard and reports centre screens
 
 ## P4 Retail POS & returns
 - [ ] Electron main process: window, preload bridge, printing service, scanner input, auto-update hook (Jeeva packages)
 - [ ] Data-source abstraction in web (`online` HTTP / `local` IPC) agreed with Meyyarivu
-- [ ] Role-based landing + retail dashboard + widget library (web `dashboard/`)
+- [ ] Role-based landing and retail dashboard APIs (`reporting`) for Gokul's dashboard screens
 - [ ] `notification` module: email + in-app, alert rules
 - [ ] Admin settings screens: payment, printer, notification settings (web `admin/`)
 - [ ] Decide the licensing rules (grace days, what restricted mode blocks, soft vs hard invoice limit, first plans and prices) and accept ADR-0015 before LIC work starts in P5 (`docs/architecture/LICENSING.md`)
@@ -43,7 +46,7 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 - [ ] `modules/sync` (device registration, number-series blocks, push/pull, conflicts) + desktop SQLCipher store and sync engine
 - [ ] `payment` module: receipts and payments with allocation; screens (web `payments/`)
 - [ ] `accounting` module: chart of accounts, vouchers from events, books, ledgers; screens (web `accounting/`)
-- [ ] Financial and wholesale dashboards; customer history (CRM)
+- [ ] Financial and wholesale dashboard and customer history (CRM) APIs; screens by Gokul
 - [ ] Pilot go/no-go
 
 ## P6 Pilot

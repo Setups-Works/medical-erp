@@ -1,0 +1,163 @@
+[
+  {
+    "name": "simple interest 18% on 10000.00 for 30 days / 365",
+    "featureId": "PTY-29",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "interestSimple",
+      "amount": "10000.00",
+      "ratePct": "18",
+      "days": "30",
+      "basisDays": "365"
+    },
+    "expected": {
+      "interest": "147.95"
+    }
+  },
+  {
+    "name": "simple interest 24% on 4006.00 for 45 days / 360",
+    "featureId": "PTY-29",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "interestSimple",
+      "amount": "4006.00",
+      "ratePct": "24",
+      "days": "45",
+      "basisDays": "360"
+    },
+    "expected": {
+      "interest": "120.18"
+    }
+  },
+  {
+    "name": "simple interest 18% on 152.00 for 1 days / 365",
+    "featureId": "PTY-29",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "interestSimple",
+      "amount": "152.00",
+      "ratePct": "18",
+      "days": "1",
+      "basisDays": "365"
+    },
+    "expected": {
+      "interest": "0.07"
+    }
+  },
+  {
+    "name": "compound monthly 18% on 10000.00 for 1 months",
+    "featureId": "PTY-29",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "interestCompoundMonthly",
+      "amount": "10000.00",
+      "ratePct": "18",
+      "months": "1"
+    },
+    "expected": {
+      "interest": "150.00"
+    }
+  },
+  {
+    "name": "compound monthly 18% on 10000.00 for 3 months",
+    "featureId": "PTY-29",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "interestCompoundMonthly",
+      "amount": "10000.00",
+      "ratePct": "18",
+      "months": "3"
+    },
+    "expected": {
+      "interest": "456.78"
+    }
+  },
+  {
+    "name": "compound monthly 12% on 50000.00 for 12 months",
+    "featureId": "PTY-29",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "interestCompoundMonthly",
+      "amount": "50000.00",
+      "ratePct": "12",
+      "months": "12"
+    },
+    "expected": {
+      "interest": "6341.25"
+    }
+  },
+  {
+    "name": "TDS 0.1%: cumulative 4500000.00 + 1000000.00, threshold 5000000.00",
+    "featureId": "ACX-06",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "tds",
+      "cumulativeBefore": "4500000.00",
+      "amount": "1000000.00",
+      "threshold": "5000000.00",
+      "ratePct": "0.1"
+    },
+    "expected": {
+      "taxableAboveThreshold": "500000.00",
+      "tds": "500.00"
+    }
+  },
+  {
+    "name": "TDS 0.1%: cumulative 6000000.00 + 250000.00, threshold 5000000.00",
+    "featureId": "ACX-06",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "tds",
+      "cumulativeBefore": "6000000.00",
+      "amount": "250000.00",
+      "threshold": "5000000.00",
+      "ratePct": "0.1"
+    },
+    "expected": {
+      "taxableAboveThreshold": "250000.00",
+      "tds": "250.00"
+    }
+  },
+  {
+    "name": "TDS 0.1%: cumulative 100000.00 + 200000.00, threshold 5000000.00",
+    "featureId": "ACX-06",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "tds",
+      "cumulativeBefore": "100000.00",
+      "amount": "200000.00",
+      "threshold": "5000000.00",
+      "ratePct": "0.1"
+    },
+    "expected": {
+      "taxableAboveThreshold": "0.00",
+      "tds": "0.00"
+    }
+  },
+  {
+    "name": "TDS 2%: cumulative 15000.00 + 10000.00, threshold 20000.00",
+    "featureId": "ACX-06",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "tds",
+      "cumulativeBefore": "15000.00",
+      "amount": "10000.00",
+      "threshold": "20000.00",
+      "ratePct": "2"
+    },
+    "expected": {
+      "taxableAboveThreshold": "5000.00",
+      "tds": "100.00"
+    }
+  }
+]

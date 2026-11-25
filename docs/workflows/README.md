@@ -1,6 +1,6 @@
 # Business workflows
 
-Mermaid diagrams of real pharmacy processes (as-is and to-be). Owner: Prakalya. One file per workflow; link from BRDs.
+Mermaid diagrams of real pharmacy processes (as-is and to-be). Owner: Prakalya. One file per workflow; link from BRDs. **New to pharmacy billing? Read [HOW_A_PHARMACY_WORKS.md](../product/HOW_A_PHARMACY_WORKS.md) first** — every workflow end to end with worked numbers.
 
 | File | Workflow |
 |---|---|

@@ -17,6 +17,8 @@ import { PharmacyBasics, WhatIsMeno } from "./lessons/product";
 import { DrugReference } from "./lessons/reference";
 import { IndianMedicineData } from "./lessons/indian-data";
 import { Licensing } from "./lessons/licensing";
+import { ErpWalkthrough } from "./lessons/erp-walkthrough";
+import { GstFetch } from "./lessons/gst-fetch";
 
 const BODIES: Record<string, () => React.ReactNode> = {
   "what-is-meno": WhatIsMeno,
@@ -39,6 +41,8 @@ const BODIES: Record<string, () => React.ReactNode> = {
   "drug-reference-openfda": DrugReference,
   "indian-medicine-data": IndianMedicineData,
   licensing: Licensing,
+  "erp-walkthrough": ErpWalkthrough,
+  "gstin-fetch": GstFetch,
 };
 
 /* "Taught" ticks are a per-viewer convenience, so browser storage is enough (and optional). */
@@ -106,7 +110,7 @@ export function LessonContent({ lesson, printMode }: { lesson: LessonMeta; print
               {lesson.sources.map((s) => (
                 <li key={s} className="flex gap-2">
                   <FileText className="mt-0.5 size-3.5 shrink-0 text-ink-4" />
-                  <span className="font-mono text-[12px]">{s}</span>
+                  <span className="min-w-0 break-all font-mono text-[12px]">{s}</span>
                 </li>
               ))}
             </ul>

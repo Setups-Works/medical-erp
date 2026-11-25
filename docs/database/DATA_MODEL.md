@@ -74,10 +74,52 @@ erDiagram
 - `item(id, tenant_id, name, brand, generic_name, manufacturer_id, dosage_form, pack_size, pack_unit, loose_unit, conversion, hsn_id, gst_rate, schedule[OTC|H|H1|X|NDPS|G], rx_required, storage, is_active)`
 - `composition(id, tenant_id, salt, strength)` ; `item_composition(item_id, composition_id)`
 - `barcode(id, tenant_id, item_id, code, unique(tenant_id, code))`
-- `item_branch_setting(item_id, branch_id, min_qty, max_qty, reorder_qty, rack_location)`
+- `item_branch_setting(item_id, branch_id, min_qty, max_qty, reorder_qty, rack_location, lead_time_days, in_warehouse_id null, out_warehouse_id null)`
+- Item additions (CAT-25 … CAT-27, PRC-12, PRC-13): `item(+code, print_name, department_id, category_id, therapeutic_class_id, nature[GOODS|CONSUMABLE|SERVICE|ASSET], shelf_life_months, warranty_months, barcode_enabled, batch_enabled, remarks, default_mrp, discount_received_pct, discount_allowed_pct, max_discount_pct, min_markup_pct, max_markup_pct, commission_pct)`; CHECK batch_enabled for pharma departments
+- `item_preferred_vendor(item_id, tenant_id, party_id, rank)` ; `item_bundle(bundle_item_id, tenant_id, component_item_id, qty)`
 
 ### party
 - `party(id, tenant_id, type[SUPPLIER|CUSTOMER|RETAILER|DOCTOR], name, phone, gstin, state_code, dl_no, dl_expiry, credit_limit, credit_days, price_list_id, opening_balance)`
+- Field spec: [MASTER_FIELDS.md](../product/MASTER_FIELDS.md). Additions (PTY-15 … PTY-30): `party(+code, print_name, party_type_id, party_group_id, is_customer, is_supplier, pan, gst_registration_type, gst_status, gst_status_checked_at, rate_mode[EXCLUSIVE|INCLUSIVE], related_party, msme_category, udyam_no, tds_section_id null, tcs_section_id null, transporter_id null, agent_id null, salesman_id null, agent_commission_pct, discount_pct, cash_discount_pct, special_discount_pct, interest_overdue_pct, interest_basis, terms_id null, active)`
+- `party_contact(id, tenant_id, party_id, contact_type, person, designation, email, mobile, office_phone, is_primary)` — one primary per party (partial UNIQUE)
+- `party_address(id, tenant_id, party_id, address_type, name, line1, line2, pincode, state_code, district, city, is_primary)` — one primary billing address per party
+- `party_licence(id, tenant_id, party_id, kind[DRUG|FSSAI|NDPS], form, number, valid_from, valid_to, file_id null)`
+- `party_bank_account(id, tenant_id, party_id, account_type, bank_name, holder_name, account_no_enc, account_no_last4, ifsc, branch, upi_id, is_primary, approved_by, approved_at)` — account number encrypted at rest
+- `party_reminder(party_id, tenant_id, enabled, days_before int[], on_due boolean, custom_days int[], channels text[])`
+- `party_patient(party_id, tenant_id, dob, gender, allergies, chronic_conditions, doctor_id null, abha_no, consent_at)` — health data, permission-gated
+- Reference (not tenant-owned): `ref_pincode(pincode, state_code, district, city)`, `ref_ifsc(ifsc, bank, branch, city)` (PLT-22)
+
+### documents and controls (DOCUMENT_FIELDS.md, FEATURES §25)
+- `period_lock(id, tenant_id, company_id, from_date, to_date, locked_by, locked_at, unlocked_by null, reason)` — posting checks it (PLT-23)
+- `attachment(id, tenant_id, owner_type, owner_id, file_id, kind, uploaded_by)` (PLT-24)
+- `ceiling_price(id, hsn_or_formulation, strength, unit, price, valid_from, valid_to, source_ref)` — reference data (CMP-12)
+- `batch_price_revision(id, tenant_id, batch_id, old_mrp, new_mrp, effective_from, reason)` (INV-19); `batch(+status[ACTIVE|BLOCKED|RECALLED], block_reason)` (INV-20)
+- `doctor(id, tenant_id, name, qualification, reg_no, council_state, specialisation, clinic, phone, address_id)` UNIQUE (tenant_id, reg_no, council_state) (PTY-32)
+- `print_log(id, tenant_id, document_type, document_id, copy_no, printed_by, printed_at)` (POS-27)
+
+### five-product parity (FEATURES §29)
+- `custom_field_def(id, tenant_id, entity, key, label, type, options jsonb, required, printable)` + `custom_values jsonb` on item / party / document (PLT-30)
+- `central_push(id, tenant_id, entity, version, payload_hash, pushed_at)`, `outlet_override_policy(entity, field, allowed)` (PLT-29)
+- `indent(id, tenant_id, branch_id, status, lines…)`, `indent_link(indent_line_id, po_line_id | transfer_line_id)` (PUR-20)
+- `inbound_mail(id, tenant_id, from, received_at, file_id, parsed_status, purchase_draft_id)` (PUR-21)
+- `offer(id, tenant_id, type, rules jsonb, priority, stackable, valid_from, valid_to, hours jsonb, segment_id null)` (PRC-15); `segment(id, tenant_id, rules jsonb)` (CRM-10)
+- `stock_request(id, tenant_id, branch_id, customer_id, item_id, qty, notified_at)` (CRM-11); `sales_target(id, tenant_id, scope, period, value, achieved)` (WHS-22)
+- `party_invite(id, tenant_id, token_hash, kind, expires_at, submitted jsonb, approved_by)` (PTY-33)
+
+### onboarding (ONBOARDING.md)
+- `onboarding_progress(tenant_id, step, status[TODO|DONE|SKIPPED], data jsonb, updated_at)` — one row per step; resume reads it (AUT-15)
+- `tenant(+business_type, source_software, go_live_at, practice_company_id null)`; `consent(id, tenant_id, user_id, kind, version, accepted_at)` (AUT-04)
+- `support_grant(id, tenant_id, granted_by, helper_id, scope[VIEW|ASSIST], expires_at, revoked_at)` — every helper action audited (AUT-14)
+- `verification(id, user_id, channel[SMS|EMAIL], code_hash, expires_at, attempts)` (AUT-04)
+
+### competitor-parity additions (FEATURES §27)
+- `item(+discontinued_at, discontinued_reason, replacement_item_id)` (CAT-28); `bulk_update_job(id, tenant_id, entity, filter jsonb, changes jsonb, affected_count, status, approved_by)` (PLT-25)
+- `migration_job(id, tenant_id, source[MARG|TALLY|BUSY|VYAPAR|GOFRUGAL|CSV], entity, file_id, dry_run, result jsonb)` (PLT-26)
+- `cheque_book(id, tenant_id, bank_ledger_id, from_no, to_no, next_no, print_format)`, `cheque_leaf(id, tenant_id, book_id, number, status[UNUSED|ISSUED|CANCELLED|VOID], payment_id null)` (ACC-16)
+- `dispatch_check(id, tenant_id, invoice_id, checker_id, started_at, finished_at, mismatches jsonb)` (WHS-19); `packing_slip(id, tenant_id, invoice_id, case_no, lines jsonb)`, `dispatch(id, tenant_id, invoice_id, lr_no, lr_date, ack_at, ack_by)` (WHS-20)
+- `collection_assignment(id, tenant_id, collector_id, date, invoice_ids uuid[], status)` (WHS-21)
+- `firm` = `company` picked per bill; `sales_invoice.company_id` already scopes series, books and stock (POS-29)
+- `hsn_tax_change(id, hsn_id, old_rate, new_rate, effective_from, applied_by, impact jsonb)` (GST-15)
 
 ### inventory
 - `batch(id, tenant_id, branch_id, item_id, batch_no, mfg_date, expiry_date, mrp, ptr, purchase_rate, landed_cost, unique(tenant_id, branch_id, item_id, batch_no, expiry_date, mrp))`
@@ -90,7 +132,9 @@ Common header columns: `id, tenant_id, branch_id, fy_id, doc_no, doc_date, party
 Common line columns: `id, doc_id, line_no, item_id, batch_id, qty, free_qty, rate, mrp, discount_pct, scheme_id, taxable, gst_rate, cgst, sgst, igst, line_total, item_snapshot jsonb`.
 
 - `purchase_invoice(+supplier_invoice_no, supplier_invoice_date)` / `purchase_line`
-- `sales_invoice(+sale_type[RETAIL|WHOLESALE], customer_name, doctor_id, prescription_id, device_id, origin[ONLINE|OFFLINE], einvoice_irn)` / `sales_line`
+- `sales_invoice(+sale_type[RETAIL|WHOLESALE], customer_name, walkin jsonb null {name, mobile, age, gender, address, consent_at} (POS-30; only when party_id is the walk-in customer; index on (tenant_id, walkin->>'mobile')), doctor_id, prescription_id, device_id, origin[ONLINE|OFFLINE], einvoice_irn, order_no, order_date, lr_no, lr_date, transporter_id, vehicle_no, cases, weight, due_date, salesman_id, terms_id)` / `sales_line(+section[SALE|REPLACEMENT], replaces_claim_id null)`
+- `document_charge(id, tenant_id, document_type, document_id, kind[FREIGHT|INSURANCE|PACKING|OTHER], amount, gst_rate, cgst, sgst, igst, ledger_id)` (DOC-06)
+- `credit_note(+invoice_id null, kind[SALES_RETURN|BRK_EXP_RETURN|RATE_DIFF], printed_with_invoice boolean)` — combined bill links (WHS-15)
 - `sales_return`, `purchase_return`, `expiry_return` (+lines), `credit_note`, `debit_note`
 
 ### compliance

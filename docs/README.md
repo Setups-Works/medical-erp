@@ -11,7 +11,7 @@
 | [testing/](testing/TEST_STRATEGY.md) | Test strategy, test cases, reports | Ashok |
 | [deployment/](deployment/AZURE_DEPLOYMENT.md) | Azure, environments, config | Jeeva |
 | [runbooks/](runbooks/README.md) | Operational procedures | Jeeva |
-| [team/](team/TEAM_AND_OWNERSHIP.md) | Ownership matrix, workflow, AI workflow, onboarding, per-member plans | Nitheesh |
+| [team/](team/TEAM_AND_OWNERSHIP.md) | **What to build first + daily meeting** ([WHAT_TO_BUILD_FIRST.md](team/WHAT_TO_BUILD_FIRST.md)), ownership matrix, workflow, AI workflow, onboarding, per-member plans | Nitheesh |
 | [planning/](planning/PHASES.md) | Phases, Sprint 0, current state | Nitheesh |
 | [business-requirements/](business-requirements/README.md) | BRD, FRS, user stories, UAT | Prakalya |
 | [workflows/](workflows/README.md) | Business process diagrams | Prakalya |

@@ -1,0 +1,126 @@
+[
+  {
+    "name": "margin and mark-up: sale 100.0000, cost 80.0000",
+    "featureId": "PRC-13",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "margin",
+      "saleExGst": "100.0000",
+      "cost": "80.0000"
+    },
+    "expected": {
+      "marginPct": "20.00",
+      "markupPct": "25.00"
+    }
+  },
+  {
+    "name": "margin and mark-up: sale 57.6000, cost 48.0000",
+    "featureId": "PRC-13",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "margin",
+      "saleExGst": "57.6000",
+      "cost": "48.0000"
+    },
+    "expected": {
+      "marginPct": "16.67",
+      "markupPct": "20.00"
+    }
+  },
+  {
+    "name": "margin and mark-up: sale 211.0200, cost 172.0000",
+    "featureId": "PRC-13",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "margin",
+      "saleExGst": "211.0200",
+      "cost": "172.0000"
+    },
+    "expected": {
+      "marginPct": "18.49",
+      "markupPct": "22.69"
+    }
+  },
+  {
+    "name": "margin and mark-up: sale 50.0000, cost 55.0000",
+    "featureId": "PRC-13",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "margin",
+      "saleExGst": "50.0000",
+      "cost": "55.0000"
+    },
+    "expected": {
+      "marginPct": "-10.00",
+      "markupPct": "-9.09"
+    }
+  },
+  {
+    "name": "weighted average: 10 @ 24.0000 + 11 @ 21.8182",
+    "featureId": "INV-10",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "weightedAverage",
+      "oldQty": "10",
+      "oldAvg": "24.0000",
+      "inQty": "11",
+      "inCost": "21.8182"
+    },
+    "expected": {
+      "newAvg": "22.8572"
+    }
+  },
+  {
+    "name": "weighted average: 0 @ 0 + 5 @ 84.3000",
+    "featureId": "INV-10",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "weightedAverage",
+      "oldQty": "0",
+      "oldAvg": "0",
+      "inQty": "5",
+      "inCost": "84.3000"
+    },
+    "expected": {
+      "newAvg": "84.3000"
+    }
+  },
+  {
+    "name": "weighted average: 40 @ 10.5000 + 60 @ 9.7500",
+    "featureId": "INV-10",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "weightedAverage",
+      "oldQty": "40",
+      "oldAvg": "10.5000",
+      "inQty": "60",
+      "inCost": "9.7500"
+    },
+    "expected": {
+      "newAvg": "10.0500"
+    }
+  },
+  {
+    "name": "weighted average: 3 @ 100.0000 + 1 @ 0",
+    "featureId": "INV-10",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "weightedAverage",
+      "oldQty": "3",
+      "oldAvg": "100.0000",
+      "inQty": "1",
+      "inCost": "0"
+    },
+    "expected": {
+      "newAvg": "75.0000"
+    }
+  }
+]

@@ -1,0 +1,303 @@
+{
+  "version": 1,
+  "status": "researched",
+  "note": "Seed values for statutory_setting (ADR-0014: never hard-coded). Researched 2026-11-24, see docs/compliance/RESEARCHED_ANSWERS.md. Each value keeps its answer ID and confidence; a CA / pharmacist / lawyer confirmation changes status to 'confirmed'. Amounts are strings in rupees.",
+  "settings": [
+    {
+      "key": "gst.medicine_rate_regime",
+      "value": "nil|5|18 per HSN (12 % slab removed for medicines)",
+      "effective_from": "2025-09-22",
+      "answer": "R-01",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "einvoice.aato_threshold",
+      "value": "50000000",
+      "effective_from": "2023-08-01",
+      "answer": "R-02",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "einvoice.report_within_days",
+      "value": "30",
+      "effective_from": "2025-04-01",
+      "answer": "R-02",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "einvoice.time_limit_aato",
+      "value": "100000000",
+      "effective_from": "2025-04-01",
+      "answer": "R-02",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "eway.threshold.default",
+      "value": "50000",
+      "effective_from": "2018-04-01",
+      "answer": "R-03",
+      "confidence": "B",
+      "note": "states may set their own intra-state threshold: add eway.threshold.<state_code>",
+      "confirmed_by": null
+    },
+    {
+      "key": "invoice.number_max_length",
+      "value": "16",
+      "effective_from": "2017-07-01",
+      "answer": "R-04",
+      "confidence": "A",
+      "confirmed_by": null
+    },
+    {
+      "key": "invoice.hsn_digits.upto_5cr",
+      "value": "4",
+      "effective_from": "2021-04-01",
+      "answer": "R-04",
+      "confidence": "A",
+      "confirmed_by": null
+    },
+    {
+      "key": "invoice.hsn_digits.above_5cr",
+      "value": "6",
+      "effective_from": "2021-04-01",
+      "answer": "R-04",
+      "confidence": "A",
+      "confirmed_by": null
+    },
+    {
+      "key": "billing.cash_discount_on",
+      "value": "before_tax_when_on_invoice",
+      "effective_from": "2017-07-01",
+      "answer": "R-05",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "pricing.discount_order",
+      "value": "scheme_then_trade",
+      "effective_from": "2017-07-01",
+      "answer": "R-05",
+      "confidence": "C",
+      "note": "commercial convention, tenant may change",
+      "confirmed_by": null
+    },
+    {
+      "key": "billing.charges_gst",
+      "value": "principal-proportionate",
+      "effective_from": "2017-07-01",
+      "answer": "R-07",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "credit_note.gst_last_day",
+      "value": "30-11 after FY end or annual return date, whichever earlier",
+      "effective_from": "2017-07-01",
+      "answer": "R-08",
+      "confidence": "A",
+      "confirmed_by": null
+    },
+    {
+      "key": "retention.gst_records_months",
+      "value": "72 from annual return due date (31 Dec after FY)",
+      "effective_from": "2017-07-01",
+      "answer": "R-09",
+      "confidence": "A",
+      "confirmed_by": null
+    },
+    {
+      "key": "retention.drug_registers_years_min",
+      "value": "2",
+      "effective_from": "1945-01-01",
+      "answer": "R-09",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "retention.schedule_h1_register_years",
+      "value": "3",
+      "effective_from": "2014-03-01",
+      "answer": "R-18",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "gst.split_rounding",
+      "value": "cgst_first",
+      "effective_from": "2017-07-01",
+      "answer": "R-10",
+      "confidence": "C",
+      "note": "accounting convention; CA chooses",
+      "confirmed_by": null
+    },
+    {
+      "key": "tds.194q.rate_pct",
+      "value": "0.1",
+      "effective_from": "2021-07-01",
+      "answer": "R-11",
+      "confidence": "B",
+      "note": "store act version + section code; Income Tax Act 2025 applies from 2026-04-01 with new numbering",
+      "confirmed_by": null
+    },
+    {
+      "key": "tds.194q.threshold",
+      "value": "5000000",
+      "effective_from": "2021-07-01",
+      "answer": "R-11",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "tds.194q.buyer_turnover",
+      "value": "100000000",
+      "effective_from": "2021-07-01",
+      "answer": "R-11",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "tcs.206c1h.active",
+      "value": "false",
+      "effective_from": "2025-04-01",
+      "answer": "R-11",
+      "confidence": "A",
+      "confirmed_by": null
+    },
+    {
+      "key": "tds.194h.rate_pct",
+      "value": "2",
+      "effective_from": "2024-10-01",
+      "answer": "R-12",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "msme.payment_days_no_agreement",
+      "value": "15",
+      "effective_from": "2024-04-01",
+      "answer": "R-13",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "msme.payment_days_max_agreed",
+      "value": "45",
+      "effective_from": "2024-04-01",
+      "answer": "R-13",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "composition.trader_turnover_limit",
+      "value": "15000000",
+      "effective_from": "2019-04-01",
+      "answer": "R-14",
+      "confidence": "B",
+      "note": "7500000 in special-category states",
+      "confirmed_by": null
+    },
+    {
+      "key": "schedule.h1.register_fields",
+      "value": "prescriber_name,prescriber_address,patient_name,drug_name,quantity,date",
+      "effective_from": "2014-03-01",
+      "answer": "R-18",
+      "confidence": "B",
+      "note": "patient address optional",
+      "confirmed_by": null
+    },
+    {
+      "key": "dpco.ceiling_excludes_gst",
+      "value": "true",
+      "effective_from": "2013-05-15",
+      "answer": "R-21",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "breach.dpdp_board_report_hours",
+      "value": "72",
+      "effective_from": "2027-05-13",
+      "answer": "R-23",
+      "confidence": "B",
+      "note": "commencement date computed, not confirmed",
+      "confirmed_by": null
+    },
+    {
+      "key": "security.certin_report_hours",
+      "value": "6",
+      "effective_from": "2022-06-27",
+      "answer": "R-24",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "security.log_retention_days_in_india",
+      "value": "180",
+      "effective_from": "2022-06-27",
+      "answer": "R-24",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "ndps.retail_sale_enabled",
+      "value": "false",
+      "effective_from": "2026-11-24",
+      "answer": "R-27",
+      "confidence": "C",
+      "note": "blocked until workflow is defined",
+      "confirmed_by": null
+    },
+    {
+      "key": "tds.194h.threshold",
+      "value": "20000",
+      "effective_from": "2025-04-01",
+      "answer": "R-12",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "gstr9.mandatory_above",
+      "value": "20000000",
+      "effective_from": "2024-04-01",
+      "answer": "R-33",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "gstr9c.mandatory_above",
+      "value": "50000000",
+      "effective_from": "2020-04-01",
+      "answer": "R-33",
+      "confidence": "B",
+      "confirmed_by": null
+    },
+    {
+      "key": "interest_debit_note.gst",
+      "value": "at underlying supply rate, time of supply = receipt",
+      "effective_from": "2017-07-01",
+      "answer": "R-06",
+      "confidence": "A",
+      "confirmed_by": null
+    },
+    {
+      "key": "branch_transfer.document",
+      "value": "tax_invoice_if_different_gstin_else_delivery_challan",
+      "effective_from": "2017-07-01",
+      "answer": "R-15",
+      "confidence": "A",
+      "confirmed_by": null
+    },
+    {
+      "key": "ims.pending_max_periods",
+      "value": "1",
+      "effective_from": "2025-10-01",
+      "answer": "R-16",
+      "confidence": "B",
+      "confirmed_by": null
+    }
+  ]
+}

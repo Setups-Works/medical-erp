@@ -1,0 +1,102 @@
+[
+  {
+    "name": "loose sale: MRP 33.60 / 15 units, 5 loose, 0% off, GST 5%",
+    "featureId": "CAT-05",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "looseSale",
+      "mrp": "33.60",
+      "unitsPerPack": "15",
+      "looseQty": "5",
+      "discountPct": "0",
+      "gstRate": "5",
+      "intraState": true
+    },
+    "expected": {
+      "looseMrp": "2.2400",
+      "stockOutPacks": "0.3333",
+      "gross": "11.2000",
+      "taxable": "10.6700",
+      "gst": "0.53",
+      "cgst": "0.27",
+      "sgst": "0.26",
+      "total": "11.2000"
+    }
+  },
+  {
+    "name": "loose sale: MRP 118.00 / 10 units, 3 loose, 10% off, GST 5%",
+    "featureId": "CAT-05",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "looseSale",
+      "mrp": "118.00",
+      "unitsPerPack": "10",
+      "looseQty": "3",
+      "discountPct": "10",
+      "gstRate": "5",
+      "intraState": true
+    },
+    "expected": {
+      "looseMrp": "11.8000",
+      "stockOutPacks": "0.3000",
+      "gross": "35.4000",
+      "taxable": "30.3400",
+      "gst": "1.52",
+      "cgst": "0.76",
+      "sgst": "0.76",
+      "total": "31.8600"
+    }
+  },
+  {
+    "name": "loose sale: MRP 95.50 / 15 units, 4 loose, 0% off, GST 5%",
+    "featureId": "CAT-05",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "looseSale",
+      "mrp": "95.50",
+      "unitsPerPack": "15",
+      "looseQty": "4",
+      "discountPct": "0",
+      "gstRate": "5",
+      "intraState": true
+    },
+    "expected": {
+      "looseMrp": "6.3667",
+      "stockOutPacks": "0.2667",
+      "gross": "25.4668",
+      "taxable": "24.2568",
+      "gst": "1.21",
+      "cgst": "0.61",
+      "sgst": "0.60",
+      "total": "25.4668"
+    }
+  },
+  {
+    "name": "loose sale: MRP 249.00 / 1 units, 1 loose, 0% off, GST 18%",
+    "featureId": "CAT-05",
+    "status": "draft",
+    "source": "Independent Python implementation (scripts/vectors/generate_extended_vectors.py) of CALCULATIONS.md; NOT yet confirmed by Prakalya / CA",
+    "input": {
+      "fn": "looseSale",
+      "mrp": "249.00",
+      "unitsPerPack": "1",
+      "looseQty": "1",
+      "discountPct": "0",
+      "gstRate": "18",
+      "intraState": true
+    },
+    "expected": {
+      "looseMrp": "249.0000",
+      "stockOutPacks": "1.0000",
+      "gross": "249.0000",
+      "taxable": "211.0200",
+      "gst": "37.98",
+      "cgst": "18.99",
+      "sgst": "18.99",
+      "total": "249.0000"
+    }
+  }
+]
