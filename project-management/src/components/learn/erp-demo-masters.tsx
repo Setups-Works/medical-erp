@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Check, Loader2, Search, X } from "lucide-react";
 import { useState } from "react";
 import { fmt, m } from "@/lib/learn/money";
 import { Kbd } from "../ui";
@@ -11,12 +11,14 @@ import {
   F,
   FieldGuide,
   GSTIN_DIRECTORY,
+  type GstPortal,
   type Guide,
   HSNS,
   IFSCS,
   type Med,
   MultiChips,
   NextBar,
+  PAN_HOLDER,
   PINS,
   RX,
   STATES,
@@ -27,6 +29,9 @@ import {
   Tabs,
   Toggle,
   expiryError,
+  fetchGstPortal,
+  gstinChecks,
+  stateName,
   gstinError,
   pctError,
 } from "./erp-demo-kit";
@@ -50,6 +55,8 @@ type BankAc = { type: string; ifsc: string; holder: string; acc: string; acc2: s
 type PartyForm = {
   gstin: string;
   gstStatus: string;
+  /** Legal name from the GST portal (live fetch only). */
+  legal: string;
   name: string;
   printName: string;
   code: string;
@@ -99,6 +106,7 @@ const blankBank = (type = "Primary"): BankAc => ({ type, ifsc: "", holder: "", a
 const base: Omit<PartyForm, "name" | "kind" | "contacts" | "addresses"> = {
   gstin: "",
   gstStatus: "",
+  legal: "",
   printName: "",
   code: "",
   group: "",
@@ -192,6 +200,21 @@ const RETAILER_DEFAULT: PartyForm = {
   interest: "18",
 };
 
+/** Empty forms for the live GSTIN lesson: everything comes from Fetch or the user. */
+const LIVE_SUPPLIER: PartyForm = { ...base, name: "", kind: "Distributor", group: "", contacts: [blankContact()], addresses: [blankAddress()], remind: false };
+const liveCustomer = (kind: string): PartyForm => ({
+  ...base,
+  name: "",
+  kind,
+  group: "",
+  contacts: [blankContact()],
+  addresses: [blankAddress()],
+  remind: false,
+  ...(kind === "Retail (person)" ? { gstType: "Unregistered (consumer)", rateMode: "Inclusive of GST" } : { dlForm: "20 / 21" }),
+});
+
+type PinDir = typeof PINS;
+
 const PERSON = "Retail (person)";
 const needsLicence = (role: "supplier" | "customer", kind: string) => role === "supplier" || ["Retailer (pharmacy)", "Hospital", "Clinic"].includes(kind);
 const gstinRequired = (t: string) => ["Regular", "Composition", "SEZ"].includes(t);
@@ -231,7 +254,7 @@ const partyGuide = (role: "supplier" | "customer"): Guide => {
 
 type Errs = Record<string, string | undefined>;
 
-function validateParty(p: PartyForm, role: "supplier" | "customer"): { errs: Errs; tabOf: Record<string, string>; warn: string[] } {
+function validateParty(p: PartyForm, role: "supplier" | "customer", pins: PinDir = PINS): { errs: Errs; tabOf: Record<string, string>; warn: string[] } {
   const e: Errs = {};
   const tabOf: Record<string, string> = {};
   const set = (k: string, tab: string, msg?: string) => {
@@ -241,7 +264,7 @@ function validateParty(p: PartyForm, role: "supplier" | "customer"): { errs: Err
     }
   };
   const billing = p.addresses.find((a) => a.type === "Billing");
-  const state = billing ? PINS[billing.pin]?.state ?? "" : "";
+  const state = billing ? pins[billing.pin]?.state ?? "" : "";
   set("name", "Books", p.name.trim() ? undefined : "Name is required.");
   set("gstin", "Books", gstinError(p.gstin, state, gstinRequired(p.gstType)));
   set("gstinStatus", "Books", p.gstStatus === "Cancelled" ? "This GSTIN is cancelled: you can't save it on an active party." : undefined);
@@ -254,7 +277,7 @@ function validateParty(p: PartyForm, role: "supplier" | "customer"): { errs: Err
   set("addresses", "Books", billing ? undefined : "Add a billing address.");
   p.addresses.forEach((a, i) => {
     set(`a${i}.line1`, "Books", a.line1.trim() ? undefined : "Address line 1 is required.");
-    set(`a${i}.pin`, "Books", !RX.pin.test(a.pin) ? "6 digits, not starting with 0." : PINS[a.pin] ? undefined : "Not in the demo PIN list: try 600001, 600003, 560001, 682001, 400001.");
+    set(`a${i}.pin`, "Books", !RX.pin.test(a.pin) ? "6 digits, not starting with 0." : pins[a.pin] ? undefined : "Not in the demo PIN list: try 600001, 600003, 560001, 682001, 400001, or Fetch a GSTIN to add its PIN.");
   });
   if (needsLicence(role, p.kind)) {
     set("dl", "Licences", p.dl.trim().length >= 3 ? undefined : "Drug licence number is required.");
@@ -284,18 +307,29 @@ function validateParty(p: PartyForm, role: "supplier" | "customer"): { errs: Err
 
 export function PartyStep({
   role,
-  saved,
+  saved: savedProp,
   onSave,
   onBack,
   onNext,
+  live,
 }: {
   role: "supplier" | "customer";
-  saved: Vendor | Customer | null;
-  onSave: (v: Vendor | Customer) => void;
-  onBack: () => void;
-  onNext: () => void;
+  saved?: Vendor | Customer | null;
+  onSave?: (v: Vendor | Customer) => void;
+  onBack?: () => void;
+  onNext?: () => void;
+  /** Day 22: start empty and let Fetch call the real GST verify service (via /api/learn/gst). */
+  live?: boolean;
 }) {
-  const [p, setP] = useState<PartyForm>(role === "supplier" ? SUPPLIER_DEFAULT : RETAIL_DEFAULT);
+  const [p, setP] = useState<PartyForm>(live ? (role === "supplier" ? LIVE_SUPPLIER : liveCustomer("Retailer (pharmacy)")) : role === "supplier" ? SUPPLIER_DEFAULT : RETAIL_DEFAULT);
+  const [ownSaved, setOwnSaved] = useState<Vendor | Customer | null>(null);
+  const saved = savedProp !== undefined ? savedProp : ownSaved;
+  // PIN directory: the demo list plus any PIN a live fetch brought back.
+  const [pins, setPins] = useState<PinDir>(PINS);
+  const [portal, setPortal] = useState<GstPortal | null>(null);
+  const [fromGst, setFromGst] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(false);
+  const [showJson, setShowJson] = useState(false);
   const [tab, setTab] = useState("Books");
   const [active, setActive] = useState("gstin");
   const [tried, setTried] = useState(false);
@@ -304,16 +338,54 @@ export function PartyStep({
   const set = <K extends keyof PartyForm>(k: K) => (v: PartyForm[K]) => setP((x) => ({ ...x, [k]: v }));
   const person = role === "customer" && p.kind === PERSON;
   const tabs = ["Books", ...(needsLicence(role, p.kind) ? ["Licences"] : []), "Bank", "Income tax", "GST", ...(person ? ["Patient"] : []), "Others"];
-  const { errs, tabOf, warn } = validateParty(p, role);
+  const { errs, tabOf, warn } = validateParty(p, role, pins);
   const ok = Object.values(errs).every((x) => !x);
   const show = (k: string) => (tried ? errs[k] : undefined);
   const tabErrors = tried ? Object.fromEntries(Object.entries(tabOf).map(([, t]) => [t, true])) : {};
   const billing = p.addresses.find((a) => a.type === "Billing");
-  const state = billing ? PINS[billing.pin]?.state : undefined;
+  const state = billing ? pins[billing.pin]?.state : undefined;
+  const gst = (k: string) => (live && fromGst.has(k) ? "From GST portal" : undefined);
 
   const upd = <T,>(list: T[], i: number, patch: Partial<T>) => list.map((x, j) => (j === i ? { ...x, ...patch } : x));
 
+  const fetchLive = async () => {
+    setActive("gstin");
+    setPortal(null);
+    if (!gstinChecks(p.gstin).every((c) => c.ok)) return setFetchMsg("Fix the GSTIN first: the checks below must all pass. No API call was made.");
+    setLoading(true);
+    setFetchMsg(undefined);
+    try {
+      const d = await fetchGstPortal(p.gstin);
+      const a = d.structured_address ?? {};
+      const code = d.gstin.slice(0, 2);
+      const pin = a.pincode ?? "";
+      if (RX.pin.test(pin)) setPins((x) => ({ ...x, [pin]: { state: code, district: a.city ?? "", city: a.city ?? "" } }));
+      const regType = /composition/i.test(d.dty ?? "") ? "Composition" : /sez/i.test(d.dty ?? "") ? "SEZ" : "Regular";
+      const status = /^active$/i.test(d.sts ?? "") ? "Active" : /cancel/i.test(d.sts ?? "") ? "Cancelled" : /suspend/i.test(d.sts ?? "") ? "Suspended" : (d.sts ?? "");
+      setP((x) => ({
+        ...x,
+        name: d.tradeNam || d.lgnm || x.name,
+        printName: d.tradeNam || d.lgnm || x.printName,
+        legal: d.lgnm ?? "",
+        gstStatus: status,
+        gstType: regType,
+        pan: d.gstin.slice(2, 12),
+        // A GST-registered customer is a business, not a walk-in person.
+        ...(role === "customer" && x.kind === PERSON ? { kind: "Retailer (pharmacy)", rateMode: "Exclusive of GST", dlForm: "20 / 21" } : {}),
+        addresses: [{ ...(x.addresses[0] ?? blankAddress()), type: "Billing", name: x.addresses[0]?.name || "Principal place of business", line1: a.address_line1 ?? "", line2: a.address_line2 ?? "", pin }, ...x.addresses.slice(1)],
+      }));
+      setFromGst(new Set(["name", "printName", "legal", "gstStatus", "gstType", "pan", "address"]));
+      setPortal(d);
+      setFetchMsg(`Fetched from the GST portal: ${d.lgnm ?? d.gstin} · ${status || "status unknown"}.`);
+    } catch (e) {
+      setFetchMsg(e instanceof Error ? e.message : "Couldn’t fetch the GSTIN.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchGstin = () => {
+    if (live) return void fetchLive();
     setActive("gstin");
     const hit = GSTIN_DIRECTORY[p.gstin];
     if (!RX.gstin.test(p.gstin)) return setFetchMsg("Enter a valid 15-character GSTIN first.");
@@ -337,11 +409,12 @@ export function PartyStep({
       return;
     }
     const b = billing!;
-    const pin = PINS[b.pin];
+    const pin = pins[b.pin];
     const address = `${b.line1}${b.line2 ? `, ${b.line2}` : ""}, ${pin.city} ${b.pin}`;
     const phone = p.contacts.find((c) => c.type === "Primary")!.mobile;
-    if (role === "supplier") onSave({ name: p.name.trim(), gstin: p.gstin, state: pin.state, dl: p.dl, dlExpiry: p.dlExpiry, phone, address, creditDays: p.creditDays, opening: p.opening || "0", msme: p.msme });
-    else onSave({ kind: p.kind === PERSON ? "retail" : "retailer", name: p.name.trim(), phone, gstin: p.gstin, state: pin.state, dl: p.dl, creditLimit: p.creditLimit || "0", creditDays: p.creditDays, address });
+    const done = (v: Vendor | Customer) => (onSave ? onSave(v) : setOwnSaved(v));
+    if (role === "supplier") done({ name: p.name.trim(), gstin: p.gstin, state: pin.state, dl: p.dl, dlExpiry: p.dlExpiry, phone, address, creditDays: p.creditDays, opening: p.opening || "0", msme: p.msme });
+    else done({ kind: p.kind === PERSON ? "retail" : "retailer", name: p.name.trim(), phone, gstin: p.gstin, state: pin.state, dl: p.dl, creditLimit: p.creditLimit || "0", creditDays: p.creditDays, address });
   };
 
   const route = role === "supplier" ? "/masters/suppliers/new" : "/masters/customers/new";
@@ -362,8 +435,13 @@ export function PartyStep({
                   value={p.kind}
                   setActive={setActive}
                   onChange={(k) => {
-                    setP(k === PERSON ? RETAIL_DEFAULT : { ...RETAILER_DEFAULT, kind: k });
-                    setFetchMsg(undefined);
+                    if (live) {
+                      // Keep what Fetch filled; only the type (and the fields it drives) changes.
+                      setP((x) => (portal ? { ...x, kind: k } : liveCustomer(k)));
+                    } else {
+                      setP(k === PERSON ? RETAIL_DEFAULT : { ...RETAILER_DEFAULT, kind: k });
+                      setFetchMsg(undefined);
+                    }
                     setTried(false);
                   }}
                   options={[PERSON, "Retailer (pharmacy)", "Hospital", "Clinic", "Institution"].map((v) => ({ v, l: v }))}
@@ -375,8 +453,9 @@ export function PartyStep({
                   label={gstinRequired(p.gstType) ? "GSTIN" : "GSTIN (optional)"}
                   value={p.gstin}
                   onChange={(v) => {
-                    set("gstin")(v);
+                    set("gstin")(v.slice(0, 15));
                     set("gstStatus")("");
+                    if (live) setFetchMsg(undefined);
                   }}
                   setActive={setActive}
                   error={show("gstin") ?? show("gstinStatus")}
@@ -384,14 +463,15 @@ export function PartyStep({
                   upper
                   required={gstinRequired(p.gstType)}
                   hint={fetchMsg ?? (p.gstStatus ? `Status: ${p.gstStatus}` : "Fetch fills the rest")}
+                  placeholder={live ? "33AAJCN0778N1ZZ" : undefined}
                   action={
-                    <button onClick={fetchGstin} aria-label="Fetch GSTIN details" className="inline-flex h-9 shrink-0 items-center gap-1 rounded-ctl px-2.5 text-[12px] text-ink-2 shadow-[inset_0_0_0_1px_var(--line-2)] hover:bg-hover">
-                      <Search className="size-3.5" /> Fetch
+                    <button onClick={fetchGstin} disabled={loading} aria-label="Fetch GSTIN details" className="inline-flex h-9 shrink-0 items-center gap-1 rounded-ctl px-2.5 text-[12px] text-ink-2 shadow-[inset_0_0_0_1px_var(--line-2)] hover:bg-hover disabled:opacity-50">
+                      {loading ? <Loader2 className="size-3.5 animate-spin" /> : <Search className="size-3.5" />} Fetch
                     </button>
                   }
                 />
-                <F k="name" label={role === "supplier" ? "Vendor name" : "Customer name"} value={p.name} onChange={set("name")} setActive={setActive} error={show("name")} required />
-                <F k="printName" label="Print name" value={p.printName} onChange={set("printName")} setActive={setActive} placeholder={p.name || "Defaults to name"} />
+                <F k="name" label={role === "supplier" ? "Vendor name" : "Customer name"} value={p.name} onChange={set("name")} setActive={setActive} error={show("name")} required hint={gst("name")} />
+                <F k="printName" label="Print name" value={p.printName} onChange={set("printName")} setActive={setActive} placeholder={p.name || "Defaults to name"} hint={gst("printName")} />
                 <F k="code" label="Code" value={p.code} onChange={set("code")} setActive={setActive} placeholder="Auto: V-0001" mono />
                 {role === "supplier" ? (
                   <Chips k="kind" label="Vendor type" value={p.kind} onChange={set("kind")} setActive={setActive} options={["Manufacturer", "Distributor", "Stockist", "C&F agent"].map((v) => ({ v, l: v }))} />
@@ -400,6 +480,16 @@ export function PartyStep({
                 )}
                 <F k="group" label="Group" value={p.group} onChange={set("group")} setActive={setActive} hint="Picked from the party group master" />
               </div>
+              {live && p.gstin && (
+                <ul className="grid gap-0.5 sm:grid-cols-2" aria-label="GSTIN checks before Fetch">
+                  {gstinChecks(p.gstin).map((c) => (
+                    <li key={c.label} className={c.ok ? "flex items-center gap-1.5 text-[12px] text-ink-2" : "flex items-center gap-1.5 text-[12px] text-critical"}>
+                      {c.ok ? <Check className="size-3.5" /> : <X className="size-3.5" />} {c.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {live && p.legal && <F k="name" label="Legal name (GST, read-only)" value={p.legal} readOnly setActive={setActive} hint={gst("legal")} />}
 
               <SectionLabel action={<AddButton onClick={() => set("contacts")([...p.contacts, blankContact("Accounts")])}>Add contact</AddButton>}>Contacts</SectionLabel>
               {show("contacts") && <p className="text-[11.5px] text-critical">{show("contacts")}</p>}
@@ -420,15 +510,16 @@ export function PartyStep({
               {show("addresses") && <p className="text-[11.5px] text-critical">{show("addresses")}</p>}
               <div className="space-y-2">
                 {p.addresses.map((a, i) => {
-                  const pin = PINS[a.pin];
+                  const pin = pins[a.pin];
+                  const fromPortal = i === 0 ? gst("address") : undefined;
                   return (
                     <Card key={i} title={`Address ${i + 1}`} onRemove={p.addresses.length > 1 ? () => set("addresses")(p.addresses.filter((_, j) => j !== i)) : undefined}>
                       <Chips k="address" label="Type" value={a.type} onChange={(v) => set("addresses")(upd(p.addresses, i, { type: v }))} setActive={setActive} options={["Billing", "Shipping", "Godown"].map((v) => ({ v, l: v }))} />
                       <F k="address" label="Address name" value={a.name} onChange={(v) => set("addresses")(upd(p.addresses, i, { name: v }))} setActive={setActive} />
-                      <F k="address" label="Line 1" value={a.line1} onChange={(v) => set("addresses")(upd(p.addresses, i, { line1: v }))} setActive={setActive} error={show(`a${i}.line1`)} required />
-                      <F k="address" label="Line 2 (optional)" value={a.line2} onChange={(v) => set("addresses")(upd(p.addresses, i, { line2: v }))} setActive={setActive} />
-                      <F k="address" label="PIN code" value={a.pin} onChange={(v) => set("addresses")(upd(p.addresses, i, { pin: v }))} setActive={setActive} error={show(`a${i}.pin`)} mono required />
-                      <F k="address" label="State" value={pin ? STATES.find((s) => s.code === pin.state)?.name ?? "" : ""} readOnly setActive={setActive} placeholder="Auto from PIN" />
+                      <F k="address" label="Line 1" value={a.line1} onChange={(v) => set("addresses")(upd(p.addresses, i, { line1: v }))} setActive={setActive} error={show(`a${i}.line1`)} required hint={fromPortal} />
+                      <F k="address" label="Line 2 (optional)" value={a.line2} onChange={(v) => set("addresses")(upd(p.addresses, i, { line2: v }))} setActive={setActive} hint={fromPortal} />
+                      <F k="address" label="PIN code" value={a.pin} onChange={(v) => set("addresses")(upd(p.addresses, i, { pin: v }))} setActive={setActive} error={show(`a${i}.pin`)} mono required hint={fromPortal} />
+                      <F k="address" label="State" value={pin ? `${stateName(pin.state)} (${pin.state})` : ""} readOnly setActive={setActive} placeholder="Auto from PIN" />
                       <F k="address" label="District" value={pin?.district ?? ""} readOnly setActive={setActive} placeholder="Auto from PIN" />
                       <F k="address" label="City" value={pin?.city ?? ""} readOnly setActive={setActive} placeholder="Auto from PIN" />
                     </Card>
@@ -482,7 +573,7 @@ export function PartyStep({
 
           {tab === "Income tax" && (
             <div className="grid gap-3 sm:grid-cols-2">
-              <F k="pan" label="PAN" value={p.pan} onChange={set("pan")} setActive={setActive} error={show("pan")} mono upper />
+              <F k="pan" label="PAN" value={p.pan} onChange={set("pan")} setActive={setActive} error={show("pan")} mono upper hint={live && p.pan.length === 10 ? `${gst("pan") ? "GSTIN characters 3–12 · " : ""}4th letter ${p.pan[3]} = ${PAN_HOLDER[p.pan[3]] ?? "unknown"}${portal?.ctb ? ` (portal: ${portal.ctb})` : ""}` : undefined} />
               <Toggle k="related" label="Is related party?" value={p.related} onChange={set("related")} setActive={setActive} />
               <Chips k="msme" label={`Is ${role === "supplier" ? "vendor" : "customer"} MSME registered?`} value={p.msme} onChange={set("msme")} setActive={setActive} options={["Not applicable", "Micro", "Small", "Medium"].map((v) => ({ v, l: v }))} />
               {p.msme !== "Not applicable" ? <F k="msme" label="Udyam registration no." value={p.udyam} onChange={set("udyam")} setActive={setActive} error={show("udyam")} mono upper required /> : <span />}
@@ -497,7 +588,35 @@ export function PartyStep({
               </div>
               <Chips k="rateMode" label="Rates on their bills" value={p.rateMode} onChange={set("rateMode")} setActive={setActive} options={["Exclusive of GST", "Inclusive of GST"].map((v) => ({ v, l: v }))} />
               <F k="gstType" label="GST status" value={p.gstStatus || (p.gstin ? "Not fetched" : "Unregistered")} readOnly setActive={setActive} />
-              <F k="gstType" label="Place of supply (from billing address)" value={state ? `${STATES.find((s) => s.code === state)?.name} (${state}) → ${state === "33" ? "CGST + SGST" : "IGST"}` : "Add a billing PIN"} readOnly setActive={setActive} />
+              <F k="gstType" label="Place of supply (our shop is in Tamil Nadu, 33)" value={state ? `${stateName(state)} (${state}) → ${state === "33" ? "CGST + SGST" : "IGST"}` : "Add a billing PIN"} readOnly setActive={setActive} />
+              {live && portal && (
+                <div className="rounded-tile bg-side p-3 sm:col-span-2">
+                  <p className="mb-2 text-[12px] font-semibold text-ink-2">From the GST portal (read-only, kept with the party for audit)</p>
+                  <dl className="grid gap-x-4 gap-y-1.5 text-[12.5px] sm:grid-cols-2">
+                    {[
+                      ["Registration type", portal.dty],
+                      ["GST status", portal.sts],
+                      ["Registration date", portal.rgdt?.replaceAll("/", "-")],
+                      ["Cancelled on", portal.cxdt?.replaceAll("/", "-") || "—"],
+                      ["Constitution of business", portal.ctb],
+                      ["E-invoice enabled", portal.einvoiceStatus],
+                      ["Nature of business", portal.nba?.join(", ")],
+                      ["Principal address", portal.principal_address],
+                      ["State jurisdiction", portal.stj],
+                      ["Centre jurisdiction", portal.ctj],
+                    ].map(([k, v]) => (
+                      <div key={k} className="min-w-0">
+                        <dt className="text-[11.5px] text-ink-4">{k}</dt>
+                        <dd className="break-words text-ink-2">{v || "—"}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <button onClick={() => setShowJson((x) => !x)} className="mt-2 text-[12px] text-ink-3 underline hover:text-ink">
+                    {showJson ? "Hide" : "Show"} the raw response
+                  </button>
+                  {showJson && <pre className="mt-2 max-h-72 overflow-auto rounded-tile bg-sunken p-3 font-mono text-[11.5px] leading-relaxed text-ink">{JSON.stringify(portal, null, 2)}</pre>}
+                </div>
+              )}
               {["Composition", "Unregistered (consumer)"].includes(p.gstType) && role === "supplier" && <p className="text-[12px] text-ink-3">No input tax credit on this supplier&apos;s bills.</p>}
             </div>
           )}
@@ -553,7 +672,7 @@ export function PartyStep({
           {saved.state === "33" ? "Same state as our shop: CGST + SGST." : "Different state from our shop: IGST."}
         </SavedNote>
       )}
-      <NextBar
+      {onNext && <NextBar
         onBack={onBack}
         onNext={onNext}
         canNext={!!saved}
@@ -565,7 +684,7 @@ export function PartyStep({
               : "See where money is recorded: the chart of accounts."
             : "Walk every tab, then Save. Try Fetch with a cancelled GSTIN, a wrong PIN or mismatched account numbers."
         }
-      />
+      />}
     </div>
   );
 }

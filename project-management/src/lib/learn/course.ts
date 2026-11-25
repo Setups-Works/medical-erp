@@ -236,6 +236,16 @@ export const LESSONS: LessonMeta[] = [
     goals: ["Demo the masters-first order and say why", "Explain every field on the vendor, customer, ledger, purchase and POS screens", "Run a POS bill with the keyboard (F2, F3, F4, F9, F10)", "Show what one bill writes: stock movement, GST and voucher"],
     sources: ["docs/product/MASTER_FIELDS.md", "docs/product/MASTERS.md", "docs/architecture/VALIDATION_AND_BUSINESS_RULES.md", "docs/architecture/CHART_OF_ACCOUNTS.md", "docs/design/POS_KEYBOARD.md"],
   },
+  {
+    slug: "gstin-fetch",
+    day: 22,
+    module: MODULES[8],
+    title: "GSTIN fetch: fill a supplier or customer from one GST number",
+    summary: "Read a GSTIN (state, PAN, check character), call a real GST verify API, and watch the full supplier and customer forms fill: name, legal name, address, PAN, GST type and status. Then how MENO builds it for real (PTY-15, INT-17).",
+    minutes: 45,
+    goals: ["Read a GSTIN and validate its check character", "Map a GST verify response to the party form", "Explain why only meno-api calls the provider", "Handle a cancelled GSTIN and a provider that is down"],
+    sources: ["docs/product/GSTIN_FETCH.md", "docs/product/MASTER_FIELDS.md", "docs/compliance/RESEARCHED_ANSWERS.md R-31", "docs/product/FEATURES.md PTY-15, INT-17"],
+  },
 ];
 
 export const lessonBySlug = (slug: string) => LESSONS.find((l) => l.slug === slug);

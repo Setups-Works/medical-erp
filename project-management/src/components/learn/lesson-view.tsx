@@ -18,6 +18,7 @@ import { DrugReference } from "./lessons/reference";
 import { IndianMedicineData } from "./lessons/indian-data";
 import { Licensing } from "./lessons/licensing";
 import { ErpWalkthrough } from "./lessons/erp-walkthrough";
+import { GstFetch } from "./lessons/gst-fetch";
 
 const BODIES: Record<string, () => React.ReactNode> = {
   "what-is-meno": WhatIsMeno,
@@ -41,6 +42,7 @@ const BODIES: Record<string, () => React.ReactNode> = {
   "indian-medicine-data": IndianMedicineData,
   licensing: Licensing,
   "erp-walkthrough": ErpWalkthrough,
+  "gstin-fetch": GstFetch,
 };
 
 /* "Taught" ticks are a per-viewer convenience, so browser storage is enough (and optional). */

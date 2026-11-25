@@ -23,7 +23,7 @@
 
 | Field | Type / options | Req. | Notes and rule | Status |
 |---|---|---|---|---|
-| GSTIN + **Fetch** button | 15 chars | C | Required when GST type = Regular / Composition. Fetch fills legal name, trade name, state, address and GST status from the GST verification service ⚠ (GSP/API provider and cost to confirm) | Plan PTY-01 · **New PTY-15** (fetch) |
+| GSTIN + **Fetch** button | 15 chars | C | Required when GST type = Regular / Composition. Fetch fills legal name, trade name, state, address and GST status from the GST verification service ⚠ (GSP/API provider and cost to confirm). Field map, checks and errors: [GSTIN_FETCH.md](GSTIN_FETCH.md) | Plan PTY-01 · **New PTY-15** (fetch) |
 | Vendor name | text 1–200 | Y | Duplicate check, case-insensitive | Plan PTY-01 |
 | Print name | text | | Printed on documents; defaults to vendor name | **New PTY-16** |
 | Vendor code | text | | Auto from number series if blank; unique | **New PTY-16** |
@@ -167,7 +167,7 @@ Same tabs as the supplier. Differences only:
 |---|---|---|---|
 | PIN code → state, district, city | addresses | India Post PIN directory (open data) loaded as reference data, yearly refresh ⚠ licence check | **New PLT-22** |
 | IFSC → bank, branch | bank accounts | RBI IFSC list (open data), monthly refresh ⚠ | **New PLT-22** |
-| GSTIN verification | Fetch button | GSP / GST API provider ⚠ cost and terms | **New PTY-15** |
+| GSTIN verification | Fetch button | GSP / GST API provider ⚠ cost and terms; candidate and spec in [GSTIN_FETCH.md](GSTIN_FETCH.md) | **New PTY-15**, INT-17 |
 | Party type, group, transporter, agent, terms, MSME category, GST registration type | parties | configuration masters | **New PTY-16, PTY-26, PTY-28** |
 
 ## 5. Rules that apply to every new field

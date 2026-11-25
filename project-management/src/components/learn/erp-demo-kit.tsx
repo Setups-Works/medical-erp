@@ -41,6 +41,73 @@ export const GSTIN_DIRECTORY: Record<string, { legal: string; line1: string; pin
   "33DDDDD3333D1Z1": { legal: "Old Town Pharma", line1: "9 Bazaar Road", pin: "600001", status: "Cancelled", type: "Regular" },
 };
 
+/** Every GST state code (first two characters of a GSTIN). Demo copy; MENO reads the state master. */
+export const GST_STATES: Record<string, string> = {
+  "01": "Jammu and Kashmir", "02": "Himachal Pradesh", "03": "Punjab", "04": "Chandigarh", "05": "Uttarakhand",
+  "06": "Haryana", "07": "Delhi", "08": "Rajasthan", "09": "Uttar Pradesh", "10": "Bihar", "11": "Sikkim",
+  "12": "Arunachal Pradesh", "13": "Nagaland", "14": "Manipur", "15": "Mizoram", "16": "Tripura", "17": "Meghalaya",
+  "18": "Assam", "19": "West Bengal", "20": "Jharkhand", "21": "Odisha", "22": "Chhattisgarh", "23": "Madhya Pradesh",
+  "24": "Gujarat", "26": "Dadra and Nagar Haveli and Daman and Diu", "27": "Maharashtra", "29": "Karnataka",
+  "30": "Goa", "31": "Lakshadweep", "32": "Kerala", "33": "Tamil Nadu", "34": "Puducherry",
+  "35": "Andaman and Nicobar Islands", "36": "Telangana", "37": "Andhra Pradesh", "38": "Ladakh",
+  "97": "Other Territory",
+};
+export const stateName = (code: string) => STATES.find((s) => s.code === code)?.name ?? GST_STATES[code] ?? "";
+
+/** The PAN's 4th letter says who holds it. */
+export const PAN_HOLDER: Record<string, string> = {
+  C: "Company", P: "Individual (person)", F: "Firm / LLP", H: "Hindu Undivided Family", A: "Association of Persons",
+  T: "Trust", B: "Body of Individuals", L: "Local authority", J: "Artificial juridical person", G: "Government",
+};
+
+const B36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+/** GSTIN check character (15th): weights 1,2,1,2… over the first 14 characters in base 36. */
+export function gstinCheckChar(g: string) {
+  let sum = 0;
+  for (let i = 0; i < 14; i++) {
+    const p = B36.indexOf(g[i]) * (i % 2 ? 2 : 1);
+    sum += Math.floor(p / 36) + (p % 36);
+  }
+  return B36[(36 - (sum % 36)) % 36];
+}
+
+/** The four free checks done before spending an API call on a GSTIN. */
+export function gstinChecks(raw: string) {
+  const g = raw.trim().toUpperCase();
+  const fmtOk = RX.gstin.test(g);
+  return [
+    { label: "15 characters in the GSTIN pattern", ok: fmtOk },
+    { label: g.length >= 2 ? `State code ${g.slice(0, 2)}: ${GST_STATES[g.slice(0, 2)] ?? "unknown"}` : "Known state code", ok: !!GST_STATES[g.slice(0, 2)] },
+    { label: "Characters 3–12 are a PAN", ok: /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(g.slice(2, 12)) },
+    { label: fmtOk ? `Check character must be ${gstinCheckChar(g)}` : "Check character (15th) is right", ok: fmtOk && gstinCheckChar(g) === g[14] },
+  ];
+}
+
+/** Basic details from the public GST verify service (the Hub proxies it at /api/learn/gst). */
+export type GstPortal = {
+  gstin: string;
+  lgnm?: string;
+  tradeNam?: string;
+  sts?: string;
+  rgdt?: string;
+  ctb?: string;
+  dty?: string;
+  stj?: string;
+  ctj?: string;
+  cxdt?: string;
+  nba?: string[];
+  einvoiceStatus?: string;
+  principal_address?: string;
+  structured_address?: { address_line1?: string; address_line2?: string; city?: string; state?: string; pincode?: string };
+};
+
+export async function fetchGstPortal(gstin: string): Promise<GstPortal> {
+  const res = await fetch(`/api/learn/gst?gstin=${encodeURIComponent(gstin)}`);
+  const json = (await res.json().catch(() => ({}))) as { data?: GstPortal; error?: string };
+  if (!res.ok || !json.data) throw new Error(json.error ?? "Couldn’t fetch the GSTIN.");
+  return json.data;
+}
+
 /** Demo HSN → GST rate (illustrative; MENO reads `hsn_tax` for the document date). */
 export const HSNS = [
   { code: "3004", label: "3004 · Medicaments (dosage form)", gst: "5" },

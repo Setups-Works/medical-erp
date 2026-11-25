@@ -98,7 +98,7 @@ Medicine fields (required unless noted): product name, generic name, brand, manu
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles | QA |
 |---|---|---|---|---|---|---|---|---|
 | Supplier list | `/masters/suppliers` | All suppliers | PTY-01 | P2 | Kamesh | Ashok | OW BM IM AC | Prakalya |
-| Add supplier | `/masters/suppliers/new` | Tabs: Books (GSTIN fetch, contacts, addresses), Licences, Bank, Income tax (PAN, MSME, TDS), GST, Others (see MASTER_FIELDS.md) | PTY-01, PTY-15, PTY-16, PTY-17, PTY-18, PTY-19, PTY-20, PTY-21, PTY-22, PTY-23, PTY-24, PTY-25, PTY-29, PLT-22 | P6 | Kamesh | Ashok | OW BM IM | Prakalya |
+| Add supplier | `/masters/suppliers/new` | Tabs: Books (GSTIN fetch, contacts, addresses), Licences, Bank, Income tax (PAN, MSME, TDS), GST, Others (see MASTER_FIELDS.md) | PTY-01, PTY-15, PTY-16, PTY-17, PTY-18, PTY-19, PTY-20, PTY-21, PTY-22, PTY-23, PTY-24, PTY-25, PTY-29, PLT-22, INT-17 | P6 | Kamesh | Ashok | OW BM IM | Prakalya |
 | Supplier details | `/masters/suppliers/[id]` | Profile and business details | PTY-01 | P2 | Kamesh | Ashok | OW BM IM AC | Prakalya |
 | Supplier ledger | `/masters/suppliers/[id]/ledger` | Debit and credit history | PTY-06 | P5 | Kamesh | Ashok | OW AC AU | Prakalya |
 | Supplier outstanding | `/masters/suppliers/[id]/outstanding` | Payable balances and ageing | PTY-06, ACC-09 | P5 | Kamesh | Ashok | OW AC | Prakalya |
@@ -114,7 +114,7 @@ Medicine fields (required unless noted): product name, generic name, brand, manu
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles | QA |
 |---|---|---|---|---|---|---|---|---|
 | Customer list | `/masters/customers` | All customers and retailers | PTY-02, PTY-03 | P2 | Kamesh | Ashok | OW BM PH BO AC WM | Prakalya |
-| Add customer | `/masters/customers/new` | Retail or wholesale; same tabs as supplier plus Patient for a person (see MASTER_FIELDS.md) | PTY-02, PTY-03, PTY-15, PTY-16, PTY-17, PTY-18, PTY-19, PTY-24, PTY-30, PTY-25, PTY-29 | P6 | Kamesh | Ashok | OW BM BO WM | Prakalya |
+| Add customer | `/masters/customers/new` | Retail or wholesale; same tabs as supplier plus Patient for a person (see MASTER_FIELDS.md) | PTY-02, PTY-03, PTY-15, PTY-16, PTY-17, PTY-18, PTY-19, PTY-24, PTY-30, PTY-25, PTY-29, INT-17 | P6 | Kamesh | Ashok | OW BM BO WM | Prakalya |
 | Party merge | `/masters/parties/merge` | Merge duplicate suppliers or customers, history kept | PTY-31 | P5 | Kamesh | Ashok | OW | Prakalya |
 | Transporters | `/masters/transporters` | Transporter master used by GRN, delivery and e-way bill | PTY-26 | P5 | Kamesh | Ashok | OW IM WM | Prakalya |
 | Agents | `/masters/agents` | Agents and commission | PTY-28 | P6 | Kamesh | Ashok | OW WM | Prakalya |

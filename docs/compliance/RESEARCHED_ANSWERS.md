@@ -41,7 +41,7 @@ The generator matches each open rule to an answer by the **Applies to** keywords
 | R-28 | Banned FDCs and recalls | Banned, banned, recall, CDSCO | Pharmacist |
 | R-29 | Fixed-asset depreciation rates | depreciation, ACX-04 | CA |
 | R-30 | Licences of public reference data | PLT-22, PIN code, IFSC, licence check, licensing of data source, CAT-10, medicine database | Lawyer |
-| R-31 | GSTIN verification service | GSTIN fetch, GSTIN verification, GSTIN \+ Fetch, PTY-15 | CA |
+| R-31 | GSTIN verification service | GSTIN fetch, GSTIN verification, GSTIN \+ Fetch, PTY-15, INT-17 | CA |
 | R-32 | ABHA / ABDM integration | ABHA, ABDM | Lawyer |
 | R-33 | GSTR-9 annual return | GSTR-9 | CA |
 | R-34 | Service items at the counter | POS-26, Service billing, SAC | CA |
@@ -224,6 +224,7 @@ The generator matches each open rule to an answer by the **Applies to** keywords
 ### R-31 GSTIN verification — confidence B
 - The GST portal's public taxpayer search is interactive; programmatic GSTIN verification is offered by **GSPs and verification vendors** as paid APIs (e.g. bank / payment providers' verification suites). Pick one provider with the e-invoice GSP (INT-01) to keep one contract; cache results with the check date; never store the vendor's credentials outside Key Vault.
 - Sources: Cashfree GST verification page; GST portal public search.
+- **Candidate tried 25-11-2026: GST verify API** (`api.gstverify.dubey.app`). Basic details (`full=false`) work without a key: legal / trade name, status, registration date and type, constitution, nature of business, e-invoice status, jurisdictions, structured address. Full details need a key (403). Unknown or wrong GSTIN → 400. Unofficial third-party service: terms, rate limits, uptime and cost to confirm before production. Spec and field map: [GSTIN_FETCH.md](../product/GSTIN_FETCH.md); live demo in Hub → Learn → Day 22.
 
 ### R-32 ABHA / ABDM — confidence B
 - ABDM integration: build in the **ABDM sandbox**, pass the **milestone test cases** (M1 ABHA, M2 consent workflows, M3 health-data exchange as HIP / HIU), then a **web-application security audit by a CERT-In empanelled auditor** and an **NHA exit review** to receive production credentials. Health-record sharing needs the patient's consent artefact.

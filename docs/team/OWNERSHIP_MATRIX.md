@@ -57,6 +57,7 @@ A few features are built by someone other than their prefix's owners. MENO Hub a
 | Feature | Backend | Frontend | Extra | Why |
 |---|---|---|---|---|
 | INT-12 | nitheesh | | | DrugDB adapter: Nitheesh built the Learn prototype (Day 19) and owns the source decision |
+| INT-17 | nitheesh | | | GSTIN verification adapter: Learn prototype (Day 22) and the provider decision are Nitheesh's; the PTY-15 endpoint and Fetch screens stay with Kamesh and Ashok |
 | CAT-24 | nitheesh | nitheesh | | Medicine search-as-you-type on the item form, from the same prototype |
 | LIC-07 | nitheesh | meyyarivu | jeeva | Desktop offline license: certificate check in the desktop renderer (Meyyarivu), public-key bundling in the build (Jeeva) |
 | PTY-22 | nitheesh | ashok | | Party TDS/TCS and related-party fields feed the accounting module (ACX-06) |
