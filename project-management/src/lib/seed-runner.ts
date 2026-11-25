@@ -41,6 +41,7 @@ export const TEAM = [
   { slug: "meyyarivu", name: "Meyyarivu", title: "Frontend Lead + QA", role: "member", tint: "green" },
   { slug: "ashok", name: "Ashok", title: "QA Lead + Frontend", role: "member", tint: "amber" },
   { slug: "jeeva", name: "Jeeva", title: "DevOps Engineer", role: "member", tint: "red" },
+  { slug: "gokul", name: "Gokul", title: "Frontend Engineer", role: "member", tint: "slate" },
 ] as const;
 
 const EMAIL_DOMAIN = process.env.HUB_EMAIL_DOMAIN || "meno.team";

@@ -2,7 +2,7 @@
 
 Next.js (App Router) built as a **static SPA** (`output: 'export'`). It is a client of `meno-api` only — **no API routes, no server actions, no server-side data fetching, no secrets** (ADR-0003). The same build runs inside the Electron desktop app.
 
-Owners: Meyyarivu (foundation + transactional features), Nitheesh (admin, finance, dashboards, CRM), Ashok (masters, parties, returns, compliance, reports). Split: `docs/team/OWNERSHIP_MATRIX.md`. Read `docs/design/DESIGN_LANGUAGE.md` before any UI work.
+Owners: Meyyarivu (foundation + transactional features), Nitheesh (admin, finance, licensing), Ashok (masters, parties, returns, compliance), Gokul (pricing, GST, dashboards, reports, CRM, delivery, channels). Split: `docs/team/OWNERSHIP_MATRIX.md`. Read `docs/design/DESIGN_LANGUAGE.md` before any UI work.
 
 ## Layout
 
@@ -43,9 +43,10 @@ The sidebar menu is defined in `docs/design/NAVIGATION.md` (Dashboard + 9 groups
 
 | Feature folders | Owner |
 |---|---|
-| `auth purchase inventory pos wholesale pricing gst` + shell | Meyyarivu |
-| `company branches users settings admin dashboard accounting payments crm` | Nitheesh |
-| `catalog parties returns compliance reports` | Ashok |
+| `auth purchase inventory pos wholesale` + shell | Meyyarivu |
+| `company branches users settings admin accounting payments platform` | Nitheesh |
+| `catalog parties returns compliance` | Ashok |
+| `pricing gst dashboard reports crm delivery channels` | Gokul |
 
 Source of truth: `docs/team/OWNERSHIP_MATRIX.md`.
 

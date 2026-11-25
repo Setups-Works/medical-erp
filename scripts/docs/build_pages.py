@@ -500,7 +500,7 @@ out = ["# Page catalogue", "",
 "> Every screen MENO will have, grouped A–R (Q delivery and online, R desktop and mobile app screens). **Generated** by `scripts/docs/build_pages.py` from the page list in that script, `FEATURES.md` (phases) and `docs/team/OWNERSHIP_MATRIX.md` (owners): edit those, then re-run the script. MENO Hub shows this catalogue on its Product map with live status.",
 "",
 "- **Phase**: the phase in which the page is complete (latest phase among its features). Pages can appear earlier with partial functionality.",
-"- **Backend / Frontend / QA**: owners of the page's first feature prefix (QA is never the person who built it). Frontend is split between Meyyarivu, Nitheesh and Ashok.",
+"- **Backend / Frontend / QA**: owners of the page's first feature prefix (QA is never the person who built it). Frontend is split between Meyyarivu, Nitheesh, Ashok and Gokul.",
 "- **Roles**: SA Super Admin · OW Business Owner · BM Branch Manager · PH Pharmacist · BO Billing Operator · IM Inventory Manager · AC Accountant · WM Wholesale Manager · SR Sales Representative · AU Auditor · All = every signed-in user. Access is enforced by permissions, not by role names (ROLES_AND_DASHBOARDS.md).",
 "- **Validation**: every page follows `docs/architecture/VALIDATION_AND_BUSINESS_RULES.md`.",
 ""]

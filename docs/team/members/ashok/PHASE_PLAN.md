@@ -15,7 +15,7 @@ QA lead + frontend. Legend: **[FE]** frontend; everything else is QA. Do tasks i
 - [ ] Test vector runner contract (JSON schema) for Java + TS
 - [ ] Review the 20 draft vectors in `contracts/test-vectors/` with Prakalya: recompute by hand, mark confirmed or fix; the P0 "40 vectors" item was ticked but no files existed until 24-11-2026
 - [ ] Test vectors for CALCULATIONS.md §7–§22 with Prakalya: combined distributor bill with returns and charges, loose sale, bill-discount allocation, landed cost and suggested PTR, margin/mark-up, weighted-average valuation, returns, payment allocation, credit check, ageing and interest, reorder, expiry buckets (`contracts/test-vectors/`)
-- [ ] [FE] First screen on Meyyarivu's patterns: report filter bar + ReportPage skeleton (web `reports/`)
+- [ ] [FE] First screen on Meyyarivu's patterns: medicine list on ListPage with MSW mocks (web `catalog/`); the reports skeleton moved to Gokul
 
 ## P2 Masters
 - [ ] [FE] Medicine master screens: list, add/edit, details, generic/salt, brand, manufacturer, units + conversion, barcodes (web `catalog/`)
@@ -29,7 +29,6 @@ QA lead + frontend. Legend: **[FE]** frontend; everything else is QA. Do tasks i
 - [ ] Stock reconciliation verification queries
 - [ ] CSV import negative tests (bad rows, duplicates, unknown items)
 - [ ] [FE] Medicine export, medicine history and supplier price list screens
-- [ ] [FE] Reports centre screens: stock, batch, expiry, purchase reports with export (web `reports/`)
 
 ## P4 Retail POS & returns
 - [ ] Scenario 6 (concurrent billing, no oversell) — parallel API test
@@ -45,7 +44,6 @@ QA lead + frontend. Legend: **[FE]** frontend; everything else is QA. Do tasks i
 - [ ] Security: OWASP ZAP baseline, cross-tenant fuzzing, permission matrix tests
 - [ ] Full regression suite in CI; restore drill verification with Jeeva
 - [ ] [FE] Customer groups and account statements screens (web `parties/`)
-- [ ] [FE] Outstanding, ageing, GST and wholesale reports; analytics screens (web `reports/`)
 
 ## P6 Pilot
 - [ ] GSTR export validation, pilot defect triage, release reports

@@ -1,6 +1,6 @@
 # AGENTS.md — read this first
 
-You are working on **MENO**, a multi-tenant Pharmacy ERP (retail + wholesale) built by **Setups Works**. Six people build it, each pairing with AI agents. This file is the contract that keeps everyone's code — human or AI — consistent. Folder-level `AGENTS.md` files add detail: **read the one in every folder you touch before you change anything in it.**
+You are working on **MENO**, a multi-tenant Pharmacy ERP (retail + wholesale) built by **Setups Works**. Seven people build it, each pairing with AI agents. This file is the contract that keeps everyone's code — human or AI — consistent. Folder-level `AGENTS.md` files add detail: **read the one in every folder you touch before you change anything in it.**
 
 > **Source of truth:** GitHub Issues → _what to build and who owns it_ · `docs/` → _how to build it_ · the code → _what exists today_ · `docs/planning/CURRENT_STATE.md` → _what is done_. If they disagree, say so in your PR instead of guessing.
 

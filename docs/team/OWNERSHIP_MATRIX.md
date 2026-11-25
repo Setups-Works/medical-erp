@@ -7,7 +7,7 @@ Rules of the split:
 | Track | Who |
 |---|---|
 | **Backend** | Kamesh (core money and stock modules), Nitheesh (platform, finance, reporting, CRM, sync) |
-| **Frontend** | Three people take all the screens: **Meyyarivu** (lead: design system, app shell, auth, POS, purchase, inventory, pricing, wholesale, GST, desktop), **Nitheesh** (platform & admin, dashboards, accounting & payments, CRM), **Ashok** (medicine master, suppliers/customers/doctors, returns, compliance, reports & analytics) |
+| **Frontend** | Four people take all the screens: **Meyyarivu** (lead: design system, app shell, auth, POS, purchase, inventory, wholesale, desktop), **Nitheesh** (platform & admin, accounting & payments, licensing), **Ashok** (medicine master, suppliers/customers/doctors, returns, compliance), **Gokul** (pricing & schemes, GST screens, role dashboards, reports & analytics, CRM & engagement, delivery, online channels) |
 | **QA** | Ashok (QA lead: core modules, critical scenarios, test strategy), Meyyarivu, Prakalya, Nitheesh: each tests areas they did **not** build |
 | **DevOps** | Jeeva (also the desktop installer and integration infrastructure) |
 
@@ -21,10 +21,10 @@ Rules of the split:
 | SEC | Security | identity, audit, platform | nitheesh | meyyarivu | admin/security | jeeva | ashok |
 | AUT | Authentication & onboarding | auth, tenancy | nitheesh | meyyarivu | auth | | ashok |
 | NAV | Navigation & command search | identity | nitheesh | meyyarivu | (app shell) | | ashok |
-| DSH | Role dashboards | reporting | nitheesh | nitheesh | dashboard | | meyyarivu |
+| DSH | Role dashboards | reporting | nitheesh | gokul | dashboard | | meyyarivu |
 | CAT | Medicine master | catalog | kamesh | ashok | catalog | | prakalya |
 | PTY | Suppliers, customers, doctors | party | kamesh | ashok | parties | | prakalya |
-| PRC | Pricing, schemes, discounts | pricing | kamesh | meyyarivu | pricing | | ashok |
+| PRC | Pricing, schemes, discounts | pricing | kamesh | gokul | pricing | | ashok |
 | PUR | Purchase | purchase | kamesh | meyyarivu | purchase | | ashok |
 | INV | Inventory | inventory | kamesh | meyyarivu | inventory | | ashok |
 | IJX | Inventory journals | inventory | kamesh | meyyarivu | inventory | | ashok |
@@ -34,21 +34,21 @@ Rules of the split:
 | DOC | Sales & purchase document cycle | sales, purchase | kamesh | meyyarivu | wholesale, purchase | | ashok |
 | RET | Returns | returns | kamesh | ashok | returns | | prakalya |
 | CMP | Pharmacy compliance | compliance | kamesh | ashok | compliance | | prakalya |
-| GST | GST & statutory | taxation | kamesh | meyyarivu | gst | | ashok |
+| GST | GST & statutory | taxation | kamesh | gokul | gst | | ashok |
 | ACC | Payments & accounting | payment, accounting | nitheesh | nitheesh | payments, accounting | | ashok |
 | ACX | Full books & finance | accounting | nitheesh | nitheesh | accounting | | ashok |
-| RPT | Reports | reporting | nitheesh | ashok | reports | | meyyarivu |
-| ANX | Analytics | reporting | nitheesh | ashok | reports | | meyyarivu |
-| CRM | CRM & customer care | party, sales, notification | nitheesh | nitheesh | crm | | prakalya |
-| ENG | Engagement (campaigns) | notification | nitheesh | nitheesh | crm | | prakalya |
+| RPT | Reports | reporting | nitheesh | gokul | reports | | meyyarivu |
+| ANX | Analytics | reporting | nitheesh | gokul | reports | | meyyarivu |
+| CRM | CRM & customer care | party, sales, notification | nitheesh | gokul | crm | | prakalya |
+| ENG | Engagement (campaigns) | notification | nitheesh | gokul | crm | | prakalya |
 | NTF | Notifications | notification | nitheesh | meyyarivu | (app shell) | | ashok |
 | ADM | Administration settings | integrations, identity | nitheesh | nitheesh | admin | | meyyarivu |
 | INT | Integrations (GSP, WhatsApp, SMS, Tally) | integrations | nitheesh | | admin | jeeva | ashok |
 | DSK | Desktop app & offline | sync | nitheesh | meyyarivu | (desktop renderer) | jeeva | ashok |
 | MOB | Mobile (P7) | fieldsales | nitheesh | meyyarivu | apps/mobile | | ashok |
 | LIC | Licensing: plans, license keys, entitlements | subscription | nitheesh | nitheesh | platform, admin | | ashok |
-| DLV | Home delivery & fleet | delivery | nitheesh | nitheesh | delivery | | ashok |
-| OMN | Online channels (store page, customer app, marketplaces) | channels, integrations | nitheesh | nitheesh | channels | jeeva | meyyarivu |
+| DLV | Home delivery & fleet | delivery | nitheesh | gokul | delivery | | ashok |
+| OMN | Online channels (store page, customer app, marketplaces) | channels, integrations | nitheesh | gokul | channels | jeeva | meyyarivu |
 
 ## Feature overrides
 
@@ -94,8 +94,8 @@ QA: the Hub creates one QA task per prefix per phase ("QA: Purchase · P3") list
 | QA owner | Prefixes they test |
 |---|---|
 | Ashok (QA lead) | PRC, PUR, INV, IJX, MKT, POS, WHS, DOC, GST, ACC, ACX, AUT, NAV, NTF, INT, DSK, MOB, PLT, DLV, LIC + 15 critical scenarios |
-| Meyyarivu | DSH, ADM, OMN (Nitheesh's screens) and RPT, ANX (Ashok's screens) |
-| Prakalya | CAT, PTY, RET, CMP (Ashok's screens; she wrote their stories) and CRM, ENG (Nitheesh's screens) |
+| Meyyarivu | ADM (Nitheesh's screens) and DSH, RPT, ANX, OMN (Gokul's screens) |
+| Prakalya | CAT, PTY, RET, CMP (Ashok's screens; she wrote their stories) and CRM, ENG (Gokul's screens) |
 | Nitheesh | Final QA sign-off on every release |
 
 ## Backend modules by owner
@@ -109,6 +109,7 @@ QA: the Hub creates one QA task per prefix per phase ("QA: Purchase · P3") list
 
 | Owner | `apps/web/src/features/` |
 |---|---|
-| Meyyarivu | auth, purchase, inventory, pos, wholesale, pricing, gst + app shell, `packages/ui`, page patterns |
-| Nitheesh | company, branches, users, settings, admin, dashboard, accounting, payments, crm, delivery, channels, platform |
-| Ashok | catalog, parties, returns, compliance, reports |
+| Meyyarivu | auth, purchase, inventory, pos, wholesale + app shell, `packages/ui`, page patterns |
+| Nitheesh | company, branches, users, settings, admin, accounting, payments, platform |
+| Ashok | catalog, parties, returns, compliance |
+| Gokul | pricing, gst, dashboard, reports, crm, delivery, channels |

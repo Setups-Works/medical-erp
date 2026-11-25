@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**256 tasks** · P0: 3 · P1: 4 · P2: 26 · P3: 48 · P4: 58 · P5: 78 · P6: 34 · P7: 5
+**258 tasks** · P0: 3 · P1: 4 · P2: 26 · P3: 48 · P4: 60 · P5: 78 · P6: 34 · P7: 5
 
 ## P0 · Foundation (3)
 
@@ -51,7 +51,7 @@
 | 28 | PTY-19 Party licences as rows: drug licence form + number + valid from/to + scan upload, FSSAI licence, NDPS licence; expiry reminders 30/15/7 days (verify) | Feature | Ashok |
 | 29 | PTY-24 Party GST fields: registration type (regular, composition, unregistered, SEZ, overseas) and default rate mode on their bills (exclusive / inclusive of GST); composition and unregistered suppliers give no input tax credit | Feature | Ashok |
 | 30 | DOC-04 Masters for transporters, terms & conditions, narrations, modes of payment, salesman/agent | Feature | Meyyarivu |
-| 31 | GST-09 GST configuration: registrations per company, rate master, reverse-charge and composition settings (data, never hard-coded) | Feature | Meyyarivu |
+| 31 | GST-09 GST configuration: registrations per company, rate master, reverse-charge and composition settings (data, never hard-coded) | Feature | Gokul |
 | 32 | CAT-06 Categories, therapeutic class, storage condition (cold-chain 2–8 °C, below 25 °C) | Feature | Ashok |
 | 33 | Synthetic seed data for staging (items, parties, batches) that never uses real customer data | Readiness | — |
 
@@ -67,10 +67,10 @@
 | 39 | CAT-28 Discontinued items: flag with date and reason; blocks new purchase, PO and sale; returns allowed per setting; shown in search with a badge; replacement item suggested | Feature | Ashok |
 | 40 | PTY-10 Party opening balances | Feature | Ashok |
 | 41 | PTY-20 Multiple bank accounts per party with IFSC validation and auto-fill, UPI ID, masked and encrypted account no.; bank-detail changes need approval (maker-checker) and are audited | Feature | Ashok |
-| 42 | PRC-01 Batch-wise MRP, PTR, PTS, purchase rate, selling rate | Feature | Meyyarivu |
-| 43 | PRC-04 Free-quantity schemes (10+1, 20+3) on purchase and sale | Feature | Meyyarivu |
-| 44 | PRC-05 Scheme discount %, trade discount, cash discount (verify) order of application | Feature | Meyyarivu |
-| 45 | PRC-12 Product price defaults: discount received %, discount allowed %, maximum discount % per item (lower of item and role cap wins) | Feature | Meyyarivu |
+| 42 | PRC-01 Batch-wise MRP, PTR, PTS, purchase rate, selling rate | Feature | Gokul |
+| 43 | PRC-04 Free-quantity schemes (10+1, 20+3) on purchase and sale | Feature | Gokul |
+| 44 | PRC-05 Scheme discount %, trade discount, cash discount (verify) order of application | Feature | Gokul |
+| 45 | PRC-12 Product price defaults: discount received %, discount allowed %, maximum discount % per item (lower of item and role cap wins) | Feature | Gokul |
 | 46 | PUR-01 Purchase order (manual or from reorder suggestions), email/WhatsApp PO to supplier | Feature | Meyyarivu |
 | 47 | PUR-02 Purchase invoice entry: supplier inv no/date, lines with batch, expiry, MRP, PTR, qty, free qty, discounts, GST | Feature | Meyyarivu |
 | 48 | PUR-04 Distributor CSV / Excel purchase import with item mapping memory (supplier item code → our item) | Feature | Meyyarivu |
@@ -88,9 +88,9 @@
 | 60 | INV-12 Nightly reconciliation of balances vs ledger, alerts on drift | Feature | Meyyarivu |
 | 61 | MKT-01 Short book / shortage list: items marked at the counter when out of stock or low; one click turns it into a PO per supplier | Feature | Meyyarivu |
 | 62 | DOC-02 Full purchase cycle: Purchase order → Purchase challan (goods without bill) → Purchase bill → Return → Debit note | Feature | Meyyarivu |
-| 63 | GST-01 Intra/inter-state determination, CGST/SGST/IGST, cess | Feature | Meyyarivu |
-| 64 | GST-11 Invoice GST validation before posting (GSTIN format/state, place of supply, HSN, rate, totals) | Feature | Meyyarivu |
-| 65 | GST-15 GST rate change roll-over: effective-dated bulk HSN rate change, drafts and open orders re-priced on the change date, MRP relabel prompts for old stock, before/after report (verify) confirm rates with CA | Feature | Meyyarivu |
+| 63 | GST-01 Intra/inter-state determination, CGST/SGST/IGST, cess | Feature | Gokul |
+| 64 | GST-11 Invoice GST validation before posting (GSTIN format/state, place of supply, HSN, rate, totals) | Feature | Gokul |
+| 65 | GST-15 GST rate change roll-over: effective-dated bulk HSN rate change, drafts and open orders re-priced on the change date, MRP relabel prompts for old stock, before/after report (verify) confirm rates with CA | Feature | Gokul |
 | 66 | CAT-07 Rack / shelf / bin location per branch | Feature | Ashok |
 | 67 | CAT-10 Global medicine database seed (common Indian brands) to speed up item creation (verify) licensing of data source | Feature | Ashok |
 | 68 | CAT-11 Item merge (duplicate cleanup) with history preserved | Feature | Ashok |
@@ -102,13 +102,13 @@
 | 74 | PTY-11 Supplier price list: agreed / last rates per supplier and item, shown during purchase | Feature | Ashok |
 | 75 | PTY-15 GSTIN fetch on supplier and customer forms: verify a GSTIN and fill legal/trade name, state, address and GST status (Active / Cancelled / Suspended); cancelled GSTIN warns at purchase and sale (verify) GSP provider and cost | Feature | Ashok |
 | 76 | PTY-27 Party default discounts (discount %, cash discount %, special discount %) copied to purchase and sale documents | Feature | Ashok |
-| 77 | PRC-09 Price change history | Feature | Meyyarivu |
+| 77 | PRC-09 Price change history | Feature | Gokul |
 | 78 | PUR-03 Goods receipt (GRN) with short/excess/damaged quantities | Feature | Meyyarivu |
 | 79 | PUR-12 Purchase dashboard: open POs, pending GRNs, payables due, price changes | Feature | Meyyarivu |
 | 80 | PUR-14 Purchase verification: match supplier bill against PO and GRN (qty, batch, rate) before posting | Feature | Meyyarivu |
 | 81 | Nightly stock reconciliation job with alert on drift | Readiness | — |
 
-## P4 · Retail POS & returns (58)
+## P4 · Retail POS & returns (60)
 
 | Step | Task | Type | With |
 |---|---|---|---|
@@ -118,10 +118,10 @@
 | 85 | `compliance`: prescriptions, Schedule H1 register, restricted-medicine guard | Groundwork | — |
 | 86 | CAT-05 Loose / strip sale: sell by tablet with conversion factor, loose MRP | Feature | Ashok |
 | 87 | PTY-32 Doctor master fields: qualification, registration no. + state council (unique together), specialisation, clinic, address with PIN auto-fill | Feature | Ashok |
-| 88 | PRC-06 Item/category/party-wise discount rules, max discount per role | Feature | Meyyarivu |
-| 89 | PRC-07 Bill-level discount and round-off | Feature | Meyyarivu |
-| 90 | PRC-08 Never sell above MRP (hard rule) | Feature | Meyyarivu |
-| 91 | PRC-14 Totals breakdown on every invoice: sub total, item discount, bill discount, returns, taxable value, CGST / SGST / IGST / cess, charges, round off, grand total, each shown separately and never merged | Feature | Meyyarivu |
+| 88 | PRC-06 Item/category/party-wise discount rules, max discount per role | Feature | Gokul |
+| 89 | PRC-07 Bill-level discount and round-off | Feature | Gokul |
+| 90 | PRC-08 Never sell above MRP (hard rule) | Feature | Gokul |
+| 91 | PRC-14 Totals breakdown on every invoice: sub total, item discount, bill discount, returns, taxable value, CGST / SGST / IGST / cess, charges, round off, grand total, each shown separately and never merged | Feature | Gokul |
 | 92 | INV-03 FEFO batch suggestion (first expiry first out) at sale | Feature | Meyyarivu |
 | 93 | INV-04 Expiry block: cannot sell expired; warn within N days (setting) | Feature | Meyyarivu |
 | 94 | INV-18 FEFO override with an authorised reason (recorded in the movement and audit log) | Feature | Meyyarivu |
@@ -143,162 +143,164 @@
 | 110 | POS-22 Search by manufacturer and by salt in POS search (in addition to name/barcode) | Feature | Meyyarivu |
 | 111 | POS-27 Reprint marking: reprints show "Duplicate copy" with reprint count, user and time audited | Feature | Meyyarivu |
 | 112 | POS-28 POS line columns: item with pack, manufacturer, HSN and schedule badge; batch · expiry; qty; MRP; disc % and ₹; taxable; GST % and ₹; amount; column set configurable per counter (narrow screens hide optional columns) | Feature | Meyyarivu |
-| 113 | RET-01 Sales return against invoice (batch-aware), stock back only if saleable | Feature | Ashok |
-| 114 | RET-02 Credit note (refund, adjust against outstanding, or future bills) | Feature | Ashok |
-| 115 | RET-03 Purchase return to supplier with debit note | Feature | Ashok |
-| 116 | RET-04 Expiry return / breakage claim to supplier (batch list, claim tracking until credit note received) | Feature | Ashok |
-| 117 | RET-08 Return inspection: decide saleable / damaged / expired per line before stock re-entry | Feature | Ashok |
-| 118 | DOC-07 Invoice print content standard: both parties' DL nos., GSTINs and state codes, invoice / order / L.R. / due date, line columns (S. no., product, packing, manufacturer, HSN, batch, expiry, qty, free, MRP, rate, disc %, GST %, amount), section headings, tax summary by rate, sub total, item discount, returns, taxable, tax heads, charges, round off, grand total, amount in words, terms from the terms master, declaration, E.&O.E., checked by, authorised signatory, bank / UPI QR, page x of y with carried-forward totals | Feature | Meyyarivu |
-| 119 | DOC-08 Print formats: laser A4 / A5, dot-matrix on pre-printed stationery (fixed positions, carry-forward per page), thermal 2" / 3"; template chosen per document type, counter and party | Feature | Meyyarivu |
-| 120 | CMP-01 Schedule H1 register (auto from sales: patient, doctor, item, qty, date) — printable/exportable | Feature | Ashok |
-| 121 | CMP-03 Prescription storage (image), linked to invoice, retention policy | Feature | Ashok |
-| 122 | CMP-05 Drug licence numbers printed on invoices; licence expiry alerts for own branches | Feature | Ashok |
-| 123 | CMP-09 Restricted-medicine alerts at billing: schedule warnings and required steps | Feature | Ashok |
-| 124 | GST-02 HSN summary on invoices and reports | Feature | Meyyarivu |
-| 125 | CAT-09 Generic substitutes (same composition + strength) shown at POS when out of stock | Feature | Ashok |
-| 126 | CAT-12 Banned / recalled drug list with blocking at sale and purchase (verify) CDSCO list maintenance | Feature | Ashok |
-| 127 | CAT-22 Barcode lookup for unknown items: when a scanned barcode is not in the tenant catalogue, look up own barcodes (CAT-04) → Indian medicine data (CAT-10 / INT-11); a hit pre-fills a draft item, a miss opens quick-create with the barcode filled. Never blocks billing | Feature | Ashok |
-| 128 | PTY-05 Doctor master (name, registration no., clinic) for prescriptions and doctor-wise reports | Feature | Ashok |
-| 129 | PTY-30 Retail patient profile on the customer: age or date of birth, gender, allergies, chronic conditions, regular doctor, ABHA no.; permission-gated, never logged, consent recorded (verify) | Feature | Ashok |
-| 130 | PUR-19 Merge purchase orders: receive several open POs of one supplier into one purchase invoice or challan; pending-PO-lines report per supplier and item | Feature | Meyyarivu |
-| 131 | INV-19 Batch MRP revision (price change notified by the manufacturer): new MRP from a date, relabel note, old stock rule, full audit | Feature | Meyyarivu |
-| 132 | MKT-04 Dump / broken / damaged stock bucket, kept separate from saleable stock, feeding expiry and breakage claims | Feature | Meyyarivu |
-| 133 | POS-11 WhatsApp / SMS invoice share (PDF link) | Feature | Meyyarivu |
-| 134 | POS-16 Substitute suggestion when item out of stock | Feature | Meyyarivu |
-| 135 | RET-06 Return reasons & approval limits | Feature | Ashok |
-| 136 | CMP-04 Pharmacist on duty recorded on each bill (registration no.) | Feature | Ashok |
-| 137 | CMP-06 Banned/recalled drug block (see CAT-12) | Feature | Ashok |
-| 138 | CMP-12 NPPA / DPCO ceiling price check: ceiling price table (effective-dated); warn at purchase when batch MRP exceeds the ceiling, block sale once confirmed (verify) source and update process | Feature | Ashok |
-| 139 | RET-09 Counter return without the original bill, only when the store policy setting allows it, at the lower of last selling price and MRP, with approval (verify) | Feature | Ashok |
+| 113 | POS-30 Walk-in customer details: optional name, mobile, age, gender and address on a walk-in bill, stored as a snapshot on the bill (no customer record); patient name required when the bill has a Schedule H1 / X line; a mobile that matches a saved customer offers to link the bill; "Save as customer" creates a Retail (person) customer; walk-in mobiles with repeat visits listed for conversion (CRM-10); printed on the bill; searchable by mobile for returns and reprints; DPDP notice and consent before storing the mobile (verify) | Feature | Meyyarivu |
+| 114 | POS-31 Add and edit a customer from POS: F3 picker shows "+ New customer" (Alt+N), and a typed unknown mobile offers "Add as new customer"; dialog with mobile, name, age, gender, address + PIN, regular doctor, allergies; saves a Retail (person) customer into the same customer master and selects it on the bill; "Edit customer" on the selected customer; duplicate mobile offers the existing customer instead; walk-in details already typed are carried into the dialog; consent recorded (verify); old bills keep their snapshot | Feature | Meyyarivu |
+| 115 | RET-01 Sales return against invoice (batch-aware), stock back only if saleable | Feature | Ashok |
+| 116 | RET-02 Credit note (refund, adjust against outstanding, or future bills) | Feature | Ashok |
+| 117 | RET-03 Purchase return to supplier with debit note | Feature | Ashok |
+| 118 | RET-04 Expiry return / breakage claim to supplier (batch list, claim tracking until credit note received) | Feature | Ashok |
+| 119 | RET-08 Return inspection: decide saleable / damaged / expired per line before stock re-entry | Feature | Ashok |
+| 120 | DOC-07 Invoice print content standard: both parties' DL nos., GSTINs and state codes, invoice / order / L.R. / due date, line columns (S. no., product, packing, manufacturer, HSN, batch, expiry, qty, free, MRP, rate, disc %, GST %, amount), section headings, tax summary by rate, sub total, item discount, returns, taxable, tax heads, charges, round off, grand total, amount in words, terms from the terms master, declaration, E.&O.E., checked by, authorised signatory, bank / UPI QR, page x of y with carried-forward totals | Feature | Meyyarivu |
+| 121 | DOC-08 Print formats: laser A4 / A5, dot-matrix on pre-printed stationery (fixed positions, carry-forward per page), thermal 2" / 3"; template chosen per document type, counter and party | Feature | Meyyarivu |
+| 122 | CMP-01 Schedule H1 register (auto from sales: patient, doctor, item, qty, date) — printable/exportable | Feature | Ashok |
+| 123 | CMP-03 Prescription storage (image), linked to invoice, retention policy | Feature | Ashok |
+| 124 | CMP-05 Drug licence numbers printed on invoices; licence expiry alerts for own branches | Feature | Ashok |
+| 125 | CMP-09 Restricted-medicine alerts at billing: schedule warnings and required steps | Feature | Ashok |
+| 126 | GST-02 HSN summary on invoices and reports | Feature | Gokul |
+| 127 | CAT-09 Generic substitutes (same composition + strength) shown at POS when out of stock | Feature | Ashok |
+| 128 | CAT-12 Banned / recalled drug list with blocking at sale and purchase (verify) CDSCO list maintenance | Feature | Ashok |
+| 129 | CAT-22 Barcode lookup for unknown items: when a scanned barcode is not in the tenant catalogue, look up own barcodes (CAT-04) → Indian medicine data (CAT-10 / INT-11); a hit pre-fills a draft item, a miss opens quick-create with the barcode filled. Never blocks billing | Feature | Ashok |
+| 130 | PTY-05 Doctor master (name, registration no., clinic) for prescriptions and doctor-wise reports | Feature | Ashok |
+| 131 | PTY-30 Retail patient profile on the customer: age or date of birth, gender, allergies, chronic conditions, regular doctor, ABHA no.; permission-gated, never logged, consent recorded (verify) | Feature | Ashok |
+| 132 | PUR-19 Merge purchase orders: receive several open POs of one supplier into one purchase invoice or challan; pending-PO-lines report per supplier and item | Feature | Meyyarivu |
+| 133 | INV-19 Batch MRP revision (price change notified by the manufacturer): new MRP from a date, relabel note, old stock rule, full audit | Feature | Meyyarivu |
+| 134 | MKT-04 Dump / broken / damaged stock bucket, kept separate from saleable stock, feeding expiry and breakage claims | Feature | Meyyarivu |
+| 135 | POS-11 WhatsApp / SMS invoice share (PDF link) | Feature | Meyyarivu |
+| 136 | POS-16 Substitute suggestion when item out of stock | Feature | Meyyarivu |
+| 137 | RET-06 Return reasons & approval limits | Feature | Ashok |
+| 138 | CMP-04 Pharmacist on duty recorded on each bill (registration no.) | Feature | Ashok |
+| 139 | CMP-06 Banned/recalled drug block (see CAT-12) | Feature | Ashok |
+| 140 | CMP-12 NPPA / DPCO ceiling price check: ceiling price table (effective-dated); warn at purchase when batch MRP exceeds the ceiling, block sale once confirmed (verify) source and update process | Feature | Ashok |
+| 141 | RET-09 Counter return without the original bill, only when the store policy setting allows it, at the lower of last selling price and MRP, with approval (verify) | Feature | Ashok |
 
 ## P5 · Wholesale, finance, offline (78)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 140 | Wholesale orders → pick → invoice, price lists, schemes, credit control, reservations | Groundwork | — |
-| 141 | e-invoice / e-way bill via the GSP adapter (`integrations/gst`) | Groundwork | — |
-| 142 | Stock transfers, stock count, stock aging | Groundwork | — |
-| 143 | Server-side validation used by `sync` push (with Nitheesh) | Groundwork | — |
-| 144 | PLT-26 Migration importers for exports of popular software (Marg, Tally, Busy, Vyapar, GoFrugal): items, parties, opening stock by batch, outstanding bills, ledgers with opening balances; dry run with error report | Feature | Ashok, Jeeva |
-| 145 | PLT-29 Head-office control for chains: items, HSN / GST, prices, offers, users and settings managed centrally and pushed to outlets; which fields an outlet may override is a setting; push log per outlet | Feature | Nitheesh |
-| 146 | PTY-06 Party ledger, outstanding, ageing | Feature | Ashok |
-| 147 | PTY-07 Credit limit & credit days enforcement with override approval | Feature | Ashok |
-| 148 | PTY-13 Customer and supplier account statements (date range, PDF, email/WhatsApp) | Feature | Ashok |
-| 149 | PTY-34 Credit rules beyond amount: limit by value, number of open bills and oldest bill age; over-limit approval from the owner's phone; average payment days shown at billing | Feature | Ashok |
-| 150 | PRC-02 Price lists / rate levels (A/B/C retailers, institutions, hospitals) | Feature | Meyyarivu |
-| 151 | PRC-15 Offer engine: bill value, item, item group, category, manufacturer, combo, buy-X-get-Y, accumulated purchase, time-bound (hours / days), customer segment and near-expiry batch offers; priority and stacking rules; usage report | Feature | Meyyarivu |
-| 152 | PUR-11 Reorder suggestions (min/max, sales velocity, lead time) | Feature | Meyyarivu |
-| 153 | PUR-20 Chain indents: outlets raise indents (manual or from min / max); head office consolidates them into supplier POs or fulfils from the warehouse by stock transfer; indent status per outlet | Feature | Meyyarivu |
-| 154 | INV-08 Branch-to-branch stock transfer (dispatch → in transit → receive) with GST delivery challan / inter-state invoice (verify) | Feature | Meyyarivu |
-| 155 | POS-14 Shift open/close, cash denomination count, day-end report per counter | Feature | Meyyarivu |
-| 156 | POS-15 Offline billing on desktop with sync (see OFFLINE_SYNC.md) | Feature | Meyyarivu |
-| 157 | RET-05 Wholesale: accept expiry/breakage returns from retailers per policy | Feature | Ashok |
-| 158 | WHS-01 Sales order entry (phone/WhatsApp orders) with price list, schemes, credit check | Feature | Meyyarivu |
-| 159 | WHS-02 Order → pick list → invoice (partial fulfilment, backorders) | Feature | Meyyarivu |
-| 160 | WHS-03 Bulk GST tax invoice (A4), with DL nos. of both parties printed | Feature | Meyyarivu |
-| 161 | WHS-04 Credit sales with due dates, credit limit enforcement | Feature | Meyyarivu |
-| 162 | WHS-06 E-invoice (IRN + QR) generation via IRP/GSP (verify) turnover threshold | Feature | Meyyarivu |
-| 163 | WHS-15 Combined distributor bill: one printed document with sections Sales, Less sales return, Less breakage / expiry return, Add replacement; each return section is a credit note with its own number linked to the invoice, replacement lines are invoice lines (RET-07), the settlement is netted (verify) CA | Feature | Meyyarivu |
-| 164 | WHS-16 Dispatch details on invoices: order no. + date, L.R. no. + date, transporter, vehicle no., number of cases, weight; printed and passed to the e-way bill | Feature | Meyyarivu |
-| 165 | WHS-17 Stock & sales statement (secondary sales) per manufacturer / company: opening, purchase, purchase return, sales, sales return, free, closing by item for a month; Excel / PDF / email to the company or C&F | Feature | Meyyarivu |
-| 166 | WHS-19 Dispatch checking (item checker): scan every item and batch against the invoice before dispatch on web or phone, mismatch alerts, several checkers in parallel, checker name on the packing slip; same scan for GRN check-in with rack allocation | Feature | Meyyarivu |
-| 167 | DOC-01 Full sales cycle: Quotation → Sales order → Delivery challan → Invoice → Return → Credit note (convert any step to the next, partial conversion supported) | Feature | Meyyarivu |
-| 168 | DOC-06 Additional charges on sales and purchase invoices (freight, insurance, packing, other): amount, GST treatment from the setting `billing.charges_gst` (verify), posted to its own ledger; on purchase, allocated into landed cost (PUR-06) | Feature | Meyyarivu |
-| 169 | CMP-07 Data privacy: patient data minimisation, consent, deletion requests (DPDP Act) | Feature | Ashok |
-| 170 | GST-06 E-invoice and e-way bill (see WHS-06/07) | Feature | Meyyarivu |
-| 171 | PTY-04 Drug licence expiry tracking & block sale to retailers with expired licence | Feature | Ashok |
-| 172 | PTY-12 Customer groups (individual, retailer, hospital, institution) with default price list, discount and credit terms | Feature | Ashok |
-| 173 | PTY-14 Distributor rate contracts (terms of trade): agreed rate, scheme, discount and credit days per supplier + item, valid from / to; purchase entry flags deviations (extends PTY-11) | Feature | Ashok |
-| 174 | PTY-21 Per-party payment reminders: schedule (N days before due, on due date, custom) and channels (email, WhatsApp, SMS); supplier reminders are for us, customer reminders go to the customer | Feature | Ashok |
-| 175 | PTY-26 Transporter master and party defaults (transporter, mode, vehicle type) used by GRN, delivery and e-way bill | Feature | Ashok |
-| 176 | PTY-31 Party merge (duplicate cleanup) with ledgers, documents and history preserved | Feature | Ashok |
-| 177 | PTY-33 Party self-registration link: send a link; the retailer or customer fills GSTIN, licences, address and contacts; staff review and approve before the party is active | Feature | Ashok |
-| 178 | PRC-03 Margin-based selling price rules (e.g. PTR = MRP − 20 %) | Feature | Meyyarivu |
-| 179 | PRC-10 Value-based schemes (spend ₹X, get Y % or free goods) | Feature | Meyyarivu |
-| 180 | PRC-11 Company-wise (manufacturer-wise) discount rules for wholesale | Feature | Meyyarivu |
-| 181 | PRC-13 Minimum / maximum mark-up % per item (warn below cost + min mark-up, block below cost (verify) policy) and product commission % | Feature | Meyyarivu |
-| 182 | PUR-06 Landed cost (freight, other charges) allocation | Feature | Meyyarivu |
-| 183 | PUR-09 Rate difference / price change alerts vs last purchase | Feature | Meyyarivu |
-| 184 | PUR-15 Supplier price comparison for an item across suppliers and time | Feature | Meyyarivu |
-| 185 | PUR-21 Purchase inbox: a dedicated email address or connected mailbox receives distributor CSV / PDF bills, auto-creates draft purchases with item mapping, flags rate changes | Feature | Ashok, Jeeva |
-| 186 | INV-09 Physical stock count / cycle count with variance posting | Feature | Meyyarivu |
-| 187 | INV-13 Dead / slow-moving stock report | Feature | Meyyarivu |
-| 188 | INV-15 Barcode label printing for loose/repacked items | Feature | Meyyarivu |
-| 189 | INV-16 Stock aging: by inward date and by expiry bucket | Feature | Meyyarivu |
-| 190 | INV-17 Stock reservation for confirmed orders and held bills (available = on hand − reserved) | Feature | Meyyarivu |
-| 191 | INV-21 Dosage labels: print a medicine label with patient name, dose, frequency, timing and instructions from the bill line (verify) pharmacist review of wording | Feature | Meyyarivu |
-| 192 | INV-22 Stock reallocation: suggests moving non-moving or short-expiry stock to branches with demand or to the warehouse; one click creates the transfer | Feature | Meyyarivu |
-| 193 | IJX-01 Stock inward / outward vouchers (non-purchase receipts and issues, e.g. samples, free goods from company) | Feature | Meyyarivu |
-| 194 | MKT-06 Multi-warehouse within a branch (godown, cold room, display) with location-level stock | Feature | Meyyarivu |
-| 195 | MKT-08 Customisable keyboard shortcuts per user (`/me/shortcuts`): change any key from KEYBOARD_SHORTCUTS.md, conflict check, reset to default, synced to desktop | Feature | Meyyarivu |
-| 196 | POS-08 UPI QR on screen / on bill (static VPA QR with amount) | Feature | Meyyarivu |
-| 197 | POS-17 Repeat last bill for a customer (chronic refill) | Feature | Meyyarivu |
-| 198 | POS-19 Estimate / quotation convertible to bill | Feature | Meyyarivu |
-| 199 | POS-23 One-click generic conversion: switch every branded line on a bill to an in-stock generic with the same salts + strength (CAT-15); show patient saving and margin per line; pharmacist confirms each swap; extends CAT-09 / POS-16 (verify) substitution rules | Feature | Meyyarivu |
-| 200 | POS-24 Counter recommendations: among same-composition alternatives, rank by near-expiry batch and margin (configurable weights, never above MRP) | Feature | Meyyarivu |
-| 201 | POS-25 Invoice verification QR: unique QR on every printed invoice opening a read-only verification page (number, date, total, store); no patient data | Feature | Meyyarivu |
-| 202 | POS-26 Service billing: non-stock service items (BP / sugar check, injection charge, consultation fee, delivery charge) with own SAC and GST, no stock movement (verify) SAC / GST rates | Feature | Meyyarivu |
-| 203 | POS-29 Multi-firm billing: one counter billing under different firms (companies / GSTINs) of the same tenant; firm picked per bill or by item rule; separate series, books and stock (extends PLT-02) | Feature | Meyyarivu |
-| 204 | RET-07 Replacement management: replace returned goods instead of credit note | Feature | Ashok |
-| 205 | WHS-05 Delivery challan, dispatch, delivery tracking (packed, dispatched, delivered) | Feature | Meyyarivu |
-| 206 | WHS-07 E-way bill generation for consignments above threshold (verify) | Feature | Meyyarivu |
-| 207 | WHS-08 Retailer-wise / item-wise scheme overrides | Feature | Meyyarivu |
-| 208 | WHS-09 Salesman assignment and commission report | Feature | Meyyarivu |
-| 209 | WHS-13 Retailer claims: short supply, damage, rate difference; resolved by credit note | Feature | Meyyarivu |
-| 210 | WHS-20 Packing slip, parcel and dispatch register: packing slip per case, parcel register, L.R. update after dispatch, delivery acknowledgement (POD) report | Feature | Meyyarivu |
-| 211 | WHS-21 Collection tagging: assign outstanding bills to salesmen or collectors, print a collection sheet, record collections against it, assigned-vs-collected report | Feature | Meyyarivu |
-| 212 | DOC-05 Document print designer (choose fields, logo, terms, copies) | Feature | Meyyarivu |
-| 213 | CMP-08 Patient prescription history (consent-based, minimum data) | Feature | Ashok |
-| 214 | CMP-14 Expired / damaged stock destruction record: batches, quantities, date, method, witnesses, linked to the write-off adjustment (verify) | Feature | Ashok |
-| 215 | CAT-26 Bundles / kits: one sellable line made of component items, stock taken from components | Feature | Ashok |
-| 216 | IJX-03 Batch category master (e.g. "cold chain", "high value") for reporting | Feature | Meyyarivu |
-| 217 | POS-13 Cash drawer open, customer display (pole) | Feature | Meyyarivu |
+| 142 | Wholesale orders → pick → invoice, price lists, schemes, credit control, reservations | Groundwork | — |
+| 143 | e-invoice / e-way bill via the GSP adapter (`integrations/gst`) | Groundwork | — |
+| 144 | Stock transfers, stock count, stock aging | Groundwork | — |
+| 145 | Server-side validation used by `sync` push (with Nitheesh) | Groundwork | — |
+| 146 | PLT-26 Migration importers for exports of popular software (Marg, Tally, Busy, Vyapar, GoFrugal): items, parties, opening stock by batch, outstanding bills, ledgers with opening balances; dry run with error report | Feature | Ashok, Jeeva |
+| 147 | PLT-29 Head-office control for chains: items, HSN / GST, prices, offers, users and settings managed centrally and pushed to outlets; which fields an outlet may override is a setting; push log per outlet | Feature | Nitheesh |
+| 148 | PTY-06 Party ledger, outstanding, ageing | Feature | Ashok |
+| 149 | PTY-07 Credit limit & credit days enforcement with override approval | Feature | Ashok |
+| 150 | PTY-13 Customer and supplier account statements (date range, PDF, email/WhatsApp) | Feature | Ashok |
+| 151 | PTY-34 Credit rules beyond amount: limit by value, number of open bills and oldest bill age; over-limit approval from the owner's phone; average payment days shown at billing | Feature | Ashok |
+| 152 | PRC-02 Price lists / rate levels (A/B/C retailers, institutions, hospitals) | Feature | Gokul |
+| 153 | PRC-15 Offer engine: bill value, item, item group, category, manufacturer, combo, buy-X-get-Y, accumulated purchase, time-bound (hours / days), customer segment and near-expiry batch offers; priority and stacking rules; usage report | Feature | Gokul |
+| 154 | PUR-11 Reorder suggestions (min/max, sales velocity, lead time) | Feature | Meyyarivu |
+| 155 | PUR-20 Chain indents: outlets raise indents (manual or from min / max); head office consolidates them into supplier POs or fulfils from the warehouse by stock transfer; indent status per outlet | Feature | Meyyarivu |
+| 156 | INV-08 Branch-to-branch stock transfer (dispatch → in transit → receive) with GST delivery challan / inter-state invoice (verify) | Feature | Meyyarivu |
+| 157 | POS-14 Shift open/close, cash denomination count, day-end report per counter | Feature | Meyyarivu |
+| 158 | POS-15 Offline billing on desktop with sync (see OFFLINE_SYNC.md) | Feature | Meyyarivu |
+| 159 | RET-05 Wholesale: accept expiry/breakage returns from retailers per policy | Feature | Ashok |
+| 160 | WHS-01 Sales order entry (phone/WhatsApp orders) with price list, schemes, credit check | Feature | Meyyarivu |
+| 161 | WHS-02 Order → pick list → invoice (partial fulfilment, backorders) | Feature | Meyyarivu |
+| 162 | WHS-03 Bulk GST tax invoice (A4), with DL nos. of both parties printed | Feature | Meyyarivu |
+| 163 | WHS-04 Credit sales with due dates, credit limit enforcement | Feature | Meyyarivu |
+| 164 | WHS-06 E-invoice (IRN + QR) generation via IRP/GSP (verify) turnover threshold | Feature | Meyyarivu |
+| 165 | WHS-15 Combined distributor bill: one printed document with sections Sales, Less sales return, Less breakage / expiry return, Add replacement; each return section is a credit note with its own number linked to the invoice, replacement lines are invoice lines (RET-07), the settlement is netted (verify) CA | Feature | Meyyarivu |
+| 166 | WHS-16 Dispatch details on invoices: order no. + date, L.R. no. + date, transporter, vehicle no., number of cases, weight; printed and passed to the e-way bill | Feature | Meyyarivu |
+| 167 | WHS-17 Stock & sales statement (secondary sales) per manufacturer / company: opening, purchase, purchase return, sales, sales return, free, closing by item for a month; Excel / PDF / email to the company or C&F | Feature | Meyyarivu |
+| 168 | WHS-19 Dispatch checking (item checker): scan every item and batch against the invoice before dispatch on web or phone, mismatch alerts, several checkers in parallel, checker name on the packing slip; same scan for GRN check-in with rack allocation | Feature | Meyyarivu |
+| 169 | DOC-01 Full sales cycle: Quotation → Sales order → Delivery challan → Invoice → Return → Credit note (convert any step to the next, partial conversion supported) | Feature | Meyyarivu |
+| 170 | DOC-06 Additional charges on sales and purchase invoices (freight, insurance, packing, other): amount, GST treatment from the setting `billing.charges_gst` (verify), posted to its own ledger; on purchase, allocated into landed cost (PUR-06) | Feature | Meyyarivu |
+| 171 | CMP-07 Data privacy: patient data minimisation, consent, deletion requests (DPDP Act) | Feature | Ashok |
+| 172 | GST-06 E-invoice and e-way bill (see WHS-06/07) | Feature | Gokul |
+| 173 | PTY-04 Drug licence expiry tracking & block sale to retailers with expired licence | Feature | Ashok |
+| 174 | PTY-12 Customer groups (individual, retailer, hospital, institution) with default price list, discount and credit terms | Feature | Ashok |
+| 175 | PTY-14 Distributor rate contracts (terms of trade): agreed rate, scheme, discount and credit days per supplier + item, valid from / to; purchase entry flags deviations (extends PTY-11) | Feature | Ashok |
+| 176 | PTY-21 Per-party payment reminders: schedule (N days before due, on due date, custom) and channels (email, WhatsApp, SMS); supplier reminders are for us, customer reminders go to the customer | Feature | Ashok |
+| 177 | PTY-26 Transporter master and party defaults (transporter, mode, vehicle type) used by GRN, delivery and e-way bill | Feature | Ashok |
+| 178 | PTY-31 Party merge (duplicate cleanup) with ledgers, documents and history preserved | Feature | Ashok |
+| 179 | PTY-33 Party self-registration link: send a link; the retailer or customer fills GSTIN, licences, address and contacts; staff review and approve before the party is active | Feature | Ashok |
+| 180 | PRC-03 Margin-based selling price rules (e.g. PTR = MRP − 20 %) | Feature | Gokul |
+| 181 | PRC-10 Value-based schemes (spend ₹X, get Y % or free goods) | Feature | Gokul |
+| 182 | PRC-11 Company-wise (manufacturer-wise) discount rules for wholesale | Feature | Gokul |
+| 183 | PRC-13 Minimum / maximum mark-up % per item (warn below cost + min mark-up, block below cost (verify) policy) and product commission % | Feature | Gokul |
+| 184 | PUR-06 Landed cost (freight, other charges) allocation | Feature | Meyyarivu |
+| 185 | PUR-09 Rate difference / price change alerts vs last purchase | Feature | Meyyarivu |
+| 186 | PUR-15 Supplier price comparison for an item across suppliers and time | Feature | Meyyarivu |
+| 187 | PUR-21 Purchase inbox: a dedicated email address or connected mailbox receives distributor CSV / PDF bills, auto-creates draft purchases with item mapping, flags rate changes | Feature | Ashok, Jeeva |
+| 188 | INV-09 Physical stock count / cycle count with variance posting | Feature | Meyyarivu |
+| 189 | INV-13 Dead / slow-moving stock report | Feature | Meyyarivu |
+| 190 | INV-15 Barcode label printing for loose/repacked items | Feature | Meyyarivu |
+| 191 | INV-16 Stock aging: by inward date and by expiry bucket | Feature | Meyyarivu |
+| 192 | INV-17 Stock reservation for confirmed orders and held bills (available = on hand − reserved) | Feature | Meyyarivu |
+| 193 | INV-21 Dosage labels: print a medicine label with patient name, dose, frequency, timing and instructions from the bill line (verify) pharmacist review of wording | Feature | Meyyarivu |
+| 194 | INV-22 Stock reallocation: suggests moving non-moving or short-expiry stock to branches with demand or to the warehouse; one click creates the transfer | Feature | Meyyarivu |
+| 195 | IJX-01 Stock inward / outward vouchers (non-purchase receipts and issues, e.g. samples, free goods from company) | Feature | Meyyarivu |
+| 196 | MKT-06 Multi-warehouse within a branch (godown, cold room, display) with location-level stock | Feature | Meyyarivu |
+| 197 | MKT-08 Customisable keyboard shortcuts per user (`/me/shortcuts`): change any key from KEYBOARD_SHORTCUTS.md, conflict check, reset to default, synced to desktop | Feature | Meyyarivu |
+| 198 | POS-08 UPI QR on screen / on bill (static VPA QR with amount) | Feature | Meyyarivu |
+| 199 | POS-17 Repeat last bill for a customer (chronic refill) | Feature | Meyyarivu |
+| 200 | POS-19 Estimate / quotation convertible to bill | Feature | Meyyarivu |
+| 201 | POS-23 One-click generic conversion: switch every branded line on a bill to an in-stock generic with the same salts + strength (CAT-15); show patient saving and margin per line; pharmacist confirms each swap; extends CAT-09 / POS-16 (verify) substitution rules | Feature | Meyyarivu |
+| 202 | POS-24 Counter recommendations: among same-composition alternatives, rank by near-expiry batch and margin (configurable weights, never above MRP) | Feature | Meyyarivu |
+| 203 | POS-25 Invoice verification QR: unique QR on every printed invoice opening a read-only verification page (number, date, total, store); no patient data | Feature | Meyyarivu |
+| 204 | POS-26 Service billing: non-stock service items (BP / sugar check, injection charge, consultation fee, delivery charge) with own SAC and GST, no stock movement (verify) SAC / GST rates | Feature | Meyyarivu |
+| 205 | POS-29 Multi-firm billing: one counter billing under different firms (companies / GSTINs) of the same tenant; firm picked per bill or by item rule; separate series, books and stock (extends PLT-02) | Feature | Meyyarivu |
+| 206 | RET-07 Replacement management: replace returned goods instead of credit note | Feature | Ashok |
+| 207 | WHS-05 Delivery challan, dispatch, delivery tracking (packed, dispatched, delivered) | Feature | Meyyarivu |
+| 208 | WHS-07 E-way bill generation for consignments above threshold (verify) | Feature | Meyyarivu |
+| 209 | WHS-08 Retailer-wise / item-wise scheme overrides | Feature | Meyyarivu |
+| 210 | WHS-09 Salesman assignment and commission report | Feature | Meyyarivu |
+| 211 | WHS-13 Retailer claims: short supply, damage, rate difference; resolved by credit note | Feature | Meyyarivu |
+| 212 | WHS-20 Packing slip, parcel and dispatch register: packing slip per case, parcel register, L.R. update after dispatch, delivery acknowledgement (POD) report | Feature | Meyyarivu |
+| 213 | WHS-21 Collection tagging: assign outstanding bills to salesmen or collectors, print a collection sheet, record collections against it, assigned-vs-collected report | Feature | Meyyarivu |
+| 214 | DOC-05 Document print designer (choose fields, logo, terms, copies) | Feature | Meyyarivu |
+| 215 | CMP-08 Patient prescription history (consent-based, minimum data) | Feature | Ashok |
+| 216 | CMP-14 Expired / damaged stock destruction record: batches, quantities, date, method, witnesses, linked to the write-off adjustment (verify) | Feature | Ashok |
+| 217 | CAT-26 Bundles / kits: one sellable line made of component items, stock taken from components | Feature | Ashok |
+| 218 | IJX-03 Batch category master (e.g. "cold chain", "high value") for reporting | Feature | Meyyarivu |
+| 219 | POS-13 Cash drawer open, customer display (pole) | Feature | Meyyarivu |
 
 ## P6 · Pilot & GST returns (34)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 218 | GSTR-1/3B preparation, ITC register, GST reconciliation exports | Groundwork | — |
-| 219 | Performance fixes from pilot; bug SLA | Groundwork | — |
-| 220 | GST-03 GSTR-1 data export (B2B, B2C large/small, CDNR, HSN summary) in portal JSON/Excel format | Feature | Meyyarivu |
-| 221 | GST-04 GSTR-3B summary | Feature | Meyyarivu |
-| 222 | GST-10 Input tax credit register from purchases | Feature | Meyyarivu |
-| 223 | PTY-09 Patient refill reminders (chronic medicines) via WhatsApp/SMS | Feature | Ashok |
-| 224 | PTY-28 Agent master and party agent/salesman with commission %; commission report | Feature | Ashok |
-| 225 | PUR-16 PDF / scanned purchase bill import: read lines from a distributor PDF or photo into a draft purchase that is reviewed before posting (brings MKT-09 forward for purchases) | Feature | Meyyarivu |
-| 226 | PUR-17 Optimal stock levels: min / max per item and branch computed from sales velocity, lead time and expiry risk; request fulfilment rate (short-book hits vs misses) | Feature | Meyyarivu |
-| 227 | MKT-03 Retailer → distributor online ordering (ERP-to-ERP): a retailer on MENO sends a PO that arrives as a sales order at a distributor on MENO, with live stock, rates and schemes; item codes, HSN and GST mapped automatically | Feature | Meyyarivu |
-| 228 | MKT-10 Consolidated multi-branch dashboard for chains | Feature | Meyyarivu |
-| 229 | WHS-11 Routes and beats (web): retailers per route, visit days | Feature | Meyyarivu |
-| 230 | WHS-12 Delivery planning: schedule dispatches by route/vehicle, pick lists per trip | Feature | Meyyarivu |
-| 231 | WHS-14 Scheme claims: reconcile schemes given to retailers with manufacturer claims | Feature | Meyyarivu |
-| 232 | WHS-18 Sub-stockist accounting: sub-stockist party type, stock sent on sub-stockist terms, their secondary sales and claims, settlement | Feature | Meyyarivu |
-| 233 | WHS-22 Sales targets and incentives: targets by salesman, area, company or product for a period; achievement tracking; incentive slabs; leaderboard | Feature | Meyyarivu |
-| 234 | DOC-03 Commission vouchers for salesmen / agents (sales and purchase side) | Feature | Meyyarivu |
-| 235 | CMP-02 Schedule X / narcotic register with stricter controls (duplicate Rx retention) | Feature | Ashok |
-| 236 | CMP-10 Controlled stock register: restricted items inward/outward with running balance (verify) | Feature | Ashok |
-| 237 | CMP-11 Regulatory audit: compliance activity log and inspection pack export (verify) | Feature | Ashok |
-| 238 | CMP-13 Patient safety warnings at POS: allergy match with the patient profile, duplicate-therapy and interaction alerts from the drug reference; pharmacist acknowledges and it is logged (verify) pharmacist review | Feature | Ashok |
-| 239 | GST-05 GSTR-2B reconciliation with purchases (import 2B JSON) | Feature | Meyyarivu |
-| 240 | GST-07 Composition-scheme dealer support (bill of supply) (verify) | Feature | Meyyarivu |
-| 241 | GST-12 Reverse charge (RCM) on applicable inward supplies (e.g. some services) with self-invoice and liability posting (verify) | Feature | Meyyarivu |
-| 242 | GST-13 GSTR-9 annual summary data from posted documents (verify) | Feature | Meyyarivu |
-| 243 | GST-14 Invoice Management System (IMS) workflow on inward invoices (accept / reject / pending) feeding GSTR-2B matching (verify) current GSTN process | Feature | Meyyarivu |
-| 244 | CAT-13 Item images | Feature | Ashok |
-| 245 | CAT-21 Drug reference panel on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up by salt with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" (verify) pharmacist review | Feature | Ashok |
-| 246 | PTY-08 Customer loyalty points / membership discount | Feature | Ashok |
-| 247 | PUR-10 Scan supplier invoice (image/PDF) attach to purchase; OCR later | Feature | Meyyarivu |
-| 248 | INV-14 Cold-chain items flag and storage reports | Feature | Meyyarivu |
-| 249 | IJX-02 Stock journal (convert/repack: e.g. bulk into loose packs) | Feature | Meyyarivu |
-| 250 | MKT-07 Expiry-based promotions (auto-suggested discount on near-expiry batches) | Feature | Meyyarivu |
-| 251 | POS-18 Home delivery orders with delivery status | Feature | Meyyarivu |
+| 220 | GSTR-1/3B preparation, ITC register, GST reconciliation exports | Groundwork | — |
+| 221 | Performance fixes from pilot; bug SLA | Groundwork | — |
+| 222 | GST-03 GSTR-1 data export (B2B, B2C large/small, CDNR, HSN summary) in portal JSON/Excel format | Feature | Gokul |
+| 223 | GST-04 GSTR-3B summary | Feature | Gokul |
+| 224 | GST-10 Input tax credit register from purchases | Feature | Gokul |
+| 225 | PTY-09 Patient refill reminders (chronic medicines) via WhatsApp/SMS | Feature | Ashok |
+| 226 | PTY-28 Agent master and party agent/salesman with commission %; commission report | Feature | Ashok |
+| 227 | PUR-16 PDF / scanned purchase bill import: read lines from a distributor PDF or photo into a draft purchase that is reviewed before posting (brings MKT-09 forward for purchases) | Feature | Meyyarivu |
+| 228 | PUR-17 Optimal stock levels: min / max per item and branch computed from sales velocity, lead time and expiry risk; request fulfilment rate (short-book hits vs misses) | Feature | Meyyarivu |
+| 229 | MKT-03 Retailer → distributor online ordering (ERP-to-ERP): a retailer on MENO sends a PO that arrives as a sales order at a distributor on MENO, with live stock, rates and schemes; item codes, HSN and GST mapped automatically | Feature | Meyyarivu |
+| 230 | MKT-10 Consolidated multi-branch dashboard for chains | Feature | Meyyarivu |
+| 231 | WHS-11 Routes and beats (web): retailers per route, visit days | Feature | Meyyarivu |
+| 232 | WHS-12 Delivery planning: schedule dispatches by route/vehicle, pick lists per trip | Feature | Meyyarivu |
+| 233 | WHS-14 Scheme claims: reconcile schemes given to retailers with manufacturer claims | Feature | Meyyarivu |
+| 234 | WHS-18 Sub-stockist accounting: sub-stockist party type, stock sent on sub-stockist terms, their secondary sales and claims, settlement | Feature | Meyyarivu |
+| 235 | WHS-22 Sales targets and incentives: targets by salesman, area, company or product for a period; achievement tracking; incentive slabs; leaderboard | Feature | Meyyarivu |
+| 236 | DOC-03 Commission vouchers for salesmen / agents (sales and purchase side) | Feature | Meyyarivu |
+| 237 | CMP-02 Schedule X / narcotic register with stricter controls (duplicate Rx retention) | Feature | Ashok |
+| 238 | CMP-10 Controlled stock register: restricted items inward/outward with running balance (verify) | Feature | Ashok |
+| 239 | CMP-11 Regulatory audit: compliance activity log and inspection pack export (verify) | Feature | Ashok |
+| 240 | CMP-13 Patient safety warnings at POS: allergy match with the patient profile, duplicate-therapy and interaction alerts from the drug reference; pharmacist acknowledges and it is logged (verify) pharmacist review | Feature | Ashok |
+| 241 | GST-05 GSTR-2B reconciliation with purchases (import 2B JSON) | Feature | Gokul |
+| 242 | GST-07 Composition-scheme dealer support (bill of supply) (verify) | Feature | Gokul |
+| 243 | GST-12 Reverse charge (RCM) on applicable inward supplies (e.g. some services) with self-invoice and liability posting (verify) | Feature | Gokul |
+| 244 | GST-13 GSTR-9 annual summary data from posted documents (verify) | Feature | Gokul |
+| 245 | GST-14 Invoice Management System (IMS) workflow on inward invoices (accept / reject / pending) feeding GSTR-2B matching (verify) current GSTN process | Feature | Gokul |
+| 246 | CAT-13 Item images | Feature | Ashok |
+| 247 | CAT-21 Drug reference panel on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up by salt with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" (verify) pharmacist review | Feature | Ashok |
+| 248 | PTY-08 Customer loyalty points / membership discount | Feature | Ashok |
+| 249 | PUR-10 Scan supplier invoice (image/PDF) attach to purchase; OCR later | Feature | Meyyarivu |
+| 250 | INV-14 Cold-chain items flag and storage reports | Feature | Meyyarivu |
+| 251 | IJX-02 Stock journal (convert/repack: e.g. bulk into loose packs) | Feature | Meyyarivu |
+| 252 | MKT-07 Expiry-based promotions (auto-suggested discount on near-expiry batches) | Feature | Meyyarivu |
+| 253 | POS-18 Home delivery orders with delivery status | Feature | Meyyarivu |
 
 ## P7 · Growth (5)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 252 | Retailer → distributor ordering API between tenants | Groundwork | — |
-| 253 | PUR-18 Distributor marketplace: compare rates, schemes and stock across connected distributors and place POs from one screen (extends MKT-03 beyond MENO-to-MENO) (verify) partner agreements | Feature | Meyyarivu |
-| 254 | MKT-09 AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | Feature | Meyyarivu |
-| 255 | WHS-10 Retailer self-ordering portal (web) | Feature | Meyyarivu |
-| 256 | GST-08 TCS/TDS fields where applicable (verify) | Feature | Meyyarivu |
+| 254 | Retailer → distributor ordering API between tenants | Groundwork | — |
+| 255 | PUR-18 Distributor marketplace: compare rates, schemes and stock across connected distributors and place POs from one screen (extends MKT-03 beyond MENO-to-MENO) (verify) partner agreements | Feature | Meyyarivu |
+| 256 | MKT-09 AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | Feature | Meyyarivu |
+| 257 | WHS-10 Retailer self-ordering portal (web) | Feature | Meyyarivu |
+| 258 | GST-08 TCS/TDS fields where applicable (verify) | Feature | Gokul |

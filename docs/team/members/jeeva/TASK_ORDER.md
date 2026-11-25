@@ -126,7 +126,7 @@
 | 83 | Scale plan if pilot grows (bigger VM / Container Apps ADR) | Groundwork | — |
 | 84 | PLT-41 High availability and disaster recovery: managed PostgreSQL with point-in-time recovery, second-region backup copy, RPO / RTO per tier, monthly timed restore drill | Feature | Nitheesh |
 | 85 | PLT-44 Security assurance: OWASP ASVS L2 checklist per release, dependency and container scanning, annual VAPT by a CERT-In empanelled auditor, CERT-In 6-hour incident reporting and 180-day log retention (verify), ISO 27001 readiness | Feature | Nitheesh, Ashok |
-| 86 | OMN-04 WhatsApp ordering: customer sends an order or prescription on WhatsApp, it lands as a draft bill at the counter | Feature | Nitheesh |
+| 86 | OMN-04 WhatsApp ordering: customer sends an order or prescription on WhatsApp, it lands as a draft bill at the counter | Feature | Nitheesh, Gokul |
 | 87 | INT-03 Tally export | Feature | Nitheesh |
 | 88 | INT-16 Public API platform: versioned API, OAuth 2.0 client credentials, per-client rate limits, idempotent writes, bulk master endpoints, signed webhooks with retries, developer portal with sandbox (extends INT-05) | Feature | Nitheesh |
 | 89 | SEC-03 Envelope encryption and key management: per-tenant data keys wrapped by a Key Vault master key, versioned keys, yearly rotation, crypto-shredding on tenant exit | Feature | Nitheesh, Meyyarivu |
@@ -140,9 +140,9 @@
 | Step | Task | Type | With |
 |---|---|---|---|
 | 94 | Mobile build pipeline (EAS), environment for public API | Groundwork | — |
-| 95 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Nitheesh |
-| 96 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Nitheesh |
-| 97 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Nitheesh |
+| 95 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Nitheesh, Gokul |
+| 96 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Nitheesh, Gokul |
+| 97 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Nitheesh, Gokul |
 | 98 | INT-05 Public API + webhooks for partners | Feature | Nitheesh |
 | 99 | INT-06 Online pharmacy / e-commerce order intake | Feature | Nitheesh |
 | 100 | INT-07 ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions (verify) ABDM certification | Feature | Nitheesh |

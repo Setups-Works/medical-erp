@@ -4,7 +4,7 @@
  * Pure functions: no database access.
  */
 
-export type Slug = "nitheesh" | "prakalya" | "kamesh" | "meyyarivu" | "ashok" | "jeeva";
+export type Slug = "nitheesh" | "prakalya" | "kamesh" | "meyyarivu" | "ashok" | "jeeva" | "gokul";
 export type Area = "lead" | "ba" | "backend" | "frontend" | "qa" | "devops";
 
 export const AREA_OF: Record<Slug, Area> = {
@@ -14,6 +14,7 @@ export const AREA_OF: Record<Slug, Area> = {
   meyyarivu: "frontend",
   ashok: "qa",
   jeeva: "devops",
+  gokul: "frontend",
 };
 
 export const ROLE_OF: Record<Slug, string> = {
@@ -23,6 +24,7 @@ export const ROLE_OF: Record<Slug, string> = {
   meyyarivu: "Frontend Lead + QA",
   ashok: "QA Lead + Frontend",
   jeeva: "DevOps Engineer",
+  gokul: "Frontend Engineer",
 };
 
 export type PhaseInfo = { key: string; name: string; goal: string; exit: string };

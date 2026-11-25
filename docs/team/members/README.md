@@ -11,20 +11,22 @@ Each member has a folder with:
 
 | Member | Role | Folder | Main paths owned |
 |---|---|---|---|
-| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | [nitheesh/](nitheesh/README.md) | Platform, finance, dashboards, reports, CRM (full stack); auth/sync/notifications/integrations backend; architecture, contracts |
+| Nitheesh | Tech Lead & Full-stack Engineer (manages the team) | [nitheesh/](nitheesh/README.md) | Platform, finance, licensing (full stack); dashboards, reports, CRM, auth, sync, notifications, integrations backend; architecture, contracts |
 | Prakalya | Business Analyst + QA · part-time, ~40 tasks | [prakalya/](prakalya/README.md) | `docs/product`, `docs/business-requirements`, `docs/workflows`, compliance research |
 | Kamesh | Backend Engineer | [kamesh/](kamesh/README.md) | Backend modules catalog, party, pricing, purchase, inventory, sales, returns, compliance, taxation + their migrations |
-| Meyyarivu | Frontend Lead + QA | [meyyarivu/](meyyarivu/README.md) | `packages/ui`, `packages/validation`, `docs/design`, app shell; web auth, purchase, inventory, pos, wholesale, pricing, gst |
-| Ashok | QA Lead + Frontend | [ashok/](ashok/README.md) | `docs/testing`, `apps/web/tests/e2e`, backend `scenarios/` tests, API collections; QA task per module per phase; web catalog, parties, returns, compliance, reports |
+| Meyyarivu | Frontend Lead + QA | [meyyarivu/](meyyarivu/README.md) | `packages/ui`, `packages/validation`, `docs/design`, app shell; web auth, purchase, inventory, pos, wholesale |
+| Ashok | QA Lead + Frontend | [ashok/](ashok/README.md) | `docs/testing`, `apps/web/tests/e2e`, backend `scenarios/` tests, API collections; QA task per module per phase; web catalog, parties, returns, compliance |
 | Jeeva | DevOps Engineer | [jeeva/](jeeva/README.md) | `infrastructure/`, `.github/workflows`, `docker-compose.yml`, Dockerfiles, desktop packaging |
+| Gokul | Frontend Engineer (joined 25-11-2026) | [gokul/](gokul/README.md) | web pricing, gst, dashboard, reports, crm, delivery, channels |
 
-## Frontend split (Meyyarivu, Nitheesh, Ashok take all the screens)
+## Frontend split (Meyyarivu, Nitheesh, Ashok, Gokul take all the screens)
 
 ```
 apps/web/src/features/
-  auth/ purchase/ inventory/ pos/ wholesale/ pricing/ gst/                → Meyyarivu (+ app shell, packages/ui)
-  company/ branches/ users/ settings/ admin/ dashboard/ accounting/ payments/ crm/ → Nitheesh
-  catalog/ parties/ returns/ compliance/ reports/                                  → Ashok
+  auth/ purchase/ inventory/ pos/ wholesale/                          → Meyyarivu (+ app shell, packages/ui)
+  company/ branches/ users/ settings/ admin/ accounting/ payments/ platform/ → Nitheesh
+  catalog/ parties/ returns/ compliance/                               → Ashok
+  pricing/ gst/ dashboard/ reports/ crm/ delivery/ channels/           → Gokul
 ```
 
 Everything is derived from [OWNERSHIP_MATRIX.md](../OWNERSHIP_MATRIX.md); change that file first.

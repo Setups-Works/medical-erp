@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**255 tasks** · P0: 5 · P1: 13 · P2: 29 · P3: 39 · P4: 56 · P5: 65 · P6: 34 · P7: 14
+**221 tasks** · P0: 5 · P1: 13 · P2: 29 · P3: 34 · P4: 49 · P5: 51 · P6: 28 · P7: 12
 
 ## P0 · Foundation (5)
 
@@ -26,7 +26,7 @@
 | 8 | Test vector runner contract (JSON schema) for Java + TS | Groundwork | — |
 | 9 | Review the 20 draft vectors in `contracts/test-vectors/` with Prakalya: recompute by hand, mark confirmed or fix; the P0 "40 vectors" item was ticked but no files existed until 24-11-2026 | Groundwork | — |
 | 10 | Test vectors for CALCULATIONS.md §7–§22 with Prakalya: combined distributor bill with returns and charges, loose sale, bill-discount allocation, landed cost and suggested PTR, margin/mark-up, weighted-average valuation, returns, payment allocation, credit check, ageing and interest, reorder, expiry buckets (`contracts/test-vectors/`) | Groundwork | — |
-| 11 | First screen on Meyyarivu's patterns: report filter bar + ReportPage skeleton (web `reports/`) | Groundwork | — |
+| 11 | First screen on Meyyarivu's patterns: medicine list on ListPage with MSW mocks (web `catalog/`); the reports skeleton moved to Gokul | Groundwork | — |
 | 12 | SEC-14 Secure SDLC gates: threat-model review per epic, SAST (CodeQL / Semgrep), DAST (ZAP), secret scanning, IaC scanning, security sign-off for auth / money / sync / file PRs, abuse-case tests from THREAT_MODEL.md §5 | Feature | Jeeva |
 | 13 | Defect workflow live (labels, severity S1–S4, triage every morning) | Readiness | — |
 | 14 | Critical scenario #9: User of tenant A gets 404 for every tenant B resource | Critical scenario | — |
@@ -69,7 +69,7 @@
 | 46 | QA: Sales & purchase document cycle · P2 (1 feature) | QA | — |
 | 47 | QA: GST & statutory · P2 (1 feature) | QA | — |
 
-## P3 · Purchase & inventory (39)
+## P3 · Purchase & inventory (34)
 
 | Step | Task | Type | With |
 |---|---|---|---|
@@ -77,227 +77,193 @@
 | 49 | Stock reconciliation verification queries | Groundwork | — |
 | 50 | CSV import negative tests (bad rows, duplicates, unknown items) | Groundwork | — |
 | 51 | Medicine export, medicine history and supplier price list screens | Groundwork | — |
-| 52 | Reports centre screens: stock, batch, expiry, purchase reports with export (web `reports/`) | Groundwork | — |
-| 53 | CAT-08 Min / max / reorder level per branch | Feature | Kamesh |
-| 54 | CAT-28 Discontinued items: flag with date and reason; blocks new purchase, PO and sale; returns allowed per setting; shown in search with a badge; replacement item suggested | Feature | Kamesh |
-| 55 | PTY-10 Party opening balances | Feature | Kamesh |
-| 56 | PTY-20 Multiple bank accounts per party with IFSC validation and auto-fill, UPI ID, masked and encrypted account no.; bank-detail changes need approval (maker-checker) and are audited | Feature | Kamesh |
-| 57 | RPT-03 Purchase register (supplier-wise, item-wise) | Feature | Nitheesh |
-| 58 | RPT-04 Stock reports: current stock, batch-wise, valuation, movement history of an item | Feature | Nitheesh |
-| 59 | RPT-05 Expiry report, expired stock, near-expiry by supplier (for returns) | Feature | Nitheesh |
-| 60 | RPT-16 Report framework standard: every report has date range, filters, server pagination, export and permission control | Feature | Nitheesh |
-| 61 | CAT-07 Rack / shelf / bin location per branch | Feature | Kamesh |
-| 62 | CAT-10 Global medicine database seed (common Indian brands) to speed up item creation (verify) licensing of data source | Feature | Kamesh |
-| 63 | CAT-11 Item merge (duplicate cleanup) with history preserved | Feature | Kamesh |
-| 64 | CAT-18 Medicine export (Excel/CSV) with the same columns as import | Feature | Kamesh |
-| 65 | CAT-19 Medicine history: price changes, purchases, sales, adjustments for one item | Feature | Kamesh |
-| 66 | CAT-23 Pre-fill the medicine create form from Indian medicine data: search by brand, salt or barcode and fill name, brand, salts + strengths, manufacturer, dosage form, pack and loose units; each pre-filled field marked and editable; save blocked until HSN, GST, schedule and pack are confirmed by the user (verify) | Feature | Kamesh |
-| 67 | CAT-27 Product stock defaults: lead time, default in/out warehouse, ranked preferred vendors (used by PO and reorder) | Feature | Kamesh |
-| 68 | CAT-29 Create missing masters on the fly when adding or importing a product (brand, manufacturer, category, unit): shown as "will be created", reviewed in one list, audited | Feature | Kamesh |
-| 69 | PTY-11 Supplier price list: agreed / last rates per supplier and item, shown during purchase | Feature | Kamesh |
-| 70 | PTY-15 GSTIN fetch on supplier and customer forms: verify a GSTIN and fill legal/trade name, state, address and GST status (Active / Cancelled / Suspended); cancelled GSTIN warns at purchase and sale (verify) GSP provider and cost | Feature | Kamesh |
-| 71 | PTY-27 Party default discounts (discount %, cash discount %, special discount %) copied to purchase and sale documents | Feature | Kamesh |
-| 72 | Calculation parity CI job: Java and TypeScript must pass every test vector | Readiness | Nitheesh |
-| 73 | Critical scenario #1: Purchase invoice (incl. free qty, discounts) creates correct batch stock and landed cost | Critical scenario | — |
-| 74 | Critical scenario #5: Purchase return updates stock and supplier balance | Critical scenario | — |
-| 75 | Critical scenario #7: GST correct: intra/inter-state, MRP-inclusive, rounding — all vectors pass | Critical scenario | — |
-| 76 | QA: Platform & administration · P3 (4 features) | QA | — |
-| 77 | QA: Authentication & onboarding · P3 (2 features) | QA | — |
-| 78 | QA: Navigation & command search · P3 (1 feature) | QA | — |
-| 79 | QA: Pricing, schemes, discounts · P3 (5 features) | QA | — |
-| 80 | QA: Purchase · P3 (10 features) | QA | — |
-| 81 | QA: Inventory · P3 (8 features) | QA | — |
-| 82 | QA: Pharmacy operations (short book, ordering, warehouses) · P3 (1 feature) | QA | — |
-| 83 | QA: Sales & purchase document cycle · P3 (1 feature) | QA | — |
-| 84 | QA: GST & statutory · P3 (3 features) | QA | — |
-| 85 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P3 (3 features) | QA | — |
-| 86 | QA: Security · P3 (1 feature) | QA | — |
+| 52 | CAT-08 Min / max / reorder level per branch | Feature | Kamesh |
+| 53 | CAT-28 Discontinued items: flag with date and reason; blocks new purchase, PO and sale; returns allowed per setting; shown in search with a badge; replacement item suggested | Feature | Kamesh |
+| 54 | PTY-10 Party opening balances | Feature | Kamesh |
+| 55 | PTY-20 Multiple bank accounts per party with IFSC validation and auto-fill, UPI ID, masked and encrypted account no.; bank-detail changes need approval (maker-checker) and are audited | Feature | Kamesh |
+| 56 | CAT-07 Rack / shelf / bin location per branch | Feature | Kamesh |
+| 57 | CAT-10 Global medicine database seed (common Indian brands) to speed up item creation (verify) licensing of data source | Feature | Kamesh |
+| 58 | CAT-11 Item merge (duplicate cleanup) with history preserved | Feature | Kamesh |
+| 59 | CAT-18 Medicine export (Excel/CSV) with the same columns as import | Feature | Kamesh |
+| 60 | CAT-19 Medicine history: price changes, purchases, sales, adjustments for one item | Feature | Kamesh |
+| 61 | CAT-23 Pre-fill the medicine create form from Indian medicine data: search by brand, salt or barcode and fill name, brand, salts + strengths, manufacturer, dosage form, pack and loose units; each pre-filled field marked and editable; save blocked until HSN, GST, schedule and pack are confirmed by the user (verify) | Feature | Kamesh |
+| 62 | CAT-27 Product stock defaults: lead time, default in/out warehouse, ranked preferred vendors (used by PO and reorder) | Feature | Kamesh |
+| 63 | CAT-29 Create missing masters on the fly when adding or importing a product (brand, manufacturer, category, unit): shown as "will be created", reviewed in one list, audited | Feature | Kamesh |
+| 64 | PTY-11 Supplier price list: agreed / last rates per supplier and item, shown during purchase | Feature | Kamesh |
+| 65 | PTY-15 GSTIN fetch on supplier and customer forms: verify a GSTIN and fill legal/trade name, state, address and GST status (Active / Cancelled / Suspended); cancelled GSTIN warns at purchase and sale (verify) GSP provider and cost | Feature | Kamesh |
+| 66 | PTY-27 Party default discounts (discount %, cash discount %, special discount %) copied to purchase and sale documents | Feature | Kamesh |
+| 67 | Calculation parity CI job: Java and TypeScript must pass every test vector | Readiness | Nitheesh |
+| 68 | Critical scenario #1: Purchase invoice (incl. free qty, discounts) creates correct batch stock and landed cost | Critical scenario | — |
+| 69 | Critical scenario #5: Purchase return updates stock and supplier balance | Critical scenario | — |
+| 70 | Critical scenario #7: GST correct: intra/inter-state, MRP-inclusive, rounding — all vectors pass | Critical scenario | — |
+| 71 | QA: Platform & administration · P3 (4 features) | QA | — |
+| 72 | QA: Authentication & onboarding · P3 (2 features) | QA | — |
+| 73 | QA: Navigation & command search · P3 (1 feature) | QA | — |
+| 74 | QA: Pricing, schemes, discounts · P3 (5 features) | QA | — |
+| 75 | QA: Purchase · P3 (10 features) | QA | — |
+| 76 | QA: Inventory · P3 (8 features) | QA | — |
+| 77 | QA: Pharmacy operations (short book, ordering, warehouses) · P3 (1 feature) | QA | — |
+| 78 | QA: Sales & purchase document cycle · P3 (1 feature) | QA | — |
+| 79 | QA: GST & statutory · P3 (3 features) | QA | — |
+| 80 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P3 (3 features) | QA | — |
+| 81 | QA: Security · P3 (1 feature) | QA | — |
 
-## P4 · Retail POS & returns (56)
+## P4 · Retail POS & returns (49)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 87 | Scenario 6 (concurrent billing, no oversell) — parallel API test | Groundwork | — |
-| 88 | Scenario 11 (duplicate requests → one invoice) | Groundwork | — |
-| 89 | POS E2E: keyboard-only billing, H1 capture, returns, printing | Groundwork | — |
-| 90 | Performance baseline (k6): item search, invoice post | Groundwork | — |
-| 91 | Returns screens: sales/purchase return, inspection, credit/debit notes (web `returns/`) | Groundwork | — |
-| 92 | Compliance screens: Schedule H/H1/X registers, prescription register, narcotic stock (web `compliance/`) | Groundwork | — |
-| 93 | PLT-43 Performance budgets in CI: POS keystroke ≤ 50 ms, item search p95 ≤ 150 ms, bill save p95 ≤ 500 ms, page load ≤ 2 s on a 4 GB PC; failing budget fails the build | Feature | Nitheesh, Jeeva |
-| 94 | CAT-05 Loose / strip sale: sell by tablet with conversion factor, loose MRP | Feature | Kamesh |
-| 95 | PTY-32 Doctor master fields: qualification, registration no. + state council (unique together), specialisation, clinic, address with PIN auto-fill | Feature | Kamesh |
-| 96 | RET-01 Sales return against invoice (batch-aware), stock back only if saleable | Feature | Kamesh |
-| 97 | RET-02 Credit note (refund, adjust against outstanding, or future bills) | Feature | Kamesh |
-| 98 | RET-03 Purchase return to supplier with debit note | Feature | Kamesh |
-| 99 | RET-04 Expiry return / breakage claim to supplier (batch list, claim tracking until credit note received) | Feature | Kamesh |
-| 100 | RET-08 Return inspection: decide saleable / damaged / expired per line before stock re-entry | Feature | Kamesh |
-| 101 | CMP-01 Schedule H1 register (auto from sales: patient, doctor, item, qty, date) — printable/exportable | Feature | Kamesh |
-| 102 | CMP-03 Prescription storage (image), linked to invoice, retention policy | Feature | Kamesh |
-| 103 | CMP-05 Drug licence numbers printed on invoices; licence expiry alerts for own branches | Feature | Kamesh |
-| 104 | CMP-09 Restricted-medicine alerts at billing: schedule warnings and required steps | Feature | Kamesh |
-| 105 | RPT-01 Owner dashboard: today's sales, collections, purchases, margin, low stock, near expiry, outstanding | Feature | Nitheesh |
-| 106 | RPT-02 Sales register (day/month, bill-wise, item-wise, customer-wise, doctor-wise, user-wise, branch-wise) | Feature | Nitheesh |
-| 107 | RPT-09 Schedule H1 / narcotic registers | Feature | Nitheesh |
-| 108 | RPT-13 Reports centre: catalogue, favourites, saved filters, recent | Feature | Nitheesh |
-| 109 | RPT-14 Batch-wise sales and traceability: who received batch X (recalls) | Feature | Nitheesh |
-| 110 | ANX-06 POS register (counter/shift-wise), sales & sales-return registers, compliance register | Feature | Nitheesh |
-| 111 | CAT-09 Generic substitutes (same composition + strength) shown at POS when out of stock | Feature | Kamesh |
-| 112 | CAT-12 Banned / recalled drug list with blocking at sale and purchase (verify) CDSCO list maintenance | Feature | Kamesh |
-| 113 | CAT-22 Barcode lookup for unknown items: when a scanned barcode is not in the tenant catalogue, look up own barcodes (CAT-04) → Indian medicine data (CAT-10 / INT-11); a hit pre-fills a draft item, a miss opens quick-create with the barcode filled. Never blocks billing | Feature | Kamesh |
-| 114 | PTY-05 Doctor master (name, registration no., clinic) for prescriptions and doctor-wise reports | Feature | Kamesh |
-| 115 | PTY-30 Retail patient profile on the customer: age or date of birth, gender, allergies, chronic conditions, regular doctor, ABHA no.; permission-gated, never logged, consent recorded (verify) | Feature | Kamesh |
-| 116 | RET-06 Return reasons & approval limits | Feature | Kamesh |
-| 117 | CMP-04 Pharmacist on duty recorded on each bill (registration no.) | Feature | Kamesh |
-| 118 | CMP-06 Banned/recalled drug block (see CAT-12) | Feature | Kamesh |
-| 119 | CMP-12 NPPA / DPCO ceiling price check: ceiling price table (effective-dated); warn at purchase when batch MRP exceeds the ceiling, block sale once confirmed (verify) source and update process | Feature | Kamesh |
-| 120 | RPT-15 Discount report by user, item, reason | Feature | Nitheesh |
-| 121 | RET-09 Counter return without the original bill, only when the store policy setting allows it, at the lower of last selling price and MRP, with approval (verify) | Feature | Kamesh |
-| 122 | Performance baseline with k6: item search p95 < 150 ms, invoice post p95 < 500 ms | Readiness | — |
-| 123 | Critical scenario #2: Sales invoice reduces the right batch (FEFO) | Critical scenario | — |
-| 124 | Critical scenario #3: Expired batch cannot be sold (online and offline) | Critical scenario | — |
-| 125 | Critical scenario #4: Sales return restores stock only if saleable; credit note correct | Critical scenario | — |
-| 126 | Critical scenario #6: 20 concurrent bills on the last 10 units → no oversell | Critical scenario | — |
-| 127 | Critical scenario #11: Same `Idempotency-Key` twice → one invoice, same response | Critical scenario | — |
-| 128 | Critical scenario #13: H1 sale without Rx is blocked; register entry created with Rx | Critical scenario | — |
-| 129 | Critical scenario #14: Posted invoice cannot be edited; reversal creates opposite movements and vouchers | Critical scenario | — |
-| 130 | QA: Platform & administration · P4 (2 features) | QA | — |
-| 131 | QA: Authentication & onboarding · P4 (2 features) | QA | — |
-| 132 | QA: Navigation & command search · P4 (2 features) | QA | — |
-| 133 | QA: Pricing, schemes, discounts · P4 (4 features) | QA | — |
-| 134 | QA: Purchase · P4 (1 feature) | QA | — |
-| 135 | QA: Inventory · P4 (5 features) | QA | — |
-| 136 | QA: Pharmacy operations (short book, ordering, warehouses) · P4 (3 features) | QA | — |
-| 137 | QA: Retail POS & invoices · P4 (17 features) | QA | — |
-| 138 | QA: Sales & purchase document cycle · P4 (2 features) | QA | — |
-| 139 | QA: GST & statutory · P4 (1 feature) | QA | — |
-| 140 | QA: Notifications · P4 (3 features) | QA | — |
-| 141 | QA: Desktop app & offline · P4 (3 features) | QA | — |
-| 142 | QA: Security · P4 (3 features) | QA | — |
+| 82 | Scenario 6 (concurrent billing, no oversell) — parallel API test | Groundwork | — |
+| 83 | Scenario 11 (duplicate requests → one invoice) | Groundwork | — |
+| 84 | POS E2E: keyboard-only billing, H1 capture, returns, printing | Groundwork | — |
+| 85 | Performance baseline (k6): item search, invoice post | Groundwork | — |
+| 86 | Returns screens: sales/purchase return, inspection, credit/debit notes (web `returns/`) | Groundwork | — |
+| 87 | Compliance screens: Schedule H/H1/X registers, prescription register, narcotic stock (web `compliance/`) | Groundwork | — |
+| 88 | PLT-43 Performance budgets in CI: POS keystroke ≤ 50 ms, item search p95 ≤ 150 ms, bill save p95 ≤ 500 ms, page load ≤ 2 s on a 4 GB PC; failing budget fails the build | Feature | Nitheesh, Jeeva |
+| 89 | CAT-05 Loose / strip sale: sell by tablet with conversion factor, loose MRP | Feature | Kamesh |
+| 90 | PTY-32 Doctor master fields: qualification, registration no. + state council (unique together), specialisation, clinic, address with PIN auto-fill | Feature | Kamesh |
+| 91 | RET-01 Sales return against invoice (batch-aware), stock back only if saleable | Feature | Kamesh |
+| 92 | RET-02 Credit note (refund, adjust against outstanding, or future bills) | Feature | Kamesh |
+| 93 | RET-03 Purchase return to supplier with debit note | Feature | Kamesh |
+| 94 | RET-04 Expiry return / breakage claim to supplier (batch list, claim tracking until credit note received) | Feature | Kamesh |
+| 95 | RET-08 Return inspection: decide saleable / damaged / expired per line before stock re-entry | Feature | Kamesh |
+| 96 | CMP-01 Schedule H1 register (auto from sales: patient, doctor, item, qty, date) — printable/exportable | Feature | Kamesh |
+| 97 | CMP-03 Prescription storage (image), linked to invoice, retention policy | Feature | Kamesh |
+| 98 | CMP-05 Drug licence numbers printed on invoices; licence expiry alerts for own branches | Feature | Kamesh |
+| 99 | CMP-09 Restricted-medicine alerts at billing: schedule warnings and required steps | Feature | Kamesh |
+| 100 | CAT-09 Generic substitutes (same composition + strength) shown at POS when out of stock | Feature | Kamesh |
+| 101 | CAT-12 Banned / recalled drug list with blocking at sale and purchase (verify) CDSCO list maintenance | Feature | Kamesh |
+| 102 | CAT-22 Barcode lookup for unknown items: when a scanned barcode is not in the tenant catalogue, look up own barcodes (CAT-04) → Indian medicine data (CAT-10 / INT-11); a hit pre-fills a draft item, a miss opens quick-create with the barcode filled. Never blocks billing | Feature | Kamesh |
+| 103 | PTY-05 Doctor master (name, registration no., clinic) for prescriptions and doctor-wise reports | Feature | Kamesh |
+| 104 | PTY-30 Retail patient profile on the customer: age or date of birth, gender, allergies, chronic conditions, regular doctor, ABHA no.; permission-gated, never logged, consent recorded (verify) | Feature | Kamesh |
+| 105 | RET-06 Return reasons & approval limits | Feature | Kamesh |
+| 106 | CMP-04 Pharmacist on duty recorded on each bill (registration no.) | Feature | Kamesh |
+| 107 | CMP-06 Banned/recalled drug block (see CAT-12) | Feature | Kamesh |
+| 108 | CMP-12 NPPA / DPCO ceiling price check: ceiling price table (effective-dated); warn at purchase when batch MRP exceeds the ceiling, block sale once confirmed (verify) source and update process | Feature | Kamesh |
+| 109 | RET-09 Counter return without the original bill, only when the store policy setting allows it, at the lower of last selling price and MRP, with approval (verify) | Feature | Kamesh |
+| 110 | Performance baseline with k6: item search p95 < 150 ms, invoice post p95 < 500 ms | Readiness | — |
+| 111 | Critical scenario #2: Sales invoice reduces the right batch (FEFO) | Critical scenario | — |
+| 112 | Critical scenario #3: Expired batch cannot be sold (online and offline) | Critical scenario | — |
+| 113 | Critical scenario #4: Sales return restores stock only if saleable; credit note correct | Critical scenario | — |
+| 114 | Critical scenario #6: 20 concurrent bills on the last 10 units → no oversell | Critical scenario | — |
+| 115 | Critical scenario #11: Same `Idempotency-Key` twice → one invoice, same response | Critical scenario | — |
+| 116 | Critical scenario #13: H1 sale without Rx is blocked; register entry created with Rx | Critical scenario | — |
+| 117 | Critical scenario #14: Posted invoice cannot be edited; reversal creates opposite movements and vouchers | Critical scenario | — |
+| 118 | QA: Platform & administration · P4 (2 features) | QA | — |
+| 119 | QA: Authentication & onboarding · P4 (2 features) | QA | — |
+| 120 | QA: Navigation & command search · P4 (2 features) | QA | — |
+| 121 | QA: Pricing, schemes, discounts · P4 (4 features) | QA | — |
+| 122 | QA: Purchase · P4 (1 feature) | QA | — |
+| 123 | QA: Inventory · P4 (5 features) | QA | — |
+| 124 | QA: Pharmacy operations (short book, ordering, warehouses) · P4 (3 features) | QA | — |
+| 125 | QA: Retail POS & invoices · P4 (19 features) | QA | — |
+| 126 | QA: Sales & purchase document cycle · P4 (2 features) | QA | — |
+| 127 | QA: GST & statutory · P4 (1 feature) | QA | — |
+| 128 | QA: Notifications · P4 (3 features) | QA | — |
+| 129 | QA: Desktop app & offline · P4 (3 features) | QA | — |
+| 130 | QA: Security · P4 (3 features) | QA | — |
 
-## P5 · Wholesale, finance, offline (65)
+## P5 · Wholesale, finance, offline (51)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 143 | Scenario 12 offline sync: 3-day offline, conflicts, duplicates | Groundwork | — |
-| 144 | Credit limit, outstanding, ageing, ledger balance tests | Groundwork | — |
-| 145 | Security: OWASP ZAP baseline, cross-tenant fuzzing, permission matrix tests | Groundwork | — |
-| 146 | Full regression suite in CI; restore drill verification with Jeeva | Groundwork | — |
-| 147 | Customer groups and account statements screens (web `parties/`) | Groundwork | — |
-| 148 | Outstanding, ageing, GST and wholesale reports; analytics screens (web `reports/`) | Groundwork | — |
-| 149 | PLT-26 Migration importers for exports of popular software (Marg, Tally, Busy, Vyapar, GoFrugal): items, parties, opening stock by batch, outstanding bills, ledgers with opening balances; dry run with error report | Feature | Kamesh, Jeeva |
-| 150 | PTY-06 Party ledger, outstanding, ageing | Feature | Kamesh |
-| 151 | PTY-07 Credit limit & credit days enforcement with override approval | Feature | Kamesh |
-| 152 | PTY-13 Customer and supplier account statements (date range, PDF, email/WhatsApp) | Feature | Kamesh |
-| 153 | PTY-34 Credit rules beyond amount: limit by value, number of open bills and oldest bill age; over-limit approval from the owner's phone; average payment days shown at billing | Feature | Kamesh |
-| 154 | RET-05 Wholesale: accept expiry/breakage returns from retailers per policy | Feature | Kamesh |
-| 155 | CMP-07 Data privacy: patient data minimisation, consent, deletion requests (DPDP Act) | Feature | Kamesh |
-| 156 | RPT-06 Profit reports (bill-wise, item-wise, category-wise) on landed cost | Feature | Nitheesh |
-| 157 | RPT-07 Outstanding & ageing reports | Feature | Nitheesh |
-| 158 | RPT-17 Outstanding by area, route, salesman and as-on-date / age-wise for receivables and payables, shareable as PDF / WhatsApp | Feature | Nitheesh |
-| 159 | RPT-18 Exception (bill audit) report: edited drafts, cancelled, back-dated, reprinted, below-cost, above-cap discount, FEFO overrides, negative-stock attempts, by user and day | Feature | Nitheesh |
-| 160 | PTY-04 Drug licence expiry tracking & block sale to retailers with expired licence | Feature | Kamesh |
-| 161 | PTY-12 Customer groups (individual, retailer, hospital, institution) with default price list, discount and credit terms | Feature | Kamesh |
-| 162 | PTY-14 Distributor rate contracts (terms of trade): agreed rate, scheme, discount and credit days per supplier + item, valid from / to; purchase entry flags deviations (extends PTY-11) | Feature | Kamesh |
-| 163 | PTY-21 Per-party payment reminders: schedule (N days before due, on due date, custom) and channels (email, WhatsApp, SMS); supplier reminders are for us, customer reminders go to the customer | Feature | Kamesh |
-| 164 | PTY-22 Party income-tax fields: PAN (matches GSTIN), related-party flag, TDS/TCS applicable + section from `tds_section`; related-party transactions report (verify) | Feature | Nitheesh |
-| 165 | PTY-23 MSME (Udyam) details for suppliers: category (micro / small / medium / not applicable), Udyam no., certificate; MSME payables due-date tracking and overdue report (verify) CA to confirm payment limit and tax effect | Feature | Nitheesh |
-| 166 | PTY-26 Transporter master and party defaults (transporter, mode, vehicle type) used by GRN, delivery and e-way bill | Feature | Kamesh |
-| 167 | PTY-31 Party merge (duplicate cleanup) with ledgers, documents and history preserved | Feature | Kamesh |
-| 168 | PTY-33 Party self-registration link: send a link; the retailer or customer fills GSTIN, licences, address and contacts; staff review and approve before the party is active | Feature | Kamesh |
-| 169 | PUR-21 Purchase inbox: a dedicated email address or connected mailbox receives distributor CSV / PDF bills, auto-creates draft purchases with item mapping, flags rate changes | Feature | Kamesh, Jeeva |
-| 170 | RET-07 Replacement management: replace returned goods instead of credit note | Feature | Kamesh |
-| 171 | CMP-08 Patient prescription history (consent-based, minimum data) | Feature | Kamesh |
-| 172 | CMP-14 Expired / damaged stock destruction record: batches, quantities, date, method, witnesses, linked to the write-off adjustment (verify) | Feature | Kamesh |
-| 173 | RPT-11 Export every report to Excel/PDF, schedule by email | Feature | Nitheesh |
-| 174 | RPT-19 Customer payment behaviour: average payment days, delay trend, bills paid after due date per customer and area | Feature | Nitheesh |
-| 175 | RPT-20 Manufacturer-wise reports: sales, stock, expiry and returns by manufacturer / company | Feature | Nitheesh |
-| 176 | RPT-22 Group register: net sales quantity and amount, profit and growth % vs the previous period by product group, category, brand or manufacturer | Feature | Nitheesh |
-| 177 | ANX-01 Bill-wise profit and rate / quantity difference analysis (purchase vs sale price drift) | Feature | Nitheesh |
-| 178 | ANX-02 ABC ranking of items by value/volume; stock-flow card (opening → in → out → closing) | Feature | Nitheesh |
-| 179 | ANX-07 Sales vs payment and sales vs purchase trend charts | Feature | Nitheesh |
-| 180 | ANX-08 Staff performance: sales, bills, average bill value, discounts given, returns, cancellations by user, salesman, counter and outlet | Feature | Nitheesh |
-| 181 | ANX-10 Risk flags: customers approaching their credit limit and declining customers; dead and declining stock; each with drill-down to bills and items (extends ANX-04) | Feature | Nitheesh |
-| 182 | CAT-26 Bundles / kits: one sellable line made of component items, stock taken from components | Feature | Kamesh |
-| 183 | PTY-25 One party in both roles (customer and supplier) with a single ledger and netted outstanding (verify) CA | Feature | Nitheesh |
-| 184 | OWASP ZAP scan + permission matrix tests + cross-tenant fuzzing: no High/Critical findings open | Readiness | — |
-| 185 | 3-day offline billing test on the desktop app: 500 bills, reconnect, zero duplicates | Readiness | — |
-| 186 | Critical scenario #8: Customer outstanding = invoices − receipts − credit notes | Critical scenario | — |
-| 187 | Critical scenario #10: Branch transfer: out = in, in-transit visible, reconciles | Critical scenario | — |
-| 188 | Critical scenario #12: Desktop offline 3 days, 500 bills, reconnect → all synced once, conflicts flagged | Critical scenario | — |
-| 189 | Critical scenario #15: Vouchers always balance; trial balance totals equal | Critical scenario | — |
-| 190 | QA: Platform & administration · P5 (18 features) | QA | — |
-| 191 | QA: Licensing: plans, license keys, entitlements · P5 (9 features) | QA | — |
-| 192 | QA: Authentication & onboarding · P5 (1 feature) | QA | — |
-| 193 | QA: Pricing, schemes, discounts · P5 (6 features) | QA | — |
-| 194 | QA: Purchase · P5 (6 features) | QA | — |
-| 195 | QA: Inventory · P5 (8 features) | QA | — |
-| 196 | QA: Inventory journals · P5 (2 features) | QA | — |
-| 197 | QA: Pharmacy operations (short book, ordering, warehouses) · P5 (2 features) | QA | — |
-| 198 | QA: Retail POS & invoices · P5 (11 features) | QA | — |
-| 199 | QA: Wholesale · P5 (16 features) | QA | — |
-| 200 | QA: Sales & purchase document cycle · P5 (3 features) | QA | — |
-| 201 | QA: GST & statutory · P5 (1 feature) | QA | — |
-| 202 | QA: Payments & accounting · P5 (10 features) | QA | — |
-| 203 | QA: Full books & finance · P5 (9 features) | QA | — |
-| 204 | QA: Notifications · P5 (4 features) | QA | — |
-| 205 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P5 (2 features) | QA | — |
-| 206 | QA: Desktop app & offline · P5 (3 features) | QA | — |
-| 207 | QA: Security · P5 (10 features) | QA | — |
+| 131 | Scenario 12 offline sync: 3-day offline, conflicts, duplicates | Groundwork | — |
+| 132 | Credit limit, outstanding, ageing, ledger balance tests | Groundwork | — |
+| 133 | Security: OWASP ZAP baseline, cross-tenant fuzzing, permission matrix tests | Groundwork | — |
+| 134 | Full regression suite in CI; restore drill verification with Jeeva | Groundwork | — |
+| 135 | Customer groups and account statements screens (web `parties/`) | Groundwork | — |
+| 136 | PLT-26 Migration importers for exports of popular software (Marg, Tally, Busy, Vyapar, GoFrugal): items, parties, opening stock by batch, outstanding bills, ledgers with opening balances; dry run with error report | Feature | Kamesh, Jeeva |
+| 137 | PTY-06 Party ledger, outstanding, ageing | Feature | Kamesh |
+| 138 | PTY-07 Credit limit & credit days enforcement with override approval | Feature | Kamesh |
+| 139 | PTY-13 Customer and supplier account statements (date range, PDF, email/WhatsApp) | Feature | Kamesh |
+| 140 | PTY-34 Credit rules beyond amount: limit by value, number of open bills and oldest bill age; over-limit approval from the owner's phone; average payment days shown at billing | Feature | Kamesh |
+| 141 | RET-05 Wholesale: accept expiry/breakage returns from retailers per policy | Feature | Kamesh |
+| 142 | CMP-07 Data privacy: patient data minimisation, consent, deletion requests (DPDP Act) | Feature | Kamesh |
+| 143 | PTY-04 Drug licence expiry tracking & block sale to retailers with expired licence | Feature | Kamesh |
+| 144 | PTY-12 Customer groups (individual, retailer, hospital, institution) with default price list, discount and credit terms | Feature | Kamesh |
+| 145 | PTY-14 Distributor rate contracts (terms of trade): agreed rate, scheme, discount and credit days per supplier + item, valid from / to; purchase entry flags deviations (extends PTY-11) | Feature | Kamesh |
+| 146 | PTY-21 Per-party payment reminders: schedule (N days before due, on due date, custom) and channels (email, WhatsApp, SMS); supplier reminders are for us, customer reminders go to the customer | Feature | Kamesh |
+| 147 | PTY-22 Party income-tax fields: PAN (matches GSTIN), related-party flag, TDS/TCS applicable + section from `tds_section`; related-party transactions report (verify) | Feature | Nitheesh |
+| 148 | PTY-23 MSME (Udyam) details for suppliers: category (micro / small / medium / not applicable), Udyam no., certificate; MSME payables due-date tracking and overdue report (verify) CA to confirm payment limit and tax effect | Feature | Nitheesh |
+| 149 | PTY-26 Transporter master and party defaults (transporter, mode, vehicle type) used by GRN, delivery and e-way bill | Feature | Kamesh |
+| 150 | PTY-31 Party merge (duplicate cleanup) with ledgers, documents and history preserved | Feature | Kamesh |
+| 151 | PTY-33 Party self-registration link: send a link; the retailer or customer fills GSTIN, licences, address and contacts; staff review and approve before the party is active | Feature | Kamesh |
+| 152 | PUR-21 Purchase inbox: a dedicated email address or connected mailbox receives distributor CSV / PDF bills, auto-creates draft purchases with item mapping, flags rate changes | Feature | Kamesh, Jeeva |
+| 153 | RET-07 Replacement management: replace returned goods instead of credit note | Feature | Kamesh |
+| 154 | CMP-08 Patient prescription history (consent-based, minimum data) | Feature | Kamesh |
+| 155 | CMP-14 Expired / damaged stock destruction record: batches, quantities, date, method, witnesses, linked to the write-off adjustment (verify) | Feature | Kamesh |
+| 156 | CAT-26 Bundles / kits: one sellable line made of component items, stock taken from components | Feature | Kamesh |
+| 157 | PTY-25 One party in both roles (customer and supplier) with a single ledger and netted outstanding (verify) CA | Feature | Nitheesh |
+| 158 | OWASP ZAP scan + permission matrix tests + cross-tenant fuzzing: no High/Critical findings open | Readiness | — |
+| 159 | 3-day offline billing test on the desktop app: 500 bills, reconnect, zero duplicates | Readiness | — |
+| 160 | Critical scenario #8: Customer outstanding = invoices − receipts − credit notes | Critical scenario | — |
+| 161 | Critical scenario #10: Branch transfer: out = in, in-transit visible, reconciles | Critical scenario | — |
+| 162 | Critical scenario #12: Desktop offline 3 days, 500 bills, reconnect → all synced once, conflicts flagged | Critical scenario | — |
+| 163 | Critical scenario #15: Vouchers always balance; trial balance totals equal | Critical scenario | — |
+| 164 | QA: Platform & administration · P5 (18 features) | QA | — |
+| 165 | QA: Licensing: plans, license keys, entitlements · P5 (9 features) | QA | — |
+| 166 | QA: Authentication & onboarding · P5 (1 feature) | QA | — |
+| 167 | QA: Pricing, schemes, discounts · P5 (6 features) | QA | — |
+| 168 | QA: Purchase · P5 (6 features) | QA | — |
+| 169 | QA: Inventory · P5 (8 features) | QA | — |
+| 170 | QA: Inventory journals · P5 (2 features) | QA | — |
+| 171 | QA: Pharmacy operations (short book, ordering, warehouses) · P5 (2 features) | QA | — |
+| 172 | QA: Retail POS & invoices · P5 (11 features) | QA | — |
+| 173 | QA: Wholesale · P5 (16 features) | QA | — |
+| 174 | QA: Sales & purchase document cycle · P5 (3 features) | QA | — |
+| 175 | QA: GST & statutory · P5 (1 feature) | QA | — |
+| 176 | QA: Payments & accounting · P5 (10 features) | QA | — |
+| 177 | QA: Full books & finance · P5 (9 features) | QA | — |
+| 178 | QA: Notifications · P5 (4 features) | QA | — |
+| 179 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P5 (2 features) | QA | — |
+| 180 | QA: Desktop app & offline · P5 (3 features) | QA | — |
+| 181 | QA: Security · P5 (10 features) | QA | — |
 
-## P6 · Pilot & GST returns (34)
+## P6 · Pilot & GST returns (28)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 208 | GSTR export validation, pilot defect triage, release reports | Groundwork | — |
-| 209 | PLT-44 Security assurance: OWASP ASVS L2 checklist per release, dependency and container scanning, annual VAPT by a CERT-In empanelled auditor, CERT-In 6-hour incident reporting and 180-day log retention (verify), ISO 27001 readiness | Feature | Jeeva, Nitheesh |
-| 210 | RPT-08 GST reports (see §12) | Feature | Nitheesh |
-| 211 | PTY-09 Patient refill reminders (chronic medicines) via WhatsApp/SMS | Feature | Kamesh |
-| 212 | PTY-28 Agent master and party agent/salesman with commission %; commission report | Feature | Kamesh |
-| 213 | CMP-02 Schedule X / narcotic register with stricter controls (duplicate Rx retention) | Feature | Kamesh |
-| 214 | CMP-10 Controlled stock register: restricted items inward/outward with running balance (verify) | Feature | Kamesh |
-| 215 | CMP-11 Regulatory audit: compliance activity log and inspection pack export (verify) | Feature | Kamesh |
-| 216 | CMP-13 Patient safety warnings at POS: allergy match with the patient profile, duplicate-therapy and interaction alerts from the drug reference; pharmacist acknowledges and it is logged (verify) pharmacist review | Feature | Kamesh |
-| 217 | RPT-10 Branch comparison | Feature | Nitheesh |
-| 218 | RPT-21 Commission and TDS register: salesman / agent commission vouchers with sales amount, commission %, commission, TDS section, TDS % and TDS amount by period (verify) CA (TDS on commission) | Feature | Nitheesh |
-| 219 | ANX-03 Customer, product and vendor performance reports (top, declining, dormant) | Feature | Nitheesh |
-| 220 | ANX-09 Customer retention: new vs repeat, lapsed customers, refill adherence by month and branch | Feature | Nitheesh |
-| 221 | CAT-13 Item images | Feature | Kamesh |
-| 222 | CAT-21 Drug reference panel on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up by salt with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" (verify) pharmacist review | Feature | Kamesh |
-| 223 | PTY-08 Customer loyalty points / membership discount | Feature | Kamesh |
-| 224 | PTY-29 Interest on overdue: % and basis (simple 365 / 360 days, compound monthly) per party; interest calculation report and optional interest debit note (verify) | Feature | Nitheesh |
-| 225 | ANX-05 Smart insights card on dashboard (plain-language highlights: "Sales of X down 30 % vs last month") | Feature | Nitheesh |
-| 226 | Weekly pilot regression run and release report | Readiness | — |
-| 227 | QA: Platform & administration · P6 (7 features) | QA | — |
-| 228 | QA: Licensing: plans, license keys, entitlements · P6 (2 features) | QA | — |
-| 229 | QA: Purchase · P6 (3 features) | QA | — |
-| 230 | QA: Inventory · P6 (1 feature) | QA | — |
-| 231 | QA: Inventory journals · P6 (1 feature) | QA | — |
-| 232 | QA: Pharmacy operations (short book, ordering, warehouses) · P6 (3 features) | QA | — |
-| 233 | QA: Retail POS & invoices · P6 (1 feature) | QA | — |
-| 234 | QA: Wholesale · P6 (5 features) | QA | — |
-| 235 | QA: Sales & purchase document cycle · P6 (1 feature) | QA | — |
-| 236 | QA: GST & statutory · P6 (8 features) | QA | — |
-| 237 | QA: Payments & accounting · P6 (5 features) | QA | — |
-| 238 | QA: Full books & finance · P6 (8 features) | QA | — |
-| 239 | QA: Home delivery & fleet · P6 (1 feature) | QA | — |
-| 240 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P6 (4 features) | QA | — |
-| 241 | QA: Security · P6 (2 features) | QA | — |
+| 182 | GSTR export validation, pilot defect triage, release reports | Groundwork | — |
+| 183 | PLT-44 Security assurance: OWASP ASVS L2 checklist per release, dependency and container scanning, annual VAPT by a CERT-In empanelled auditor, CERT-In 6-hour incident reporting and 180-day log retention (verify), ISO 27001 readiness | Feature | Jeeva, Nitheesh |
+| 184 | PTY-09 Patient refill reminders (chronic medicines) via WhatsApp/SMS | Feature | Kamesh |
+| 185 | PTY-28 Agent master and party agent/salesman with commission %; commission report | Feature | Kamesh |
+| 186 | CMP-02 Schedule X / narcotic register with stricter controls (duplicate Rx retention) | Feature | Kamesh |
+| 187 | CMP-10 Controlled stock register: restricted items inward/outward with running balance (verify) | Feature | Kamesh |
+| 188 | CMP-11 Regulatory audit: compliance activity log and inspection pack export (verify) | Feature | Kamesh |
+| 189 | CMP-13 Patient safety warnings at POS: allergy match with the patient profile, duplicate-therapy and interaction alerts from the drug reference; pharmacist acknowledges and it is logged (verify) pharmacist review | Feature | Kamesh |
+| 190 | CAT-13 Item images | Feature | Kamesh |
+| 191 | CAT-21 Drug reference panel on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up by salt with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" (verify) pharmacist review | Feature | Kamesh |
+| 192 | PTY-08 Customer loyalty points / membership discount | Feature | Kamesh |
+| 193 | PTY-29 Interest on overdue: % and basis (simple 365 / 360 days, compound monthly) per party; interest calculation report and optional interest debit note (verify) | Feature | Nitheesh |
+| 194 | Weekly pilot regression run and release report | Readiness | — |
+| 195 | QA: Platform & administration · P6 (7 features) | QA | — |
+| 196 | QA: Licensing: plans, license keys, entitlements · P6 (2 features) | QA | — |
+| 197 | QA: Purchase · P6 (3 features) | QA | — |
+| 198 | QA: Inventory · P6 (1 feature) | QA | — |
+| 199 | QA: Inventory journals · P6 (1 feature) | QA | — |
+| 200 | QA: Pharmacy operations (short book, ordering, warehouses) · P6 (3 features) | QA | — |
+| 201 | QA: Retail POS & invoices · P6 (1 feature) | QA | — |
+| 202 | QA: Wholesale · P6 (5 features) | QA | — |
+| 203 | QA: Sales & purchase document cycle · P6 (1 feature) | QA | — |
+| 204 | QA: GST & statutory · P6 (8 features) | QA | — |
+| 205 | QA: Payments & accounting · P6 (5 features) | QA | — |
+| 206 | QA: Full books & finance · P6 (8 features) | QA | — |
+| 207 | QA: Home delivery & fleet · P6 (1 feature) | QA | — |
+| 208 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P6 (4 features) | QA | — |
+| 209 | QA: Security · P6 (2 features) | QA | — |
 
-## P7 · Growth (14)
+## P7 · Growth (12)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 242 | Mobile test strategy | Groundwork | — |
-| 243 | RPT-12 Sales forecasting & smart reorder (ML) | Feature | Nitheesh |
-| 244 | ANX-04 Customer & product intelligence: purchase frequency, refill prediction, churn risk | Feature | Nitheesh |
-| 245 | QA: Platform & administration · P7 (3 features) | QA | — |
-| 246 | QA: Purchase · P7 (1 feature) | QA | — |
-| 247 | QA: Pharmacy operations (short book, ordering, warehouses) · P7 (1 feature) | QA | — |
-| 248 | QA: Wholesale · P7 (1 feature) | QA | — |
-| 249 | QA: GST & statutory · P7 (1 feature) | QA | — |
-| 250 | QA: Payments & accounting · P7 (1 feature) | QA | — |
-| 251 | QA: Full books & finance · P7 (1 feature) | QA | — |
-| 252 | QA: Notifications · P7 (1 feature) | QA | — |
-| 253 | QA: Home delivery & fleet · P7 (2 features) | QA | — |
-| 254 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P7 (7 features) | QA | — |
-| 255 | QA: Mobile (P7) · P7 (6 features) | QA | — |
+| 210 | Mobile test strategy | Groundwork | — |
+| 211 | QA: Platform & administration · P7 (3 features) | QA | — |
+| 212 | QA: Purchase · P7 (1 feature) | QA | — |
+| 213 | QA: Pharmacy operations (short book, ordering, warehouses) · P7 (1 feature) | QA | — |
+| 214 | QA: Wholesale · P7 (1 feature) | QA | — |
+| 215 | QA: GST & statutory · P7 (1 feature) | QA | — |
+| 216 | QA: Payments & accounting · P7 (1 feature) | QA | — |
+| 217 | QA: Full books & finance · P7 (1 feature) | QA | — |
+| 218 | QA: Notifications · P7 (1 feature) | QA | — |
+| 219 | QA: Home delivery & fleet · P7 (2 features) | QA | — |
+| 220 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P7 (7 features) | QA | — |
+| 221 | QA: Mobile (P7) · P7 (6 features) | QA | — |

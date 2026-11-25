@@ -1,4 +1,4 @@
-# Replace placeholder handles (@kamesh-gh etc.) with real GitHub usernames when the org is set up.
+# Replace placeholder handles (@kamesh-gh, @gokul-gh etc.) with real GitHub usernames when the org is set up.
 # Nitheesh (@nitheeshdr) manages everything: default owner + second reviewer on every path.
 # Later rules win, so specific paths are listed after the default.
 
@@ -54,28 +54,29 @@
 /apps/web/src/features/inventory/       @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/pos/             @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/wholesale/       @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/pricing/         @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/gst/             @meyyarivu-gh @nitheeshdr
-# Admin, finance, dashboards, CRM (Nitheesh)
+# Admin, finance, licensing (Nitheesh)
 /apps/web/src/features/company/         @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/branches/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/users/           @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/settings/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/admin/           @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/dashboard/       @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/accounting/      @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/payments/        @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/crm/             @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/delivery/        @nitheeshdr @meyyarivu-gh
 /apps/web/src/features/platform/        @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/channels/        @nitheeshdr @meyyarivu-gh
-# Medicine master, parties, returns, compliance, reports (Ashok)
+# Medicine master, parties, returns, compliance (Ashok)
 /apps/web/src/features/catalog/         @ashok-gh @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/parties/         @ashok-gh @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/returns/         @ashok-gh @meyyarivu-gh @nitheeshdr
 /apps/web/src/features/compliance/      @ashok-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/reports/         @ashok-gh @meyyarivu-gh @nitheeshdr
 /apps/web/tests/e2e/                    @ashok-gh @meyyarivu-gh
+# Pricing, GST, dashboards, reports, CRM, delivery, channels (Gokul)
+/apps/web/src/features/pricing/         @gokul-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/gst/             @gokul-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/dashboard/       @gokul-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/reports/         @gokul-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/crm/             @gokul-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/delivery/        @gokul-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/channels/        @gokul-gh @meyyarivu-gh @nitheeshdr
 
 # Desktop
 /apps/desktop/                      @nitheeshdr @jeeva-gh
