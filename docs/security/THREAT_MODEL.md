@@ -42,6 +42,7 @@ CI/CD ──▶ container registry ──▶ VM / cluster
 | Platform admin | **E**levation | Compromised super-admin account | Separate admin realm, hardware-key MFA, IP allowlist, break-glass with alert, two-person rule for destructive actions (SEC-06) |
 | CI/CD | **T**ampering | Malicious dependency or compromised GitHub token | Pinned deps, SBOM, signed images, protected branches, required reviews, secret scanning, OIDC to cloud (SEC-08, SEC-14) |
 | Backups | **I**nfo disclosure / **D**oS | Ransomware deletes backups; backup copied | Encrypted, immutable copies with separate credentials in a second region; restore drills (SEC-15) |
+| AI assistant | **I**nfo disclosure / **E**levation | Prompt injection (in a question, an item name or an uploaded document) asks for another tenant's data or a write; patient data sent to the LLM provider | Model is not the boundary: tenant from token, allowlisted read-only typed tools with permissions, no model SQL, output figure check, redaction, owner consent, provider key in vault (AIA-04, AIA-08, AIA-09, ADR-0017) |
 | Logs | **I**nfo disclosure | Patient names or tokens in logs | Structured logging with redaction, no patient data, log access restricted, retention per policy (SEC-07) |
 | Exports | **I**nfo disclosure | Staff exports the whole customer list before leaving | Export permission, watermark with user and time, approval for restricted data, bulk-export alert (SEC-11) |
 
@@ -74,6 +75,7 @@ Fraud signals are rules with thresholds in configuration (no hard-coded numbers)
 8. Support user without an active grant opens a tenant → denied and alerted.
 9. Export of patient data by a role without permission → denied.
 10. 20 failed sign-ins from one IP → throttled; owner alerted on success after failures.
+11. AI assistant asked (directly or through injected text) for another tenant's data or to post / cancel / change anything → only own data, no write; outbound provider payload contains no patient data (critical scenario #16).
 
 ## 6. Residual risks (accepted for the pilot, revisit before Standard tier)
 

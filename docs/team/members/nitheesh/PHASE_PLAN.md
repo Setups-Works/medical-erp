@@ -57,3 +57,5 @@ Manager + full-stack. Feature tasks (story → API → screen) for PLT, ADM, ACC
 ## P7 Growth
 - [ ] Field-sales and mobile owner app requirements (Prakalya reviews)
 - [ ] Mobile architecture ADR (Expo, shared packages), fieldsales module design
+- [ ] Accept ADR-0017 (AI assistant): provider, model, client library (RestClient or Spring AI), retention; update AI_ASSISTANT.md and R-52 (after Jeeva's comparison and Prakalya's privacy review)
+- [ ] AI assistant design review with Kamesh, Gokul, Jeeva and Ashok: tool list, permissions, redaction, guards, test pack (docs/architecture/AI_ASSISTANT.md)

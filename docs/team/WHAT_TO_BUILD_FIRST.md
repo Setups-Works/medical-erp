@@ -28,6 +28,7 @@ flowchart LR
 | P4 Retail POS & returns | Counter billing, returns, H1 register | A sale takes stock that already exists |
 | P5 Wholesale, finance, offline | Credit sales, payments, accounts, offline sync | Built on top of sales and stock |
 | P6 Pilot | Real pharmacies, GST returns | Only when the money and stock are proven right |
+| P7 Growth | Mobile, field sales, AI assistant ([AI_ASSISTANT.md](../architecture/AI_ASSISTANT.md)) | The assistant only reads data that sales, stock and reports already make correct |
 
 ## 2. Who starts with what
 

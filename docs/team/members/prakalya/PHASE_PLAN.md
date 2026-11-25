@@ -38,3 +38,8 @@ Legend: **[BA]** business analysis · **[QA]** testing. You work **part-time: ab
 ## P6 Pilot
 - [ ] [BA] Pilot onboarding, weekly feedback calls, triage into Hub tasks; GSTR validation with pilot's CA
 
+## P7 Growth
+
+- [ ] [BA] AI assistant question catalogue: 30 real questions from owners, branch managers and accountants with expected answers on demo data (acceptance criteria for AIA-01 … AIA-07)
+- [ ] [BA] AI assistant privacy review with the lawyer: notice and consent text, what may be sent to the provider, retention (R-52)
+- [ ] [BA] Business acceptance of the AI assistant against the question catalogue

@@ -31,7 +31,8 @@ Checks that MENO covers every capability a pharmacy retail + wholesale ERP must 
 | Loyalty & promotions | PTY-08, CRM-04, CRM-05, CRM-08, CRM-09 | Points, membership plans, vouchers, flash sales |
 | Healthcare integrations | INT-07, INT-08, INT-09 | ABHA, EMR, HMIS |
 | Access security | PLT-07, PLT-11, PLT-20 | Permissions, device registration, network allowlist |
-| AI & staff training | PLT-21, ANX-05, MKT-09, ADM-13 | Assistant, insights, training |
+| AI & staff training | AIA-01, ANX-05, MKT-09, ADM-13 | Assistant, insights, training |
+| AI assistant (shared LLM, tenant-safe) | AIA-01, AIA-02, AIA-03, AIA-04, AIA-05, AIA-06, AIA-07, AIA-08, AIA-09, AIA-10, AIA-11, AIA-12 | Read-only typed tools, Groq adapter, privacy, guards, quotas, audit, optional RAG (AI_ASSISTANT.md) |
 | Product data & barcode lookup (India) | CAT-10, INT-11, INT-12, CAT-22, CAT-23, CAT-24, CAT-04 | Indian medicine database: unknown-barcode lookup, create-form pre-fill |
 | Licensing (sell and switch on MENO) | LIC-01 … LIC-11, PLT-14, PLT-15 | Super admin issues keys, buyer activates, plan limits and expiry enforced, offline certificate |
 | Drug reference | INT-10, CAT-21 | openFDA labels by salt, reference only |

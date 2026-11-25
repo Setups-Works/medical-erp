@@ -28,6 +28,7 @@ Base-plan names are kept as **sub-domains** inside fewer, larger modules so begi
 | `accounting` | ledger_account, voucher, voucher_entry, expense, day_close | accounting | `LedgerFacade.balance` | — | party | 5 |
 | `taxation` | tax_rate, hsn_tax, einvoice_request, gstr_export | taxation | `GstCalculator`, `EInvoiceService` | — | — | 3 |
 | `reporting` | read models / SQL views only | reports | `/api/v1/reports/*` | — | everything (read-only) | 3+ |
+| `assistant` | ai_setting, ai_conversation, ai_message, ai_usage_daily, ai_document(+chunk, pgvector) | — (new, P7) | `/api/v1/assistant/*`, `AssistantTool` registry (AI_ASSISTANT.md) | — | tenancy, identity, audit, subscription, integrations, files, and the `api` packages of sales, inventory, pricing, catalog, reporting (read-only) | 7 |
 | `fieldsales` | route, beat, salesman, visit, collection | — (new) | — | — | sales, party, payment | 6 |
 
 ## Rules

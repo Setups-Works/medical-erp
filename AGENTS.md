@@ -128,6 +128,7 @@ Full process: `docs/team/WORKFLOW.md`. How to work with AI agents: `docs/team/AI
 | **Backend implementation guide (pipeline, engine twin, modules, error codes)** | `docs/architecture/BACKEND_IMPLEMENTATION.md` |
 | Researched legal / tax answers, sign-off sheets | `docs/compliance/RESEARCHED_ANSWERS.md`, `docs/compliance/signoff/` |
 | Offline + sync | `docs/architecture/OFFLINE_SYNC.md` |
+| AI assistant (P7: shared LLM, read-only tools, tenant safety) | `docs/architecture/AI_ASSISTANT.md`, ADR-0017 |
 | Multi-tenancy | `docs/architecture/MULTI_TENANCY.md` |
 | GST / pricing / rounding maths | `docs/architecture/CALCULATIONS.md` |
 | **Validation rules, no hard-coding** | `docs/architecture/VALIDATION_AND_BUSINESS_RULES.md` |

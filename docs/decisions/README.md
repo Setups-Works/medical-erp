@@ -20,3 +20,4 @@ An ADR records one significant decision: context, decision, consequences. Write 
 | [0014](0014-configuration-over-hardcoding.md) | Configuration over hard-coding, four-layer validation | Accepted |
 | [0015](0015-license-keys-signed-certificates.md) | License keys + server-side licenses + Ed25519-signed certificates | Proposed |
 | [0016](0016-tamper-evident-records-and-device-signing.md) | Hash-chained posted records and device-signed offline bills | Proposed |
+| [0017](0017-ai-assistant-shared-llm.md) | AI assistant on one shared LLM provider, behind meno-api tools | Proposed |

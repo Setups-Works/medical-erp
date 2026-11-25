@@ -41,6 +41,7 @@
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/delivery/        @nitheeshdr @kamesh77-git
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/channels/        @nitheeshdr @kamesh77-git
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/reporting/       @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/assistant/       @nitheeshdr @kamesh77-git
 /backend/meno-api/src/main/java/com/setupsworks/meno/modules/fieldsales/      @nitheeshdr @kamesh77-git
 /backend/meno-api/src/main/resources/db/migration/                            @kamesh77-git @nitheeshdr
 /backend/meno-api/src/test/java/com/setupsworks/meno/scenarios/               @ashok-gh @kamesh77-git
@@ -77,6 +78,7 @@
 /apps/web/src/features/crm/             @gokulb24 @Meyyarivu @nitheeshdr
 /apps/web/src/features/delivery/        @gokulb24 @Meyyarivu @nitheeshdr
 /apps/web/src/features/channels/        @gokulb24 @Meyyarivu @nitheeshdr
+/apps/web/src/features/assistant/       @gokulb24 @Meyyarivu @nitheeshdr
 
 # Desktop
 /apps/desktop/                      @nitheeshdr @jeeva-gh

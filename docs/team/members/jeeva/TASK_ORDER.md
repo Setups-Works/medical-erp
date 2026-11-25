@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**105 tasks** · P0: 5 · P1: 9 · P2: 8 · P3: 6 · P4: 14 · P5: 40 · P6: 12 · P7: 11
+**110 tasks** · P0: 5 · P1: 9 · P2: 8 · P3: 6 · P4: 14 · P5: 40 · P6: 12 · P7: 16
 
 ## P0 · Foundation (5)
 
@@ -136,18 +136,23 @@
 | 93 | SEC-18 Trust centre and security pack: public trust page, security whitepaper, VAPT summary, DPA template, sub-processor list, ready answers to security questionnaires | Feature | Nitheesh, Meyyarivu |
 | 94 | Monthly cost and uptime report; scale plan if the pilot grows | Readiness | — |
 
-## P7 · Growth (11)
+## P7 · Growth (16)
 
 | Step | Task | Type | With |
 |---|---|---|---|
 | 95 | Mobile build pipeline (EAS), environment for public API | Groundwork | — |
-| 96 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Nitheesh, Gokul |
-| 97 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Nitheesh, Gokul |
-| 98 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Nitheesh, Gokul |
-| 99 | INT-05 Public API + webhooks for partners | Feature | Nitheesh |
-| 100 | INT-06 Online pharmacy / e-commerce order intake | Feature | Nitheesh |
-| 101 | INT-07 ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions (verify) ABDM certification | Feature | Nitheesh |
-| 102 | INT-08 EMR integration: receive prescriptions from clinic software | Feature | Nitheesh |
-| 103 | INT-09 Hospital software (HMIS) integration: hospital pharmacy billing against patient / IP number, ward indents | Feature | Nitheesh |
-| 104 | INT-13 Insurance / TPA / corporate credit billing for hospital pharmacies: payer master, co-pay split, claim status | Feature | Nitheesh |
-| 105 | INT-14 Hospital (IP) pharmacy: ward indents, issue against admission, returns from ward, consolidated IP bill to the hospital system (extends INT-09) | Feature | Nitheesh |
+| 96 | Compare LLM providers for the AI assistant (Groq first): tool calling, latency, price, data retention, training use, region, DPA; embeddings option for RAG; write it into ADR-0017 | Groundwork | — |
+| 97 | AI assistant infrastructure: `MENO_AI_*` secrets in Key Vault, egress allowlist to the provider, pgvector-enabled PostgreSQL image (if AIA-12 goes ahead), Grafana panels and alerts for AI errors, latency and tokens | Groundwork | — |
+| 98 | AIA-03 LLM provider adapter in `integrations`: `LlmClient` port + Groq adapter (OpenAI-compatible chat API with tool calling), key in Key Vault, model, timeout, token limit and retries from configuration, provider errors mapped to friendly messages, egress allowlist, recorded-response mock for CI (verify) provider terms, retention and model (R-52) | Feature | Nitheesh |
+| 99 | AIA-11 Assistant audit, security tests and monitoring: audit row per question (who, tenant, branch, tools, tokens, latency, outcome, no prompt text), Grafana metrics and alerts (errors, p95, daily tokens), RLS fail-closed and connection-pool leak tests under `meno_app`, cross-tenant through tools (critical scenario #16) | Feature | Nitheesh |
+| 100 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Nitheesh, Gokul |
+| 101 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Nitheesh, Gokul |
+| 102 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Nitheesh, Gokul |
+| 103 | INT-05 Public API + webhooks for partners | Feature | Nitheesh |
+| 104 | INT-06 Online pharmacy / e-commerce order intake | Feature | Nitheesh |
+| 105 | INT-07 ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions (verify) ABDM certification | Feature | Nitheesh |
+| 106 | INT-08 EMR integration: receive prescriptions from clinic software | Feature | Nitheesh |
+| 107 | INT-09 Hospital software (HMIS) integration: hospital pharmacy billing against patient / IP number, ward indents | Feature | Nitheesh |
+| 108 | INT-13 Insurance / TPA / corporate credit billing for hospital pharmacies: payer master, co-pay split, claim status | Feature | Nitheesh |
+| 109 | INT-14 Hospital (IP) pharmacy: ward indents, issue against admission, returns from ward, consolidated IP bill to the hospital system (extends INT-09) | Feature | Nitheesh |
+| 110 | AIA-12 Store documents (RAG, optional): owner uploads SOPs, policies and supplier terms; chunked and embedded into PostgreSQL pgvector with tenant RLS; `search_store_documents` returns snippets with document and page; content treated as untrusted (verify) embedding provider | Feature | Nitheesh, Gokul |

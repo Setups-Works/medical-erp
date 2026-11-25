@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**47 tasks** · P0: 5 · P1: 5 · P2: 11 · P3: 4 · P4: 6 · P5: 7 · P6: 7 · P7: 2
+**50 tasks** · P0: 5 · P1: 5 · P2: 11 · P3: 4 · P4: 6 · P5: 7 · P6: 7 · P7: 5
 
 ## P0 · Foundation (5)
 
@@ -87,9 +87,12 @@
 | 44 | QA: CRM & customer care · P6 (7 features) | QA | — |
 | 45 | QA: Engagement (campaigns) · P6 (1 feature) | QA | — |
 
-## P7 · Growth (2)
+## P7 · Growth (5)
 
 | Step | Task | Type | With |
 |---|---|---|---|
-| 46 | QA: CRM & customer care · P7 (3 features) | QA | — |
-| 47 | QA: Engagement (campaigns) · P7 (1 feature) | QA | — |
+| 46 | AI assistant question catalogue: 30 real questions from owners, branch managers and accountants with expected answers on demo data (acceptance criteria for AIA-01 … AIA-07) | Groundwork | — |
+| 47 | AI assistant privacy review with the lawyer: notice and consent text, what may be sent to the provider, retention (R-52) | Groundwork | — |
+| 48 | Business acceptance of the AI assistant against the question catalogue | Groundwork | — |
+| 49 | QA: CRM & customer care · P7 (3 features) | QA | — |
+| 50 | QA: Engagement (campaigns) · P7 (1 feature) | QA | — |

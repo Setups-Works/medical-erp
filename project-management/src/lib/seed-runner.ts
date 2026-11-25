@@ -125,12 +125,13 @@ const AREA_BY_PREFIX: Record<string, string> = {
   PLT: "platform", CAT: "masters", PTY: "masters", PRC: "pricing", PUR: "purchase", INV: "inventory", POS: "pos",
   WHS: "wholesale", RET: "returns", CMP: "compliance", ACC: "accounting", GST: "gst", RPT: "reports", NTF: "notifications",
   DSK: "desktop", MOB: "mobile", INT: "integrations", MKT: "pharmacy-ops", DOC: "documents", ACX: "accounting",
-  IJX: "inventory", ANX: "reports", ENG: "engagement", NAV: "navigation", CRM: "crm", ADM: "administration", AUT: "auth", DSH: "dashboards", DLV: "delivery", OMN: "channels", LIC: "licensing", SEC: "security",
+  IJX: "inventory", ANX: "reports", ENG: "engagement", NAV: "navigation", CRM: "crm", ADM: "administration", AUT: "auth", DSH: "dashboards", DLV: "delivery", OMN: "channels", AIA: "ai-assistant", LIC: "licensing", SEC: "security",
 };
 
-const SCENARIO_PHASE: Record<string, string> = { "1": "P3", "2": "P4", "3": "P4", "4": "P4", "5": "P3", "6": "P4", "7": "P3", "8": "P5", "9": "P1", "10": "P5", "11": "P4", "12": "P5", "13": "P4", "14": "P4", "15": "P5" };
+const SCENARIO_PHASE: Record<string, string> = { "1": "P3", "2": "P4", "3": "P4", "4": "P4", "5": "P3", "6": "P4", "7": "P3", "8": "P5", "9": "P1", "10": "P5", "11": "P4", "12": "P5", "13": "P4", "14": "P4", "15": "P5", "16": "P7" };
 
 function compliancePhase(area: string) {
+  if (/AI assistant/i.test(area)) return "P7"; // only needed before the assistant is built (AI_ASSISTANT.md)
   if (/DPDP/i.test(area)) return "P5";
   if (/e-invoice|e-way|returns/i.test(area)) return "P4";
   if (/retention/i.test(area)) return "P3";
@@ -334,7 +335,7 @@ export function buildDrafts(dir: string): Draft[] {
 }
 
 /** Build order of feature areas: foundations first, then the money/stock flow, then finance, reports and extras. */
-const PREFIX_ORDER = "PLT LIC AUT NAV CAT PTY PRC PUR INV IJX MKT POS RET WHS DOC CMP GST ACC ACX DSH RPT ANX CRM ENG NTF ADM DLV OMN INT DSK MOB".split(" ");
+const PREFIX_ORDER = "PLT LIC AUT NAV CAT PTY PRC PUR INV IJX MKT POS RET WHS DOC CMP GST ACC ACX DSH RPT ANX CRM ENG NTF ADM DLV OMN INT DSK MOB AIA".split(" ");
 /** Within a phase: groundwork → rules to confirm → features → readiness → critical scenarios → QA → phase gate. */
 const STAGE: Record<string, number> = { plan: 1, compliance: 2, feature: 3, ready: 4, runbook: 4, scenario: 5, qa: 6, gate: 9 };
 const PRIORITY_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 };

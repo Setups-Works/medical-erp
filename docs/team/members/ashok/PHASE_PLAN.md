@@ -50,3 +50,4 @@ QA lead + frontend. Legend: **[FE]** frontend; everything else is QA. Do tasks i
 
 ## P7 Growth
 - [ ] Mobile test strategy
+- [ ] [QA] AI assistant security test pack: cross-tenant through questions and crafted tool arguments, prompt injection (question, item name, document), write requests refused, redaction on the outbound payload, pool leak; automate critical scenario #16

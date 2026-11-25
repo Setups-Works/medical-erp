@@ -39,6 +39,7 @@ Coverage gates: backend `service/` + `domain/` ≥ 80 % lines; `billing-engine` 
 | 13 | H1 sale without Rx is blocked; register entry created with Rx | scenario + E2E |
 | 14 | Posted invoice cannot be edited; reversal creates opposite movements and vouchers | scenario |
 | 15 | Vouchers always balance; trial balance totals equal | scenario |
+| 16 | AI assistant: a user of tenant A, through questions, crafted tool arguments or injected text, never gets tenant B's data, never triggers a write, and no patient data reaches the LLM provider (P7, AI_ASSISTANT.md §11) | integration + mock LLM |
 
 ## Test data
 
