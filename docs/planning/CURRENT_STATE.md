@@ -2,7 +2,7 @@
 
 > Agents read this to know what exists. **Update it in every PR that changes what works.** Keep it factual: `live` (merged & on staging) · `building` (in progress) · `planned`.
 
-**Phase:** P0 Foundation · **Last updated:** 2026-11-24 · **By:** Nitheesh
+**Phase:** P0 Foundation · **Last updated:** 2026-11-25 · **By:** Nitheesh
 
 | Area | Status | Notes |
 |---|---|---|
@@ -15,6 +15,7 @@
 | Docker Compose / CI | planned | P1 |
 | Azure staging | planned | P1 |
 | Mobile | deferred | P7 |
+| Team access | live | 7 members. GitHub (`Setups-Works/medical-erp`): nitheeshdr, kamesh77-git, Meyyarivu, gokulb24 (invited 25-11-2026, Hub #978); real handles in `.github/CODEOWNERS`. Prakalya, Ashok and Jeeva still use placeholder handles until they join the repo. Hub: all 7 have accounts |
 | MENO Hub (project management) | live | https://setupsworks-pms.vercel.app · `project-management/`: **Start here** page (build order with live milestone status, everyone's next Step, weekly goal, daily meeting), step-ordered tasks, 378 pages, 475 features (every feature linked to at least one page) imported from these docs; owners from OWNERSHIP_MATRIX.md. Learn Day 21: click-through ERP demo (tabbed supplier, customer, product forms; ledger, purchase, POS with full line columns, wholesale tax invoice with returns / replacement / charges and printed layout, results). Learn Day 22: live GSTIN fetch on the full supplier and customer forms (real GST verify API through `/api/learn/gst`; spec `docs/product/GSTIN_FETCH.md`) |
 | Field and logic specs | live | `docs/product/MASTER_FIELDS.md` (supplier, customer, product tabs and fields), `docs/product/DOCUMENT_FIELDS.md` (every transaction document: fields, checks, posting), CALCULATIONS.md §6a–§22; FEATURES §24–§32; security: `docs/security/THREAT_MODEL.md`, controls catalogue in SECURITY.md, ADR-0016 (Proposed); researched answers `docs/compliance/RESEARCHED_ANSWERS.md` (51 answers; 189 / 189 open rules researched or proposed; sign-off sheets in `docs/compliance/signoff/`); plain-language guide `docs/product/HOW_A_PHARMACY_WORKS.md` and HTML learning guide `docs/guide/meno-learning-guide.html` and developer guide `docs/guide/meno-developer-guide.html` (13 core screens field by field, 378 pages with pattern and API; both in Hub → Learn) + seed `contracts/reference-data/statutory-settings.v1.json`; enterprise standard `docs/architecture/ENTERPRISE_READINESS.md`; pilot scope `docs/planning/PILOT_SCOPE.md` (generated); open rules `docs/compliance/RULES_TO_CONFIRM.md` (generated); 20 draft test vectors in `contracts/test-vectors/`; pharmacy visit guide; onboarding flow `docs/product/ONBOARDING.md`; competitor audit `docs/product/research/COMPETITOR_AUDIT.md` (Marg, VarthagamSoft, others) |
 | Sprint 0 review pack | live | `docs/planning/sprint-0/`: architecture review held, all 14 ADRs accepted; BRD / ER / wireframe review checklists |

@@ -1,4 +1,4 @@
-# Replace placeholder handles (@kamesh-gh, @gokul-gh etc.) with real GitHub usernames when the org is set up.
+# Real handles: @nitheeshdr, @kamesh77-git, @Meyyarivu, @gokulb24. Still placeholders (replace when they join the repo): @prakalya-gh, @ashok-gh, @jeeva-gh.
 # Nitheesh (@nitheeshdr) manages everything: default owner + second reviewer on every path.
 # Later rules win, so specific paths are listed after the default.
 
@@ -9,9 +9,9 @@
 /docs/business-requirements/        @prakalya-gh @nitheeshdr
 /docs/workflows/                    @prakalya-gh @nitheeshdr
 /docs/compliance/                   @prakalya-gh @nitheeshdr
-/docs/design/                       @meyyarivu-gh @nitheeshdr
-/docs/database/                     @kamesh-gh @nitheeshdr
-/docs/api/                          @kamesh-gh @nitheeshdr
+/docs/design/                       @Meyyarivu @nitheeshdr
+/docs/database/                     @kamesh77-git @nitheeshdr
+/docs/api/                          @kamesh77-git @nitheeshdr
 /docs/testing/                      @ashok-gh @nitheeshdr
 /docs/deployment/                   @jeeva-gh @nitheeshdr
 /docs/runbooks/                     @jeeva-gh @nitheeshdr
@@ -19,64 +19,64 @@
 # Generated from docs/team/OWNERSHIP_MATRIX.md: change that file first.
 
 # Backend modules
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/catalog/         @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/party/           @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/pricing/         @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/purchase/        @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/inventory/       @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/sales/           @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/returns/         @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/compliance/      @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/taxation/        @kamesh-gh @nitheeshdr
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/auth/            @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/tenancy/         @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/identity/        @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/subscription/    @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/audit/           @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/files/           @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/sync/            @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/notification/    @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/payment/         @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/accounting/      @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/delivery/        @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/channels/        @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/reporting/       @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/java/com/setupsworks/meno/modules/fieldsales/      @nitheeshdr @kamesh-gh
-/backend/meno-api/src/main/resources/db/migration/                            @kamesh-gh @nitheeshdr
-/backend/meno-api/src/test/java/com/setupsworks/meno/scenarios/               @ashok-gh @kamesh-gh
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/catalog/         @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/party/           @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/pricing/         @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/purchase/        @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/inventory/       @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/sales/           @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/returns/         @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/compliance/      @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/taxation/        @kamesh77-git @nitheeshdr
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/auth/            @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/tenancy/         @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/identity/        @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/subscription/    @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/audit/           @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/files/           @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/sync/            @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/notification/    @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/payment/         @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/accounting/      @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/delivery/        @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/channels/        @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/reporting/       @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/java/com/setupsworks/meno/modules/fieldsales/      @nitheeshdr @kamesh77-git
+/backend/meno-api/src/main/resources/db/migration/                            @kamesh77-git @nitheeshdr
+/backend/meno-api/src/test/java/com/setupsworks/meno/scenarios/               @ashok-gh @kamesh77-git
 
 # Frontend (Meyyarivu: shell + transactional screens)
-/apps/web/                              @meyyarivu-gh @nitheeshdr
-/packages/ui/                           @meyyarivu-gh @nitheeshdr
-/packages/validation/                   @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/auth/            @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/purchase/        @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/inventory/       @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/pos/             @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/wholesale/       @meyyarivu-gh @nitheeshdr
+/apps/web/                              @Meyyarivu @nitheeshdr
+/packages/ui/                           @Meyyarivu @nitheeshdr
+/packages/validation/                   @Meyyarivu @nitheeshdr
+/apps/web/src/features/auth/            @Meyyarivu @nitheeshdr
+/apps/web/src/features/purchase/        @Meyyarivu @nitheeshdr
+/apps/web/src/features/inventory/       @Meyyarivu @nitheeshdr
+/apps/web/src/features/pos/             @Meyyarivu @nitheeshdr
+/apps/web/src/features/wholesale/       @Meyyarivu @nitheeshdr
 # Admin, finance, licensing (Nitheesh)
-/apps/web/src/features/company/         @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/branches/        @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/users/           @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/settings/        @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/admin/           @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/accounting/      @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/payments/        @nitheeshdr @meyyarivu-gh
-/apps/web/src/features/platform/        @nitheeshdr @meyyarivu-gh
+/apps/web/src/features/company/         @nitheeshdr @Meyyarivu
+/apps/web/src/features/branches/        @nitheeshdr @Meyyarivu
+/apps/web/src/features/users/           @nitheeshdr @Meyyarivu
+/apps/web/src/features/settings/        @nitheeshdr @Meyyarivu
+/apps/web/src/features/admin/           @nitheeshdr @Meyyarivu
+/apps/web/src/features/accounting/      @nitheeshdr @Meyyarivu
+/apps/web/src/features/payments/        @nitheeshdr @Meyyarivu
+/apps/web/src/features/platform/        @nitheeshdr @Meyyarivu
 # Medicine master, parties, returns, compliance (Ashok)
-/apps/web/src/features/catalog/         @ashok-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/parties/         @ashok-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/returns/         @ashok-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/compliance/      @ashok-gh @meyyarivu-gh @nitheeshdr
-/apps/web/tests/e2e/                    @ashok-gh @meyyarivu-gh
+/apps/web/src/features/catalog/         @ashok-gh @Meyyarivu @nitheeshdr
+/apps/web/src/features/parties/         @ashok-gh @Meyyarivu @nitheeshdr
+/apps/web/src/features/returns/         @ashok-gh @Meyyarivu @nitheeshdr
+/apps/web/src/features/compliance/      @ashok-gh @Meyyarivu @nitheeshdr
+/apps/web/tests/e2e/                    @ashok-gh @Meyyarivu
 # Pricing, GST, dashboards, reports, CRM, delivery, channels (Gokul)
-/apps/web/src/features/pricing/         @gokul-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/gst/             @gokul-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/dashboard/       @gokul-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/reports/         @gokul-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/crm/             @gokul-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/delivery/        @gokul-gh @meyyarivu-gh @nitheeshdr
-/apps/web/src/features/channels/        @gokul-gh @meyyarivu-gh @nitheeshdr
+/apps/web/src/features/pricing/         @gokulb24 @Meyyarivu @nitheeshdr
+/apps/web/src/features/gst/             @gokulb24 @Meyyarivu @nitheeshdr
+/apps/web/src/features/dashboard/       @gokulb24 @Meyyarivu @nitheeshdr
+/apps/web/src/features/reports/         @gokulb24 @Meyyarivu @nitheeshdr
+/apps/web/src/features/crm/             @gokulb24 @Meyyarivu @nitheeshdr
+/apps/web/src/features/delivery/        @gokulb24 @Meyyarivu @nitheeshdr
+/apps/web/src/features/channels/        @gokulb24 @Meyyarivu @nitheeshdr
 
 # Desktop
 /apps/desktop/                      @nitheeshdr @jeeva-gh
