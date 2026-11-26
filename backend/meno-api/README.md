@@ -52,6 +52,8 @@ Access token 15 min (`sub` user, `tid` tenant, `email`, `roles`). Refresh token 
 
 ## Docker and deploy
 
+Whole local stack from the repo root: `cp .env.example .env && scripts/dev/gen-jwt-keys.sh && docker compose --profile api up -d --build`.
+
 ```bash
 docker build -f infrastructure/docker/api.Dockerfile -t meno-api backend/meno-api   # from the repo root
 ```

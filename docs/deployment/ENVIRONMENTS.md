@@ -2,6 +2,8 @@
 
 ## Local services (docker-compose, P1)
 
+Built: [`docker-compose.yml`](../../docker-compose.yml). `cp .env.example .env`, then `docker compose up -d` (postgres, redis, mailpit) or `scripts/dev/gen-jwt-keys.sh && docker compose --profile api up -d --build` (+ meno-api on :8080). The postgres container creates `meno_owner` (Flyway) and `meno_app` (runtime) on first start. MinIO is not included yet: the `minio/minio` image is no longer published on Docker Hub, and nothing stores files yet.
+
 | Service | Image (pin exact version in P1) | Port | Purpose |
 |---|---|---|---|
 | postgres | postgres:17 | 5432 | DB (`meno`, roles `meno_owner`, `meno_app`) |

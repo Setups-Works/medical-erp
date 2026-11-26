@@ -1,7 +1,7 @@
 # CI for every pull request into develop / main (Hub #134). Make the two job names required checks in
 # branch protection: "Backend verify" and "API image + scan".
-# Not yet: frontend jobs (apps/web has no code yet), test-vector parity (P3), CodeQL (needs GitHub
-# Advanced Security on a private repo).
+# "Frontend checks" runs as soon as apps/web has a package.json (it is skipped until then).
+# CodeQL is its own workflow (codeql.yml). Not yet: test-vector parity (P3).
 # Rollback: delete this file or disable it in the Actions tab; nothing else depends on it.
 name: CI
 
@@ -80,3 +80,30 @@ jobs:
           ignore-unfixed: true
           exit-code: "0"
           skip-setup-trivy: true
+
+  frontend:
+    name: Frontend checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      # apps/web is folders only today; the checks start running when the scaffold lands.
+      - id: web
+        run: |
+          if [ -f apps/web/package.json ]; then echo "present=true" >> "$GITHUB_OUTPUT"
+          else echo "present=false" >> "$GITHUB_OUTPUT"; echo "apps/web has no package.json yet: nothing to check."; fi
+      - if: steps.web.outputs.present == 'true'
+        uses: pnpm/action-setup@v4
+      - if: steps.web.outputs.present == 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - if: steps.web.outputs.present == 'true'
+        run: pnpm install --frozen-lockfile
+      - if: steps.web.outputs.present == 'true'
+        run: pnpm typecheck
+      - if: steps.web.outputs.present == 'true'
+        run: pnpm test
+      - if: steps.web.outputs.present == 'true'
+        run: pnpm --if-present check:design
