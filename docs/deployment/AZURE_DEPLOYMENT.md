@@ -2,6 +2,8 @@
 
 Owner: Jeeva. Approver: Nitheesh. Decision record: ADR-0005.
 
+> **Now (P1 until the pilot): the API runs on two App Services (`meno-api-staging`, `meno-api-production`) on an existing B1 plan, not a VM** ([ADR-0018](../decisions/0018-azure-app-service.md)). Push to `develop` deploys staging, push to `main` deploys production, through `.github/workflows/deploy-api.yml`. Setup, app settings and URLs: **[AZURE_APP_SERVICE.md](AZURE_APP_SERVICE.md)**. The VM topology below is the target when we outgrow F1 or need Redis / nginx / monitoring on our own host.
+
 ## Target topology
 
 ```mermaid
@@ -44,12 +46,14 @@ Budget alerts at $25 / $50 / $75. Jeeva reports spend at each sprint review. If 
 | Env | Where | Deploy trigger | Data |
 |---|---|---|---|
 | local | developer laptop, `docker compose up` | — | seed |
-| staging | VM `vm-meno-stg` | merge to `develop` (auto) | seed + anonymised demo |
-| production | VM `vm-meno-prod` | tag `v*` on `main` + manual approval in GitHub Environment | real |
+| staging | App Service `meno-api-staging` now, VM `vm-meno-stg` later | merge to `develop` (auto) | seed + anonymised demo |
+| production | App Service `meno-api-production` now, VM `vm-meno-prod` later | merge to `main` (auto; add required reviewers on the `production` Environment before real tenants) | real |
 
 Naming: `rg-meno-<env>`, `vm-meno-<env>`, `psql-meno`, `stmeno<env>`, DNS `staging.<domain>`, `app.<domain>`.
 
 ## Pipeline
+
+Built today (`ci.yml`, `deploy-api.yml`): PR → backend verify + OpenAPI-spec check + Dockerfile build + Trivy; push to `develop` / `main` → verify → jar to the matching App Service → smoke test. The steps below are the full target.
 
 1. PR: build, unit + integration tests, Modulith verify, lint/typecheck/design check, parity vectors, CodeQL, Trivy.
 2. Merge to `develop`: build images `ghcr.io/setupsworks/meno-api:<sha>`, `meno-web:<sha>` → SSH deploy to staging (`docker compose pull && up -d`) → Flyway runs on API start (as `meno_owner`) → smoke test → Playwright smoke.

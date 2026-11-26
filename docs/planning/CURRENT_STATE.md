@@ -12,7 +12,7 @@
 | pnpm workspace root | live | `package.json`, `pnpm-workspace.yaml` (apps/*, packages/*) |
 | Web scaffold / design system | planned | P1 — tokens defined in `docs/design/DESIGN_LANGUAGE.md` |
 | Desktop shell | planned | P4 (online), P5 (offline) |
-| Docker Compose / CI | planned | P1 |
+| Docker Compose / CI | building | `docker-compose.yml` (postgres 17, redis, mailpit, api profile). CI (`.github/workflows/ci.yml`): backend verify + OpenAPI-spec check + API image build + Trivy + frontend checks (once apps/web has code) on every PR; CodeQL (`codeql.yml`); Dependabot. Azure (26-11-2026): apps `meno-api-staging` / `meno-api-production` on the existing B1 plan in `nitheesh_group` (F1 ran out of CPU quota), GitHub Environments set. Databases `meno_staging` / `meno_prod` on `untitled-ws-pg-13oct26`. **Staging live:** https://meno-api-staging.azurewebsites.net (health UP, Swagger, login verified 26-11-2026). CD (`deploy-api.yml`): `develop` → staging App Service, `main` → production App Service, smoke-tested (ADR-0018, Hub #133/#134/#135/#141). `infrastructure/docker/api.Dockerfile`. Azure apps, DB and GitHub Environments are set up by hand per `docs/deployment/AZURE_APP_SERVICE.md`. Not yet: object storage in compose, web Dockerfile (no web code yet), OIDC switch (script ready) |
 | Azure staging | planned | P1 |
 | Mobile | deferred | P7 |
 | Team access | live | 7 members. GitHub (`Setups-Works/medical-erp`): nitheeshdr, kamesh77-git, Meyyarivu, gokulb24 (invited 25-11-2026, Hub #978); real handles in `.github/CODEOWNERS`. Prakalya, Ashok and Jeeva still use placeholder handles until they join the repo. Hub: all 7 have accounts |

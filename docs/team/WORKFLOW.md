@@ -74,4 +74,6 @@ Use the template. Must include: linked issue, what/why, screenshots for UI (ligh
 
 ## Releases
 
-Phase gate → `release/vX.Y` → regression on staging → QA report → Nitheesh go → merge to `main` + tag → Jeeva deploys to production with the runbook → release notes.
+Phase gate → `release/vX.Y` → regression on staging → QA report → Nitheesh go → merge to `main` + tag → production deploy → release notes.
+
+Deploys are automatic (`.github/workflows/deploy-api.yml`, ADR-0018): every merge to `develop` deploys staging, every merge to `main` deploys production, each with a smoke test. So merging into `main` **is** the production release; the gate is the release PR review (plus required reviewers on the `production` GitHub Environment once enabled). Rollback: `docs/runbooks/rollback.md`.

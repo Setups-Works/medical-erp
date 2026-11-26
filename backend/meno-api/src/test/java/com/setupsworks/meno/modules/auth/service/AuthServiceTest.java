@@ -50,7 +50,7 @@ class AuthServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         var key = new ECKeyGenerator(Curve.P_256).keyID("test").generate();
-        var jwtProps = new JwtProperties("meno", "test", Duration.ofMinutes(15), null, null, true);
+        var jwtProps = new JwtProperties("meno", "test", Duration.ofMinutes(15), null, null, null, null, true);
         var jwt = new JwtTokenService(new NimbusJwtEncoder(new ImmutableJWKSet<>(new JWKSet(key))), jwtProps, clock);
         service = new AuthService(credentials, refreshTokens, jwt, new AuthProperties(Duration.ofDays(30), false),
                 clock);

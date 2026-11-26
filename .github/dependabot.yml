@@ -1,0 +1,22 @@
+# Weekly dependency updates (SECURITY.md "Dependabot"). Each update is a normal PR into develop and must pass CI.
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /backend/meno-api
+    target-branch: develop
+    schedule: { interval: weekly, day: monday }
+    open-pull-requests-limit: 5
+    groups:
+      spring: { patterns: ["org.springframework*", "org.springdoc*"] }
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule: { interval: weekly, day: monday }
+  - package-ecosystem: docker
+    directory: /infrastructure/docker
+    target-branch: develop
+    schedule: { interval: weekly, day: monday }
+  - package-ecosystem: docker-compose
+    directory: /
+    target-branch: develop
+    schedule: { interval: weekly, day: monday }

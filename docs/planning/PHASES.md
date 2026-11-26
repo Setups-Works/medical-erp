@@ -65,7 +65,7 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 | `identity`, `auth`, `audit` base, configuration tables + `SettingsFacade`, OpenAPI export → `api-client` | Nitheesh (+ Kamesh) |
 | Next.js skeleton (static export), `packages/ui` (shadcn new-york + tokens), app shell + sidebar (NAVIGATION.md), list/form/report page patterns, login, forgot/reset password, signup | Meyyarivu |
 | Users, roles and permission screens (on Meyyarivu's patterns) | Nitheesh |
-| Docker Compose (postgres, redis, minio, mailpit), Dockerfiles, CI (build/test/lint/scan), staging VM + Nginx + TLS, GHCR | Jeeva |
+| Docker Compose (postgres, redis, minio, mailpit), Dockerfiles, CI (build/test/lint/scan), staging on App Service with auto-deploy (ADR-0018; VM + Nginx later) | Jeeva |
 | API test collection, auth/role/tenant test cases, Playwright setup | Ashok |
 | User stories P2, permission matrix (role × action), field validation catalogue | Prakalya (BA) |
 

@@ -50,6 +50,16 @@ With the `local` profile: <http://localhost:8080/swagger-ui.html> (spec: `/v3/ap
 
 Access token 15 min (`sub` user, `tid` tenant, `email`, `roles`). Refresh token 30 days, stored only as SHA-256; reusing a rotated one revokes the whole login. 10 wrong passwords lock the account for 15 minutes. Every value is configurable (`application.yml`).
 
+## Docker and deploy
+
+Whole local stack from the repo root: `cp .env.example .env && scripts/dev/gen-jwt-keys.sh && docker compose --profile api up -d --build`.
+
+```bash
+docker build -f infrastructure/docker/api.Dockerfile -t meno-api backend/meno-api   # from the repo root
+```
+
+Merging to `develop` deploys staging, merging to `main` deploys production (Azure App Service, ADR-0018). Where the host has no key files, pass the PEM text in `MENO_JWT_PRIVATE_KEY` / `MENO_JWT_PUBLIC_KEY`. Setup: `docs/deployment/AZURE_APP_SERVICE.md`.
+
 ## Tests
 
 `./mvnw verify` — unit tests, `ModulithTest` (module boundaries), `AuthFlowIntegrationTest` and the OpenAPI tests (`OpenApiExportTest` writes the spec, `OpenApiDisabledByDefaultTest` proves docs are off by default) on real PostgreSQL (skipped without Docker).

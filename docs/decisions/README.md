@@ -8,7 +8,7 @@ An ADR records one significant decision: context, decision, consequences. Write 
 | [0002](0002-modular-monolith.md) | Modular monolith with Spring Modulith | Accepted |
 | [0003](0003-nextjs-static-spa.md) | Next.js as static SPA; Spring Boot is the only backend | Accepted |
 | [0004](0004-electron-desktop-offline.md) | Electron desktop with SQLite offline billing | Accepted |
-| [0005](0005-azure-vm-docker-compose.md) | Azure VM + Docker Compose + managed PostgreSQL | Accepted |
+| [0005](0005-azure-vm-docker-compose.md) | Azure VM + Docker Compose + managed PostgreSQL | Accepted (hosting until the pilot: ADR-0018) |
 | [0006](0006-shared-schema-multitenancy.md) | Shared-schema multi-tenancy with RLS | Accepted |
 | [0007](0007-inventory-ledger-immutable-docs.md) | Inventory movement ledger and immutable posted documents | Accepted |
 | [0008](0008-mobile-deferred.md) | Mobile app deferred to P7 | Accepted |
@@ -21,3 +21,4 @@ An ADR records one significant decision: context, decision, consequences. Write 
 | [0015](0015-license-keys-signed-certificates.md) | License keys + server-side licenses + Ed25519-signed certificates | Proposed |
 | [0016](0016-tamper-evident-records-and-device-signing.md) | Hash-chained posted records and device-signed offline bills | Proposed |
 | [0017](0017-ai-assistant-shared-llm.md) | AI assistant on one shared LLM provider, behind meno-api tools | Proposed |
+| [0018](0018-azure-app-service.md) | Azure App Service (Java 21, shared B1 plan) for meno-api until the pilot | Accepted |

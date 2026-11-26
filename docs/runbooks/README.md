@@ -4,8 +4,8 @@ Owner: Jeeva. Step-by-step procedures anyone on call can follow. Written during 
 
 | Runbook | When |
 |---|---|
-| deploy.md | Normal staging/prod deploy |
-| rollback.md | Smoke test failed / bad release |
+| [deploy.md](deploy.md) | Normal staging/prod deploy (App Service, ADR-0018) |
+| [rollback.md](rollback.md) | Smoke test failed / bad release |
 | restore-database.md | Data loss / corruption / restore drill |
 | rotate-secrets.md | Scheduled or after exposure |
 | api-down.md | Alert: API down |

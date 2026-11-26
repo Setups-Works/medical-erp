@@ -1,0 +1,78 @@
+# Local stack (Hub #132). Copy .env.example to .env first, then:
+#   docker compose up -d                 postgres, redis, mailpit
+#   docker compose --profile api up -d   + meno-api built from infrastructure/docker/api.Dockerfile
+# JWT keys for the api profile: scripts/dev/gen-jwt-keys.sh (writes .secrets/, gitignored).
+# Object storage (MinIO in the docs) is left out: the minio/minio image is no longer published on Docker Hub
+# and nothing uses files yet. Pick a replacement when the files module lands.
+# Rollback: delete this file; nothing in CI or deploy depends on it.
+name: meno
+
+services:
+  postgres:
+    image: postgres:17.11-bookworm
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: meno
+      # Read by the init script to create the two roles from docs/deployment/ENVIRONMENTS.md.
+      MENO_FLYWAY_USER: ${MENO_FLYWAY_USER:-meno_owner}
+      MENO_FLYWAY_PASSWORD: ${MENO_FLYWAY_PASSWORD:?set MENO_FLYWAY_PASSWORD in .env}
+      MENO_DB_USER: ${MENO_DB_USER:-meno_app}
+      MENO_DB_PASSWORD: ${MENO_DB_PASSWORD:?set MENO_DB_PASSWORD in .env}
+      TZ: ${TZ:-Asia/Kolkata}
+    ports: ["127.0.0.1:5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infrastructure/docker/postgres/init-roles.sh:/docker-entrypoint-initdb.d/10-init-roles.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d meno"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7.4.11-bookworm
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports: ["127.0.0.1:6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mailpit:
+    image: axllent/mailpit:v1.33.1
+    ports: ["127.0.0.1:1025:1025", "127.0.0.1:8025:8025"]
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  api:
+    profiles: [api]
+    build:
+      context: backend/meno-api
+      dockerfile: ../../infrastructure/docker/api.Dockerfile
+    image: meno-api:local
+    env_file: .env
+    environment:
+      MENO_DB_URL: jdbc:postgresql://postgres:5432/meno
+      MENO_JWT_PRIVATE_KEY_PATH: /run/secrets/jwt_private
+      MENO_JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public
+    secrets: [jwt_private, jwt_public]
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+secrets:
+  jwt_private:
+    file: ./.secrets/jwt_private.pem
+  jwt_public:
+    file: ./.secrets/jwt_public.pem
+
+volumes:
+  pgdata:
