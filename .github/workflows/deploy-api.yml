@@ -28,6 +28,11 @@ jobs:
     name: Verify + package
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    # Several merges in a row: only the newest commit is built and deployed. Back-to-back restarts on the
+    # shared B1 pinned its CPU at 100% and made each start take minutes (26-11-2026).
+    concurrency:
+      group: deploy-api-build-${{ github.ref_name }}
+      cancel-in-progress: true
     defaults:
       run:
         working-directory: backend/meno-api
@@ -89,29 +94,52 @@ jobs:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      # Calls the OneDeploy API directly instead of azure/webapps-deploy: that action first asks Kudu for the
+      # app's runtime OS, and on a busy plan this lookup alone took 12+ minutes (run 45856408961) before the
+      # 20-second upload even started. Same API, same flags (type=jar, clean, restart).
       - id: deploy
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-          # Empty when OIDC is set up: the action then uses the azure/login session.
-          publish-profile: ${{ vars.AZURE_CLIENT_ID == '' && secrets.AZURE_WEBAPP_PUBLISH_PROFILE || '' }}
-          package: app.jar
-          type: JAR
-          clean: true
-          restart: true
-      # Allow up to ~10 minutes for the JVM start and Flyway migrations after the restart.
+        name: Deploy jar (OneDeploy)
+        env:
+          APP: ${{ vars.AZURE_WEBAPP_NAME }}
+          USE_OIDC: ${{ vars.AZURE_CLIENT_ID != '' }}
+          PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        run: |
+          api="https://$APP.scm.azurewebsites.net/api/publish?type=jar&clean=true&restart=true"
+          if [ "$USE_OIDC" = true ]; then
+            token=$(az account get-access-token --query accessToken -o tsv)
+            echo "::add-mask::$token"
+            auth=(-H "Authorization: Bearer $token")
+          else
+            # Credentials of the ZipDeploy entry in the publish profile (the same pair the action used).
+            entry=$(printf '%s' "$PROFILE" | tr -d '\n' | grep -o '<publishProfile [^>]*publishMethod="ZipDeploy"[^>]*>')
+            user=$(printf '%s' "$entry" | sed -n 's/.*userName="\([^"]*\)".*/\1/p')
+            pass=$(printf '%s' "$entry" | sed -n 's/.*userPWD="\([^"]*\)".*/\1/p')
+            [ -n "$user" ] && [ -n "$pass" ] || { echo "::error::No ZipDeploy credentials in AZURE_WEBAPP_PUBLISH_PROFILE."; exit 1; }
+            echo "::add-mask::$pass"
+            auth=(-u "$user:$pass")
+          fi
+          # Synchronous: returns when Kudu has placed the jar and triggered the restart.
+          code=$(curl -sS -o deploy.out -w '%{http_code}' --retry 3 --retry-all-errors --max-time 600 \
+            "${auth[@]}" -X POST -H 'Content-Type: application/octet-stream' --data-binary @app.jar "$api")
+          if [ "${code:0:1}" != 2 ]; then
+            echo "::error::OneDeploy returned HTTP $code"; cat deploy.out; exit 1
+          fi
+          echo "Deployed app.jar to $APP (HTTP $code)"
+          echo "webapp-url=https://$APP.azurewebsites.net" >> "$GITHUB_OUTPUT"
+      # Allow up to ~10 minutes for the JVM start and Flyway migrations after the restart. Polls every 5 s
+      # so a healthy app is noticed quickly.
       - name: Smoke test
         env:
           URL: ${{ steps.deploy.outputs.webapp-url }}
           IS_PROD: ${{ github.ref_name == 'main' }}
         run: |
-          for i in $(seq 1 40); do
-            if curl -fsS --max-time 20 "$URL/actuator/health" | grep -q '"UP"'; then
-              echo "Healthy: $URL/actuator/health"
+          for i in $(seq 1 120); do
+            if curl -fsS --max-time 10 "$URL/actuator/health" 2>/dev/null | grep -q '"UP"'; then
+              echo "Healthy after ~$((i * 5)) s: $URL/actuator/health"
               break
             fi
-            [ "$i" = 40 ] && { echo "::error::$URL did not report UP. See docs/runbooks/rollback.md"; exit 1; }
-            sleep 15
+            [ "$i" = 120 ] && { echo "::error::$URL did not report UP. See docs/runbooks/rollback.md"; exit 1; }
+            sleep 5
           done
           code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$URL/api/v1/auth/login")
           [ "$code" = 400 ] || { echo "::error::POST /api/v1/auth/login with an empty body returned $code, expected 400"; exit 1; }
