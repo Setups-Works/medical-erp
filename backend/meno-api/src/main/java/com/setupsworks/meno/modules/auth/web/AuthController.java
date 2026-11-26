@@ -1,13 +1,9 @@
 package com.setupsworks.meno.modules.auth.web;
 
-import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import com.setupsworks.meno.modules.auth.service.AuthService;
-import com.setupsworks.meno.modules.auth.service.AuthService.AuthResult;
-import com.setupsworks.meno.modules.auth.service.AuthService.ClientInfo;
 import com.setupsworks.meno.security.JwtTokenService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,9 +20,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -44,14 +40,14 @@ class AuthController {
 
     private static final String PROBLEM = "application/problem+json";
 
-    static final String REFRESH_COOKIE = "meno_refresh";
-    private static final String COOKIE_PATH = "/api/v1/auth";
-    private static final int MAX_USER_AGENT = 255;
+    static final String REFRESH_COOKIE = SessionResponses.REFRESH_COOKIE;
 
     private final AuthService authService;
+    private final SessionResponses responses;
 
-    AuthController(AuthService authService) {
+    AuthController(AuthService authService, SessionResponses responses) {
         this.authService = authService;
+        this.responses = responses;
     }
 
     @Operation(summary = "Sign in with email and password",
@@ -67,8 +63,8 @@ class AuthController {
     @ApiResponse(responseCode = "423", description = "AUTH_LOCKED after too many wrong passwords",
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
     @PostMapping("/login")
-    ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
-        return withRefreshCookie(authService.login(request.email(), request.password(), clientInfo(http)));
+    ResponseEntity<SessionResponses.TokenResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
+        return responses.withRefreshCookie(authService.login(request.email(), request.password(), SessionResponses.clientInfo(http)), HttpStatus.OK);
     }
 
     @Operation(summary = "Get a new access token",
@@ -79,12 +75,12 @@ class AuthController {
             description = "AUTH_REFRESH_INVALID, or AUTH_REFRESH_REUSED (whole session revoked)",
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
     @PostMapping("/refresh")
-    ResponseEntity<TokenResponse> refresh(
+    ResponseEntity<SessionResponses.TokenResponse> refresh(
             @CookieValue(name = REFRESH_COOKIE, required = false) String refreshToken, HttpServletRequest http) {
         if (refreshToken == null || refreshToken.isBlank()) {
             throw AuthService.invalidRefresh();
         }
-        return withRefreshCookie(authService.refresh(refreshToken, clientInfo(http)));
+        return responses.withRefreshCookie(authService.refresh(refreshToken, SessionResponses.clientInfo(http)), HttpStatus.OK);
     }
 
     @Operation(summary = "Sign out", description = "Revokes the session behind the meno_refresh cookie and clears it.")
@@ -94,7 +90,7 @@ class AuthController {
     ResponseEntity<Void> logout(@CookieValue(name = REFRESH_COOKIE, required = false) String refreshToken) {
         authService.logout(refreshToken);
         return ResponseEntity.noContent()
-                .header(HttpHeaders.SET_COOKIE, refreshCookie("", Duration.ZERO).toString())
+                .header(HttpHeaders.SET_COOKIE, responses.clearedRefreshCookie().toString())
                 .build();
     }
 
@@ -110,47 +106,11 @@ class AuthController {
                 jwt.getClaimAsStringList(JwtTokenService.CLAIM_ROLES));
     }
 
-    private ResponseEntity<TokenResponse> withRefreshCookie(AuthResult result) {
-        var account = result.account();
-        TokenResponse body = new TokenResponse(result.accessToken().value(), "Bearer",
-                result.accessToken().expiresInSeconds(),
-                new UserView(account.userId(), account.tenantId(), account.email(), account.fullName(),
-                        account.roles()));
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE,
-                        refreshCookie(result.refreshToken(), authService.refreshTokenTtl()).toString())
-                .header(HttpHeaders.CACHE_CONTROL, "no-store")
-                .body(body);
-    }
-
-    private ResponseCookie refreshCookie(String value, Duration maxAge) {
-        return ResponseCookie.from(REFRESH_COOKIE, value)
-                .httpOnly(true)
-                .secure(authService.refreshCookieSecure())
-                .sameSite("Strict")
-                .path(COOKIE_PATH)
-                .maxAge(maxAge)
-                .build();
-    }
-
-    private static ClientInfo clientInfo(HttpServletRequest http) {
-        String userAgent = http.getHeader(HttpHeaders.USER_AGENT);
-        if (userAgent != null && userAgent.length() > MAX_USER_AGENT) {
-            userAgent = userAgent.substring(0, MAX_USER_AGENT);
-        }
-        return new ClientInfo(http.getRemoteAddr(), userAgent);
-    }
-
     record LoginRequest(
             @NotBlank @Email @Size(max = 254) String email,
             @NotBlank @Size(max = 128) String password) {
     }
 
-    record UserView(UUID id, UUID tenantId, String email, String fullName, Set<String> roles) {
-    }
-
-    record TokenResponse(String accessToken, String tokenType, long expiresIn, UserView user) {
-    }
 
     record MeResponse(UUID userId, UUID tenantId, String email, List<String> roles) {
     }

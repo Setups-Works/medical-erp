@@ -64,14 +64,16 @@ erDiagram
 ## 3. Key tables (columns abbreviated; audit/tenant cols implied)
 
 ### tenancy
-- `tenant(id, name, code unique, status[ACTIVE|SUSPENDED], version)` — built (V202611261700); `plan_code` comes with subscription
+- `tenant(id, name, code unique, status[ACTIVE|SUSPENDED], state_code → state null, start_option null, partner_code null, signup_key unique null, version)` — built (V202611261700, sign-up columns V202611262000); `plan_code` comes with subscription
+- `state(code char(2) pk = GST state code, name, kind[STATE|UNION_TERRITORY|OTHER], effective_from, effective_to null, sort_order)` — built (V202611262000), seeded platform reference data; 25 kept with `effective_to` for old GSTINs
 - `company(id, tenant_id, legal_name, gstin, state_code, edition[RETAIL|WHOLESALE|BOTH], pan)`
 - `branch(id, tenant_id, company_id, name, code, address, state_code, dl_retail_no, dl_wholesale_no, dl_expiry, pharmacist_name, pharmacist_reg_no)`
 - `financial_year(id, tenant_id, company_id, start_date, end_date, status[OPEN|CLOSED])`
 - `number_series(id, tenant_id, branch_id, doc_type, fy_id, device_id null, prefix, next_value)` — row-locked on use
 
 ### identity / auth (built P1, 26-11-2026)
-- `app_user(id, tenant_id, email unique lower-case, password_hash, full_name, status[ACTIVE|DISABLED], failed_attempts, locked_until, last_login_at, version)` — one email = one user = one tenant
+- `app_user(id, tenant_id, email unique lower-case, password_hash, full_name, mobile E.164 null (CHECK `+91[6-9]…`), mobile_verified_at, email_verified_at, status[ACTIVE|DISABLED], failed_attempts, locked_until, last_login_at, version)` — one email = one user = one tenant; mobile / verification columns V202611262001
+- `consent(id, tenant_id, user_id, kind[TERMS_AND_PRIVACY], version, accepted_at, created_at, created_by)` — built (V202611262001), append-only (AUT-04)
 - `user_role(user_id, role)` — temporary until role / permission tables (ADR-0014)
 - `refresh_token(id, tenant_id, user_id, token_hash unique (SHA-256), family_id, expires_at, revoked_at, replaced_by_id, created_by_ip, user_agent, version)` — reuse of a rotated token revokes the family
 - RLS on these tables is added by the tenancy task (#7); login reads `app_user` by email before the tenant is known and needs an exemption
@@ -114,7 +116,7 @@ erDiagram
 
 ### onboarding (ONBOARDING.md)
 - `onboarding_progress(tenant_id, step, status[TODO|DONE|SKIPPED], data jsonb, updated_at)` — one row per step; resume reads it (AUT-15)
-- `tenant(+business_type, source_software, go_live_at, practice_company_id null)`; `consent(id, tenant_id, user_id, kind, version, accepted_at)` (AUT-04)
+- `tenant(+business_type, source_software, go_live_at, practice_company_id null)`; `consent` is built (see identity / auth)
 - `support_grant(id, tenant_id, granted_by, helper_id, scope[VIEW|ASSIST], expires_at, revoked_at)` — every helper action audited (AUT-14)
 - `verification(id, user_id, channel[SMS|EMAIL], code_hash, expires_at, attempts)` (AUT-04)
 

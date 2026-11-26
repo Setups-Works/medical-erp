@@ -13,7 +13,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 public record IdentityProperties(
         @DefaultValue("10") int maxFailedAttempts,
         @DefaultValue("15m") Duration lockDuration,
-        @DefaultValue("8") int minPasswordLength,
+        /* SECURITY.md: minimum 10 characters. */
+        @DefaultValue("10") int minPasswordLength,
         @DefaultValue Bootstrap bootstrap) {
 
     /** First owner account, created only when the user table is empty. */

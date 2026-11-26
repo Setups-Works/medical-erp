@@ -75,7 +75,7 @@ class CredentialService implements CredentialCheck {
                 .map(CredentialService::toAccount);
     }
 
-    private static LoginAccount toAccount(AppUser user) {
+    static LoginAccount toAccount(AppUser user) {
         return new LoginAccount(user.getId(), user.getTenantId(), user.getEmail(), user.getFullName(),
                 user.getRoles().stream().map(Role::name).collect(Collectors.toSet()));
     }

@@ -44,6 +44,18 @@ public class Tenant {
     @Column(name = "updated_by")
     private UUID updatedBy;
 
+    @Column(name = "state_code", columnDefinition = "bpchar(2)")
+    private String stateCode;
+
+    @Column(name = "start_option")
+    private String startOption;
+
+    @Column(name = "partner_code")
+    private String partnerCode;
+
+    @Column(name = "signup_key")
+    private UUID signupKey;
+
     @Version
     private long version;
 
@@ -57,6 +69,14 @@ public class Tenant {
         this.status = Status.ACTIVE;
         this.createdAt = now;
         this.updatedAt = now;
+    }
+
+    /** Sign-up details (AUT-04); set once when the tenant is created by sign-up. */
+    public void recordSignup(String stateCode, String startOption, String partnerCode, UUID signupKey) {
+        this.stateCode = stateCode;
+        this.startOption = startOption;
+        this.partnerCode = partnerCode;
+        this.signupKey = signupKey;
     }
 
     public boolean isActive() {
