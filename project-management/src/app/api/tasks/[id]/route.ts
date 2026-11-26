@@ -45,6 +45,11 @@ export const PATCH = route<P>(async (req, { params, session }) => {
     const board = await Board.findById(boardId).lean();
     const name = (k: string) => board?.columns.find((c) => c.key === k)?.name ?? k;
     await logActivity({ boardId, taskId: id, actor: session.uid, action: "moved", detail: `${tag}: ${name(before.column)} → ${name(input.column)}` });
+    // Admins are the reviewers who move tasks to Done (agents reach them via the @mention in `agent-task review`).
+    if (input.column === "review") {
+      const admins = (await User.find({ role: "admin", active: true }).select("_id").lean()).map((u) => String(u._id));
+      await notify({ users: admins, actor: session.uid, type: "review", text: `${session.name} sent ${tag} to review`, boardId, taskId: id });
+    }
   }
   if (input.assignees) {
     const added = input.assignees.filter((a) => !before.assignees.includes(a));

@@ -33,6 +33,8 @@ After you edit those docs, run `npm run seed` to import new items. It never dupl
 
 AI agents work tasks by number with `npm run agent-task -- <show|start|check|comment|review> <n>` (acts as `HUB_AGENT_AS`; never moves to Done). See `../docs/team/AGENT_TASK_WORKFLOW.md`.
 
+**Email:** with `HUB_SMTP_*` set (see `.env.example`), the hub emails people when they're assigned a task or @mentioned, emails admins when a task moves to In review, and sends "Forgot password?" reset links (valid 30 minutes, one per minute per person). Plain comments stay in-app only. Without `HUB_SMTP_HOST` emails are only logged.
+
 Without `MONGODB_URI` (development only) the app starts an in-memory MongoDB; data is lost on restart.
 
 ### Troubleshooting
