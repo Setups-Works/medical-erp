@@ -18,6 +18,8 @@ spring:
     properties:
       mail.smtp.auth: ${MENO_MAIL_AUTH:true}
       mail.smtp.starttls.enable: ${MENO_MAIL_STARTTLS:true}
+      # Implicit TLS for port 465 (e.g. Hostinger): MENO_MAIL_SSL=true and MENO_MAIL_STARTTLS=false.
+      mail.smtp.ssl.enable: ${MENO_MAIL_SSL:false}
       mail.smtp.connectiontimeout: 10000
       mail.smtp.timeout: 10000
       mail.smtp.writetimeout: 10000
