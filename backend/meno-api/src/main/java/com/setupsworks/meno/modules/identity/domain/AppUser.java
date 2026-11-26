@@ -4,8 +4,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.setupsworks.meno.common.persistence.Uuids;
 
@@ -24,6 +27,8 @@ import jakarta.persistence.Version;
 @Entity
 @Table(name = "app_user")
 public class AppUser {
+
+    private static final Pattern INDIAN_MOBILE = Pattern.compile("(?:\\+?91|0)?([6-9][0-9]{9})");
 
     public enum Status { ACTIVE, DISABLED }
 
@@ -111,6 +116,19 @@ public class AppUser {
 
     public static String normalizeEmail(String email) {
         return email == null ? null : email.trim().toLowerCase(Locale.ROOT);
+    }
+
+    /**
+     * Indian mobile in E.164 ({@code +91} + 10 digits starting 6-9, VALIDATION_AND_BUSINESS_RULES.md "Phone (India)"),
+     * or empty when {@code raw} isn't one. Accepts the 10 digits with or without {@code +91} / {@code 91} / {@code 0},
+     * spaces and dashes (like the web form), because that is how people type their number at sign-in.
+     */
+    public static Optional<String> normalizeMobile(String raw) {
+        if (raw == null) {
+            return Optional.empty();
+        }
+        Matcher m = INDIAN_MOBILE.matcher(raw.replaceAll("[\\s-]", ""));
+        return m.matches() ? Optional.of("+91" + m.group(1)) : Optional.empty();
     }
 
     public boolean isActive() {

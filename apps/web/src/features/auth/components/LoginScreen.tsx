@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Callout, Field, Input, PasswordInput } from "@meno/ui";
-import { loginRequest, type LoginRequest } from "@meno/validation";
+import { loginRequest, type LoginForm, type LoginRequest } from "@meno/validation";
 import { applyApiError } from "@/lib/problem";
 import { useFetchChecklist, useLogin } from "../queries";
 import { landingPath, safeNext } from "../utils";
@@ -19,7 +19,10 @@ export function LoginScreen() {
   const login = useLogin();
   const fetchChecklist = useFetchChecklist();
   const [formError, setFormError] = useState<string | null>(null);
-  const form = useForm<LoginRequest>({ resolver: zodResolver(loginRequest), defaultValues: { email: "", password: "" } });
+  const form = useForm<LoginForm, unknown, LoginRequest>({
+    resolver: zodResolver(loginRequest),
+    defaultValues: { identifier: "", password: "" },
+  });
   const { errors, isSubmitting } = form.formState;
 
   const onSubmit = form.handleSubmit(async (values) => {
@@ -42,8 +45,17 @@ export function LoginScreen() {
       <AuthHeading title="Sign in" description="Welcome back. Sign in to your pharmacy." />
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4" data-testid="login-form">
         {formError && <Callout tone="critical">{formError}</Callout>}
-        <Field label="Email" error={errors.email?.message} required>
-          <Input type="email" autoComplete="username" autoFocus inputMode="email" {...form.register("email")} data-testid="login-email" />
+        <Field label="Email or mobile" error={errors.identifier?.message} required>
+          <Input
+            type="text"
+            autoComplete="username"
+            autoCapitalize="none"
+            spellCheck={false}
+            autoFocus
+            placeholder="you@pharmacy.in or 98765 43210"
+            {...form.register("identifier")}
+            data-testid="login-identifier"
+          />
         </Field>
         <Field label="Password" error={errors.password?.message} required>
           <PasswordInput autoComplete="current-password" {...form.register("password")} data-testid="login-password" />
@@ -64,7 +76,7 @@ export function LoginScreen() {
         </Link>
       </p>
       {process.env.NODE_ENV === "development" && (
-        <LocalMockHint>Sign up first (data stays in this tab), then sign in with the same email and password.</LocalMockHint>
+        <LocalMockHint>Sign up first (data stays in this tab), then sign in with the same email or mobile and password.</LocalMockHint>
       )}
     </AuthShell>
   );

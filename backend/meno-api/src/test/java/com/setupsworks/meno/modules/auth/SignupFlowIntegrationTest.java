@@ -122,7 +122,7 @@ class SignupFlowIntegrationTest {
 
         // The new owner can sign in with the password from sign-up.
         mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"owner.one@test.local\",\"password\":\"signup-pass-123\"}"))
+                        .content("{\"identifier\":\"owner.one@test.local\",\"password\":\"signup-pass-123\"}"))
                 .andExpect(status().isOk());
     }
 

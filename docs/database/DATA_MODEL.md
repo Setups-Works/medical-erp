@@ -77,7 +77,7 @@ erDiagram
 - `number_series(id, tenant_id, branch_id, doc_type, fy_id, device_id null, prefix, next_value)` — row-locked on use
 
 ### identity / auth (built P1, 26-11-2026)
-- `app_user(id, tenant_id, email unique lower-case, password_hash, full_name, mobile E.164 null (CHECK `+91[6-9]…`), mobile_verified_at, email_verified_at, status[ACTIVE|DISABLED], failed_attempts, locked_until, last_login_at, version)` — one email = one user = one tenant; mobile / verification columns V202611262001
+- `app_user(id, tenant_id, email unique lower-case, password_hash, full_name, mobile E.164 null unique (CHECK `+91[6-9]…`, `ux_app_user_mobile` V202611262700), mobile_verified_at, email_verified_at, status[ACTIVE|DISABLED], failed_attempts, locked_until, last_login_at, version)` — one email = one user = one tenant, and one mobile = one user (sign in with either, PLT-08); mobile / verification columns V202611262001
 - `consent(id, tenant_id, user_id, kind[TERMS_AND_PRIVACY], version, accepted_at, created_at, created_by)` — built (V202611262001), append-only (AUT-04)
 - `verification(id, tenant_id, user_id, channel[EMAIL|SMS], token_hash unique (SHA-256), expires_at, consumed_at, version)` — built (V202611262200), email links now, SMS OTP later
 - `permission(code)`, `role_permission(role, permission_code)` — built (V202611262101), global seed until per-tenant roles (PLT-07)

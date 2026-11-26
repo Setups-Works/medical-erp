@@ -15,5 +15,10 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
 
     boolean existsByEmail(String email);
 
+    /** Login by mobile (E.164); unique like email (ux_app_user_mobile). Same RLS exemption as findByEmail. */
+    Optional<AppUser> findByMobile(String mobile);
+
+    boolean existsByMobile(String mobile);
+
     List<AppUser> findByTenantId(UUID tenantId);
 }

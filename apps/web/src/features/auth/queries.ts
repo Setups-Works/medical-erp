@@ -28,7 +28,7 @@ function useSignedIn() {
 export function useLogin() {
   const signedIn = useSignedIn();
   return useMutation({
-    mutationFn: (body: { email: string; password: string }) => api.post("/api/v1/auth/login", { body }),
+    mutationFn: (body: { identifier: string; password: string }) => api.post("/api/v1/auth/login", { body }),
     onSuccess: signedIn,
   });
 }
@@ -37,6 +37,18 @@ export function useLogout() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => api.post("/api/v1/auth/logout"),
+    onSettled: () => {
+      sessionStore.set(null);
+      qc.clear();
+    },
+  });
+}
+
+/** PLT-08: ends every session of this user (all browsers and counter PCs), then this one. */
+export function useLogoutAll() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.post("/api/v1/auth/logout-all"),
     onSettled: () => {
       sessionStore.set(null);
       qc.clear();

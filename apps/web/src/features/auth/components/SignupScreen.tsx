@@ -18,6 +18,7 @@ import { PasswordMeter } from "./PasswordMeter";
 /** ONBOARDING.md step 1 (PLT-01, AUT-04). Error codes from SignupController that belong to one field: */
 const CODE_FIELDS = {
   IDENTITY_EMAIL_TAKEN: "email",
+  IDENTITY_MOBILE_TAKEN: "mobile",
   IDENTITY_PASSWORD_TOO_SHORT: "password",
   IDENTITY_START_OPTION_INVALID: "startWith",
   IDENTITY_TERMS_NOT_ACCEPTED: "acceptTerms",

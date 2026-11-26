@@ -123,7 +123,7 @@ class PasswordResetIntegrationTest {
     }
 
     private static String loginBody(String email, String password) {
-        return "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}";
+        return "{\"identifier\":\"" + email + "\",\"password\":\"" + password + "\"}";
     }
 
     private String tokenFromEmail(String to) {

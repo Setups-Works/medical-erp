@@ -14,8 +14,8 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Sign in with email and password
-         * @description Returns a short-lived access token in the body and sets the meno_refresh HttpOnly cookie.
+         * Sign in with email or mobile and password
+         * @description identifier is the email or the Indian mobile (10 digits, +91 optional). Returns a short-lived access token in the body and sets the meno_refresh HttpOnly cookie.
          */
         post: operations["login"];
         delete?: never;
@@ -38,6 +38,26 @@ export interface paths {
          * @description Revokes the session behind the meno_refresh cookie and clears it.
          */
         post: operations["logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/logout-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sign out of all devices
+         * @description Revokes every session of the signed-in user (all browsers and devices) and clears the meno_refresh cookie. Access tokens already issued stop working when they expire (15 min).
+         */
+        post: operations["logoutAll"];
         delete?: never;
         options?: never;
         head?: never;
@@ -615,8 +635,8 @@ export interface components {
             pharmacistRegNo: string;
         };
         LoginRequest: {
-            /** Format: email */
-            email: string;
+            /** @example owner@example.com or 9876543210 */
+            identifier: string;
             password: string;
         };
         MeResponse: {
@@ -767,7 +787,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["ProblemDetail"];
                 };
             };
-            /** @description AUTH_INVALID_CREDENTIALS (same for unknown email) */
+            /** @description AUTH_INVALID_CREDENTIALS (same for unknown email or mobile) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -809,6 +829,31 @@ export interface operations {
         responses: {
             /** @description Signed out (also when already signed out) */
             204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    logoutAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Signed out everywhere */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing, expired or invalid access token */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -999,7 +1044,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["ProblemDetail"];
                 };
             };
-            /** @description IDENTITY_EMAIL_TAKEN */
+            /** @description IDENTITY_EMAIL_TAKEN, IDENTITY_MOBILE_TAKEN */
             409: {
                 headers: {
                     [name: string]: unknown;

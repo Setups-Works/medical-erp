@@ -27,7 +27,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @AutoConfigureMockMvc
 class RateLimitIntegrationTest {
 
-    private static final String BODY = "{\"email\":\"nobody@test.local\",\"password\":\"wrong-password\"}";
+    private static final String BODY = "{\"identifier\":\"nobody@test.local\",\"password\":\"wrong-password\"}";
 
     @Autowired
     MockMvc mvc;

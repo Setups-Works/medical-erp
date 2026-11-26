@@ -122,6 +122,19 @@ class SignupServiceTest {
     }
 
     @Test
+    void mobileAlreadyUsedIsAConflict() {
+        when(users.existsByMobile("+919876543210")).thenReturn(true);
+        assertError(valid(), HttpStatus.CONFLICT, "IDENTITY_MOBILE_TAKEN");
+    }
+
+    @Test
+    void racingSignupsWithTheSameMobileEndInAConflict() {
+        when(users.saveAndFlush(any(AppUser.class))).thenThrow(new DataIntegrityViolationException(
+                "duplicate key value violates unique constraint \"ux_app_user_mobile\""));
+        assertError(valid(), HttpStatus.CONFLICT, "IDENTITY_MOBILE_TAKEN");
+    }
+
+    @Test
     void closedSignupIsRefused() {
         assertThatThrownBy(() -> service(false).signUp(valid(), null))
                 .isInstanceOfSatisfying(MenoException.class, e -> assertThat(e.code()).isEqualTo("IDENTITY_SIGNUP_CLOSED"));

@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -51,13 +50,14 @@ class AuthController {
         this.responses = responses;
     }
 
-    @Operation(summary = "Sign in with email and password",
-            description = "Returns a short-lived access token in the body and sets the meno_refresh HttpOnly cookie.")
+    @Operation(summary = "Sign in with email or mobile and password",
+            description = "identifier is the email or the Indian mobile (10 digits, +91 optional). Returns a short-lived "
+                    + "access token in the body and sets the meno_refresh HttpOnly cookie.")
     @SecurityRequirements
     @ApiResponse(responseCode = "200", description = "Signed in")
     @ApiResponse(responseCode = "400", description = "Invalid request body",
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
-    @ApiResponse(responseCode = "401", description = "AUTH_INVALID_CREDENTIALS (same for unknown email)",
+    @ApiResponse(responseCode = "401", description = "AUTH_INVALID_CREDENTIALS (same for unknown email or mobile)",
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
     @ApiResponse(responseCode = "403", description = "AUTH_ACCOUNT_DISABLED",
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
@@ -65,9 +65,9 @@ class AuthController {
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
     @PostMapping("/login")
     ResponseEntity<SessionResponses.TokenResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
-        // Login finds the user by email before the tenant is known (RLS bypass, TenantContext).
+        // Login finds the user by email or mobile before the tenant is known (RLS bypass, TenantContext).
         return responses.withRefreshCookie(TenantContext.callAsSystem(
-                () -> authService.login(request.email(), request.password(), SessionResponses.clientInfo(http))),
+                () -> authService.login(request.identifier(), request.password(), SessionResponses.clientInfo(http))),
                 HttpStatus.OK);
     }
 
@@ -99,6 +99,19 @@ class AuthController {
                 .build();
     }
 
+    @Operation(summary = "Sign out of all devices",
+            description = "Revokes every session of the signed-in user (all browsers and devices) and clears the "
+                    + "meno_refresh cookie. Access tokens already issued stop working when they expire (15 min).")
+    @ApiResponse(responseCode = "204", description = "Signed out everywhere")
+    @ApiResponse(responseCode = "401", description = "Missing, expired or invalid access token")
+    @PostMapping("/logout-all")
+    ResponseEntity<Void> logoutAll() {
+        authService.logoutAll(TenantContext.userId().orElseThrow());
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, responses.clearedRefreshCookie().toString())
+                .build();
+    }
+
     @Operation(summary = "Who am I", description = "User, tenant and roles from the access token.")
     @ApiResponse(responseCode = "200", description = "Current user")
     @ApiResponse(responseCode = "401", description = "Missing, expired or invalid access token")
@@ -111,8 +124,9 @@ class AuthController {
                 jwt.getClaimAsStringList(JwtTokenService.CLAIM_ROLES));
     }
 
+    /** identifier: email or Indian mobile. Its format is checked in identity, where a bad one looks like a wrong password. */
     record LoginRequest(
-            @NotBlank @Email @Size(max = 254) String email,
+            @NotBlank @Size(max = 254) @Schema(example = "owner@example.com or 9876543210") String identifier,
             @NotBlank @Size(max = 128) String password) {
     }
 

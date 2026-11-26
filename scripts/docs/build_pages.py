@@ -20,7 +20,7 @@ S = []  # (section, intro, pages); page = (name, route, what, ids, roles)
 def sec(title, intro, pages, note=""): S.append((title, intro, pages, note))
 
 sec("A. Authentication & onboarding", "Public and first-run pages.", [
- ("Login", "/login", "Email or username, password, MFA for admins", "AUT-01 PLT-08 PLT-09", ALL),
+ ("Login", "/login", "Email or mobile, password, MFA for admins", "AUT-01 PLT-08 PLT-09", ALL),
  ("Forgot password", "/forgot-password", "Request a reset link", "AUT-01", ALL),
  ("Reset password", "/reset-password", "Single-use token, strong password rules", "AUT-01", ALL),
  ("Accept invitation", "/invite/[token]", "Join a company with an invited role", "PLT-06", ALL),

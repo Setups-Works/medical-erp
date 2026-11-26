@@ -35,7 +35,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 class AuthFlowIntegrationTest {
 
     private static final String LOGIN = """
-            {"email":"owner@test.local","password":"%s"}""";
+            {"identifier":"owner@test.local","password":"%s"}""";
 
     @Autowired
     MockMvc mvc;

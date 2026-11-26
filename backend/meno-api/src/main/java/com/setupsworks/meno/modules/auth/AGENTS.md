@@ -18,8 +18,8 @@ UserLoggedIn, UserLoggedOut
 identity::api, tenancy::api
 
 ## Built so far (P1, from Kamesh's login work, 26-11-2026)
-- `POST /api/v1/auth/login` → access token (ES256 JWT, 15 min) in body + `meno_refresh` HttpOnly, Secure, SameSite=Strict cookie (path `/api/v1/auth`)
-- `POST /api/v1/auth/refresh` rotates the refresh token · `POST /api/v1/auth/logout` revokes the family · `GET /api/v1/auth/me`
+- `POST /api/v1/auth/login` `{identifier, password}`: identifier is the email or the Indian mobile (10 digits; `+91`, `91`, `0`, spaces and dashes allowed), decided 26-11-2026 (PLT-08; there is no username) → access token (ES256 JWT, 15 min) in body + `meno_refresh` HttpOnly, Secure, SameSite=Strict cookie (path `/api/v1/auth`)
+- `POST /api/v1/auth/refresh` rotates the refresh token · `POST /api/v1/auth/logout` revokes the family · `POST /api/v1/auth/logout-all` (bearer) revokes every refresh token of the user, i.e. all browsers and counter PCs; access tokens already issued live out their 15 min · `GET /api/v1/auth/me`
 - `GET /api/v1/auth/signup/options` and `POST /api/v1/auth/signup` (201, signed in like login; 200 on Idempotency-Key replay). Rules live in identity (`SignupFacade`); `SessionResponses` builds the body + cookie for login, refresh and sign-up.
 - `POST /auth/verify-email` (public, token), `POST /auth/verify-email/resend`, `GET /auth/verification`. Login / refresh / logout / sign-up run with RLS bypass (`TenantContext.callAsSystem`) because no tenant is known yet.
 - Rate limits (SEC-10, `security/RateLimitFilter`, `meno.rate-limit.*`): login 10/min, refresh 30/min, sign-up 5/10 min, verify 10/10 min, resend 5/h per client IP → 429 `COMMON_RATE_LIMITED` + Retry-After. In memory: move to Redis with a second instance.
@@ -33,7 +33,7 @@ AUTH_RESET_TOKEN_INVALID (410, expired or used reset link), AUTH_INVALID_CREDENT
 
 ## Module rules
 1. Refresh tokens stored hashed; reuse of a rotated token revokes the whole family.
-2. Never reveal whether an email exists (same response for unknown user and wrong password).
+2. Never reveal whether an email or mobile exists (same response for unknown user, malformed identifier and wrong password).
 3. Rate limit login and reset endpoints.
 
 Also follow `backend/meno-api/AGENTS.md` (module template) and root `AGENTS.md` §4. Update this file when you add tables, events or error codes.

@@ -35,6 +35,7 @@ class SignupService implements SignupFacade {
 
     private static final Logger log = LoggerFactory.getLogger(SignupService.class);
     private static final String INDIA_PREFIX = "+91";
+    private static final String MOBILE_INDEX = "ux_app_user_mobile";
 
     private final TenantFacade tenants;
     private final AppUserRepository users;
@@ -81,8 +82,12 @@ class SignupService implements SignupFacade {
             }
         }
         checkRules(command);
+        String mobile = INDIA_PREFIX + command.mobile();
         if (users.existsByEmail(email)) {
             throw emailTaken();
+        }
+        if (users.existsByMobile(mobile)) {
+            throw mobileTaken();
         }
 
         Instant now = clock.instant();
@@ -90,12 +95,13 @@ class SignupService implements SignupFacade {
                 command.startWith(), blankToNull(command.partnerCode()), idempotencyKey));
         AppUser owner;
         try {
-            owner = users.saveAndFlush(AppUser.signedUpOwner(tenantId, email, INDIA_PREFIX + command.mobile(),
+            owner = users.saveAndFlush(AppUser.signedUpOwner(tenantId, email, mobile,
                     passwordEncoder.encode(command.password()), command.ownerName().trim(), EnumSet.of(Role.OWNER),
                     now));
         } catch (DataIntegrityViolationException e) {
-            // Two sign-ups with the same email at the same moment: the unique index decides.
-            throw emailTaken();
+            // Two sign-ups with the same email or mobile at the same moment: the unique index decides.
+            boolean mobileClash = String.valueOf(e.getMostSpecificCause().getMessage()).contains(MOBILE_INDEX);
+            throw mobileClash ? mobileTaken() : emailTaken();
         }
         consents.save(new Consent(tenantId, owner.getId(), Consent.Kind.TERMS_AND_PRIVACY,
                 command.acceptedTermsVersion(), now));
@@ -135,6 +141,11 @@ class SignupService implements SignupFacade {
     private static MenoException emailTaken() {
         return new MenoException(HttpStatus.CONFLICT, "IDENTITY_EMAIL_TAKEN",
                 "An account with this email already exists. Sign in instead.");
+    }
+
+    private static MenoException mobileTaken() {
+        return new MenoException(HttpStatus.CONFLICT, "IDENTITY_MOBILE_TAKEN",
+                "An account with this mobile number already exists. Sign in instead.");
     }
 
     private static String blankToNull(String value) {

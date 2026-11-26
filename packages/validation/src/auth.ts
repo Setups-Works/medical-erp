@@ -5,7 +5,7 @@
  * The password minimum is served by GET /api/v1/auth/signup/options (minPasswordLength), so it is a parameter here.
  */
 import { z } from "zod";
-import { businessName, email, indianMobile, optionValue, otpCode, personName } from "./fields";
+import { businessName, email, INDIAN_MOBILE_PATTERN, indianMobile, optionValue, otpCode, personName } from "./fields";
 
 export const PASSWORD_MAX = 128;
 
@@ -17,11 +17,34 @@ export function newPassword(minLength: number) {
     .refine((v) => v.trim().length === v.length, "Remove spaces at the start or end.");
 }
 
-/** Mirrors LoginRequest: @NotBlank @Email @Size(max=254) email, @NotBlank @Size(max=128) password. */
+/**
+ * Sign in with email or Indian mobile (PLT-08). Mirrors LoginRequest: @NotBlank @Size(max=254) identifier; meno-api
+ * normalises it the same way (AppUser.normalizeMobile). Sends a lower-cased email or the bare 10 digits.
+ */
+export const loginIdentifier = z
+  .string()
+  .trim()
+  .min(1, "Enter your email or mobile number.")
+  .max(254, "Keep it under 254 characters.")
+  .transform((v, ctx) => {
+    if (v.includes("@")) {
+      const parsed = email.safeParse(v);
+      if (parsed.success) return parsed.data;
+      ctx.addIssue({ code: "custom", message: "Enter a valid email address." });
+      return z.NEVER;
+    }
+    const digits = v.replace(/[\s-]/g, "").replace(/^(\+?91|0)(?=\d{10}$)/, "");
+    if (INDIAN_MOBILE_PATTERN.test(digits)) return digits;
+    ctx.addIssue({ code: "custom", message: "Enter your email, or a 10-digit mobile number starting with 6, 7, 8 or 9." });
+    return z.NEVER;
+  });
+
+/** Mirrors LoginRequest: identifier (email or mobile), @NotBlank @Size(max=128) password. */
 export const loginRequest = z.object({
-  email,
+  identifier: loginIdentifier,
   password: z.string().min(1, "Enter your password.").max(PASSWORD_MAX, `Keep it under ${PASSWORD_MAX} characters.`),
 });
+export type LoginForm = z.input<typeof loginRequest>;
 export type LoginRequest = z.infer<typeof loginRequest>;
 
 /**
