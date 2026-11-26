@@ -4,14 +4,14 @@
 # It creates a user-assigned managed identity (no app registration needed), trusts GitHub's OIDC tokens
 # for the repo's staging / production Environments, lets it deploy only to the two MENO apps, stores the
 # ids as Environment variables, deletes the publish-profile secrets and turns basic-auth publishing off.
-# Rollback: delete the identity (az identity delete -g rg-meno -n id-meno-github-deploy), re-enable SCM basic
+# Rollback: delete the identity (az identity delete -g nitheesh_group -n id-meno-github-deploy), re-enable SCM basic
 # auth on the apps and set AZURE_WEBAPP_PUBLISH_PROFILE again (docs/deployment/AZURE_APP_SERVICE.md).
 set -euo pipefail
-RG=${RG:-rg-meno}
+RG=${RG:-nitheesh_group}
 REPO=${REPO:-Setups-Works/medical-erp}
 ID_NAME=${ID_NAME:-id-meno-github-deploy}
 # "<GitHub Environment>:<App Service>" pairs (plain bash 3 for macOS).
-PAIRS=${PAIRS:-"staging:meno-api-stg production:meno-api-prod"}
+PAIRS=${PAIRS:-"staging:meno-api-staging production:meno-api-production"}
 
 SUB=$(az account show --query id -o tsv)
 TENANT=$(az account show --query tenantId -o tsv)

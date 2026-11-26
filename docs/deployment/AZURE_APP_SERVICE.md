@@ -1,28 +1,29 @@
-# meno-api on Azure App Service (free student setup)
+# meno-api on Azure App Service (student setup)
 
 Owner: Jeeva. Approver: Nitheesh. Decision: [ADR-0017](../decisions/0017-azure-app-service-free-tier.md). Workflows: [`ci.yml`](../../.github/workflows/ci.yml), [`deploy-api.yml`](../../.github/workflows/deploy-api.yml).
 
 ```mermaid
 flowchart LR
     pr[Pull request] -->|CI: Backend verify + API image scan| review[Review + merge]
-    review -->|push to develop| stg[GitHub Environment staging] --> appS["App Service (F1, Java 21)<br/>https://&lt;staging-app&gt;.azurewebsites.net"]
-    review -->|push to main| prod[GitHub Environment production] --> appP["App Service (F1, Java 21)<br/>https://&lt;prod-app&gt;.azurewebsites.net"]
+    review -->|push to develop| stg[GitHub Environment staging] --> appS["App Service (B1, Java 21)<br/>https://meno-api-staging.azurewebsites.net"]
+    review -->|push to main| prod[GitHub Environment production] --> appP["App Service (B1, Java 21)<br/>https://meno-api-productionuction.azurewebsites.net"]
     appS --> pg[("PostgreSQL Flexible B1ms<br/>meno_staging · meno_prod")]
     appP --> pg
 ```
 
 | Branch | GitHub Environment | App Service | URL | Swagger |
 |---|---|---|---|---|
-| `develop` | `staging` | `meno-api-stg` | <https://meno-api-stg.azurewebsites.net> | <https://meno-api-stg.azurewebsites.net/swagger-ui.html> |
-| `main` | `production` | `meno-api-prod` | <https://meno-api-prod.azurewebsites.net> | off (smoke test fails if it is on) |
+| `develop` | `staging` | `meno-api-staging` | <https://meno-api-staging.azurewebsites.net> | <https://meno-api-staging.azurewebsites.net/swagger-ui.html> |
+| `main` | `production` | `meno-api-production` | <https://meno-api-production.azurewebsites.net> | off (smoke test fails if it is on) |
 
 ## What exists (set up 26-11-2026)
 
 | Resource | Name | Notes |
 |---|---|---|
-| Resource group | `rg-meno` (Central India) | MENO only |
-| App Service plan | `asp-meno-free` | Linux, **Free F1** |
-| Web apps | `meno-api-stg`, `meno-api-prod` | Java 21 SE, HTTPS only, TLS 1.2+, FTPS off, app settings filled (DB, JWT keys per env, bootstrap owner) |
+| Resource group | `nitheesh_group` (Central India) | Shared with Nitheesh's other apps; MENO resources are tagged `project=meno` |
+| App Service plan | `untitled-ws-free-f1` (despite the name: **Basic B1**, already paid) | Linux, 1 vCPU, 1.75 GB, shared with two other apps; no daily CPU quota, Always On |
+| Web apps | `meno-api-staging`, `meno-api-production` | Java 21 SE, HTTPS only, TLS 1.2+, FTPS off, Always On, app settings filled (DB, JWT keys per env, bootstrap owner) |
+| Retired | `rg-meno` with plan `asp-meno-free` (F1) and apps `meno-api-stg` / `meno-api-prod` | **Delete by hand** (`az group delete -n rg-meno`): F1's 60 CPU minutes a day ran out during the first deploy and stopped both apps (QuotaExceeded) |
 | PostgreSQL | `untitled-ws-pg-13oct26` in `nitheesh_group` (shared, B1ms, v16) | Databases `meno_staging`, `meno_prod`; roles `meno_stg_owner` / `meno_stg_app`, `meno_prod_owner` / `meno_prod_app` (staging credentials cannot open the production database) |
 | GitHub Environments | `staging` (branch `develop` only), `production` (branch `main` only) | `AZURE_WEBAPP_NAME` + `AZURE_WEBAPP_PUBLISH_PROFILE` until OIDC is switched on |
 
@@ -36,13 +37,13 @@ Everything here is on free tiers for an Azure for Students subscription. ⚠ Che
 
 | Resource | SKU | Note |
 |---|---|---|
-| 2 × App Service (Linux) | **Free F1** | 1 GB RAM, 60 CPU minutes a day, sleeps after ~20 idle minutes. Move production to B1 before the pilot (ADR-0017) |
+| 2 × App Service (Linux) | on the existing **B1** plan | No extra cost (the plan is already paid). F1 was tried first and is not enough for Spring Boot: 60 CPU minutes a day, shared by every app on the plan |
 | PostgreSQL Flexible Server | B1ms, 32 GB | 750 h a month free for 12 months on eligible student subscriptions. One server, two databases |
 | Key Vault (optional) | Standard | Tiny per-operation cost; holds the JWT keys and DB passwords as references |
 
 ## One-time setup (a person does this, not an agent)
 
-Names used: resource group `rg-meno`, plan `asp-meno-free`, apps `meno-api-stg` / `meno-api-prod` (the name becomes the URL). PostgreSQL reuses the existing server `untitled-ws-pg-13oct26` (the free 750 h cover one server).
+Names used: resource group `nitheesh_group`, plan `untitled-ws-free-f1` (B1), apps `meno-api-staging` / `meno-api-production` (the name becomes the URL). PostgreSQL reuses the existing server `untitled-ws-pg-13oct26` (the free 750 h cover one server).
 
 ### 1. PostgreSQL
 
@@ -65,7 +66,7 @@ alter default privileges for role meno_<env>_owner in schema public grant usage,
 
 ### 2. The two App Services
 
-Portal → Create → Web App: **Publish: Code**, **Runtime stack: Java 21**, **Java web server stack: Java SE (Embedded Web Server)**, **OS: Linux**, region Central India, pricing plan **Free F1**. Do it twice (staging, production). Then on each app:
+Portal → Create → Web App: **Publish: Code**, **Runtime stack: Java 21**, **Java web server stack: Java SE (Embedded Web Server)**, **OS: Linux**, region Central India, pricing plan: the existing B1 plan (an app can only use a plan in its own resource group). Do it twice (staging, production). Then on each app:
 
 - Settings → Configuration → General settings: **SCM Basic Auth Publishing Credentials: On** (the publish profile needs it), HTTPS only: On, minimum TLS 1.2.
 - Settings → Environment variables → App settings: the table below.
@@ -74,7 +75,7 @@ Portal → Create → Web App: **Publish: Code**, **Runtime stack: Java 21**, **
 | App setting | staging | production | Secret |
 |---|---|---|---|
 | `SERVER_PORT` | `80` | `80` | no (App Service Java SE routes traffic to port 80) |
-| `JAVA_OPTS` | `-XX:MaxRAMPercentage=70 -XX:+UseSerialGC -XX:TieredStopAtLevel=1` | same | no (fits the 1 GB F1 plan, faster start) |
+| `JAVA_OPTS` | `-Xms128m -Xmx384m -XX:MaxMetaspaceSize=160m -XX:+UseSerialGC -XX:TieredStopAtLevel=1` | same | no (four apps share 1.75 GB; fixed heap, faster start) |
 | `SPRING_PROFILES_ACTIVE` | `staging` | `prod` | no |
 | `TZ` | `Asia/Kolkata` | `Asia/Kolkata` | no |
 | `MENO_DB_URL` | `jdbc:postgresql://untitled-ws-pg-13oct26.postgres.database.azure.com:5432/meno_staging?sslmode=verify-full&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory` | same with `meno_prod` | no |
@@ -142,5 +143,5 @@ Actions → **Deploy API** → Run workflow on `develop` (or merge any backend c
 
 - Merge to `develop` → staging updates in about 5 minutes. Merge `develop` → `main` (release PR) → production updates.
 - Something broke: [docs/runbooks/rollback.md](../runbooks/rollback.md). Normal procedure: [docs/runbooks/deploy.md](../runbooks/deploy.md).
-- Logs: app → Monitoring → Log stream (or `az webapp log tail -n <app> -g rg-meno-staging`).
-- First request after idle is slow on F1 (the app sleeps). The deploy smoke test waits up to 10 minutes for that reason.
+- Logs: app → Monitoring → Log stream (or `az webapp log tail -n <app> -g nitheesh_group`).
+- Always On is enabled, so there is no cold start; the smoke test still waits up to 10 minutes for the JVM and Flyway after a deploy.

@@ -2,7 +2,7 @@
 
 Owner: Jeeva. Approver: Nitheesh. Decision record: ADR-0005.
 
-> **Now (P1 until the pilot): the API runs on two free App Services, not a VM** ([ADR-0017](../decisions/0017-azure-app-service-free-tier.md)). Push to `develop` deploys staging, push to `main` deploys production, through `.github/workflows/deploy-api.yml`. Setup, app settings and URLs: **[AZURE_APP_SERVICE.md](AZURE_APP_SERVICE.md)**. The VM topology below is the target when we outgrow F1 or need Redis / nginx / monitoring on our own host.
+> **Now (P1 until the pilot): the API runs on two App Services (`meno-api-staging`, `meno-api-production`) on an existing B1 plan, not a VM** ([ADR-0017](../decisions/0017-azure-app-service-free-tier.md)). Push to `develop` deploys staging, push to `main` deploys production, through `.github/workflows/deploy-api.yml`. Setup, app settings and URLs: **[AZURE_APP_SERVICE.md](AZURE_APP_SERVICE.md)**. The VM topology below is the target when we outgrow F1 or need Redis / nginx / monitoring on our own host.
 
 ## Target topology
 
@@ -46,8 +46,8 @@ Budget alerts at $25 / $50 / $75. Jeeva reports spend at each sprint review. If 
 | Env | Where | Deploy trigger | Data |
 |---|---|---|---|
 | local | developer laptop, `docker compose up` | — | seed |
-| staging | App Service (F1) now, VM `vm-meno-stg` later | merge to `develop` (auto) | seed + anonymised demo |
-| production | App Service (F1) now, VM `vm-meno-prod` later | merge to `main` (auto; add required reviewers on the `production` Environment before real tenants) | real |
+| staging | App Service `meno-api-staging` now, VM `vm-meno-stg` later | merge to `develop` (auto) | seed + anonymised demo |
+| production | App Service `meno-api-production` now, VM `vm-meno-prod` later | merge to `main` (auto; add required reviewers on the `production` Environment before real tenants) | real |
 
 Naming: `rg-meno-<env>`, `vm-meno-<env>`, `psql-meno`, `stmeno<env>`, DNS `staging.<domain>`, `app.<domain>`.
 
