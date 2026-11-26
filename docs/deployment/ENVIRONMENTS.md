@@ -34,7 +34,7 @@ Built: [`docker-compose.yml`](../../docker-compose.yml). `cp .env.example .env`,
 | `MENO_JWT_KID`, `MENO_JWT_ISSUER` | api | no | rotated per runbook |
 | `MENO_API_DOCS_ENABLED` | api | no | Swagger UI + `/v3/api-docs`; `false` in production |
 | `PORT` / `SERVER_PORT` | api | no | HTTP port (8080 locally, 80 on App Service) |
-| `JAVA_OPTS` | api (App Service) | no | JVM flags for the 1 GB F1 plan |
+| `JAVA_OPTS` | api (App Service) | no | JVM flags (heap capped: the B1 plan is shared by four apps) |
 | `MENO_MAIL_*` | api | yes | SMTP |
 | `MENO_SENTRY_DSN` | api, web, desktop | no | |
 | `MENO_GSP_*` | api | yes | e-invoice provider (P5) |

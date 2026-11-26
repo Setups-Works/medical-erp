@@ -1,4 +1,4 @@
-# ADR-0017: Azure App Service (free F1, Java 21) for meno-api until the pilot
+# ADR-0017: Azure App Service (Java 21) for meno-api until the pilot
 
 - Status: Accepted (Nitheesh, 2026-11-26)
 - Date: 2026-11-26
@@ -23,4 +23,5 @@ Until the pilot, run meno-api on **two Linux App Services on the Free (F1) plan,
 − Production deploys automatically on merge to `main`. The guard is the PR review into `main` plus optional required reviewers on the `production` GitHub Environment; turn those on before real tenants exist.
 − No Redis, nginx rate limits or Prometheus on App Service. Add them (or move to the VM) when the features that need them land.
 − Deploys authenticate with each app's publish profile (a long-lived password in a GitHub Environment secret). The threat model (SEC-08) prefers OIDC to Azure: `deploy-api.yml` already switches to `azure/login` OIDC when the Environment has `AZURE_CLIENT_ID`; `infrastructure/azure/setup-oidc.sh` creates a user-assigned managed identity (no app registration needed) with a federated credential per Environment, then deletes the publish profiles and turns basic-auth publishing off.
+− **Update 26-11-2026 (Nitheesh):** F1 failed on the first deploy: the 60 CPU minutes a day are shared by every app on the plan, and a starting Spring Boot app used them up, so both apps were stopped (QuotaExceeded). The apps now run as `meno-api-staging` / `meno-api-production` on the existing, already-paid **B1** plan `untitled-ws-free-f1` in `nitheesh_group` (no extra cost, Always On, no CPU quota), sharing its 1.75 GB with two other apps (heap capped at 384 MB each). Still one plan for staging and production: a runaway staging app can slow production. Give production its own plan before the pilot.
 − Partly supersedes ADR-0005 for P1–P4. Revisit at the pilot go-live (Hub #395).
