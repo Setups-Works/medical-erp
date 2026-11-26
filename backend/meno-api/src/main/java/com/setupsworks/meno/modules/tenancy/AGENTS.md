@@ -17,6 +17,10 @@ BranchCreated, FinancialYearClosed
 ## Allowed dependencies
 —
 
+## Built so far (P1, 26-11-2026)
+- `tenant` (V202611261700). `TenantFacade` (api): `isActive`, `createTenant`.
+- Not yet (#7): `TenantContext`, filter, Hibernate filter, RLS policies + `SET LOCAL`, cross-tenant test base.
+
 ## Error codes
 TENANCY_BRANCH_NOT_ALLOWED, TENANCY_FY_CLOSED, TENANCY_EDITION_REQUIRED
 

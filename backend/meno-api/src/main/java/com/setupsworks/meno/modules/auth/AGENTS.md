@@ -17,8 +17,14 @@ UserLoggedIn, UserLoggedOut
 ## Allowed dependencies
 identity::api, tenancy::api
 
+## Built so far (P1, from Kamesh's login work, 26-11-2026)
+- `POST /api/v1/auth/login` → access token (ES256 JWT, 15 min) in body + `meno_refresh` HttpOnly, Secure, SameSite=Strict cookie (path `/api/v1/auth`)
+- `POST /api/v1/auth/refresh` rotates the refresh token · `POST /api/v1/auth/logout` revokes the family · `GET /api/v1/auth/me`
+- Table `refresh_token` (V202611261702). `login_attempt`, `password_reset`, `AuthFacade`, events: not yet.
+- Config `meno.auth.*` (refresh TTL, cookie secure); all from env, no hard-coded values.
+
 ## Error codes
-AUTH_INVALID_CREDENTIALS, AUTH_LOCKED, AUTH_REFRESH_REUSED, AUTH_2FA_REQUIRED
+AUTH_INVALID_CREDENTIALS (401), AUTH_LOCKED (423), AUTH_ACCOUNT_DISABLED (403), AUTH_REFRESH_INVALID (401), AUTH_REFRESH_REUSED (401), AUTH_2FA_REQUIRED (P5)
 
 ## Module rules
 1. Refresh tokens stored hashed; reuse of a rotated token revokes the whole family.

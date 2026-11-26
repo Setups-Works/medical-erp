@@ -2,12 +2,12 @@
 
 > Agents read this to know what exists. **Update it in every PR that changes what works.** Keep it factual: `live` (merged & on staging) · `building` (in progress) · `planned`.
 
-**Phase:** P0 Foundation · **Last updated:** 2026-11-25 · **By:** Nitheesh
+**Phase:** P0 Foundation · **Last updated:** 2026-11-26 · **By:** Nitheesh
 
 | Area | Status | Notes |
 |---|---|---|
 | Repo structure & docs | live | Folders, AGENTS.md, architecture, phases, team plans, page catalogue, roles, validation rulebook, ownership matrix |
-| Backend scaffold | planned | P1 — implementation guide written: `docs/architecture/BACKEND_IMPLEMENTATION.md` |
+| Backend scaffold | building | `backend/meno-api` (Kamesh, Hub #457/#458): Spring Boot 4.2, Java 21, Modulith (`ModulithTest`), Problem Details, UUIDv7, Flyway; login / refresh (rotation + reuse detection) / logout / me with ES256 JWT; modules `tenancy`, `identity`, `auth`. `./mvnw verify` green (PostgreSQL integration test needs Docker). Not yet: RLS + TenantContext (#7), permissions, page envelope, money, validation annotations |
 | Billing engine (`packages/billing-engine`) | building | TypeScript, decimal.js; 72 / 72 test vectors pass (draft vectors, awaiting hand check + CA); Java twin pending (Kamesh) |
 | pnpm workspace root | live | `package.json`, `pnpm-workspace.yaml` (apps/*, packages/*) |
 | Web scaffold / design system | planned | P1 — tokens defined in `docs/design/DESIGN_LANGUAGE.md` |

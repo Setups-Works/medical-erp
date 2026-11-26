@@ -1,0 +1,8 @@
+# ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+meno:
+  security:
+    jwt:
+      # Without MENO_JWT_*_KEY_PATH a throw-away key is used; tokens die on restart. Never in staging/prod.
+      allow-ephemeral-key: true
+  auth:
+    refresh-cookie-secure: ${MENO_COOKIE_SECURE:false}
