@@ -46,7 +46,8 @@ class SecurityConfig {
                 .formLogin(f -> f.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login", "/api/v1/auth/refresh",
-                                "/api/v1/auth/logout", "/api/v1/auth/signup", "/api/v1/auth/verify-email").permitAll()
+                                "/api/v1/auth/logout", "/api/v1/auth/signup", "/api/v1/auth/verify-email",
+                                "/api/v1/auth/password/forgot", "/api/v1/auth/password/reset").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/signup/options").permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**", "/error").permitAll()
                         // Only exist when MENO_API_DOCS_ENABLED=true (off in production).

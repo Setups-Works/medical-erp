@@ -18,6 +18,8 @@ tags:
   name: Auth
 - description: Create a pharmacy business (tenant) and its owner account.
   name: Sign-up
+- description: Forgot and reset password with a single-use emailed link.
+  name: Password
 - description: Verify a GSTIN and fetch its registration details.
   name: GSTIN
 paths:
@@ -104,6 +106,58 @@ paths:
       summary: Who am I
       tags:
       - Auth
+  /api/v1/auth/password/forgot:
+    post:
+      description: "Always 202, so it never reveals whether the email exists."
+      operationId: forgot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForgotPasswordRequest"
+        required: true
+      responses:
+        "202":
+          description: Accepted
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: COMMON_RATE_LIMITED
+      security: []
+      summary: Email a single-use reset link (AUT-01)
+      tags:
+      - Password
+  /api/v1/auth/password/reset:
+    post:
+      description: Revokes all sessions. The minimum length comes from GET /auth/signup/options.
+      operationId: reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordRequest"
+        required: true
+      responses:
+        "204":
+          description: Password changed
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: IDENTITY_PASSWORD_TOO_SHORT
+        "410":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: AUTH_RESET_TOKEN_INVALID (expired or already used)
+      security: []
+      summary: Set a new password with the token from the email link
+      tags:
+      - Password
   /api/v1/auth/refresh:
     post:
       description: "Uses the meno_refresh cookie, rotates it and returns a new access\
@@ -943,6 +997,16 @@ components:
           type: string
         tradeName:
           type: string
+    ForgotPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 0
+      required:
+      - email
     GoLiveRequest:
       type: object
       properties:
@@ -1158,6 +1222,20 @@ components:
           type: boolean
         ready:
           type: boolean
+    ResetPasswordRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          maxLength: 128
+          minLength: 0
+        token:
+          type: string
+          maxLength: 100
+          minLength: 0
+      required:
+      - password
+      - token
     SettingInfo:
       type: object
       properties:

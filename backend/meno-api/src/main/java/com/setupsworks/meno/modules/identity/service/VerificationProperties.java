@@ -11,5 +11,5 @@ public record VerificationProperties(
         @DefaultValue("24h") Duration emailTtl,
         @DefaultValue("60s") Duration resendCooldown,
         /* Base of the link in the email; the token is appended. */
-        @DefaultValue("http://localhost:3000/verify?token=") String emailLinkBase) {
+        @DefaultValue("http://localhost:3000/verify/?token=") String emailLinkBase) {
 }

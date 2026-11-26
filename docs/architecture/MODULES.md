@@ -8,7 +8,7 @@ Base-plan names are kept as **sub-domains** inside fewer, larger modules so begi
 
 | Module | Owns (tables, roughly) | Base-plan names merged in | Public API (examples) | Publishes events | Allowed deps | Phase |
 |---|---|---|---|---|---|---|
-| `auth` | refresh_token, login_attempt, device | auth | `AuthFacade.currentUser()` | `UserLoggedIn` | identity, tenancy | 1 |
+| `auth` | refresh_token, login_attempt, password_reset, device | auth | `AuthFacade.currentUser()`; built: login, refresh, logout, sign-up, verify, forgot / reset password | `UserLoggedIn` | identity, notification (reset email) | 1 |
 | `tenancy` | tenant, state, company, licence, branch, financial_year, number_series, tenant_setting, onboarding_progress (+ seeded lookup_option, setting_definition, onboarding_step) | company, branch | `TenantFacade`, `GoLiveCheck` SPI (`TenantContext` lives in shared `security`), `BranchFacade` later | `TenantWentLive`, `BranchCreated` | — | 1 |
 | `identity` | app_user, role, permission, role_permission, user_branch, consent, verification | users, roles | `SignupFacade`, `EmailVerification`, `CredentialCheck` (`PermissionChecker` lives in shared `security`) | `UserInvited` | tenancy, notification (EmailSender for one-time links) | 1 |
 | `subscription` | plan, license, license_event, license_activation_attempt, usage (LICENSING.md) | subscription, licensing | `EntitlementGuard.requireEdition/Feature/Capacity/Writable`, `EditionGuard.require(WHOLESALE)` | `LicenseActivated`, `LicenseChanged`, `PlanChanged` | tenancy | 5 |

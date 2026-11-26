@@ -22,6 +22,7 @@ tenancy::api
 - `app_user`, `user_role` (V202611261701). `CredentialCheck` (api): password check + lockout (`meno.identity.max-failed-attempts`, `lock-duration`), same result for unknown email and wrong password.
 - `BootstrapOwner`: first tenant + OWNER from `MENO_BOOTSTRAP_*` on an empty DB.
 - Sign-up (AUT-04 step 1): `SignupFacade` (api) → `SignupService` creates tenant + OWNER (mobile E.164) + `consent` in one transaction; Idempotency-Key replay; options (states, start options, terms version, password minimum) from data / `meno.signup.*`. Password minimum 10 (SECURITY.md). Email link built: `EmailVerification` (api) sends after commit through `notification.api.EmailSender` (SMTP); `/auth/verify-email`, `/auth/verify-email/resend`, `/auth/verification`. `OwnerEmailVerifiedCheck` implements tenancy's `GoLiveCheck`. Not yet: mobile OTP (needs an SMS provider, INT-02).
+- `PasswordAccounts` (api) for the reset flow: `findForReset(email)` (active users only), `changePassword(userId, raw)` (policy check, clears lockout).
 - `permission` / `role_permission` seed (V202611262101) read by `security/PermissionChecker` (permissions, never role names).
 - `Role` enum is temporary: replace with role / permission / role_permission tables (ADR-0014).
 - Open: Argon2id (THREAT_MODEL) needs BouncyCastle → tech-lead approval; bcrypt via the delegating encoder until then.
