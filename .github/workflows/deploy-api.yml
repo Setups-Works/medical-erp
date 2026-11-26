@@ -126,13 +126,22 @@ jobs:
           fi
           echo "Deployed app.jar to $APP (HTTP $code)"
           echo "webapp-url=https://$APP.azurewebsites.net" >> "$GITHUB_OUTPUT"
-      # Allow up to ~10 minutes for the JVM start and Flyway migrations after the restart. Polls every 5 s
-      # so a healthy app is noticed quickly.
+      # OneDeploy returns before the restart, so the old JVM can still answer UP for a few seconds (run
+      # 45861317851 passed against the old instance). First wait for the restart to take the app down, then
+      # allow up to ~10 minutes for the new JVM and Flyway. Polls every 5 s.
       - name: Smoke test
         env:
           URL: ${{ steps.deploy.outputs.webapp-url }}
           IS_PROD: ${{ github.ref_name == 'main' }}
         run: |
+          for i in $(seq 1 36); do
+            if ! curl -fsS --max-time 10 "$URL/actuator/health" 2>/dev/null | grep -q '"UP"'; then
+              echo "Restart seen after ~$((i * 5)) s"
+              break
+            fi
+            [ "$i" = 36 ] && { echo "::error::$URL never went down for the restart in 3 minutes, so the new jar is not verified."; exit 1; }
+            sleep 5
+          done
           for i in $(seq 1 120); do
             if curl -fsS --max-time 10 "$URL/actuator/health" 2>/dev/null | grep -q '"UP"'; then
               echo "Healthy after ~$((i * 5)) s: $URL/actuator/health"
