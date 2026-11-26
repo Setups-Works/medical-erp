@@ -34,8 +34,8 @@ import org.springframework.security.web.SecurityFilterChain;
 class SecurityConfig {
 
     @Bean
-    SecurityFilterChain apiSecurity(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter)
-            throws Exception {
+    SecurityFilterChain apiSecurity(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter,
+            RateLimitProperties rateLimits, java.time.Clock clock) throws Exception {
         http
                 // Stateless API: the access token travels in the Authorization header (not a cookie), so
                 // there is nothing for CSRF to ride on. The refresh cookie is HttpOnly + SameSite=Strict and
@@ -46,7 +46,7 @@ class SecurityConfig {
                 .formLogin(f -> f.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login", "/api/v1/auth/refresh",
-                                "/api/v1/auth/logout", "/api/v1/auth/signup").permitAll()
+                                "/api/v1/auth/logout", "/api/v1/auth/signup", "/api/v1/auth/verify-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/signup/options").permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**", "/error").permitAll()
                         // Only exist when MENO_API_DOCS_ENABLED=true (off in production).
@@ -54,7 +54,9 @@ class SecurityConfig {
                                 "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(o -> o.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
-                .addFilterAfter(new TenantContextFilter(), BearerTokenAuthenticationFilter.class);
+                .addFilterAfter(new TenantContextFilter(), BearerTokenAuthenticationFilter.class)
+                // Before authentication, so floods are cut off cheaply.
+                .addFilterBefore(new RateLimitFilter(rateLimits, clock), BearerTokenAuthenticationFilter.class);
         return http.build();
     }
 
