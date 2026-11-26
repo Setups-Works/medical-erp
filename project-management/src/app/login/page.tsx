@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Button, FormError, Input, Label } from "@/components/ui";
 import { api } from "@/lib/client";
@@ -35,7 +36,12 @@ export default function LoginPage() {
             <Input type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoFocus />
           </label>
           <label className="block">
-            <Label>Password</Label>
+            <span className="flex items-baseline justify-between">
+              <Label>Password</Label>
+              <Link href="/forgot-password" className="text-[12px] text-ink-4 underline-offset-2 hover:text-ink hover:underline">
+                Forgot password?
+              </Link>
+            </span>
             <Input type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
           </label>
           <FormError>{error}</FormError>

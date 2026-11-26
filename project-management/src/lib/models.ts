@@ -96,7 +96,7 @@ const notificationSchema = new Schema(
   {
     user: { type: ObjectId, ref: "User", required: true, index: true },
     actor: { type: ObjectId, ref: "User" },
-    type: { type: String, enum: ["assigned", "mentioned", "commented"], required: true },
+    type: { type: String, enum: ["assigned", "mentioned", "commented", "review"], required: true },
     text: { type: String, required: true },
     boardId: { type: ObjectId, ref: "Board" },
     taskId: { type: ObjectId, ref: "Task" },
@@ -129,6 +129,18 @@ const pageCheckSchema = new Schema(
   { timestamps: true },
 );
 
+/** One-time password reset link. Only the SHA-256 of the token is stored; Mongo's TTL index removes expired rows. */
+const passwordResetSchema = new Schema(
+  {
+    user: { type: ObjectId, ref: "User", required: true, index: true },
+    tokenHash: { type: String, required: true, unique: true },
+    expiresAt: { type: Date, required: true },
+    usedAt: { type: Date, default: null },
+  },
+  { timestamps: { createdAt: true, updatedAt: false } },
+);
+passwordResetSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
 const counterSchema = new Schema({ _id: String, seq: { type: Number, default: 0 } });
 
 function model<S extends Schema>(name: string, schema: S): Model<InferSchemaType<S>> {
@@ -144,6 +156,7 @@ export const Notification = model("Notification", notificationSchema);
 export const Counter = model("Counter", counterSchema);
 export const ProductItem = model("ProductItem", productItemSchema);
 export const PageCheck = model("PageCheck", pageCheckSchema);
+export const PasswordReset = model("PasswordReset", passwordResetSchema);
 
 export async function nextTaskNumber(): Promise<number> {
   const c = await Counter.findByIdAndUpdate("task", { $inc: { seq: 1 } }, { upsert: true, new: true }).lean();
