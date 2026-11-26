@@ -1,0 +1,18 @@
+{
+  "name": "@meno/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "gen": "openapi-typescript ../../contracts/openapi/meno-api.yaml -o src/generated/meno-api.ts && openapi-typescript ../../contracts/openapi/proposed/auth.yaml -o src/generated/proposed.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.9.1",
+    "typescript": "5.9.2",
+    "vitest": "^2.1.0"
+  }
+}

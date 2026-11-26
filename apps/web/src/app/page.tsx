@@ -1,0 +1,5 @@
+import { HomeRedirect } from "@/features/auth/components/HomeRedirect";
+
+export default function Page() {
+  return <HomeRedirect />;
+}

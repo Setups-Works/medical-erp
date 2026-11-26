@@ -1,0 +1,38 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "msw init public --save=false",
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "postbuild": "node -e \"require('node:fs').rmSync('out/mockServiceWorker.js',{force:true})\"",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "5.2.1",
+    "@meno/api-client": "workspace:*",
+    "@meno/ui": "workspace:*",
+    "@meno/validation": "workspace:*",
+    "@tanstack/react-query": "5.90.2",
+    "date-fns": "4.1.0",
+    "next": "15.5.29",
+    "react": "19.1.10",
+    "react-dom": "19.1.10",
+    "react-hook-form": "7.62.0",
+    "sonner": "2.0.7",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.13",
+    "@types/node": "22.18.6",
+    "@types/react": "19.1.13",
+    "@types/react-dom": "19.1.9",
+    "msw": "2.11.3",
+    "tailwindcss": "4.1.13",
+    "typescript": "5.9.2",
+    "vitest": "^2.1.0"
+  }
+}

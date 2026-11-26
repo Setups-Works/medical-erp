@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@meno/ui/tokens.css";
+@import "@meno/ui/theme.css";
+
+/* Workspace packages live outside this app, so tell Tailwind to scan them for class names. */
+@source "../../../../packages/ui/src";

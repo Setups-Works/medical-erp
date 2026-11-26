@@ -35,6 +35,20 @@ tests/unit/                                     Vitest
 tests/e2e/                                      Playwright (Ashok)
 ```
 
+## Built so far (P1 auth + onboarding, 26-11-2026)
+
+| Route | Screen | API |
+|---|---|---|
+| `/login` `/signup` `/verify` `/forgot-password` `/reset-password?token=` | `features/auth` | real meno-api (`/auth/login`, `/auth/signup`, `/auth/signup/options`, `/auth/verification`, `/auth/verify-email[/resend]`, `/auth/password/forgot`, `/auth/password/reset`) |
+| `/invite?token=` + mobile OTP on `/verify` | `features/auth` | **proposed** (`contracts/openapi/proposed/auth.yaml`), local MSW until built |
+| `/onboarding` + `business` `pharmacy` `licences` `branches` `books` `configuration` `go-live` | `features/onboarding` | real meno-api (`/api/v1/onboarding/*`, `/gstin-verifications/{gstin}`) |
+| `/onboarding/team` `data` `devices` `plan` `practice` `license` `help` | `LaterStep` ("Coming in Pn", skip if optional) | checklist `available: false` |
+
+- `/invite` uses `?token=` (not `/invite/[token]`): a static export can't pre-render unknown tokens.
+- Session: access token in memory only (`lib/session.ts`); `meno_refresh` HttpOnly cookie restores it on reload via `/auth/refresh` (single-flight in `@meno/api-client`). Dev proxies `/api` to `MENO_API_ORIGIN` so the cookie is same-origin.
+- API types are generated (`pnpm gen:api`); `packages/api-client/src/overrides.ts` corrects 4 springdoc gaps until the backend annotations are fixed (listed in that file).
+- **Mocks are local-dev only**: `NEXT_PUBLIC_API_MOCKING=all|missing|off` works only under `next dev`; `next build` (staging, production) always uses the real API, the MSW code is pruned and `mockServiceWorker.js` is deleted from `out/`.
+
 ## Navigation
 
 The sidebar menu is defined in `docs/design/NAVIGATION.md` (Dashboard + 9 groups, routes, edition, feature IDs). `src/config/nav.ts` must match it; don't add menu items that aren't in that table.
@@ -75,8 +89,10 @@ Source of truth: `docs/team/OWNERSHIP_MATRIX.md`.
 
 ## Commands (from P1)
 
-`pnpm --filter web dev` · `pnpm --filter web test` · `pnpm --filter web e2e` · `pnpm typecheck` · `pnpm check:design`
+`cp apps/web/.env.example apps/web/.env.local` · `pnpm --filter web dev` · `pnpm --filter web test` · `pnpm --filter web e2e` · `pnpm typecheck` · `pnpm check:design`
 
 ## Mistakes to avoid
 
-(Add entries here when an agent or human gets something wrong twice.)
+- Wrap Radix-based controls (Select, ChoiceCards, Segmented, DatePicker) in `<Field>`; they read the label/aria wiring from Field's context, a `<Controller>` in between can't receive cloned props.
+- Form field names must not contain `.` (react-hook-form reads it as nesting). Map API keys like `stock.near_expiry_days` to flat names (see ConfigurationStep).
+- Single-use POSTs triggered by a page load (email link) use a query keyed by the token, not a mutation in an effect (Strict Mode remounts).

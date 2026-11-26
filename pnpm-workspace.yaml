@@ -1,3 +1,9 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# Install scripts allowed (native binaries, MSW worker). Everything else stays blocked.
+allowBuilds:
+  '@tailwindcss/oxide': true
+  esbuild: true
+  msw: true
