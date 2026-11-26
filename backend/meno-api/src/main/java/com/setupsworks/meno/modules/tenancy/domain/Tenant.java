@@ -56,6 +56,27 @@ public class Tenant {
     @Column(name = "signup_key")
     private UUID signupKey;
 
+    @Column(name = "business_type")
+    private String businessType;
+
+    @Column(name = "branch_count")
+    private String branchCount;
+
+    @Column(name = "catalogue_size")
+    private String catalogueSize;
+
+    @Column(name = "current_software")
+    private String currentSoftware;
+
+    @Column
+    private String language;
+
+    @Column(name = "go_live_date")
+    private java.time.LocalDate goLiveDate;
+
+    @Column(name = "go_live_at")
+    private Instant goLiveAt;
+
     @Version
     private long version;
 
@@ -77,6 +98,45 @@ public class Tenant {
         this.startOption = startOption;
         this.partnerCode = partnerCode;
         this.signupKey = signupKey;
+    }
+
+    public record BusinessProfile(String businessType, String branchCount, String catalogueSize,
+            String currentSoftware, String language) {
+    }
+
+    public void updateBusinessProfile(BusinessProfile p, Instant now) {
+        businessType = p.businessType();
+        branchCount = p.branchCount();
+        catalogueSize = p.catalogueSize();
+        currentSoftware = p.currentSoftware();
+        language = p.language();
+        updatedAt = now;
+    }
+
+    public BusinessProfile businessProfile() {
+        return new BusinessProfile(businessType, branchCount, catalogueSize, currentSoftware, language);
+    }
+
+    public void goLive(java.time.LocalDate date, Instant now) {
+        goLiveDate = date;
+        goLiveAt = now;
+        updatedAt = now;
+    }
+
+    public boolean isLive() {
+        return goLiveAt != null;
+    }
+
+    public java.time.LocalDate getGoLiveDate() {
+        return goLiveDate;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public String getStateCode() {
+        return stateCode;
     }
 
     public boolean isActive() {
