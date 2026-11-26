@@ -66,6 +66,11 @@ public class AuthService {
         return issueTokens(account, Uuids.v7(), client, clock.instant());
     }
 
+    /** Signs in an account that was just created and checked elsewhere (sign-up): new session family. */
+    public AuthResult startSession(LoginAccount account, ClientInfo client) {
+        return issueTokens(account, Uuids.v7(), client, clock.instant());
+    }
+
     public AuthResult refresh(String rawRefreshToken, ClientInfo client) {
         Instant now = clock.instant();
         RefreshToken current = refreshTokens.findByTokenHash(hash(rawRefreshToken))

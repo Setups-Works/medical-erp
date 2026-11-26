@@ -44,6 +44,8 @@ With the `local` profile: <http://localhost:8080/swagger-ui.html> (spec: `/v3/ap
 | POST | `/api/v1/auth/login` | – | `{"email","password"}` → access token in body, refresh token in `meno_refresh` HttpOnly cookie |
 | POST | `/api/v1/auth/refresh` | cookie | Rotates the refresh token, returns a new access token |
 | POST | `/api/v1/auth/logout` | cookie | Revokes the session family, clears the cookie |
+| GET | `/api/v1/auth/signup/options` | – | States (GST codes), start options, terms version, password minimum for the sign-up screen |
+| POST | `/api/v1/auth/signup` | – | Creates tenant + owner + consent, signs in (201); send `Idempotency-Key` (replay → 200, same account) |
 | GET | `/api/v1/auth/me` | Bearer | User id, tenant id, email, roles from the token |
 | GET | `/actuator/health` | – | Health check |
 | GET | `/swagger-ui.html`, `/v3/api-docs` | – | API docs (only when `MENO_API_DOCS_ENABLED=true`) |

@@ -19,10 +19,11 @@ BranchCreated, FinancialYearClosed
 
 ## Built so far (P1, 26-11-2026)
 - `tenant` (V202611261700). `TenantFacade` (api): `isActive`, `createTenant`.
+- `state` lookup (GST state codes, seeded, effective-dated) and sign-up columns on `tenant` (V202611262000). `TenantFacade`: `createTenant(NewTenant)`, `findBySignupKey`, `activeStates`, `isActiveState`.
 - Not yet (#7): `TenantContext`, filter, Hibernate filter, RLS policies + `SET LOCAL`, cross-tenant test base.
 
 ## Error codes
-TENANCY_BRANCH_NOT_ALLOWED, TENANCY_FY_CLOSED, TENANCY_EDITION_REQUIRED
+TENANCY_STATE_UNKNOWN (400), TENANCY_BRANCH_NOT_ALLOWED, TENANCY_FY_CLOSED, TENANCY_EDITION_REQUIRED
 
 ## Module rules
 1. Number series allocation locks the series row (SELECT … FOR UPDATE) inside the document transaction.

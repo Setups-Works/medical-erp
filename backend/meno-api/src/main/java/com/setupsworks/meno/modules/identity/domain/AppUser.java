@@ -55,6 +55,16 @@ public class AppUser {
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
 
+    /** E.164 (+91…); null for users created before sign-up existed. */
+    @Column
+    private String mobile;
+
+    @Column(name = "mobile_verified_at")
+    private Instant mobileVerifiedAt;
+
+    @Column(name = "email_verified_at")
+    private Instant emailVerifiedAt;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
@@ -89,6 +99,14 @@ public class AppUser {
         this.roles = EnumSet.copyOf(roles);
         this.createdAt = now;
         this.updatedAt = now;
+    }
+
+    /** Owner from sign-up (AUT-04): mobile and email start unverified until OTP / email link land. */
+    public static AppUser signedUpOwner(UUID tenantId, String email, String mobileE164, String passwordHash,
+            String fullName, Set<Role> roles, Instant now) {
+        AppUser user = new AppUser(tenantId, email, passwordHash, fullName, roles, now);
+        user.mobile = mobileE164;
+        return user;
     }
 
     public static String normalizeEmail(String email) {
@@ -134,6 +152,10 @@ public class AppUser {
 
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public String getMobile() {
+        return mobile;
     }
 
     public String getFullName() {

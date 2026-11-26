@@ -50,12 +50,19 @@ meno:
   identity:
     max-failed-attempts: ${MENO_LOGIN_MAX_FAILED_ATTEMPTS:10}
     lock-duration: ${MENO_LOGIN_LOCK_DURATION:PT15M}
-    min-password-length: ${MENO_MIN_PASSWORD_LENGTH:8}
+    min-password-length: ${MENO_MIN_PASSWORD_LENGTH:10}
     bootstrap:
       tenant-name: ${MENO_BOOTSTRAP_TENANT:}
       full-name: ${MENO_BOOTSTRAP_NAME:Owner}
       email: ${MENO_BOOTSTRAP_EMAIL:}
       password: ${MENO_BOOTSTRAP_PASSWORD:}
+
+  signup:
+    # false closes public sign-up (POST /api/v1/auth/signup answers IDENTITY_SIGNUP_CLOSED).
+    enabled: ${MENO_SIGNUP_ENABLED:true}
+    start-options: ${MENO_SIGNUP_START_OPTIONS:TRIAL,DEMO,LICENSE_KEY}
+    # Version of the terms + privacy (DPDP) notice shown on /signup; stored with every acceptance (Hub #868).
+    terms-version: ${MENO_SIGNUP_TERMS_VERSION:draft-2026-11}
 
 springdoc:
   # Off unless asked for: local and staging set MENO_API_DOCS_ENABLED=true, production leaves it false.

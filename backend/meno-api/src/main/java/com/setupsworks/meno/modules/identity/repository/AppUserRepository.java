@@ -11,4 +11,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
 
     /** Login lookup across tenants (one email = one user). Needs an RLS exemption when RLS lands (#7). */
     Optional<AppUser> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

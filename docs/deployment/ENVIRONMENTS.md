@@ -33,6 +33,8 @@ Built: [`docker-compose.yml`](../../docker-compose.yml). `cp .env.example .env`,
 | `MENO_JWT_PRIVATE_KEY`, `MENO_JWT_PUBLIC_KEY` | api | private yes | PEM text instead of files (App Service app settings / Key Vault reference, ADR-0018); used only when the paths are unset |
 | `MENO_JWT_KID`, `MENO_JWT_ISSUER` | api | no | rotated per runbook |
 | `MENO_API_DOCS_ENABLED` | api | no | Swagger UI + `/v3/api-docs`; `false` in production |
+| `MENO_MIN_PASSWORD_LENGTH` | api | no | Password minimum (10, SECURITY.md) |
+| `MENO_SIGNUP_ENABLED`, `MENO_SIGNUP_START_OPTIONS`, `MENO_SIGNUP_TERMS_VERSION` | api | no | Public sign-up switch (off in production until OTP + rate limits), "start with" options, version of the terms + privacy notice |
 | `PORT` / `SERVER_PORT` | api | no | HTTP port (8080 locally, 80 on App Service) |
 | `JAVA_OPTS` | api (App Service) | no | JVM flags (heap capped: the B1 plan is shared by four apps) |
 | `MENO_MAIL_*` | api | yes | SMTP |
