@@ -1,4 +1,4 @@
-package com.setupsworks.meno.modules.tenancy.domain;
+package com.setupsworks.meno.common.gst;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -83,6 +83,20 @@ meno:
     # Version of the terms + privacy (DPDP) notice shown on /signup; stored with every acceptance (Hub #868).
     terms-version: ${MENO_SIGNUP_TERMS_VERSION:draft-2026-11}
 
+  onboarding:
+    financial-year-start-month: ${MENO_FY_START_MONTH:4}
+    go-live-max-days-ahead: ${MENO_GO_LIVE_MAX_DAYS_AHEAD:7}
+  integrations:
+    gstin:
+      # GST verification provider: none (default; manual entry) | gstverify (candidate, R-31 not decided ⚠).
+      provider: ${MENO_GSTIN_PROVIDER:none}
+      base-url: ${MENO_GSTIN_BASE_URL:https://api.gstverify.dubey.app}
+      api-key: ${MENO_GSTIN_API_KEY:}
+      timeout: ${MENO_GSTIN_TIMEOUT:PT8S}
+  party:
+    gstin:
+      cache-ttl: ${MENO_GSTIN_CACHE_TTL:PT24H}
+      lookups-per-minute-per-tenant: ${MENO_GSTIN_LOOKUPS_PER_MINUTE:30}
   rate-limit:
     enabled: ${MENO_RATE_LIMIT_ENABLED:true}
     rules:

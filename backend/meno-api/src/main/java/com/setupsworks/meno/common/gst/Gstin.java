@@ -1,4 +1,4 @@
-package com.setupsworks.meno.modules.tenancy.domain;
+package com.setupsworks.meno.common.gst;
 
 import java.util.regex.Pattern;
 
@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 public final class Gstin {
 
     private static final Pattern FORMAT = Pattern.compile("^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$");
+    private static final Pattern PAN = Pattern.compile("^[A-Z]{5}[0-9]{4}[A-Z]$");
     private static final String BASE36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private Gstin() {
@@ -21,6 +22,11 @@ public final class Gstin {
 
     public static boolean hasValidCheckCharacter(String gstin) {
         return hasValidFormat(gstin) && checkCharacter(gstin.substring(0, 14)) == gstin.charAt(14);
+    }
+
+    /** GSTIN_FETCH.md §4 check 3: characters 3–12 are a valid PAN. */
+    public static boolean hasValidPan(String gstin) {
+        return gstin != null && gstin.length() >= 12 && PAN.matcher(gstin.substring(2, 12)).matches();
     }
 
     static char checkCharacter(String first14) {

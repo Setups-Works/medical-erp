@@ -21,6 +21,8 @@ identity::api, tenancy::api
 - `POST /api/v1/auth/login` → access token (ES256 JWT, 15 min) in body + `meno_refresh` HttpOnly, Secure, SameSite=Strict cookie (path `/api/v1/auth`)
 - `POST /api/v1/auth/refresh` rotates the refresh token · `POST /api/v1/auth/logout` revokes the family · `GET /api/v1/auth/me`
 - `GET /api/v1/auth/signup/options` and `POST /api/v1/auth/signup` (201, signed in like login; 200 on Idempotency-Key replay). Rules live in identity (`SignupFacade`); `SessionResponses` builds the body + cookie for login, refresh and sign-up.
+- `POST /auth/verify-email` (public, token), `POST /auth/verify-email/resend`, `GET /auth/verification`. Login / refresh / logout / sign-up run with RLS bypass (`TenantContext.callAsSystem`) because no tenant is known yet.
+- Rate limits (SEC-10, `security/RateLimitFilter`, `meno.rate-limit.*`): login 10/min, refresh 30/min, sign-up 5/10 min, verify 10/10 min, resend 5/h per client IP → 429 `COMMON_RATE_LIMITED` + Retry-After. In memory: move to Redis with a second instance.
 - Table `refresh_token` (V202611261702). `login_attempt`, `password_reset`, `AuthFacade`, events: not yet.
 - Config `meno.auth.*` (refresh TTL, cookie secure); all from env, no hard-coded values.
 - Documented in Swagger (`@Operation` + one `@ApiResponse` per error code); login/refresh/logout are marked public, `me` needs the bearer token.

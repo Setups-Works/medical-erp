@@ -18,6 +18,8 @@ tags:
   name: Auth
 - description: Create a pharmacy business (tenant) and its owner account.
   name: Sign-up
+- description: Verify a GSTIN and fetch its registration details.
+  name: GSTIN
 paths:
   /api/v1/auth/login:
     post:
@@ -269,6 +271,59 @@ paths:
       summary: Send a new verification link
       tags:
       - Verification
+  /api/v1/gstin-verifications/{gstin}:
+    get:
+      description: "Format, state, PAN and check character are checked first; only\
+        \ a valid GSTIN is sent to the provider. If the provider is down, enter the\
+        \ details by hand: saving never depends on it."
+      operationId: verify_1
+      parameters:
+      - in: path
+        name: gstin
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GstinView"
+          description: Details from the GST provider
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: COMMON_PERMISSION_DENIED
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PARTY_GSTIN_NOT_FOUND
+        "422":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: "PARTY_GSTIN_INVALID (property failedCheck: FORMAT, STATE,\
+            \ PAN, CHECK_CHARACTER)"
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PARTY_GSTIN_RATE_LIMITED
+        "503":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PARTY_GSTIN_SERVICE_UNAVAILABLE (also when no provider is set)
+      summary: Verify a GSTIN and fetch its details
+      tags:
+      - GSTIN
   /api/v1/onboarding:
     get:
       operationId: checklist
@@ -614,6 +669,17 @@ paths:
       - Onboarding
 components:
   schemas:
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        pin:
+          type: string
     Books:
       type: object
       properties:
@@ -885,6 +951,44 @@ components:
           format: date
       required:
       - goLiveDate
+    GstinView:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+        cancelledOn:
+          type: string
+          format: date
+        constitution:
+          type: string
+        eInvoiceEnabled:
+          type: boolean
+        fetchedAt:
+          type: string
+          format: date-time
+        gstin:
+          type: string
+        legalName:
+          type: string
+        natureOfBusiness:
+          type: array
+          items:
+            type: string
+        pan:
+          type: string
+        registeredOn:
+          type: string
+          format: date
+        registrationType:
+          type: string
+        source:
+          type: string
+        stateCode:
+          type: string
+        status:
+          type: string
+        tradeName:
+          type: string
     LicenceEntry:
       type: object
       properties:

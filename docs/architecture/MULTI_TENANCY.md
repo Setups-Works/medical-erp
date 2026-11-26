@@ -23,6 +23,8 @@ erDiagram
 5. **Tests:** `CrossTenantAccessTest` base class — every controller test creates two tenants and asserts 404 (not 403, to avoid leaking existence) for the other tenant's ids.
 6. **Background jobs** iterate tenants explicitly and set the context per tenant. Never run a job "for all rows".
 
+**Built (26-11-2026, Hub #7):** layers 2, 4 and 5. `security/TenantContext` + `TenantContextFilter` (tenant from the token); `TenantAwareDataSource` writes `app.tenant_id` and `app.rls_bypass` on every connection checkout (session-level `set_config`, always overwritten, so pooled connections never keep the previous tenant); policies `tenant_isolation` on every tenant table; the app runs as `meno_app` / `meno_<env>_app` (not owner, no BYPASSRLS) in tests too. The bypass flag is set only by `TenantContext.callAsSystem` around login, refresh, logout, sign-up, email-link verification and the first-owner bootstrap, outside their transactions. Layer 3 (Hibernate filter) is not built: repositories name the tenant explicitly. Tests: `RowLevelSecurityTest`, `CrossTenantSupport` (sign up two tenants), 404 checks in `OnboardingFlowIntegrationTest`.
+
 ## Platform (super-admin) access
 
 The `PLATFORM_ADMIN` role uses a separate connection role with `BYPASSRLS`, only in `/api/v1/platform/*` endpoints, every call audited. Support staff impersonation requires the tenant admin's time-boxed consent.

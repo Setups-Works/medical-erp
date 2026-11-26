@@ -15,12 +15,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.setupsworks.meno.common.error.MenoException;
+import com.setupsworks.meno.common.gst.Gstin;
 import com.setupsworks.meno.modules.tenancy.api.GoLiveCheck;
 import com.setupsworks.meno.modules.tenancy.api.TenantWentLive;
 import com.setupsworks.meno.modules.tenancy.domain.Branch;
 import com.setupsworks.meno.modules.tenancy.domain.Company;
 import com.setupsworks.meno.modules.tenancy.domain.FinancialYear;
-import com.setupsworks.meno.modules.tenancy.domain.Gstin;
 import com.setupsworks.meno.modules.tenancy.domain.Licence;
 import com.setupsworks.meno.modules.tenancy.domain.ReferenceData;
 import com.setupsworks.meno.modules.tenancy.domain.Tenant;

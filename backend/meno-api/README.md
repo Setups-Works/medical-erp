@@ -46,7 +46,17 @@ With the `local` profile: <http://localhost:8080/swagger-ui.html> (spec: `/v3/ap
 | POST | `/api/v1/auth/logout` | cookie | Revokes the session family, clears the cookie |
 | GET | `/api/v1/auth/signup/options` | – | States (GST codes), start options, terms version, password minimum for the sign-up screen |
 | POST | `/api/v1/auth/signup` | – | Creates tenant + owner + consent, signs in (201); send `Idempotency-Key` (replay → 200, same account) |
+| POST | `/api/v1/auth/verify-email` | – | `{"token"}` from the emailed link → 204 |
+| POST | `/api/v1/auth/verify-email/resend` | Bearer | New link (older ones stop working) → 202 |
+| GET | `/api/v1/auth/verification` | Bearer | `{emailVerified, mobileVerified}` |
 | GET | `/api/v1/auth/me` | Bearer | User id, tenant id, email, roles from the token |
+| GET | `/api/v1/onboarding` | Bearer | Checklist: steps, status, next step to resume |
+| GET | `/api/v1/onboarding/options` | Bearer | Option lists, setting definitions, states |
+| GET/PUT | `/api/v1/onboarding/business` · `/company` · `/licences` · `/books` · `/configuration` | Bearer | One step each (ONBOARDING.md) |
+| GET/POST | `/api/v1/onboarding/branches`, GET/PUT `/branches/{id}` | Bearer | Branches; first = head office |
+| POST | `/api/v1/onboarding/steps/{step}/skip` | Bearer | Skip an optional step |
+| GET/POST | `/api/v1/onboarding/go-live` | Bearer | Readiness checks / go live |
+| GET | `/api/v1/gstin-verifications/{gstin}` | Bearer | GSTIN checks + provider details (GSTIN_FETCH.md) |
 | GET | `/actuator/health` | – | Health check |
 | GET | `/swagger-ui.html`, `/v3/api-docs` | – | API docs (only when `MENO_API_DOCS_ENABLED=true`) |
 

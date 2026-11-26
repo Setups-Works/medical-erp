@@ -24,6 +24,7 @@ class ProblemDetailsHandler extends ResponseEntityExceptionHandler {
         body.setType(typeFor(ex.code()));
         body.setTitle(ex.status().getReasonPhrase());
         body.setProperty("code", ex.code());
+        ex.properties().forEach(body::setProperty);
         return ResponseEntity.status(ex.status()).body(body);
     }
 

@@ -66,17 +66,24 @@ erDiagram
 ### tenancy
 - `tenant(id, name, code unique, status[ACTIVE|SUSPENDED], state_code → state null, start_option null, partner_code null, signup_key unique null, version)` — built (V202611261700, sign-up columns V202611262000); `plan_code` comes with subscription
 - `state(code char(2) pk = GST state code, name, kind[STATE|UNION_TERRITORY|OTHER], effective_from, effective_to null, sort_order)` — built (V202611262000), seeded platform reference data; 25 kept with `effective_to` for old GSTINs
-- `company(id, tenant_id, legal_name, gstin, state_code, edition[RETAIL|WHOLESALE|BOTH], pan)`
-- `branch(id, tenant_id, company_id, name, code, address, state_code, dl_retail_no, dl_wholesale_no, dl_expiry, pharmacist_name, pharmacist_reg_no)`
-- `financial_year(id, tenant_id, company_id, start_date, end_date, status[OPEN|CLOSED])`
+- `tenant(+business_type, branch_count, catalogue_size, current_software, language, go_live_date, go_live_at)` — built (V202611262300, business profile + go-live)
+- `company(id, tenant_id, is_primary, registration_type, gstin (CHECK pattern, = state, PAN = chars 3–12), legal_name, trade_name, pan, address_line1/2, pin, city, district, state_code → state, phone E.164, email, pharmacist_name, pharmacist_reg_no, pharmacist_council_state, version)` — built (V202611262300); `edition` comes with PLT-02
+- `licence(id, tenant_id, company_id, branch_id null, kind[DRUG_RETAIL|DRUG_WHOLESALE|FSSAI|NARCOTIC], number, valid_to (required for drug licences), version)` — built (V202611262300); scans with the files module
+- `branch(id, tenant_id, company_id, name, code unique per tenant [A-Z0-9]{1,10}, is_head_office (one per tenant), address_line1/2, pin, city, district, state_code, version)` — built (V202611262300); branch licences = `licence.branch_id`
+- `financial_year(id, tenant_id, company_id, start_date, end_date, books_start_date (CHECK inside FY), status[OPEN|CLOSED], version)` — built (V202611262300)
+- `tenant_setting(tenant_id, key → setting_definition, value, version)`, `onboarding_progress(tenant_id, step → onboarding_step, status[DONE|SKIPPED])` — built (V202611262300)
+- Seeded platform tables (no RLS): `lookup_option(list_code, code, label, sort_order, active)`, `business_type_licence`, `registration_type_rule`, `setting_definition(key, value_type[BOOLEAN|INTEGER|LIST], list_code, default_value, min, max)`, `onboarding_step(code, sort_order, required, available, phase, route)`
+- **RLS built** (V202611262100): policy `tenant_isolation` = `tenant_id = app_current_tenant() or app_rls_bypass()` on every tenant table above and in identity / auth
 - `number_series(id, tenant_id, branch_id, doc_type, fy_id, device_id null, prefix, next_value)` — row-locked on use
 
 ### identity / auth (built P1, 26-11-2026)
 - `app_user(id, tenant_id, email unique lower-case, password_hash, full_name, mobile E.164 null (CHECK `+91[6-9]…`), mobile_verified_at, email_verified_at, status[ACTIVE|DISABLED], failed_attempts, locked_until, last_login_at, version)` — one email = one user = one tenant; mobile / verification columns V202611262001
 - `consent(id, tenant_id, user_id, kind[TERMS_AND_PRIVACY], version, accepted_at, created_at, created_by)` — built (V202611262001), append-only (AUT-04)
+- `verification(id, tenant_id, user_id, channel[EMAIL|SMS], token_hash unique (SHA-256), expires_at, consumed_at, version)` — built (V202611262200), email links now, SMS OTP later
+- `permission(code)`, `role_permission(role, permission_code)` — built (V202611262101), global seed until per-tenant roles (PLT-07)
 - `user_role(user_id, role)` — temporary until role / permission tables (ADR-0014)
 - `refresh_token(id, tenant_id, user_id, token_hash unique (SHA-256), family_id, expires_at, revoked_at, replaced_by_id, created_by_ip, user_agent, version)` — reuse of a rotated token revokes the family
-- RLS on these tables is added by the tenancy task (#7); login reads `app_user` by email before the tenant is known and needs an exemption
+- RLS on these tables is built (#7, V202611262100); login, refresh, logout, sign-up, email-link verification and the bootstrap run with `app.rls_bypass` (TenantContext.callAsSystem), nothing else
 
 ### catalog
 - `item(id, tenant_id, name, brand, generic_name, manufacturer_id, dosage_form, pack_size, pack_unit, loose_unit, conversion, hsn_id, gst_rate, schedule[OTC|H|H1|X|NDPS|G], rx_required, storage, is_active)`
@@ -118,7 +125,7 @@ erDiagram
 - `onboarding_progress(tenant_id, step, status[TODO|DONE|SKIPPED], data jsonb, updated_at)` — one row per step; resume reads it (AUT-15)
 - `tenant(+business_type, source_software, go_live_at, practice_company_id null)`; `consent` is built (see identity / auth)
 - `support_grant(id, tenant_id, granted_by, helper_id, scope[VIEW|ASSIST], expires_at, revoked_at)` — every helper action audited (AUT-14)
-- `verification(id, user_id, channel[SMS|EMAIL], code_hash, expires_at, attempts)` (AUT-04)
+- `verification` is built (see identity / auth)
 
 ### competitor-parity additions (FEATURES §27)
 - `item(+discontinued_at, discontinued_reason, replacement_item_id)` (CAT-28); `bulk_update_job(id, tenant_id, entity, filter jsonb, changes jsonb, affected_count, status, approved_by)` (PLT-25)
@@ -176,7 +183,7 @@ Common line columns: `id, doc_id, line_no, item_id, batch_id, qty, free_qty, rat
 - `payment_mode(id, tenant_id, code, name, kind, ledger_account_id, active)`
 - `approval_rule(id, tenant_id, action, threshold_type, threshold_value, approver_permission)`
 - `statutory_setting(key, value, valid_from, valid_to, source)` (e-invoice turnover, e-way bill value, …)
-- `tenant_setting(tenant_id, key, value jsonb)` (near-expiry days, rounding, negative stock, MRP-inclusive, …)
+- `tenant_setting(tenant_id, key, value)` — built with `setting_definition` (see tenancy)
 - `notification_template(id, tenant_id, channel, event, body, approved_template_id)`
 
 All effective-dated values are read for the **document date** and snapshotted on the document.

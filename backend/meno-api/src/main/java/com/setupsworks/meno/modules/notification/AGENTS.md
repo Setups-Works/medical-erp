@@ -2,6 +2,10 @@
 
 **Owner:** Nitheesh · **QA:** Ashok · **Phase:** P4–P5 · **Features:** NTF-01…05
 
+## Built so far (26-11-2026)
+- `api/EmailSender` + `SmtpEmailSender` (spring-boot-starter-mail, `spring.mail.*` from `MENO_MAIL_*`, sender `MENO_MAIL_FROM`). No host → logged (recipient domain + subject only), not sent. Used by identity for verification links, sent after commit.
+- Deviation from the plan below: identity depends on `notification::api` (not the other way) for one-time links, so raw tokens never sit in `event_publication`. Template-based notifications (rule 1) keep the event route.
+
 ## Purpose
 In-app, email, WhatsApp, SMS notifications and alert rules.
 
