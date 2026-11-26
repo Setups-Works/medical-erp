@@ -33,6 +33,10 @@ P1 so far: login only (modules `tenancy`, `identity`, `auth`; shared `security`,
 
    and `MENO_JWT_PRIVATE_KEY_PATH`, `MENO_JWT_PUBLIC_KEY_PATH`, `MENO_JWT_KID`, `MENO_JWT_ISSUER`. All env names: `infrastructure/env/*.example`.
 
+## Swagger UI
+
+With the `local` profile: <http://localhost:8080/swagger-ui.html> (spec: `/v3/api-docs`). Call **login**, press **Authorize**, paste the `accessToken`, then try **me**. Controlled by `MENO_API_DOCS_ENABLED` (true on local/staging, false in production). The committed spec is `contracts/openapi/meno-api.yaml`; `./mvnw verify` or `./mvnw -Pexport-openapi` regenerates it.
+
 ## API so far
 
 | Method | Path | Auth | Notes |
@@ -42,9 +46,10 @@ P1 so far: login only (modules `tenancy`, `identity`, `auth`; shared `security`,
 | POST | `/api/v1/auth/logout` | cookie | Revokes the session family, clears the cookie |
 | GET | `/api/v1/auth/me` | Bearer | User id, tenant id, email, roles from the token |
 | GET | `/actuator/health` | – | Health check |
+| GET | `/swagger-ui.html`, `/v3/api-docs` | – | API docs (only when `MENO_API_DOCS_ENABLED=true`) |
 
 Access token 15 min (`sub` user, `tid` tenant, `email`, `roles`). Refresh token 30 days, stored only as SHA-256; reusing a rotated one revokes the whole login. 10 wrong passwords lock the account for 15 minutes. Every value is configurable (`application.yml`).
 
 ## Tests
 
-`./mvnw verify` — unit tests, `ModulithTest` (module boundaries), and `AuthFlowIntegrationTest` on real PostgreSQL (skipped without Docker).
+`./mvnw verify` — unit tests, `ModulithTest` (module boundaries), `AuthFlowIntegrationTest` and the OpenAPI tests (`OpenApiExportTest` writes the spec, `OpenApiDisabledByDefaultTest` proves docs are off by default) on real PostgreSQL (skipped without Docker).

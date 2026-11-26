@@ -22,6 +22,7 @@ identity::api, tenancy::api
 - `POST /api/v1/auth/refresh` rotates the refresh token · `POST /api/v1/auth/logout` revokes the family · `GET /api/v1/auth/me`
 - Table `refresh_token` (V202611261702). `login_attempt`, `password_reset`, `AuthFacade`, events: not yet.
 - Config `meno.auth.*` (refresh TTL, cookie secure); all from env, no hard-coded values.
+- Documented in Swagger (`@Operation` + one `@ApiResponse` per error code); login/refresh/logout are marked public, `me` needs the bearer token.
 
 ## Error codes
 AUTH_INVALID_CREDENTIALS (401), AUTH_LOCKED (423), AUTH_ACCOUNT_DISABLED (403), AUTH_REFRESH_INVALID (401), AUTH_REFRESH_REUSED (401), AUTH_2FA_REQUIRED (P5)

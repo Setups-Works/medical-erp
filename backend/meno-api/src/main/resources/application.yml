@@ -47,6 +47,17 @@ meno:
       email: ${MENO_BOOTSTRAP_EMAIL:}
       password: ${MENO_BOOTSTRAP_PASSWORD:}
 
+springdoc:
+  # Off unless asked for: local and staging set MENO_API_DOCS_ENABLED=true, production leaves it false.
+  api-docs:
+    enabled: ${MENO_API_DOCS_ENABLED:false}
+  swagger-ui:
+    enabled: ${MENO_API_DOCS_ENABLED:false}
+    path: /swagger-ui.html
+    persist-authorization: true
+  paths-to-match: /api/**
+  writer-with-order-by-keys: true
+
 management:
   endpoints:
     web:

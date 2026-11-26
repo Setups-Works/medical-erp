@@ -7,7 +7,7 @@
 | Area | Status | Notes |
 |---|---|---|
 | Repo structure & docs | live | Folders, AGENTS.md, architecture, phases, team plans, page catalogue, roles, validation rulebook, ownership matrix |
-| Backend scaffold | building | `backend/meno-api` (Kamesh, Hub #457/#458): Spring Boot 4.2, Java 21, Modulith (`ModulithTest`), Problem Details, UUIDv7, Flyway; login / refresh (rotation + reuse detection) / logout / me with ES256 JWT; modules `tenancy`, `identity`, `auth`. `./mvnw verify` green (PostgreSQL integration test needs Docker). Not yet: RLS + TenantContext (#7), permissions, page envelope, money, validation annotations |
+| Backend scaffold | building | `backend/meno-api` (Kamesh, Hub #457/#458): Spring Boot 4.2, Java 21, Modulith (`ModulithTest`), Problem Details, UUIDv7, Flyway; login / refresh (rotation + reuse detection) / logout / me with ES256 JWT; modules `tenancy`, `identity`, `auth`; Swagger UI (`/swagger-ui.html`, off in production) and the generated spec in `contracts/openapi/meno-api.yaml`. `./mvnw verify` green (20 tests) (PostgreSQL integration test needs Docker). Not yet: RLS + TenantContext (#7), permissions, page envelope, money, validation annotations |
 | Billing engine (`packages/billing-engine`) | building | TypeScript, decimal.js; 72 / 72 test vectors pass (draft vectors, awaiting hand check + CA); Java twin pending (Kamesh) |
 | pnpm workspace root | live | `package.json`, `pnpm-workspace.yaml` (apps/*, packages/*) |
 | Web scaffold / design system | planned | P1 — tokens defined in `docs/design/DESIGN_LANGUAGE.md` |

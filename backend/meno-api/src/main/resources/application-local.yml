@@ -6,3 +6,8 @@ meno:
       allow-ephemeral-key: true
   auth:
     refresh-cookie-secure: ${MENO_COOKIE_SECURE:false}
+springdoc:
+  api-docs:
+    enabled: ${MENO_API_DOCS_ENABLED:true}
+  swagger-ui:
+    enabled: ${MENO_API_DOCS_ENABLED:true}
