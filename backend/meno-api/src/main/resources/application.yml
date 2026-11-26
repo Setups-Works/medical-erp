@@ -118,6 +118,11 @@ springdoc:
   writer-with-order-by-keys: true
 
 management:
+  health:
+    # SMTP is optional (no host = emails are only logged) and an SMTP outage must not mark the API as down:
+    # App Service and the deploy smoke test use /actuator/health.
+    mail:
+      enabled: false
   endpoints:
     web:
       exposure:
