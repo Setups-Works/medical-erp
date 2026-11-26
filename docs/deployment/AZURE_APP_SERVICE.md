@@ -24,7 +24,7 @@ flowchart LR
 | App Service plan | `untitled-ws-free-f1` (despite the name: **Basic B1**, already paid) | Linux, 1 vCPU, 1.75 GB, shared with two other apps; no daily CPU quota, Always On |
 | Web apps | `meno-api-staging`, `meno-api-production` | Java 21 SE, HTTPS only, TLS 1.2+, FTPS off, Always On, app settings filled (DB, JWT keys per env, bootstrap owner) |
 | Retired | `rg-meno` with plan `asp-meno-free` (F1) and apps `meno-api-stg` / `meno-api-prod` | **Delete by hand** (`az group delete -n rg-meno`): F1's 60 CPU minutes a day ran out during the first deploy and stopped both apps (QuotaExceeded) |
-| PostgreSQL | `untitled-ws-pg-13oct26` in `nitheesh_group` (shared, B1ms, v16) | Databases `meno_staging`, `meno_prod`; roles `meno_stg_owner` / `meno_stg_app`, `meno_prod_owner` / `meno_prod_app` (staging credentials cannot open the production database) |
+| PostgreSQL | `untitled-ws-pg-13oct26` in `nitheesh_group` (shared, B1ms, v16) | Databases `meno_staging`, `meno_prod` (created 26-11-2026); roles `meno_stg_owner` / `meno_stg_app`, `meno_prod_owner` / `meno_prod_app` (staging credentials cannot open the production database) |
 | GitHub Environments | `staging` (branch `develop` only), `production` (branch `main` only) | `AZURE_WEBAPP_NAME` + `AZURE_WEBAPP_PUBLISH_PROFILE` until OIDC is switched on |
 
 The steps below are what was done, so the setup can be repeated or rebuilt.
@@ -59,6 +59,9 @@ create database <meno_staging|meno_prod> owner meno_<env>_owner;
 revoke connect on database <db> from public;
 grant connect on database <db> to meno_<env>_owner, meno_<env>_app;
 \connect <db>
+-- Azure does not give the database owner the public schema: without this Flyway fails with
+-- "permission denied for schema public" (seen on the first staging deploy, 26-11-2026).
+alter schema public owner to meno_<env>_owner;
 grant usage on schema public to meno_<env>_app;
 alter default privileges for role meno_<env>_owner in schema public grant select, insert, update, delete on tables to meno_<env>_app;
 alter default privileges for role meno_<env>_owner in schema public grant usage, select on sequences to meno_<env>_app;
