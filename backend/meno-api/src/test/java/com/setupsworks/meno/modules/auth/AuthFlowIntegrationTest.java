@@ -71,6 +71,14 @@ class AuthFlowIntegrationTest {
     }
 
     @Test
+    void healthIsUpWithoutAnSmtpServer() throws Exception {
+        // Staging ran without MENO_MAIL_HOST and the mail health check turned /actuator/health DOWN (503).
+        mvc.perform(get("/actuator/health"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("UP"));
+    }
+
+    @Test
     void wrongPasswordIsAProblemDetail() throws Exception {
         mvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON).content(LOGIN.formatted("wrong-password")))
