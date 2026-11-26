@@ -79,7 +79,7 @@ jobs:
           else echo "::error::Set AZURE_CLIENT_ID/AZURE_TENANT_ID/AZURE_SUBSCRIPTION_ID (OIDC) or the AZURE_WEBAPP_PUBLISH_PROFILE secret."; missing=1
           fi
           exit $missing
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: meno-api-jar
       - name: Azure login (OIDC)
