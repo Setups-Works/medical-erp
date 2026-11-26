@@ -1,0 +1,16 @@
+package com.setupsworks.meno.config;
+
+import java.time.Clock;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/** One injectable clock so tests can fix time and FY logic never calls {@code now()} directly. */
+@Configuration(proxyBeanMethods = false)
+class ClockConfig {
+
+    @Bean
+    Clock clock() {
+        return Clock.systemUTC();
+    }
+}

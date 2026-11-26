@@ -64,11 +64,17 @@ erDiagram
 ## 3. Key tables (columns abbreviated; audit/tenant cols implied)
 
 ### tenancy
-- `tenant(id, name, status, plan_code)`
+- `tenant(id, name, code unique, status[ACTIVE|SUSPENDED], version)` — built (V202611261700); `plan_code` comes with subscription
 - `company(id, tenant_id, legal_name, gstin, state_code, edition[RETAIL|WHOLESALE|BOTH], pan)`
 - `branch(id, tenant_id, company_id, name, code, address, state_code, dl_retail_no, dl_wholesale_no, dl_expiry, pharmacist_name, pharmacist_reg_no)`
 - `financial_year(id, tenant_id, company_id, start_date, end_date, status[OPEN|CLOSED])`
 - `number_series(id, tenant_id, branch_id, doc_type, fy_id, device_id null, prefix, next_value)` — row-locked on use
+
+### identity / auth (built P1, 26-11-2026)
+- `app_user(id, tenant_id, email unique lower-case, password_hash, full_name, status[ACTIVE|DISABLED], failed_attempts, locked_until, last_login_at, version)` — one email = one user = one tenant
+- `user_role(user_id, role)` — temporary until role / permission tables (ADR-0014)
+- `refresh_token(id, tenant_id, user_id, token_hash unique (SHA-256), family_id, expires_at, revoked_at, replaced_by_id, created_by_ip, user_agent, version)` — reuse of a rotated token revokes the family
+- RLS on these tables is added by the tenancy task (#7); login reads `app_user` by email before the tenant is known and needs an exemption
 
 ### catalog
 - `item(id, tenant_id, name, brand, generic_name, manufacturer_id, dosage_form, pack_size, pack_unit, loose_unit, conversion, hsn_id, gst_rate, schedule[OTC|H|H1|X|NDPS|G], rx_required, storage, is_active)`
