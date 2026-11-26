@@ -105,6 +105,23 @@ Full tree with explanations: `docs/architecture/FOLDER_STRUCTURE.md`.
 
 Full process: `docs/team/WORKFLOW.md`. How to work with AI agents: `docs/team/AI_WORKFLOW.md`.
 
+### Keep MENO Hub (PMS) updated — automatically
+
+When the developer gives you a **Hub task number** (`#512`, "task 512"), you keep its card up to date yourself, without being asked again. Run these from `project-management/` (full rules: `docs/team/AGENT_TASK_WORKFLOW.md`):
+
+| When | Run |
+|---|---|
+| Before anything else | `npm run agent-task -- show <n>` (unclear or a missing rule → `comment` the question, mention the owner, stop) |
+| You begin work | `npm run agent-task -- start <n>` |
+| A checklist item is really finished (code + tests + docs) | `npm run agent-task -- check <n> <item…>` |
+| Plan agreed, blocker hit, PR opened | `npm run agent-task -- comment <n> "short, factual"` |
+| PR open and checks green | `npm run agent-task -- review <n> "what changed · PR link · how verified · open points"` |
+
+- Never move a task to **Done**: only Nitheesh does, after the PR merges.
+- Only tasks assigned to the developer (`HUB_AGENT_AS` in `project-management/.env.local`). If `.env.local` is missing, tell the developer to set it up; don't create one with guessed values.
+- No secrets, connection strings or patient/customer data in comments.
+- After `review`, stop and wait for the developer before the next task.
+
 ## 9. Agents: what you must never do
 
 - Never commit to `main` or `develop` directly, force-push shared branches, or merge your own PR.
