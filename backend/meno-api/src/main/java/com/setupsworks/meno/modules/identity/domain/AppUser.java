@@ -154,6 +154,21 @@ public class AppUser {
         return passwordHash;
     }
 
+    public void markEmailVerified(Instant now) {
+        if (emailVerifiedAt == null) {
+            emailVerifiedAt = now;
+            updatedAt = now;
+        }
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerifiedAt != null;
+    }
+
+    public boolean isMobileVerified() {
+        return mobileVerifiedAt != null;
+    }
+
     public String getMobile() {
         return mobile;
     }

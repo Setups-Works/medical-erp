@@ -41,6 +41,7 @@ class SignupServiceTest {
     private final TenantFacade tenants = mock(TenantFacade.class);
     private final AppUserRepository users = mock(AppUserRepository.class);
     private final ConsentRepository consents = mock(ConsentRepository.class);
+    private final EmailVerificationService emailVerification = mock(EmailVerificationService.class);
     private final UUID tenantId = UUID.randomUUID();
 
     private SignupService service;
@@ -56,7 +57,7 @@ class SignupServiceTest {
     private SignupService service(boolean open) {
         return new SignupService(tenants, users, consents, NoOpPasswordEncoder.getInstance(),
                 new IdentityProperties(10, Duration.ofMinutes(15), 10, null),
-                new SignupProperties(open, List.of("TRIAL", "DEMO", "LICENSE_KEY"), TERMS),
+                new SignupProperties(open, List.of("TRIAL", "DEMO", "LICENSE_KEY"), TERMS), emailVerification,
                 Clock.fixed(NOW, ZoneOffset.UTC));
     }
 
@@ -87,6 +88,7 @@ class SignupServiceTest {
         assertThat(user.getValue().getMobile()).isEqualTo("+919876543210");
         assertThat(user.getValue().getFullName()).isEqualTo("Owner Name");
         verify(consents).save(any(Consent.class));
+        verify(emailVerification).issue(user.getValue());
     }
 
     @Test

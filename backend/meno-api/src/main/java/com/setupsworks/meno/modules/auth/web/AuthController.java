@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.setupsworks.meno.modules.auth.service.AuthService;
 import com.setupsworks.meno.security.JwtTokenService;
+import com.setupsworks.meno.security.TenantContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -64,7 +65,10 @@ class AuthController {
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
     @PostMapping("/login")
     ResponseEntity<SessionResponses.TokenResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
-        return responses.withRefreshCookie(authService.login(request.email(), request.password(), SessionResponses.clientInfo(http)), HttpStatus.OK);
+        // Login finds the user by email before the tenant is known (RLS bypass, TenantContext).
+        return responses.withRefreshCookie(TenantContext.callAsSystem(
+                () -> authService.login(request.email(), request.password(), SessionResponses.clientInfo(http))),
+                HttpStatus.OK);
     }
 
     @Operation(summary = "Get a new access token",
@@ -80,7 +84,8 @@ class AuthController {
         if (refreshToken == null || refreshToken.isBlank()) {
             throw AuthService.invalidRefresh();
         }
-        return responses.withRefreshCookie(authService.refresh(refreshToken, SessionResponses.clientInfo(http)), HttpStatus.OK);
+        return responses.withRefreshCookie(TenantContext.callAsSystem(
+                () -> authService.refresh(refreshToken, SessionResponses.clientInfo(http))), HttpStatus.OK);
     }
 
     @Operation(summary = "Sign out", description = "Revokes the session behind the meno_refresh cookie and clears it.")
@@ -88,7 +93,7 @@ class AuthController {
     @ApiResponse(responseCode = "204", description = "Signed out (also when already signed out)")
     @PostMapping("/logout")
     ResponseEntity<Void> logout(@CookieValue(name = REFRESH_COOKIE, required = false) String refreshToken) {
-        authService.logout(refreshToken);
+        TenantContext.runAsSystem(() -> authService.logout(refreshToken));
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, responses.clearedRefreshCookie().toString())
                 .build();

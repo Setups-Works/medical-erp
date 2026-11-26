@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.setupsworks.meno.common.error.MenoException;
 import com.setupsworks.meno.modules.auth.service.AuthService;
 import com.setupsworks.meno.modules.identity.api.SignupFacade;
+import com.setupsworks.meno.security.TenantContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -90,10 +91,12 @@ class SignupController {
             throw new MenoException(HttpStatus.BAD_REQUEST, "IDENTITY_SIGNUP_REJECTED",
                     "We couldn't create the account. Please try again.");
         }
-        var outcome = signup.signUp(new SignupFacade.Command(request.ownerName(), request.mobile(), request.email(),
-                request.password(), request.businessName(), request.stateCode(), request.partnerCode(),
-                request.startWith(), request.acceptedTermsVersion()), idempotencyKey);
-        var result = authService.startSession(outcome.account(), SessionResponses.clientInfo(http));
+        // Sign-up creates the tenant, so it runs before any tenant context exists (RLS bypass, TenantContext).
+        var outcome = TenantContext.callAsSystem(() -> signup.signUp(new SignupFacade.Command(request.ownerName(),
+                request.mobile(), request.email(), request.password(), request.businessName(), request.stateCode(),
+                request.partnerCode(), request.startWith(), request.acceptedTermsVersion()), idempotencyKey));
+        var result = TenantContext.callAsSystem(
+                () -> authService.startSession(outcome.account(), SessionResponses.clientInfo(http)));
         return responses.withRefreshCookie(result, outcome.replayed() ? HttpStatus.OK : HttpStatus.CREATED);
     }
 

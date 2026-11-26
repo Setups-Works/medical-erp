@@ -10,10 +10,16 @@ servers:
 security:
 - bearerAuth: []
 tags:
+- description: Set-up steps from sign-up to go-live; resume anywhere.
+  name: Onboarding
+- description: Confirm the owner's email with the one-time link.
+  name: Verification
 - description: "Sign in, refresh, sign out. Errors are Problem Details with a `code`."
   name: Auth
 - description: Create a pharmacy business (tenant) and its owner account.
   name: Sign-up
+- description: Verify a GSTIN and fetch its registration details.
+  name: GSTIN
 paths:
   /api/v1/auth/login:
     post:
@@ -194,7 +200,7 @@ paths:
     get:
       description: "States (GST codes), start options, the current terms version and\
         \ the password minimum. The screen never hard-codes these lists."
-      operationId: options
+      operationId: options_1
       responses:
         "200":
           content:
@@ -206,8 +212,856 @@ paths:
       summary: Options for the sign-up screen
       tags:
       - Sign-up
+  /api/v1/auth/verification:
+    get:
+      operationId: status
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+          description: Status
+      summary: Verification status of the signed-in user
+      tags:
+      - Verification
+  /api/v1/auth/verify-email:
+    post:
+      description: "Works without signing in (the link may be opened on another device).\
+        \ Single use, 24 h."
+      operationId: verify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyRequest"
+        required: true
+      responses:
+        "204":
+          description: Email confirmed
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: "IDENTITY_VERIFICATION_INVALID, IDENTITY_VERIFICATION_EXPIRED"
+      security: []
+      summary: Confirm an email with the token from the link
+      tags:
+      - Verification
+  /api/v1/auth/verify-email/resend:
+    post:
+      description: Older links stop working.
+      operationId: resend
+      responses:
+        "202":
+          description: Sent
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: IDENTITY_ALREADY_VERIFIED
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: IDENTITY_VERIFICATION_TOO_SOON
+      summary: Send a new verification link
+      tags:
+      - Verification
+  /api/v1/gstin-verifications/{gstin}:
+    get:
+      description: "Format, state, PAN and check character are checked first; only\
+        \ a valid GSTIN is sent to the provider. If the provider is down, enter the\
+        \ details by hand: saving never depends on it."
+      operationId: verify_1
+      parameters:
+      - in: path
+        name: gstin
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GstinView"
+          description: Details from the GST provider
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: COMMON_PERMISSION_DENIED
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PARTY_GSTIN_NOT_FOUND
+        "422":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: "PARTY_GSTIN_INVALID (property failedCheck: FORMAT, STATE,\
+            \ PAN, CHECK_CHARACTER)"
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PARTY_GSTIN_RATE_LIMITED
+        "503":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PARTY_GSTIN_SERVICE_UNAVAILABLE (also when no provider is set)
+      summary: Verify a GSTIN and fetch its details
+      tags:
+      - GSTIN
+  /api/v1/onboarding:
+    get:
+      operationId: checklist
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Checklist"
+          description: OK
+      summary: "Checklist: every step with its status and the next step to resume"
+      tags:
+      - Onboarding
+  /api/v1/onboarding/books:
+    get:
+      operationId: books
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Books"
+          description: Not filled in yet
+      tags:
+      - Onboarding
+    put:
+      description: The FY starts on day 1 of the configured month (April by default)
+        and lasts a year.
+      operationId: saveBooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BooksRequest"
+        required: true
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Books"
+          description: "TENANCY_FY_START_INVALID, TENANCY_BOOKS_START_OUTSIDE_FY"
+      summary: Save the financial year and books start date
+      tags:
+      - Onboarding
+  /api/v1/onboarding/branches:
+    get:
+      operationId: branches
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Branches"
+          description: OK
+      summary: "Branches, plus a suggestion pre-filled from the company address when\
+        \ there are none"
+      tags:
+      - Onboarding
+    post:
+      description: The first branch becomes the head office.
+      operationId: createBranch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BranchRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BranchView"
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BranchView"
+          description: TENANCY_BRANCH_STATE_MISMATCH
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BranchView"
+          description: "TENANCY_BRANCH_CODE_TAKEN, TENANCY_STEP_ORDER"
+      summary: Add a branch
+      tags:
+      - Onboarding
+  /api/v1/onboarding/branches/{id}:
+    get:
+      operationId: branch
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BranchView"
+          description: TENANCY_BRANCH_NOT_FOUND (also for another tenant's id)
+      tags:
+      - Onboarding
+    put:
+      operationId: updateBranch
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BranchRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BranchView"
+          description: OK
+      tags:
+      - Onboarding
+  /api/v1/onboarding/business:
+    get:
+      operationId: business
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessProfile"
+          description: OK
+      tags:
+      - Onboarding
+    put:
+      description: Every value must be a code from /options.
+      operationId: saveBusiness
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BusinessRequest"
+        required: true
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessProfile"
+          description: TENANCY_OPTION_INVALID
+      summary: Save the business profile
+      tags:
+      - Onboarding
+  /api/v1/onboarding/company:
+    get:
+      operationId: company
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Details"
+          description: Not filled in yet
+      tags:
+      - Onboarding
+    put:
+      description: "GSTIN check character, state = GSTIN state, PAN = GSTIN chars\
+        \ 3–12. GSTIN fetch (PTY-15) is a separate endpoint later."
+      operationId: saveCompany
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyRequest"
+        required: true
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Details"
+          description: "TENANCY_GSTIN_INVALID, TENANCY_GSTIN_STATE_MISMATCH, TENANCY_PAN_GSTIN_MISMATCH,\
+            \ TENANCY_GSTIN_REQUIRED, TENANCY_GSTIN_NOT_ALLOWED, TENANCY_STATE_UNKNOWN"
+      summary: Save company & GST
+      tags:
+      - Onboarding
+  /api/v1/onboarding/configuration:
+    get:
+      operationId: configuration
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+          description: OK
+      summary: Tenant settings with defaults filled in
+      tags:
+      - Onboarding
+    put:
+      description: Keys and allowed values from /options.
+      operationId: saveConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfigurationRequest"
+        required: true
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+          description: "TENANCY_SETTING_UNKNOWN, TENANCY_SETTING_INVALID"
+      summary: Save billing / stock preferences
+      tags:
+      - Onboarding
+  /api/v1/onboarding/go-live:
+    get:
+      operationId: readiness
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Readiness"
+          description: OK
+      summary: Readiness checks and the allowed go-live date range
+      tags:
+      - Onboarding
+    post:
+      description: All checks must pass; date between books start and today + N days.
+      operationId: goLive
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoLiveRequest"
+        required: true
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Readiness"
+          description: TENANCY_GO_LIVE_DATE_INVALID
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Readiness"
+          description: "TENANCY_NOT_READY, TENANCY_ALREADY_LIVE"
+      summary: Go live
+      tags:
+      - Onboarding
+  /api/v1/onboarding/licences:
+    get:
+      operationId: licences
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Licences"
+          description: OK
+      tags:
+      - Onboarding
+    put:
+      description: Which drug licences are required depends on the business type (seeded
+        rule table). Drug licences need an expiry in the future. Scans come with the
+        files module.
+      operationId: saveLicences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LicencesRequest"
+        required: true
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Licences"
+          description: "TENANCY_LICENCE_REQUIRED, TENANCY_LICENCE_EXPIRY_REQUIRED,\
+            \ TENANCY_LICENCE_EXPIRED, TENANCY_FSSAI_INVALID"
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Licences"
+          description: TENANCY_STEP_ORDER (business profile and company first)
+      summary: Save licences and the pharmacist in charge
+      tags:
+      - Onboarding
+  /api/v1/onboarding/options:
+    get:
+      operationId: options
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Options"
+          description: OK
+      summary: "Option lists, setting definitions and states for all onboarding screens"
+      tags:
+      - Onboarding
+  /api/v1/onboarding/steps/{step}/skip:
+    post:
+      operationId: skip
+      parameters:
+      - in: path
+        name: step
+        required: true
+        schema:
+          type: string
+      responses:
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Checklist"
+          description: "TENANCY_STEP_REQUIRED, TENANCY_ALREADY_LIVE"
+      summary: "Skip an optional step (team, data, devices, plan, practice)"
+      tags:
+      - Onboarding
 components:
   schemas:
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        pin:
+          type: string
+    Books:
+      type: object
+      properties:
+        booksStartDate:
+          type: string
+          format: date
+        financialYearEnd:
+          type: string
+          format: date
+        financialYearStart:
+          type: string
+          format: date
+        label:
+          type: string
+    BooksRequest:
+      type: object
+      properties:
+        booksStartDate:
+          type: string
+          format: date
+        financialYearStart:
+          type: string
+          format: date
+      required:
+      - booksStartDate
+      - financialYearStart
+    BranchRequest:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          maxLength: 200
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        addressLine2:
+          type: string
+          maxLength: 200
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        city:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        code:
+          type: string
+          minLength: 1
+          pattern: "[A-Z0-9]{1,10}"
+        district:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        name:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        pin:
+          type: string
+          minLength: 1
+          pattern: "[1-9][0-9]{5}"
+        stateCode:
+          type: string
+          minLength: 1
+          pattern: "[0-9]{2}"
+      required:
+      - addressLine1
+      - city
+      - code
+      - name
+      - pin
+      - stateCode
+    BranchView:
+      type: object
+      properties:
+        details:
+          $ref: "#/components/schemas/Details"
+        headOffice:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+    Branches:
+      type: object
+      properties:
+        branches:
+          type: array
+          items:
+            $ref: "#/components/schemas/BranchView"
+        suggestion:
+          $ref: "#/components/schemas/Details"
+    BusinessProfile:
+      type: object
+      properties:
+        branchCount:
+          type: string
+        businessType:
+          type: string
+        catalogueSize:
+          type: string
+        currentSoftware:
+          type: string
+        language:
+          type: string
+    BusinessRequest:
+      type: object
+      properties:
+        branchCount:
+          type: string
+          maxLength: 50
+          minLength: 0
+        businessType:
+          type: string
+          maxLength: 50
+          minLength: 0
+        catalogueSize:
+          type: string
+          maxLength: 50
+          minLength: 0
+        currentSoftware:
+          type: string
+          maxLength: 50
+          minLength: 0
+        language:
+          type: string
+          maxLength: 50
+          minLength: 0
+      required:
+      - branchCount
+      - businessType
+      - catalogueSize
+      - currentSoftware
+      - language
+    Check:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        passed:
+          type: boolean
+    Checklist:
+      type: object
+      properties:
+        goLiveDate:
+          type: string
+          format: date
+        live:
+          type: boolean
+        nextStep:
+          type: string
+        steps:
+          type: array
+          items:
+            $ref: "#/components/schemas/StepStatus"
+    CompanyRequest:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          maxLength: 200
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        addressLine2:
+          type: string
+          maxLength: 200
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        city:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        district:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 0
+        gstin:
+          type: string
+          pattern: "|[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]"
+        legalName:
+          type: string
+          maxLength: 200
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        pan:
+          type: string
+          minLength: 1
+          pattern: "[A-Z]{5}[0-9]{4}[A-Z]"
+        phone:
+          type: string
+          pattern: "|[6-9][0-9]{9}"
+        pin:
+          type: string
+          minLength: 1
+          pattern: "[1-9][0-9]{5}"
+        registrationType:
+          type: string
+          maxLength: 50
+          minLength: 0
+        stateCode:
+          type: string
+          minLength: 1
+          pattern: "[0-9]{2}"
+        tradeName:
+          type: string
+          maxLength: 200
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+      required:
+      - addressLine1
+      - city
+      - legalName
+      - pan
+      - pin
+      - registrationType
+      - stateCode
+    ConfigurationRequest:
+      type: object
+      properties:
+        settings:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - settings
+    Details:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        email:
+          type: string
+        gstin:
+          type: string
+        legalName:
+          type: string
+        pan:
+          type: string
+        phone:
+          type: string
+        pin:
+          type: string
+        registrationType:
+          type: string
+        stateCode:
+          type: string
+        tradeName:
+          type: string
+    GoLiveRequest:
+      type: object
+      properties:
+        goLiveDate:
+          type: string
+          format: date
+      required:
+      - goLiveDate
+    GstinView:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+        cancelledOn:
+          type: string
+          format: date
+        constitution:
+          type: string
+        eInvoiceEnabled:
+          type: boolean
+        fetchedAt:
+          type: string
+          format: date-time
+        gstin:
+          type: string
+        legalName:
+          type: string
+        natureOfBusiness:
+          type: array
+          items:
+            type: string
+        pan:
+          type: string
+        registeredOn:
+          type: string
+          format: date
+        registrationType:
+          type: string
+        source:
+          type: string
+        stateCode:
+          type: string
+        status:
+          type: string
+        tradeName:
+          type: string
+    LicenceEntry:
+      type: object
+      properties:
+        number:
+          type: string
+        validTo:
+          type: string
+          format: date
+    LicenceRequest:
+      type: object
+      properties:
+        number:
+          type: string
+          maxLength: 40
+          minLength: 3
+          pattern: "[^\\p{Cntrl}]*"
+        validTo:
+          type: string
+          format: date
+      required:
+      - number
+    Licences:
+      type: object
+      properties:
+        licences:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/LicenceEntry"
+        pharmacistCouncilState:
+          type: string
+        pharmacistName:
+          type: string
+        pharmacistRegNo:
+          type: string
+        required:
+          type: array
+          items:
+            type: string
+            enum:
+            - DRUG_RETAIL
+            - DRUG_WHOLESALE
+            - FSSAI
+            - NARCOTIC
+          uniqueItems: true
+    LicencesRequest:
+      type: object
+      properties:
+        drugRetail:
+          $ref: "#/components/schemas/LicenceRequest"
+        drugWholesale:
+          $ref: "#/components/schemas/LicenceRequest"
+        fssai:
+          $ref: "#/components/schemas/LicenceRequest"
+        narcotic:
+          $ref: "#/components/schemas/LicenceRequest"
+        pharmacistCouncilState:
+          type: string
+          minLength: 1
+          pattern: "[0-9]{2}"
+        pharmacistName:
+          type: string
+          maxLength: 200
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        pharmacistRegNo:
+          type: string
+          maxLength: 40
+          minLength: 3
+          pattern: "[^\\p{Cntrl}]*"
+      required:
+      - pharmacistCouncilState
+      - pharmacistName
+      - pharmacistRegNo
     LoginRequest:
       type: object
       properties:
@@ -238,24 +1092,33 @@ components:
         userId:
           type: string
           format: uuid
+    Option:
+      type: object
+      properties:
+        code:
+          type: string
+        label:
+          type: string
     Options:
       type: object
       properties:
-        minPasswordLength:
+        financialYearStartMonth:
           type: integer
           format: int32
-        open:
-          type: boolean
-        startOptions:
+        lists:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/Option"
+        settings:
           type: array
           items:
-            type: string
+            $ref: "#/components/schemas/SettingInfo"
         states:
           type: array
           items:
-            $ref: "#/components/schemas/StateOption"
-        termsVersion:
-          type: string
+            $ref: "#/components/schemas/StateInfo"
     ProblemDetail:
       type: object
       properties:
@@ -275,6 +1138,43 @@ components:
         type:
           type: string
           format: uri
+    Readiness:
+      type: object
+      properties:
+        checks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Check"
+        earliestDate:
+          type: string
+          format: date
+        goLiveDate:
+          type: string
+          format: date
+        latestDate:
+          type: string
+          format: date
+        live:
+          type: boolean
+        ready:
+          type: boolean
+    SettingInfo:
+      type: object
+      properties:
+        defaultValue:
+          type: string
+        key:
+          type: string
+        listCode:
+          type: string
+        max:
+          type: integer
+          format: int32
+        min:
+          type: integer
+          format: int32
+        type:
+          type: string
     SignupRequest:
       type: object
       properties:
@@ -330,14 +1230,34 @@ components:
       - password
       - startWith
       - stateCode
-    StateOption:
+    StateInfo:
       type: object
       properties:
         code:
           type: string
-        kind:
-          type: string
         name:
+          type: string
+    Status:
+      type: object
+      properties:
+        emailVerified:
+          type: boolean
+        mobileVerified:
+          type: boolean
+    StepStatus:
+      type: object
+      properties:
+        available:
+          type: boolean
+        code:
+          type: string
+        phase:
+          type: string
+        required:
+          type: boolean
+        route:
+          type: string
+        status:
           type: string
     TokenResponse:
       type: object
@@ -369,6 +1289,15 @@ components:
         tenantId:
           type: string
           format: uuid
+    VerifyRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          maxLength: 100
+          minLength: 0
+      required:
+      - token
   securitySchemes:
     bearerAuth:
       bearerFormat: JWT

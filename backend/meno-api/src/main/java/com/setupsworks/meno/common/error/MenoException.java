@@ -25,4 +25,16 @@ public class MenoException extends RuntimeException {
     public String code() {
         return code;
     }
+
+    private final java.util.Map<String, Object> properties = new java.util.LinkedHashMap<>();
+
+    /** Extra Problem Details member, e.g. which check failed. Never put secrets or personal data here. */
+    public MenoException setProperty(String name, Object value) {
+        properties.put(name, value);
+        return this;
+    }
+
+    public java.util.Map<String, Object> properties() {
+        return java.util.Collections.unmodifiableMap(properties);
+    }
 }

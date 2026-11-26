@@ -34,6 +34,11 @@ Built: [`docker-compose.yml`](../../docker-compose.yml). `cp .env.example .env`,
 | `MENO_JWT_KID`, `MENO_JWT_ISSUER` | api | no | rotated per runbook |
 | `MENO_API_DOCS_ENABLED` | api | no | Swagger UI + `/v3/api-docs`; `false` in production |
 | `MENO_MIN_PASSWORD_LENGTH` | api | no | Password minimum (10, SECURITY.md) |
+| `MENO_MAIL_AUTH`, `MENO_MAIL_STARTTLS` | api | no | SMTP login / STARTTLS (false for local Mailpit). Host, port, user, password, from: `MENO_MAIL_*` above; no host = emails only logged |
+| `MENO_EMAIL_VERIFICATION_TTL`, `MENO_VERIFICATION_RESEND_COOLDOWN` | api | no | Email link lifetime (24 h) and resend wait |
+| `MENO_RATE_LIMIT_ENABLED`, `MENO_RATE_LIMIT_LOGIN|REFRESH|SIGNUP|VERIFY|RESEND` | api | no | Per-IP limits in the API (SEC-10) |
+| `MENO_FY_START_MONTH`, `MENO_GO_LIVE_MAX_DAYS_AHEAD` | api | no | Onboarding: FY start month (4 = April), latest go-live date (today + N) |
+| `MENO_GSTIN_PROVIDER`, `MENO_GSTIN_BASE_URL`, `MENO_GSTIN_API_KEY`, `MENO_GSTIN_TIMEOUT`, `MENO_GSTIN_CACHE_TTL`, `MENO_GSTIN_LOOKUPS_PER_MINUTE` | api | key yes | GSTIN fetch: `none` (default) or `gstverify` (candidate, R-31 ⚠) |
 | `MENO_SIGNUP_ENABLED`, `MENO_SIGNUP_START_OPTIONS`, `MENO_SIGNUP_TERMS_VERSION` | api | no | Public sign-up switch (off in production until OTP + rate limits), "start with" options, version of the terms + privacy notice |
 | `PORT` / `SERVER_PORT` | api | no | HTTP port (8080 locally, 80 on App Service) |
 | `JAVA_OPTS` | api (App Service) | no | JVM flags (heap capped: the B1 plan is shared by four apps) |

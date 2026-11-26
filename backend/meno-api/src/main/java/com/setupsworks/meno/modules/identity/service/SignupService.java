@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Sign-up step 1 (ONBOARDING.md): tenant + owner + consent in one transaction. Field formats are checked by
  * Bean Validation on the request; this class owns the rules that need data or configuration.
- * Not yet: mobile OTP / email link (need the notification providers), rate limits (edge, SEC-10).
+ * The email link goes out after commit (EmailVerificationService); mobile OTP waits for an SMS provider (INT-02).
  */
 @Service
 class SignupService implements SignupFacade {
@@ -42,10 +42,13 @@ class SignupService implements SignupFacade {
     private final PasswordEncoder passwordEncoder;
     private final IdentityProperties identity;
     private final SignupProperties signup;
+    private final EmailVerificationService emailVerification;
     private final Clock clock;
 
     SignupService(TenantFacade tenants, AppUserRepository users, ConsentRepository consents,
-            PasswordEncoder passwordEncoder, IdentityProperties identity, SignupProperties signup, Clock clock) {
+            PasswordEncoder passwordEncoder, IdentityProperties identity, SignupProperties signup,
+            EmailVerificationService emailVerification, Clock clock) {
+        this.emailVerification = emailVerification;
         this.tenants = tenants;
         this.users = users;
         this.consents = consents;
@@ -96,6 +99,7 @@ class SignupService implements SignupFacade {
         }
         consents.save(new Consent(tenantId, owner.getId(), Consent.Kind.TERMS_AND_PRIVACY,
                 command.acceptedTermsVersion(), now));
+        emailVerification.issue(owner);
         log.info("Sign-up created tenant {} with owner {}", tenantId, owner.getId());
         return new Outcome(CredentialService.toAccount(owner), false);
     }

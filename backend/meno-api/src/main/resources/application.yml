@@ -3,11 +3,24 @@
 server:
   # App Service (Java SE) sends traffic to port 80 and sets SERVER_PORT/PORT; locally 8080.
   port: ${PORT:8080}
-  # TLS ends at the Azure front end / nginx: trust X-Forwarded-* so redirects and Secure cookies see https.
-  forward-headers-strategy: framework
+  # TLS ends at the Azure front end / nginx. "native" = Tomcat RemoteIpValve: X-Forwarded-For / -Proto are honoured
+  # only from trusted (private-range) proxies, so clients cannot spoof their IP for rate limits.
+  forward-headers-strategy: native
   shutdown: graceful
 
 spring:
+  mail:
+    # Any SMTP relay (Mailpit locally on 1025). Empty host = emails are logged, not sent.
+    host: ${MENO_MAIL_HOST:}
+    port: ${MENO_MAIL_PORT:587}
+    username: ${MENO_MAIL_USER:}
+    password: ${MENO_MAIL_PASSWORD:}
+    properties:
+      mail.smtp.auth: ${MENO_MAIL_AUTH:true}
+      mail.smtp.starttls.enable: ${MENO_MAIL_STARTTLS:true}
+      mail.smtp.connectiontimeout: 10000
+      mail.smtp.timeout: 10000
+      mail.smtp.writetimeout: 10000
   application:
     name: meno-api
   datasource:
@@ -51,18 +64,47 @@ meno:
     max-failed-attempts: ${MENO_LOGIN_MAX_FAILED_ATTEMPTS:10}
     lock-duration: ${MENO_LOGIN_LOCK_DURATION:PT15M}
     min-password-length: ${MENO_MIN_PASSWORD_LENGTH:10}
+    verification:
+      email-ttl: ${MENO_EMAIL_VERIFICATION_TTL:PT24H}
+      resend-cooldown: ${MENO_VERIFICATION_RESEND_COOLDOWN:PT60S}
+      email-link-base: ${MENO_PUBLIC_WEB_URL:http://localhost:3000}/verify?token=
     bootstrap:
       tenant-name: ${MENO_BOOTSTRAP_TENANT:}
       full-name: ${MENO_BOOTSTRAP_NAME:Owner}
       email: ${MENO_BOOTSTRAP_EMAIL:}
       password: ${MENO_BOOTSTRAP_PASSWORD:}
 
+  mail:
+    from: ${MENO_MAIL_FROM:MENO <no-reply@meno.local>}
   signup:
     # false closes public sign-up (POST /api/v1/auth/signup answers IDENTITY_SIGNUP_CLOSED).
     enabled: ${MENO_SIGNUP_ENABLED:true}
     start-options: ${MENO_SIGNUP_START_OPTIONS:TRIAL,DEMO,LICENSE_KEY}
     # Version of the terms + privacy (DPDP) notice shown on /signup; stored with every acceptance (Hub #868).
     terms-version: ${MENO_SIGNUP_TERMS_VERSION:draft-2026-11}
+
+  onboarding:
+    financial-year-start-month: ${MENO_FY_START_MONTH:4}
+    go-live-max-days-ahead: ${MENO_GO_LIVE_MAX_DAYS_AHEAD:7}
+  integrations:
+    gstin:
+      # GST verification provider: none (default; manual entry) | gstverify (candidate, R-31 not decided ⚠).
+      provider: ${MENO_GSTIN_PROVIDER:none}
+      base-url: ${MENO_GSTIN_BASE_URL:https://api.gstverify.dubey.app}
+      api-key: ${MENO_GSTIN_API_KEY:}
+      timeout: ${MENO_GSTIN_TIMEOUT:PT8S}
+  party:
+    gstin:
+      cache-ttl: ${MENO_GSTIN_CACHE_TTL:PT24H}
+      lookups-per-minute-per-tenant: ${MENO_GSTIN_LOOKUPS_PER_MINUTE:30}
+  rate-limit:
+    enabled: ${MENO_RATE_LIMIT_ENABLED:true}
+    rules:
+      login: { method: POST, path: /api/v1/auth/login, capacity: "${MENO_RATE_LIMIT_LOGIN:10}", window: PT1M }
+      refresh: { method: POST, path: /api/v1/auth/refresh, capacity: "${MENO_RATE_LIMIT_REFRESH:30}", window: PT1M }
+      signup: { method: POST, path: /api/v1/auth/signup, capacity: "${MENO_RATE_LIMIT_SIGNUP:5}", window: PT10M }
+      verify-email: { method: POST, path: /api/v1/auth/verify-email, capacity: "${MENO_RATE_LIMIT_VERIFY:10}", window: PT10M }
+      verify-email-resend: { method: POST, path: /api/v1/auth/verify-email/resend, capacity: "${MENO_RATE_LIMIT_RESEND:5}", window: PT1H }
 
 springdoc:
   # Off unless asked for: local and staging set MENO_API_DOCS_ENABLED=true, production leaves it false.

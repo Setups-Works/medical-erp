@@ -2,6 +2,10 @@
 
 **Owner:** Kamesh · **QA:** Ashok · **Phase:** P2 · **Features:** PTY-01…10
 
+## Built so far (26-11-2026)
+- GSTIN fetch (PTY-15, `docs/product/GSTIN_FETCH.md`): `GET /api/v1/gstin-verifications/{gstin}`, `GstinVerificationService` (§4 checks first via `common/gst/Gstin`, 24 h cache, per-tenant limit, log line as audit until the audit module) → `integrations.api.GstinVerifier`. Permission `party.supplier.create` or `party.customer.create` or `tenancy.onboarding.manage`. Allowed deps now `integrations::api`, `tenancy::api`.
+- Codes: PARTY_GSTIN_INVALID (422, `failedCheck` FORMAT/STATE/PAN/CHECK_CHARACTER), PARTY_GSTIN_NOT_FOUND (404), PARTY_GSTIN_RATE_LIMITED (429), PARTY_GSTIN_SERVICE_UNAVAILABLE (503).
+
 ## Purpose
 Suppliers, customers, retailers, doctors; GST/DL details; credit terms; opening balances.
 
