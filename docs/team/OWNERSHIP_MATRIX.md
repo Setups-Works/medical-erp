@@ -49,6 +49,7 @@ Rules of the split:
 | LIC | Licensing: plans, license keys, entitlements | subscription | nitheesh | nitheesh | platform, admin | | ashok |
 | DLV | Home delivery & fleet | delivery | nitheesh | gokul | delivery | | ashok |
 | OMN | Online channels (store page, customer app, marketplaces) | channels, integrations | nitheesh | gokul | channels | jeeva | meyyarivu |
+| AIA | AI assistant (shared LLM, read-only tools; AI_ASSISTANT.md) | assistant, integrations | nitheesh | gokul | assistant, admin/assistant | | ashok |
 
 ## Feature overrides
 
@@ -57,6 +58,15 @@ A few features are built by someone other than their prefix's owners. MENO Hub a
 | Feature | Backend | Frontend | Extra | Why |
 |---|---|---|---|---|
 | INT-12 | nitheesh | | | DrugDB adapter: Nitheesh built the Learn prototype (Day 19) and owns the source decision |
+| AIA-02 | nitheesh | | | Orchestrator and conversations API: backend only, no screen of its own |
+| AIA-03 | nitheesh | | jeeva | LLM provider adapter: Jeeva owns the key in Key Vault, the egress allowlist and the provider comparison |
+| AIA-04 | nitheesh | | | Tool registry and argument validation: backend only |
+| AIA-05 | kamesh | | nitheesh | Sales tools read through Kamesh's sales and reporting facades; Nitheesh wraps them as assistant tools |
+| AIA-06 | kamesh | | nitheesh | Stock tools read through Kamesh's inventory and catalog facades; Nitheesh wraps them |
+| AIA-07 | kamesh | | nitheesh | Bill quote uses Kamesh's PricingEngine and GstCalculator (same test vectors); Nitheesh wraps it |
+| AIA-09 | nitheesh | | | Answer guards: backend only |
+| AIA-11 | nitheesh | | jeeva | Audit and security tests (Nitheesh) + Grafana metrics and alerts (Jeeva) |
+| AIA-12 | nitheesh | gokul | jeeva | Optional RAG: pgvector image and backups are Jeeva's |
 | INT-17 | nitheesh | | | GSTIN verification adapter: Learn prototype (Day 22) and the provider decision are Nitheesh's; the PTY-15 endpoint and Fetch screens stay with Kamesh and Ashok |
 | CAT-24 | nitheesh | nitheesh | | Medicine search-as-you-type on the item form, from the same prototype |
 | LIC-07 | nitheesh | meyyarivu | jeeva | Desktop offline license: certificate check in the desktop renderer (Meyyarivu), public-key bundling in the build (Jeeva) |

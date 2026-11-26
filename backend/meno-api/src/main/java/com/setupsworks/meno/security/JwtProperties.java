@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 /**
  * Access-token settings. Env names follow infrastructure/env/*.example (MENO_JWT_*).
  * Keys are ES256 (P-256) PEM: files (VM / Docker secrets) or, where the host has no secret files
- * (Azure App Service, ADR-0017), the PEM text in an env var / Key Vault reference. Never in git (SECURITY.md).
+ * (Azure App Service, ADR-0018), the PEM text in an env var / Key Vault reference. Never in git (SECURITY.md).
  */
 @ConfigurationProperties("meno.security.jwt")
 public record JwtProperties(

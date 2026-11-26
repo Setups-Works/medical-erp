@@ -1,6 +1,6 @@
 # ADR-0005: Azure VM + Docker Compose + managed PostgreSQL
 
-- Status: Accepted · Date: 2026-11-21 · Until the pilot the API runs on App Service instead: [ADR-0017](0017-azure-app-service-free-tier.md)
+- Status: Accepted · Date: 2026-11-21 · Until the pilot the API runs on App Service instead: [ADR-0018](0018-azure-app-service.md)
 
 ## Context
 Hosting must fit Azure for Students credit, be operable by a fresher DevOps engineer, and match local development.

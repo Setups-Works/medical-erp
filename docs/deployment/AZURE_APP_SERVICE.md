@@ -1,6 +1,6 @@
 # meno-api on Azure App Service (student setup)
 
-Owner: Jeeva. Approver: Nitheesh. Decision: [ADR-0017](../decisions/0017-azure-app-service-free-tier.md). Workflows: [`ci.yml`](../../.github/workflows/ci.yml), [`deploy-api.yml`](../../.github/workflows/deploy-api.yml).
+Owner: Jeeva. Approver: Nitheesh. Decision: [ADR-0018](../decisions/0018-azure-app-service.md). Workflows: [`ci.yml`](../../.github/workflows/ci.yml), [`deploy-api.yml`](../../.github/workflows/deploy-api.yml).
 
 ```mermaid
 flowchart LR

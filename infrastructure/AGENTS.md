@@ -14,6 +14,6 @@ scripts/       VM bootstrap (docker, ufw, fail2ban, unattended-upgrades), deploy
 ```
 
 Built: `../docker-compose.yml` (local stack), `docker/api.Dockerfile`, `docker/postgres/init-roles.sh`, `azure/setup-oidc.sh` (a person runs it).
-Hosting now: two App Services, jar deploy from `.github/workflows/deploy-api.yml` (ADR-0017, `docs/deployment/AZURE_APP_SERVICE.md`). `azure/` Bicep and the VM scripts are for the later VM setup (ADR-0005).
+Hosting now: two App Services, jar deploy from `.github/workflows/deploy-api.yml` (ADR-0018, `docs/deployment/AZURE_APP_SERVICE.md`). `azure/` Bicep and the VM scripts are for the later VM setup (ADR-0005).
 
 Rules: pin image versions; non-root containers; healthchecks everywhere; no secrets in files (use `.env` on the VM from GitHub Environments); every change has a rollback note and a runbook update in `docs/runbooks/`.

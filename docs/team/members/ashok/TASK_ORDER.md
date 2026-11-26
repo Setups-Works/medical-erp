@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**221 tasks** · P0: 5 · P1: 13 · P2: 29 · P3: 34 · P4: 49 · P5: 51 · P6: 28 · P7: 12
+**224 tasks** · P0: 5 · P1: 13 · P2: 29 · P3: 34 · P4: 49 · P5: 51 · P6: 28 · P7: 15
 
 ## P0 · Foundation (5)
 
@@ -251,19 +251,22 @@
 | 208 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P6 (4 features) | QA | — |
 | 209 | QA: Security · P6 (2 features) | QA | — |
 
-## P7 · Growth (12)
+## P7 · Growth (15)
 
 | Step | Task | Type | With |
 |---|---|---|---|
 | 210 | Mobile test strategy | Groundwork | — |
-| 211 | QA: Platform & administration · P7 (3 features) | QA | — |
-| 212 | QA: Purchase · P7 (1 feature) | QA | — |
-| 213 | QA: Pharmacy operations (short book, ordering, warehouses) · P7 (1 feature) | QA | — |
-| 214 | QA: Wholesale · P7 (1 feature) | QA | — |
-| 215 | QA: GST & statutory · P7 (1 feature) | QA | — |
-| 216 | QA: Payments & accounting · P7 (1 feature) | QA | — |
-| 217 | QA: Full books & finance · P7 (1 feature) | QA | — |
-| 218 | QA: Notifications · P7 (1 feature) | QA | — |
-| 219 | QA: Home delivery & fleet · P7 (2 features) | QA | — |
-| 220 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P7 (7 features) | QA | — |
-| 221 | QA: Mobile (P7) · P7 (6 features) | QA | — |
+| 211 | AI assistant security test pack: cross-tenant through questions and crafted tool arguments, prompt injection (question, item name, document), write requests refused, redaction on the outbound payload, pool leak; automate critical scenario #16 | Groundwork | — |
+| 212 | Critical scenario #16: AI assistant: a user of tenant A, through questions, crafted tool arguments or injected text, never gets tenant B's data, never triggers a write, and no patient data reaches the LLM provider (P7, AI_ASSISTANT.md §11) | Critical scenario | — |
+| 213 | QA: Platform & administration · P7 (2 features) | QA | — |
+| 214 | QA: Purchase · P7 (1 feature) | QA | — |
+| 215 | QA: Pharmacy operations (short book, ordering, warehouses) · P7 (1 feature) | QA | — |
+| 216 | QA: Wholesale · P7 (1 feature) | QA | — |
+| 217 | QA: GST & statutory · P7 (1 feature) | QA | — |
+| 218 | QA: Payments & accounting · P7 (1 feature) | QA | — |
+| 219 | QA: Full books & finance · P7 (1 feature) | QA | — |
+| 220 | QA: Notifications · P7 (1 feature) | QA | — |
+| 221 | QA: Home delivery & fleet · P7 (2 features) | QA | — |
+| 222 | QA: Integrations (GSP, WhatsApp, SMS, Tally) · P7 (7 features) | QA | — |
+| 223 | QA: Mobile (P7) · P7 (6 features) | QA | — |
+| 224 | QA: AI assistant (shared LLM, read-only tools; AI_ASSISTANT.md) · P7 (12 features) | QA | — |

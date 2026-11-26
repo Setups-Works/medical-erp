@@ -45,3 +45,4 @@ From 25-11-2026 you also build the backend foundation: **backend skeleton (Hub #
 
 ## P7 Growth
 - [ ] Retailer → distributor ordering API between tenants
+- [ ] Read-only query facades for the AI assistant tools: `SalesQueryFacade` (summary, top items, payment split), `StockQueryFacade` (low stock, expiring batches, search), `PriceQuoteFacade` (PricingEngine + GstCalculator, never posts); bounded, tenant-scoped, with cross-tenant tests

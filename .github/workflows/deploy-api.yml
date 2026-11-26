@@ -1,4 +1,4 @@
-# Auto-deploy meno-api to Azure App Service (Java 21, shared B1 plan, ADR-0017; Hub #135 / #141).
+# Auto-deploy meno-api to Azure App Service (Java 21, shared B1 plan, ADR-0018; Hub #135 / #141).
 #   push to develop -> GitHub Environment "staging"    -> staging App Service
 #   push to main    -> GitHub Environment "production" -> production App Service
 # Each Environment holds (Settings -> Environments):

@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**110 tasks** · P0: 5 · P1: 2 · P2: 2 · P3: 15 · P4: 17 · P5: 28 · P6: 28 · P7: 13
+**115 tasks** · P0: 5 · P1: 2 · P2: 2 · P3: 15 · P4: 17 · P5: 28 · P6: 28 · P7: 18
 
 ## P0 · Foundation (5)
 
@@ -139,20 +139,25 @@
 | 96 | CRM-08 Paid membership plans: fee, validity, benefits (discount %, free delivery), renewal reminders | Feature | Nitheesh |
 | 97 | CRM-12 Greetings automation: birthday, anniversary and festival messages with templates, consent and opt-out | Feature | Nitheesh |
 
-## P7 · Growth (13)
+## P7 · Growth (18)
 
 | Step | Task | Type | With |
 |---|---|---|---|
 | 98 | Reuse dashboard widgets in the owner mobile app with Meyyarivu | Groundwork | — |
-| 99 | GST-08 TCS/TDS fields where applicable (verify) | Feature | Kamesh |
-| 100 | RPT-12 Sales forecasting & smart reorder (ML) | Feature | Nitheesh |
-| 101 | ANX-04 Customer & product intelligence: purchase frequency, refill prediction, churn risk | Feature | Nitheesh |
-| 102 | CRM-05 Offers and coupons | Feature | Nitheesh |
-| 103 | CRM-07 Support tickets for customer issues beyond complaints | Feature | Nitheesh |
-| 104 | CRM-09 Gift vouchers (issue, redeem, balance, expiry) and time-boxed flash-sale prices (verify) voucher accounting / GST | Feature | Nitheesh |
-| 105 | ENG-02 Customer feedback after purchase (link in WhatsApp invoice) | Feature | Nitheesh |
-| 106 | DLV-02 Live order tracking link for the customer (rider location from the delivery app, MOB-04) | Feature | Nitheesh |
-| 107 | DLV-03 Fleet management: riders, vehicles, shifts, delivery zones and charges, rider performance | Feature | Nitheesh |
-| 108 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Nitheesh, Jeeva |
-| 109 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Nitheesh, Jeeva |
-| 110 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Nitheesh, Jeeva |
+| 99 | Assistant chat UI design (answer text, data cards, data-used line, suggested questions, offline state) reviewed with Meyyarivu before AIA-01 | Groundwork | — |
+| 100 | AIA-01 Assistant screen (`/assistant` + Ask in Ctrl+K, formerly PLT-21): chat with answer text and data cards (tables from tool results), "data used" line with branch and period, suggested questions per role, feedback, keyboard-first, 1280 / 375 px, disabled offline on desktop | Feature | Nitheesh |
+| 101 | AIA-08 Privacy and consent: `Redactor` strips phone, email, Aadhaar / ABHA-like numbers and patient names; never sends customer, prescription, doctor, register, GSTIN, PAN or bank data; party names only on owner opt-in; owner enables the assistant per tenant after a notice, audited (verify) DPDP notice and consent wording (R-52) | Feature | Nitheesh |
+| 102 | AIA-10 Usage limits and cost: questions per user per day from plan entitlements, per-tenant rate limit (429 `ASSISTANT_QUOTA_EXCEEDED`), token metering per tenant, usage shown in Settings → Assistant (verify) quota numbers per plan | Feature | Nitheesh |
+| 103 | GST-08 TCS/TDS fields where applicable (verify) | Feature | Kamesh |
+| 104 | RPT-12 Sales forecasting & smart reorder (ML) | Feature | Nitheesh |
+| 105 | ANX-04 Customer & product intelligence: purchase frequency, refill prediction, churn risk | Feature | Nitheesh |
+| 106 | CRM-05 Offers and coupons | Feature | Nitheesh |
+| 107 | CRM-07 Support tickets for customer issues beyond complaints | Feature | Nitheesh |
+| 108 | CRM-09 Gift vouchers (issue, redeem, balance, expiry) and time-boxed flash-sale prices (verify) voucher accounting / GST | Feature | Nitheesh |
+| 109 | ENG-02 Customer feedback after purchase (link in WhatsApp invoice) | Feature | Nitheesh |
+| 110 | DLV-02 Live order tracking link for the customer (rider location from the delivery app, MOB-04) | Feature | Nitheesh |
+| 111 | DLV-03 Fleet management: riders, vehicles, shifts, delivery zones and charges, rider performance | Feature | Nitheesh |
+| 112 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Nitheesh, Jeeva |
+| 113 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Nitheesh, Jeeva |
+| 114 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Nitheesh, Jeeva |
+| 115 | AIA-12 Store documents (RAG, optional): owner uploads SOPs, policies and supplier terms; chunked and embedded into PostgreSQL pgvector with tenant RLS; `search_store_documents` returns snippets with document and page; content treated as untrusted (verify) embedding provider | Feature | Nitheesh, Jeeva |

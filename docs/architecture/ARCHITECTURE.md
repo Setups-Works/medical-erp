@@ -21,6 +21,7 @@ flowchart LR
     mail[(Email - SMTP)]
     tally[(Tally - export files)]
     dist[(Distributor CSV / purchase files)]
+    llm[(LLM provider - Groq, P7 AI assistant)]
 
     owner --> meno
     cashier --> meno
@@ -31,6 +32,7 @@ flowchart LR
     meno --> mail
     meno --> tally
     dist --> meno
+    meno -. redacted tool results only .-> llm
 ```
 
 ## 3. Containers (C4 level 2)
@@ -110,6 +112,7 @@ flowchart TB
     end
     reporting[reporting]
     fieldsales["fieldsales (Phase 6)"]
+    assistant["assistant (P7)<br/>AI questions · read-only tools"]
 
     purchase --> catalog & party & pricing & taxation & inventory
     sales --> catalog & party & pricing & taxation & inventory & compliance
@@ -121,9 +124,10 @@ flowchart TB
     sales -. InvoicePosted .-> notification
     inventory -. StockLow / BatchExpiring .-> notification
     reporting --> accounting & inventory & sales & purchase
+    assistant --> reporting & inventory & sales & pricing & catalog
 ```
 
-Solid arrow = synchronous call through the target's `api` facade. Dotted = domain event (Spring Modulith `@ApplicationModuleListener`, persisted in the event publication registry so nothing is lost on a crash). Every module also depends on `tenancy`, `identity` and `audit` (omitted for clarity). Full catalogue: [MODULES.md](MODULES.md).
+Solid arrow = synchronous call through the target's `api` facade. Dotted = domain event (Spring Modulith `@ApplicationModuleListener`, persisted in the event publication registry so nothing is lost on a crash). Every module also depends on `tenancy`, `identity` and `audit` (omitted for clarity). Full catalogue: [MODULES.md](MODULES.md). The `assistant` calls the LLM provider only through the `LlmClient` port in `integrations` and never writes to other modules ([AI_ASSISTANT.md](AI_ASSISTANT.md)).
 
 ### Layers inside a module
 
@@ -184,7 +188,7 @@ flowchart LR
 
 Details: [docs/deployment/AZURE_DEPLOYMENT.md](../deployment/AZURE_DEPLOYMENT.md).
 
-**Until the pilot ([ADR-0017](../decisions/0017-azure-app-service-free-tier.md)):** GitHub Actions tests every PR, then deploys the jar to an Azure App Service: `develop` → staging, `main` → production, each followed by a smoke test. The VM + Docker Compose flow above is the target once we need Redis, nginx and monitoring on our own host. Setup: [AZURE_APP_SERVICE.md](../deployment/AZURE_APP_SERVICE.md).
+**Until the pilot ([ADR-0018](../decisions/0018-azure-app-service.md)):** GitHub Actions tests every PR, then deploys the jar to an Azure App Service: `develop` → staging, `main` → production, each followed by a smoke test. The VM + Docker Compose flow above is the target once we need Redis, nginx and monitoring on our own host. Setup: [AZURE_APP_SERVICE.md](../deployment/AZURE_APP_SERVICE.md).
 
 ## 7. Quality attributes and how we meet them
 

@@ -18,7 +18,7 @@ gantt
     P5 Wholesale, finance, offline :p5, after p4, 8w
     section Launch
     P6 Pilot & GST returns   :p6, after p5, 6w
-    P7 Growth (mobile, field sales, AI) :p7, after p6, 12w
+    P7 Growth (mobile, field sales, AI assistant) :p7, after p6, 12w
 ```
 
 | Phase | Sprints | Weeks | Approx. dates | Milestone |
@@ -65,7 +65,7 @@ The base plan targeted 6 months to pilot. With offline sync, e-invoice and the c
 | `identity`, `auth`, `audit` base, configuration tables + `SettingsFacade`, OpenAPI export → `api-client` | Nitheesh (+ Kamesh) |
 | Next.js skeleton (static export), `packages/ui` (shadcn new-york + tokens), app shell + sidebar (NAVIGATION.md), list/form/report page patterns, login, forgot/reset password, signup | Meyyarivu |
 | Users, roles and permission screens (on Meyyarivu's patterns) | Nitheesh |
-| Docker Compose (postgres, redis, minio, mailpit), Dockerfiles, CI (build/test/lint/scan), staging on App Service with auto-deploy (ADR-0017; VM + Nginx later) | Jeeva |
+| Docker Compose (postgres, redis, minio, mailpit), Dockerfiles, CI (build/test/lint/scan), staging on App Service with auto-deploy (ADR-0018; VM + Nginx later) | Jeeva |
 | API test collection, auth/role/tenant test cases, Playwright setup | Ashok |
 | User stories P2, permission matrix (role × action), field validation catalogue | Prakalya (BA) |
 
@@ -170,6 +170,21 @@ GST-03, 04, 05, 07 · ACC-07, 08, 10 · PLT-14, 15, 17 · RPT-08, 10 · CMP-02 �
 
 
 Mobile owner app, wholesale field-sales app (MOB-*), fieldsales module, retailer portal, AI forecasting (RPT-12), public API, multi-language, e-commerce intake.
+
+**AI assistant (AIA-01 … AIA-12):** plain-language, read-only questions over the tenant's own data on one shared LLM provider (Groq first). Design: [AI_ASSISTANT.md](../architecture/AI_ASSISTANT.md), ADR-0017. Platform pieces (login, membership, tenant schema, RLS) already exist from P1; P7 builds them in this order:
+
+| Step | Work | Who |
+|---|---|---|
+| 1 | Question catalogue (30 real questions + expected answers); privacy review with the lawyer (R-52) | Prakalya |
+| 2 | LLM provider comparison (Groq first: tool calling, latency, price, retention, terms) | Jeeva |
+| 3 | ADR-0017 accepted (provider, model, client library, retention) | Nitheesh |
+| 4 | Read-only query facades for the tools: sales, stock, bill quote (AIA-05, 06, 07) | Kamesh |
+| 5 | Groq adapter + orchestrator + tool registry (AIA-03, 02, 04) | Nitheesh, Jeeva |
+| 6 | Privacy, guards, assistant screen and settings (AIA-08, 09, 01, 10) | Nitheesh, Gokul |
+| 7 | Audit, metrics, alerts, security test pack, critical scenario #16 (AIA-11) | Nitheesh, Jeeva, Ashok |
+| 8 | Optional: store documents with pgvector (AIA-12) | Nitheesh, Gokul, Jeeva |
+
+**AI exit:** critical scenario #16 and the AI security test pack pass; Prakalya accepts the answers to the question catalogue on demo data; R-52 confirmed before any real tenant turns it on.
 
 ---
 

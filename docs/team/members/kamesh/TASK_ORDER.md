@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**261 tasks** · P0: 3 · P1: 7 · P2: 26 · P3: 48 · P4: 60 · P5: 78 · P6: 34 · P7: 5
+**265 tasks** · P0: 3 · P1: 7 · P2: 26 · P3: 48 · P4: 60 · P5: 78 · P6: 34 · P7: 9
 
 ## P0 · Foundation (3)
 
@@ -298,12 +298,16 @@
 | 255 | MKT-07 Expiry-based promotions (auto-suggested discount on near-expiry batches) | Feature | Meyyarivu |
 | 256 | POS-18 Home delivery orders with delivery status | Feature | Meyyarivu |
 
-## P7 · Growth (5)
+## P7 · Growth (9)
 
 | Step | Task | Type | With |
 |---|---|---|---|
 | 257 | Retailer → distributor ordering API between tenants | Groundwork | — |
-| 258 | PUR-18 Distributor marketplace: compare rates, schemes and stock across connected distributors and place POs from one screen (extends MKT-03 beyond MENO-to-MENO) (verify) partner agreements | Feature | Meyyarivu |
-| 259 | MKT-09 AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | Feature | Meyyarivu |
-| 260 | WHS-10 Retailer self-ordering portal (web) | Feature | Meyyarivu |
-| 261 | GST-08 TCS/TDS fields where applicable (verify) | Feature | Gokul |
+| 258 | Read-only query facades for the AI assistant tools: `SalesQueryFacade` (summary, top items, payment split), `StockQueryFacade` (low stock, expiring batches, search), `PriceQuoteFacade` (PricingEngine + GstCalculator, never posts); bounded, tenant-scoped, with cross-tenant tests | Groundwork | — |
+| 259 | AIA-05 Sales tools: `get_sales_summary` (period ≤ 366 days, group by day / week / month, compare to previous period or last year), `get_top_items`, `get_payment_mode_split`, from reporting views, tenant time zone | Feature | Nitheesh |
+| 260 | AIA-06 Stock tools: `get_low_stock_items`, `get_expiring_batches`, `search_inventory` (name, salt or barcode) through read-only `StockQueryFacade` and `CatalogFacade` | Feature | Nitheesh |
+| 261 | AIA-07 Bill quote tool: `quote_bill` prices lines through `PricingEngine` + `GstCalculator` (passes every case in `contracts/test-vectors/`); a quote only, never an invoice; the model explains, it never calculates | Feature | Nitheesh |
+| 262 | PUR-18 Distributor marketplace: compare rates, schemes and stock across connected distributors and place POs from one screen (extends MKT-03 beyond MENO-to-MENO) (verify) partner agreements | Feature | Meyyarivu |
+| 263 | MKT-09 AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | Feature | Meyyarivu |
+| 264 | WHS-10 Retailer self-ordering portal (web) | Feature | Meyyarivu |
+| 265 | GST-08 TCS/TDS fields where applicable (verify) | Feature | Gokul |

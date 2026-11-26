@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**218 tasks** · P0: 5 · P1: 10 · P2: 12 · P3: 29 · P4: 51 · P5: 73 · P6: 23 · P7: 15
+**219 tasks** · P0: 5 · P1: 10 · P2: 12 · P3: 29 · P4: 51 · P5: 73 · P6: 23 · P7: 16
 
 ## P0 · Foundation (5)
 
@@ -245,22 +245,23 @@
 | 202 | QA: Administration settings · P6 (6 features) | QA | — |
 | 203 | QA: Online channels (store page, customer app, marketplaces) · P6 (1 feature) | QA | — |
 
-## P7 · Growth (15)
+## P7 · Growth (16)
 
 | Step | Task | Type | With |
 |---|---|---|---|
 | 204 | Share `packages/ui` primitives with mobile (Expo) | Groundwork | — |
-| 205 | MOB-01 Owner app: dashboard, approvals, alerts | Feature | Nitheesh |
-| 206 | MOB-02 Salesman app: routes/beats, retailer visit, take order offline, schemes, credit status | Feature | Nitheesh |
-| 207 | MOB-03 Collection app: record payments against invoices, receipt share | Feature | Nitheesh |
-| 208 | PUR-18 Distributor marketplace: compare rates, schemes and stock across connected distributors and place POs from one screen (extends MKT-03 beyond MENO-to-MENO) (verify) partner agreements | Feature | Kamesh |
-| 209 | MKT-09 AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | Feature | Kamesh |
-| 210 | WHS-10 Retailer self-ordering portal (web) | Feature | Kamesh |
-| 211 | NTF-06 Pill / dose-time reminders to patients from the prescription schedule, opt-in only (verify) consent, DPDP Act | Feature | Nitheesh |
-| 212 | MOB-04 Delivery app: delivery proof (photo/signature), returns pickup | Feature | Nitheesh |
-| 213 | MOB-05 Camera barcode scan for stock count | Feature | Nitheesh |
-| 214 | MOB-06 Android quick-billing app for small shops with Bluetooth thermal printer, barcode by camera, offline queue | Feature | Nitheesh |
-| 215 | QA: Reports · P7 (1 feature) | QA | — |
-| 216 | QA: Analytics · P7 (1 feature) | QA | — |
-| 217 | QA: Administration settings · P7 (2 features) | QA | — |
-| 218 | QA: Online channels (store page, customer app, marketplaces) · P7 (3 features) | QA | — |
+| 205 | Design review of the AI assistant screen and Ctrl+K Ask entry (paper and ink, keyboard, 1280 / 375 px) with Gokul | Groundwork | — |
+| 206 | MOB-01 Owner app: dashboard, approvals, alerts | Feature | Nitheesh |
+| 207 | MOB-02 Salesman app: routes/beats, retailer visit, take order offline, schemes, credit status | Feature | Nitheesh |
+| 208 | MOB-03 Collection app: record payments against invoices, receipt share | Feature | Nitheesh |
+| 209 | PUR-18 Distributor marketplace: compare rates, schemes and stock across connected distributors and place POs from one screen (extends MKT-03 beyond MENO-to-MENO) (verify) partner agreements | Feature | Kamesh |
+| 210 | MKT-09 AI-assisted item onboarding: create items and a draft purchase from a photo or PDF of a supplier bill | Feature | Kamesh |
+| 211 | WHS-10 Retailer self-ordering portal (web) | Feature | Kamesh |
+| 212 | NTF-06 Pill / dose-time reminders to patients from the prescription schedule, opt-in only (verify) consent, DPDP Act | Feature | Nitheesh |
+| 213 | MOB-04 Delivery app: delivery proof (photo/signature), returns pickup | Feature | Nitheesh |
+| 214 | MOB-05 Camera barcode scan for stock count | Feature | Nitheesh |
+| 215 | MOB-06 Android quick-billing app for small shops with Bluetooth thermal printer, barcode by camera, offline queue | Feature | Nitheesh |
+| 216 | QA: Reports · P7 (1 feature) | QA | — |
+| 217 | QA: Analytics · P7 (1 feature) | QA | — |
+| 218 | QA: Administration settings · P7 (2 features) | QA | — |
+| 219 | QA: Online channels (store page, customer app, marketplaces) · P7 (3 features) | QA | — |

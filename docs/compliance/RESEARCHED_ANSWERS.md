@@ -62,6 +62,7 @@ The generator matches each open rule to an answer by the **Applies to** keywords
 | R-49 | Distributor marketplace | PUR-18, Distributor marketplace | Team |
 | R-50 | Rolling out a GST rate change | GST-15, rate change roll-over | CA |
 | R-51 | Default chart of accounts | chart of accounts, CHART_OF_ACCOUNTS | CA |
+| R-52 | AI assistant and an external LLM provider | AI assistant, LLM, Groq, AIA-03, AIA-08, R-52 | Lawyer |
 
 ## Answers
 
@@ -301,6 +302,11 @@ Each proposal follows common practice seen in the five products and MENO's own r
 
 ### R-51 Default chart of accounts — proposed (CA to confirm)
 - Keep CHART_OF_ACCOUNTS.md (Tally-style primary groups, 43 system ledgers) as the default; the CA reviews the stock write-off entry, free-goods cost and round-off group before P5.
+
+### R-52 AI assistant and an external LLM provider — proposed (lawyer to confirm; provider terms not yet researched)
+- Proposed until the lawyer and the provider review say otherwise: the assistant is **off by default**; the owner turns it on after a notice naming the provider, what is sent and why (DPDP: notice, purpose limitation); no patient, prescription, doctor, register or customer contact data is ever sent; party names only on a separate opt-in; MENO stores only redacted messages, 90 days by default.
+- To research before P7 build (Jeeva, Nitheesh): Groq's current terms on retention, use of API data for training, processing region and data processing agreement; repeat for any alternative provider. Record the outcome in ADR-0017.
+- Sources: DPDP Act 2023 (notice, consent, processor obligations); provider terms ⚠ to be read at build time.
 
 ## Still team decisions (no outside source can answer)
 

@@ -522,7 +522,6 @@ Added after comparing a published competitor feature list with this catalogue: t
 | ID | Feature | Ed. | Ph. | Pri. |
 |---|---|---|---|---|
 | PLT-20 | Network (IP) allowlist per branch: restrict sign-in for chosen roles to the shop's network; denied attempts logged | B | P5 | S |
-| PLT-21 | AI assistant: plain-language, read-only questions over the tenant's own data ("what expires next month?"), permission-aware ⚠ no patient data to an external AI without consent | B | P7 | C |
 | INT-07 | ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions ⚠ ABDM certification | R | P7 | C |
 | INT-08 | EMR integration: receive prescriptions from clinic software | R | P7 | C |
 | INT-09 | Hospital software (HMIS) integration: hospital pharmacy billing against patient / IP number, ward indents | B | P7 | C |
@@ -544,6 +543,25 @@ openFDA (`https://api.fda.gov/drug/label.json` and `drug/ndc.json`) is the US FD
 | CAT-23 | **Pre-fill the medicine create form** from Indian medicine data: search by brand, salt or barcode and fill name, brand, salts + strengths, manufacturer, dosage form, pack and loose units; each pre-filled field marked and editable; save blocked until HSN, GST, schedule and pack are confirmed by the user ⚠ | B | P3 | S |
 | INT-10 | openFDA adapter in `integrations` (reference only): server-side client for the drug label endpoint, optional API key from secrets, cache by label `set_id` (weekly updates), handles 404 "no matches" and 429; only needed for CAT-21 | B | P6 | C |
 | CAT-21 | **Drug reference panel** on the medicine detail page and POS item info (`F1`): indications, dosage, boxed warning, warnings, contraindications, interactions, pregnancy, storage, looked up **by salt** with an Indian (INN) → US name map held in a configuration table (paracetamol → acetaminophen); shows the FDA disclaimer, attribution and "US label, the Indian label may differ" ⚠ pharmacist review | B | P6 | C |
+
+### 22.7 AI assistant (`assistant`, P7: the last phase)
+
+Plain-language, **read-only** questions over the tenant's own data, answered by **one shared LLM provider (Groq first) for all tenants**. meno-api is the security boundary: tenant and branch come from the token, the model may only call allowlisted typed tools that check permissions, every figure comes from MENO services, and no patient or personal data leaves MENO. Replaces PLT-21. Design: [AI_ASSISTANT.md](../architecture/AI_ASSISTANT.md), decision: ADR-0017 (Proposed). Rows are in build order.
+
+| ID | Feature | Ed. | Ph. | Pri. |
+|---|---|---|---|---|
+| AIA-03 | **LLM provider adapter** in `integrations`: `LlmClient` port + Groq adapter (OpenAI-compatible chat API with tool calling), key in Key Vault, model, timeout, token limit and retries from configuration, provider errors mapped to friendly messages, egress allowlist, recorded-response mock for CI ⚠ provider terms, retention and model (R-52) | B | P7 | S |
+| AIA-02 | **Assistant module and orchestrator**: per-question pipeline (tenant from token, branch checked against the token, permission and tenant setting, prompt assembly, max 3 tool rounds, answer), conversations and messages API (`/api/v1/assistant/*`, `Idempotency-Key`), redacted history kept in MENO, no state at the provider | B | P7 | S |
+| AIA-04 | **Tool registry**: allowlisted typed tools with JSON schema and Bean Validation, bounds on dates and limits, one permission per tool, tools hidden from users without it, tenant and branch injected from `TenantContext` (never tool arguments), no SQL from the model, write tools forbidden | B | P7 | S |
+| AIA-05 | **Sales tools**: `get_sales_summary` (period ≤ 366 days, group by day / week / month, compare to previous period or last year), `get_top_items`, `get_payment_mode_split`, from reporting views, tenant time zone | B | P7 | S |
+| AIA-06 | **Stock tools**: `get_low_stock_items`, `get_expiring_batches`, `search_inventory` (name, salt or barcode) through read-only `StockQueryFacade` and `CatalogFacade` | B | P7 | S |
+| AIA-07 | **Bill quote tool**: `quote_bill` prices lines through `PricingEngine` + `GstCalculator` (passes every case in `contracts/test-vectors/`); a quote only, never an invoice; the model explains, it never calculates | B | P7 | S |
+| AIA-08 | **Privacy and consent**: `Redactor` strips phone, email, Aadhaar / ABHA-like numbers and patient names; never sends customer, prescription, doctor, register, GSTIN, PAN or bank data; party names only on owner opt-in; owner enables the assistant per tenant after a notice, audited ⚠ DPDP notice and consent wording (R-52) | B | P7 | S |
+| AIA-09 | **Answer guards**: every figure in the answer must come from a tool result (else the card is shown with a template text), prompt-injection defence (tool output, item names and documents are untrusted), refusal with a screen link for write requests, length limits | B | P7 | S |
+| AIA-01 | **Assistant screen** (`/assistant` + Ask in Ctrl+K, formerly PLT-21): chat with answer text and data cards (tables from tool results), "data used" line with branch and period, suggested questions per role, feedback, keyboard-first, 1280 / 375 px, disabled offline on desktop | B | P7 | S |
+| AIA-10 | **Usage limits and cost**: questions per user per day from plan entitlements, per-tenant rate limit (429 `ASSISTANT_QUOTA_EXCEEDED`), token metering per tenant, usage shown in Settings → Assistant ⚠ quota numbers per plan | B | P7 | S |
+| AIA-11 | **Assistant audit, security tests and monitoring**: audit row per question (who, tenant, branch, tools, tokens, latency, outcome, no prompt text), Grafana metrics and alerts (errors, p95, daily tokens), RLS fail-closed and connection-pool leak tests under `meno_app`, cross-tenant through tools (critical scenario #16) | B | P7 | S |
+| AIA-12 | **Store documents (RAG, optional)**: owner uploads SOPs, policies and supplier terms; chunked and embedded into PostgreSQL **pgvector** with tenant RLS; `search_store_documents` returns snippets with document and page; content treated as untrusted ⚠ embedding provider | B | P7 | C |
 
 ## 23. Licensing: license keys, plans and entitlements (`subscription`)
 

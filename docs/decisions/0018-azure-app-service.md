@@ -1,4 +1,4 @@
-# ADR-0017: Azure App Service (Java 21) for meno-api until the pilot
+# ADR-0018: Azure App Service (Java 21) for meno-api until the pilot
 
 - Status: Accepted (Nitheesh, 2026-11-26)
 - Date: 2026-11-26

@@ -42,3 +42,4 @@ Frontend lead. Feature tasks for POS, PUR, INV, IJX, MKT, WHS, DOC, AUT, NAV, NT
 
 ## P7 Growth
 - [ ] Share `packages/ui` primitives with mobile (Expo)
+- [ ] Design review of the AI assistant screen and Ctrl+K Ask entry (paper and ink, keyboard, 1280 / 375 px) with Gokul

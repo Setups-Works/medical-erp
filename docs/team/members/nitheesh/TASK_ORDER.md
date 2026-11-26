@@ -5,7 +5,7 @@
 
 **How to use it:** work from the lowest open step. Finish a step (merged, checklist ticked, card in Done) before starting the next. If you are blocked, take the next step and say so at stand-up. Tasks shared with someone show who in **With**.
 
-**338 tasks** · P0: 10 · P1: 14 · P2: 46 · P3: 26 · P4: 42 · P5: 100 · P6: 62 · P7: 38
+**352 tasks** · P0: 10 · P1: 14 · P2: 46 · P3: 26 · P4: 42 · P5: 100 · P6: 62 · P7: 52
 
 ## P0 · Foundation (10)
 
@@ -342,45 +342,59 @@
 | 299 | Four weeks of pilot with zero data-integrity incidents: declare MENO production-ready (v1.1) | Readiness | — |
 | 300 | P6 phase gate: Pilot & GST returns complete, start P7 | Phase gate | — |
 
-## P7 · Growth (38)
+## P7 · Growth (52)
 
 | Step | Task | Type | With |
 |---|---|---|---|
 | 301 | Field-sales and mobile owner app requirements (Prakalya reviews) | Groundwork | — |
 | 302 | Mobile architecture ADR (Expo, shared packages), fieldsales module design | Groundwork | — |
-| 303 | MOB-01 Owner app: dashboard, approvals, alerts | Feature | Meyyarivu |
-| 304 | MOB-02 Salesman app: routes/beats, retailer visit, take order offline, schemes, credit status | Feature | Meyyarivu |
-| 305 | MOB-03 Collection app: record payments against invoices, receipt share | Feature | Meyyarivu |
-| 306 | PLT-18 Multi-language UI (English first; Tamil, Hindi later) | Feature | — |
-| 307 | PLT-21 AI assistant: plain-language, read-only questions over the tenant's own data ("what expires next month?"), permission-aware (verify) no patient data to an external AI without consent | Feature | — |
-| 308 | PLT-34 SCIM 2.0 user provisioning and de-provisioning from the customer's directory | Feature | — |
-| 309 | ACC-11 Payment gateway / UPI collect links for wholesale dues | Feature | — |
-| 310 | ACX-10 Income-tax overview for the owner (turnover, profit, advance-tax reminders) (verify) | Feature | — |
-| 311 | RPT-12 Sales forecasting & smart reorder (ML) | Feature | Gokul |
-| 312 | ANX-04 Customer & product intelligence: purchase frequency, refill prediction, churn risk | Feature | Gokul |
-| 313 | CRM-05 Offers and coupons | Feature | Gokul |
-| 314 | CRM-07 Support tickets for customer issues beyond complaints | Feature | Gokul |
-| 315 | CRM-09 Gift vouchers (issue, redeem, balance, expiry) and time-boxed flash-sale prices (verify) voucher accounting / GST | Feature | Gokul |
-| 316 | ENG-02 Customer feedback after purchase (link in WhatsApp invoice) | Feature | Gokul |
-| 317 | NTF-06 Pill / dose-time reminders to patients from the prescription schedule, opt-in only (verify) consent, DPDP Act | Feature | Meyyarivu |
-| 318 | ADM-12 API keys and webhooks management (with INT-05) | Feature | — |
-| 319 | ADM-13 Staff training: in-app lessons and quizzes per role, completion certificates | Feature | — |
-| 320 | DLV-02 Live order tracking link for the customer (rider location from the delivery app, MOB-04) | Feature | Gokul |
-| 321 | DLV-03 Fleet management: riders, vehicles, shifts, delivery zones and charges, rider performance | Feature | Gokul |
-| 322 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Gokul, Jeeva |
-| 323 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Gokul, Jeeva |
-| 324 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Gokul, Jeeva |
-| 325 | INT-05 Public API + webhooks for partners | Feature | Jeeva |
-| 326 | INT-06 Online pharmacy / e-commerce order intake | Feature | Jeeva |
-| 327 | INT-07 ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions (verify) ABDM certification | Feature | Jeeva |
-| 328 | INT-08 EMR integration: receive prescriptions from clinic software | Feature | Jeeva |
-| 329 | INT-09 Hospital software (HMIS) integration: hospital pharmacy billing against patient / IP number, ward indents | Feature | Jeeva |
-| 330 | INT-13 Insurance / TPA / corporate credit billing for hospital pharmacies: payer master, co-pay split, claim status | Feature | Jeeva |
-| 331 | INT-14 Hospital (IP) pharmacy: ward indents, issue against admission, returns from ward, consolidated IP bill to the hospital system (extends INT-09) | Feature | Jeeva |
-| 332 | MOB-04 Delivery app: delivery proof (photo/signature), returns pickup | Feature | Meyyarivu |
-| 333 | MOB-05 Camera barcode scan for stock count | Feature | Meyyarivu |
-| 334 | MOB-06 Android quick-billing app for small shops with Bluetooth thermal printer, barcode by camera, offline queue | Feature | Meyyarivu |
-| 335 | Mobile app ADR (Expo, shared packages) and field-sales module design | Readiness | — |
-| 336 | Pricing and plans for public launch; subscription billing live | Readiness | — |
-| 337 | Public launch checklist: marketing site, support channel, status page | Readiness | — |
-| 338 | P7 phase gate: Growth complete | Phase gate | — |
+| 303 | Accept ADR-0017 (AI assistant): provider, model, client library (RestClient or Spring AI), retention; update AI_ASSISTANT.md and R-52 (after Jeeva's comparison and Prakalya's privacy review) | Groundwork | — |
+| 304 | AI assistant design review with Kamesh, Gokul, Jeeva and Ashok: tool list, permissions, redaction, guards, test pack (docs/architecture/AI_ASSISTANT.md) | Groundwork | — |
+| 305 | Confirm compliance rule: AI assistant (external LLM) | Confirm rule | — |
+| 306 | MOB-01 Owner app: dashboard, approvals, alerts | Feature | Meyyarivu |
+| 307 | MOB-02 Salesman app: routes/beats, retailer visit, take order offline, schemes, credit status | Feature | Meyyarivu |
+| 308 | MOB-03 Collection app: record payments against invoices, receipt share | Feature | Meyyarivu |
+| 309 | AIA-01 Assistant screen (`/assistant` + Ask in Ctrl+K, formerly PLT-21): chat with answer text and data cards (tables from tool results), "data used" line with branch and period, suggested questions per role, feedback, keyboard-first, 1280 / 375 px, disabled offline on desktop | Feature | Gokul |
+| 310 | AIA-02 Assistant module and orchestrator: per-question pipeline (tenant from token, branch checked against the token, permission and tenant setting, prompt assembly, max 3 tool rounds, answer), conversations and messages API (`/api/v1/assistant/*`, `Idempotency-Key`), redacted history kept in MENO, no state at the provider | Feature | — |
+| 311 | AIA-03 LLM provider adapter in `integrations`: `LlmClient` port + Groq adapter (OpenAI-compatible chat API with tool calling), key in Key Vault, model, timeout, token limit and retries from configuration, provider errors mapped to friendly messages, egress allowlist, recorded-response mock for CI (verify) provider terms, retention and model (R-52) | Feature | Jeeva |
+| 312 | AIA-04 Tool registry: allowlisted typed tools with JSON schema and Bean Validation, bounds on dates and limits, one permission per tool, tools hidden from users without it, tenant and branch injected from `TenantContext` (never tool arguments), no SQL from the model, write tools forbidden | Feature | — |
+| 313 | AIA-05 Sales tools: `get_sales_summary` (period ≤ 366 days, group by day / week / month, compare to previous period or last year), `get_top_items`, `get_payment_mode_split`, from reporting views, tenant time zone | Feature | Kamesh |
+| 314 | AIA-06 Stock tools: `get_low_stock_items`, `get_expiring_batches`, `search_inventory` (name, salt or barcode) through read-only `StockQueryFacade` and `CatalogFacade` | Feature | Kamesh |
+| 315 | AIA-07 Bill quote tool: `quote_bill` prices lines through `PricingEngine` + `GstCalculator` (passes every case in `contracts/test-vectors/`); a quote only, never an invoice; the model explains, it never calculates | Feature | Kamesh |
+| 316 | AIA-08 Privacy and consent: `Redactor` strips phone, email, Aadhaar / ABHA-like numbers and patient names; never sends customer, prescription, doctor, register, GSTIN, PAN or bank data; party names only on owner opt-in; owner enables the assistant per tenant after a notice, audited (verify) DPDP notice and consent wording (R-52) | Feature | Gokul |
+| 317 | AIA-09 Answer guards: every figure in the answer must come from a tool result (else the card is shown with a template text), prompt-injection defence (tool output, item names and documents are untrusted), refusal with a screen link for write requests, length limits | Feature | — |
+| 318 | AIA-10 Usage limits and cost: questions per user per day from plan entitlements, per-tenant rate limit (429 `ASSISTANT_QUOTA_EXCEEDED`), token metering per tenant, usage shown in Settings → Assistant (verify) quota numbers per plan | Feature | Gokul |
+| 319 | AIA-11 Assistant audit, security tests and monitoring: audit row per question (who, tenant, branch, tools, tokens, latency, outcome, no prompt text), Grafana metrics and alerts (errors, p95, daily tokens), RLS fail-closed and connection-pool leak tests under `meno_app`, cross-tenant through tools (critical scenario #16) | Feature | Jeeva |
+| 320 | PLT-18 Multi-language UI (English first; Tamil, Hindi later) | Feature | — |
+| 321 | PLT-34 SCIM 2.0 user provisioning and de-provisioning from the customer's directory | Feature | — |
+| 322 | ACC-11 Payment gateway / UPI collect links for wholesale dues | Feature | — |
+| 323 | ACX-10 Income-tax overview for the owner (turnover, profit, advance-tax reminders) (verify) | Feature | — |
+| 324 | RPT-12 Sales forecasting & smart reorder (ML) | Feature | Gokul |
+| 325 | ANX-04 Customer & product intelligence: purchase frequency, refill prediction, churn risk | Feature | Gokul |
+| 326 | CRM-05 Offers and coupons | Feature | Gokul |
+| 327 | CRM-07 Support tickets for customer issues beyond complaints | Feature | Gokul |
+| 328 | CRM-09 Gift vouchers (issue, redeem, balance, expiry) and time-boxed flash-sale prices (verify) voucher accounting / GST | Feature | Gokul |
+| 329 | ENG-02 Customer feedback after purchase (link in WhatsApp invoice) | Feature | Gokul |
+| 330 | NTF-06 Pill / dose-time reminders to patients from the prescription schedule, opt-in only (verify) consent, DPDP Act | Feature | Meyyarivu |
+| 331 | ADM-12 API keys and webhooks management (with INT-05) | Feature | — |
+| 332 | ADM-13 Staff training: in-app lessons and quizzes per role, completion certificates | Feature | — |
+| 333 | DLV-02 Live order tracking link for the customer (rider location from the delivery app, MOB-04) | Feature | Gokul |
+| 334 | DLV-03 Fleet management: riders, vehicles, shifts, delivery zones and charges, rider performance | Feature | Gokul |
+| 335 | OMN-01 Store web page per branch: address, hours, contact, order via WhatsApp | Feature | Gokul, Jeeva |
+| 336 | OMN-02 White-label customer app: order with prescription upload, reorder, track (verify) online sale of medicines rules | Feature | Gokul, Jeeva |
+| 337 | OMN-03 Marketplace channels: ONDC, Amazon, Flipkart order intake with stock sync (extends INT-06) (verify) online sale of medicines rules | Feature | Gokul, Jeeva |
+| 338 | INT-05 Public API + webhooks for partners | Feature | Jeeva |
+| 339 | INT-06 Online pharmacy / e-commerce order intake | Feature | Jeeva |
+| 340 | INT-07 ABHA / ABDM integration: link a customer's ABHA, receive e-prescriptions (verify) ABDM certification | Feature | Jeeva |
+| 341 | INT-08 EMR integration: receive prescriptions from clinic software | Feature | Jeeva |
+| 342 | INT-09 Hospital software (HMIS) integration: hospital pharmacy billing against patient / IP number, ward indents | Feature | Jeeva |
+| 343 | INT-13 Insurance / TPA / corporate credit billing for hospital pharmacies: payer master, co-pay split, claim status | Feature | Jeeva |
+| 344 | INT-14 Hospital (IP) pharmacy: ward indents, issue against admission, returns from ward, consolidated IP bill to the hospital system (extends INT-09) | Feature | Jeeva |
+| 345 | MOB-04 Delivery app: delivery proof (photo/signature), returns pickup | Feature | Meyyarivu |
+| 346 | MOB-05 Camera barcode scan for stock count | Feature | Meyyarivu |
+| 347 | MOB-06 Android quick-billing app for small shops with Bluetooth thermal printer, barcode by camera, offline queue | Feature | Meyyarivu |
+| 348 | AIA-12 Store documents (RAG, optional): owner uploads SOPs, policies and supplier terms; chunked and embedded into PostgreSQL pgvector with tenant RLS; `search_store_documents` returns snippets with document and page; content treated as untrusted (verify) embedding provider | Feature | Gokul, Jeeva |
+| 349 | Mobile app ADR (Expo, shared packages) and field-sales module design | Readiness | — |
+| 350 | Pricing and plans for public launch; subscription billing live | Readiness | — |
+| 351 | Public launch checklist: marketing site, support channel, status page | Readiness | — |
+| 352 | P7 phase gate: Growth complete | Phase gate | — |

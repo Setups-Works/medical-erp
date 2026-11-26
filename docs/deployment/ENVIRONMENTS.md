@@ -19,7 +19,7 @@ Built: [`docker-compose.yml`](../../docker-compose.yml). `cp .env.example .env`,
 - Web: build-time `NEXT_PUBLIC_*` only for non-secrets (API base path, Sentry DSN, flags). The web has **no secrets**.
 - Desktop: API base URL + update channel baked per build; device credentials in OS keychain.
 - Every variable is listed in `.env.example` (root) with a comment. Adding a variable = update `.env.example` + this file + GitHub Environment.
-- On App Service (ADR-0017) the server-side values are **App settings** on each app, not a `.env` file. GitHub Environments `staging` / `production` hold only the deploy credentials (`AZURE_WEBAPP_NAME`, `AZURE_WEBAPP_PUBLISH_PROFILE`). See `AZURE_APP_SERVICE.md`.
+- On App Service (ADR-0018) the server-side values are **App settings** on each app, not a `.env` file. GitHub Environments `staging` / `production` hold only the deploy credentials (`AZURE_WEBAPP_NAME`, `AZURE_WEBAPP_PUBLISH_PROFILE`). See `AZURE_APP_SERVICE.md`.
 
 ## Variable catalogue (initial)
 
@@ -30,7 +30,7 @@ Built: [`docker-compose.yml`](../../docker-compose.yml). `cp .env.example .env`,
 | `MENO_REDIS_URL` | api | no | |
 | `MENO_STORAGE_*` (endpoint, bucket, key, secret) | api | yes | MinIO / Azure Blob |
 | `MENO_JWT_PRIVATE_KEY_PATH`, `MENO_JWT_PUBLIC_KEY_PATH` | api | private yes | ES256 PEM files (VM / Docker secrets) |
-| `MENO_JWT_PRIVATE_KEY`, `MENO_JWT_PUBLIC_KEY` | api | private yes | PEM text instead of files (App Service app settings / Key Vault reference, ADR-0017); used only when the paths are unset |
+| `MENO_JWT_PRIVATE_KEY`, `MENO_JWT_PUBLIC_KEY` | api | private yes | PEM text instead of files (App Service app settings / Key Vault reference, ADR-0018); used only when the paths are unset |
 | `MENO_JWT_KID`, `MENO_JWT_ISSUER` | api | no | rotated per runbook |
 | `MENO_API_DOCS_ENABLED` | api | no | Swagger UI + `/v3/api-docs`; `false` in production |
 | `PORT` / `SERVER_PORT` | api | no | HTTP port (8080 locally, 80 on App Service) |
