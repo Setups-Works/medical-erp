@@ -8,7 +8,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 /**
  * Access-token settings. Env names follow infrastructure/env/*.example (MENO_JWT_*).
- * Keys are ES256 (P-256) PEM files, never inline values (SECURITY.md).
+ * Keys are ES256 (P-256) PEM: files (VM / Docker secrets) or, where the host has no secret files
+ * (Azure App Service, ADR-0017), the PEM text in an env var / Key Vault reference. Never in git (SECURITY.md).
  */
 @ConfigurationProperties("meno.security.jwt")
 public record JwtProperties(
@@ -17,6 +18,9 @@ public record JwtProperties(
         @DefaultValue("15m") Duration accessTokenTtl,
         Path privateKeyPath,
         Path publicKeyPath,
+        /* PEM text instead of a file; used only when the paths are not set. */
+        String privateKeyPem,
+        String publicKeyPem,
         /* Local/test only: sign with a throw-away key when no key files are set. */
         @DefaultValue("false") boolean allowEphemeralKey) {
 }

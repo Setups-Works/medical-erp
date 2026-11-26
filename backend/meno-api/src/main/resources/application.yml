@@ -1,5 +1,12 @@
 # Every value can be overridden by an env var (names match infrastructure/env/*.example).
 # No secrets here: passwords and key files come from the environment only.
+server:
+  # App Service (Java SE) sends traffic to port 80 and sets SERVER_PORT/PORT; locally 8080.
+  port: ${PORT:8080}
+  # TLS ends at the Azure front end / nginx: trust X-Forwarded-* so redirects and Secure cookies see https.
+  forward-headers-strategy: framework
+  shutdown: graceful
+
 spring:
   application:
     name: meno-api
@@ -33,6 +40,9 @@ meno:
       access-token-ttl: ${MENO_JWT_ACCESS_TTL:PT15M}
       private-key-path: ${MENO_JWT_PRIVATE_KEY_PATH:}
       public-key-path: ${MENO_JWT_PUBLIC_KEY_PATH:}
+      # Where the host has no secret files (Azure App Service): the PEM text, ideally a Key Vault reference.
+      private-key-pem: ${MENO_JWT_PRIVATE_KEY:}
+      public-key-pem: ${MENO_JWT_PUBLIC_KEY:}
       allow-ephemeral-key: false
   auth:
     refresh-token-ttl: ${MENO_JWT_REFRESH_TTL:P30D}

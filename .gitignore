@@ -38,6 +38,7 @@ apps/desktop/build/
 *.sqlite
 *.sqlite-journal
 infrastructure/docker/data/
+.secrets/
 !.env.*.example
 !**/.env.*.example
 
