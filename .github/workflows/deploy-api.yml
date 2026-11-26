@@ -42,7 +42,7 @@ jobs:
       - run: ./mvnw -B -ntp verify
       - name: Rename jar
         run: cp target/meno-api-*.jar target/app.jar
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: meno-api-jar
           path: backend/meno-api/target/app.jar
