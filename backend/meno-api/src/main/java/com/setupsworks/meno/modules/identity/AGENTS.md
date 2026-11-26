@@ -17,6 +17,12 @@ UserInvited, RoleChanged
 ## Allowed dependencies
 tenancy::api
 
+## Built so far (P1, 26-11-2026)
+- `app_user`, `user_role` (V202611261701). `CredentialCheck` (api): password check + lockout (`meno.identity.max-failed-attempts`, `lock-duration`), same result for unknown email and wrong password.
+- `BootstrapOwner`: first tenant + OWNER from `MENO_BOOTSTRAP_*` on an empty DB (until sign-up PLT-01).
+- `Role` enum is temporary: replace with role / permission / role_permission tables (ADR-0014).
+- Open: Argon2id (THREAT_MODEL) needs BouncyCastle → tech-lead approval; bcrypt via the delegating encoder until then.
+
 ## Error codes
 IDENTITY_EMAIL_TAKEN, IDENTITY_LAST_ADMIN, IDENTITY_PERMISSION_DENIED
 

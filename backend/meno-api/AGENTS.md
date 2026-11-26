@@ -74,4 +74,4 @@ package com.setupsworks.meno.modules.inventory;
 
 ## Commands (from P1)
 
-`./mvnw spring-boot:run -Dspring-boot.run.profiles=local` · `./mvnw test` · `./mvnw verify` (incl. integration + Modulith + coverage) · `./mvnw -Pexport-openapi` (writes `contracts/openapi/meno-api.yaml`)
+`./mvnw spring-boot:run -Dspring-boot.run.profiles=local` · `./mvnw test` · `./mvnw verify` (incl. integration + Modulith + coverage) · `./mvnw -Pexport-openapi` (writes `contracts/openapi/meno-api.yaml`; `verify` does too, via `OpenApiExportTest`) · Swagger UI `http://localhost:8080/swagger-ui.html` with the `local` profile (`MENO_API_DOCS_ENABLED`, off in production)
