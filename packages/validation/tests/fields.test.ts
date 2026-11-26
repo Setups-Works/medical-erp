@@ -42,9 +42,15 @@ describe("money input stays a string", () => {
   });
 });
 
-describe("login mirrors LoginRequest", () => {
-  it("lower-cases and trims the email", () => expect(loginRequest.parse({ email: " Owner@Shop.IN ", password: "x" }).email).toBe("owner@shop.in"));
-  it("rejects a 129-char password", () => expect(loginRequest.safeParse({ email: "a@b.in", password: "x".repeat(129) }).success).toBe(false));
+describe("login mirrors LoginRequest (email or mobile, PLT-08)", () => {
+  const id = (identifier: string) => loginRequest.safeParse({ identifier, password: "x" });
+  it("lower-cases and trims the email", () => expect(loginRequest.parse({ identifier: " Owner@Shop.IN ", password: "x" }).identifier).toBe("owner@shop.in"));
+  it.each(["9876543210", "+919876543210", "919876543210", "09876543210", "98765 43210", "+91 98765-43210"])(
+    "sends mobile %s as the 10 digits",
+    (m) => expect(loginRequest.parse({ identifier: m, password: "x" }).identifier).toBe("9876543210"),
+  );
+  it.each(["", "   ", "5876543210", "98765", "owner@", "not-a-login"])("rejects %j", (v) => expect(id(v).success).toBe(false));
+  it("rejects a 129-char password", () => expect(loginRequest.safeParse({ identifier: "a@b.in", password: "x".repeat(129) }).success).toBe(false));
 });
 
 describe("signup mirrors SignupRequest", () => {

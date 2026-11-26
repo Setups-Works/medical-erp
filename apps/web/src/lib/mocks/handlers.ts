@@ -110,9 +110,11 @@ export const builtHandlers = [
   // ---------------------------------------------------------------- auth
   http.post(`${API}/auth/login`, async ({ request }) => {
     const b = await body(request);
-    const email = String(b.email ?? "").trim().toLowerCase();
-    const user = db.get().users.find((u) => u.email === email && u.password === b.password);
-    return user ? signIn(user) : problem(401, "AUTH_INVALID_CREDENTIALS", "Email or password is wrong.");
+    // Same matching as meno-api: email (lower-cased) or the 10 mobile digits in any common form.
+    const id = String(b.identifier ?? "").trim().toLowerCase();
+    const digits = id.replace(/[\s-]/g, "").replace(/^(\+?91|0)(?=\d{10}$)/, "");
+    const user = db.get().users.find((u) => (id.includes("@") ? u.email === id : u.mobile === digits) && u.password === b.password);
+    return user ? signIn(user) : problem(401, "AUTH_INVALID_CREDENTIALS", "Email, mobile or password is wrong.");
   }),
   http.post(`${API}/auth/refresh`, () => {
     const user = db.get().users.find((u) => u.id === db.get().sessionUserId);
@@ -123,6 +125,15 @@ export const builtHandlers = [
     db.save();
     return new HttpResponse(null, { status: 204 });
   }),
+  // The mock keeps one session per tab, so "all devices" ends just that one.
+  http.post(
+    `${API}/auth/logout-all`,
+    withAuth(() => {
+      db.get().sessionUserId = null;
+      db.save();
+      return new HttpResponse(null, { status: 204 });
+    }),
+  ),
   http.get(
     `${API}/auth/me`,
     withAuth(({ user }) => HttpResponse.json({ userId: user.id, tenantId: user.tenantId, email: user.email, roles: user.roles })),
@@ -145,6 +156,7 @@ export const builtHandlers = [
     if (!STATES.some((st) => st.code === b.stateCode)) return invalid("TENANCY_STATE_UNKNOWN", "Choose your state.");
     const email = String(b.email).trim().toLowerCase();
     if (s.users.some((u) => u.email === email)) return problem(409, "IDENTITY_EMAIL_TAKEN", "This email already has a MENO account. Sign in instead.");
+    if (s.users.some((u) => u.mobile === String(b.mobile))) return problem(409, "IDENTITY_MOBILE_TAKEN", "An account with this mobile number already exists. Sign in instead.");
     const tenantId = newId();
     s.tenants[tenantId] = { id: tenantId, name: String(b.businessName), stateCode: String(b.stateCode), licences: {}, branches: [], settings: {}, progress: {}, live: false };
     const user: MockUser = { id: newId(), tenantId, email, password: String(b.password), fullName: String(b.ownerName), mobile: String(b.mobile), roles: ["OWNER"], emailVerified: false, mobileVerified: false };
