@@ -106,7 +106,7 @@ Each product's own pages were read (Marg: help-centre menus of Marg Books and a 
 | Customer app, delivery tracking | ✓ e-commerce, delivery | ✓ online store | ✓ white-label, VitRun | ✓ OrderEasy | ✓ e-commerce | OMN-02, DLV-01…03 |
 | Warehouse picking by scan | — | — | ✓ TrackRx | ✓ | ✓ Item Checker | WHS-02, WHS-19 |
 | Stock audit app | ✓ physical stock | — | — | ✓ GoSure | — | INV-09, MOB-05 |
-| Owner app / phone queries | ✓ | — | ✓ SahaAI | ✓ WhatsNow | ✓ Business Now | MOB-01, PLT-21, NTF-07 |
+| Owner app / phone queries | ✓ | — | ✓ SahaAI | ✓ WhatsNow | ✓ Business Now | MOB-01, AIA-01, NTF-07 |
 | Multi-firm / multi-company | ✓ | ✓ 3–unlimited firms | — | ✓ multi-company invoicing | ✓ | PLT-02, POS-29 |
 | Roles, approvals, audit log, MFA | ✓ | ✓ passcode for edits | ✓ | ✓ MFA, approvals | ✓ | PLT-07/09/12/19 |
 | Backup | ✓ | ✓ Google Drive, local | ✓ cloud | ✓ OTP restore | ✓ | ADM-08, DSK-06 |

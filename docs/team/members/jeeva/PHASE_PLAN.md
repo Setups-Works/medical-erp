@@ -44,3 +44,5 @@ Do tasks in the **Step** order shown in MENO Hub and in [TASK_ORDER.md](TASK_ORD
 
 ## P7 Growth
 - [ ] Mobile build pipeline (EAS), environment for public API
+- [ ] Compare LLM providers for the AI assistant (Groq first): tool calling, latency, price, data retention, training use, region, DPA; embeddings option for RAG; write it into ADR-0017
+- [ ] AI assistant infrastructure: `MENO_AI_*` secrets in Key Vault, egress allowlist to the provider, pgvector-enabled PostgreSQL image (if AIA-12 goes ahead), Grafana panels and alerts for AI errors, latency and tokens

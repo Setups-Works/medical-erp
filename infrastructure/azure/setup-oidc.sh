@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Switch Deploy API from publish profiles (long-lived passwords) to OIDC (SEC-08, ADR-0017).
+# Switch Deploy API from publish profiles (long-lived passwords) to OIDC (SEC-08, ADR-0018).
 # A person with Owner on the subscription runs this once; agents never run it.
 # It creates a user-assigned managed identity (no app registration needed), trusts GitHub's OIDC tokens
 # for the repo's staging / production Environments, lets it deploy only to the two MENO apps, stores the

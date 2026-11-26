@@ -58,7 +58,7 @@ Whole local stack from the repo root: `cp .env.example .env && scripts/dev/gen-j
 docker build -f infrastructure/docker/api.Dockerfile -t meno-api backend/meno-api   # from the repo root
 ```
 
-Merging to `develop` deploys staging, merging to `main` deploys production (Azure App Service, ADR-0017). Where the host has no key files, pass the PEM text in `MENO_JWT_PRIVATE_KEY` / `MENO_JWT_PUBLIC_KEY`. Setup: `docs/deployment/AZURE_APP_SERVICE.md`.
+Merging to `develop` deploys staging, merging to `main` deploys production (Azure App Service, ADR-0018). Where the host has no key files, pass the PEM text in `MENO_JWT_PRIVATE_KEY` / `MENO_JWT_PUBLIC_KEY`. Setup: `docs/deployment/AZURE_APP_SERVICE.md`.
 
 ## Tests
 

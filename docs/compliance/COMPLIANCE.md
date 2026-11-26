@@ -39,6 +39,7 @@ Researched answers with sources for the ⚠ rows: [RESEARCHED_ANSWERS.md](RESEAR
 | Combined bill with returns | Netting sales returns and breakage / expiry returns on the same printed document as a tax invoice: returns as separate linked credit notes, replacement as invoice lines (WHS-15) | ⚠ VERIFY with CA |
 | GST on charges | GST rate on freight, insurance and packing charged on the invoice (follows the goods, highest rate, or separate supply) (DOC-06) | ⚠ VERIFY with CA |
 | Returns without bill | Whether medicines may be taken back without the original bill and at what value (RET-09) | ⚠ VERIFY with pharmacist |
+| AI assistant (external LLM) | Sending business data to a third-party AI provider (Groq first, AIA-08): DPDP notice and consent by the owner, how long the provider keeps data and whether it trains on it, no patient data, party names only on opt-in (R-52) | ⚠ VERIFY with lawyer |
 | Patient data | Allergy and chronic-condition fields, ABHA no.: consent and access rules under DPDP (PTY-30); walk-in name and mobile stored on bills (POS-30): notice, consent and retention | ⚠ VERIFY with lawyer |
 
 Rules confirmed here are copied into the relevant FRS and referenced by feature ID.

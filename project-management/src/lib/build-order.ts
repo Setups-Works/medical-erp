@@ -79,6 +79,7 @@ export const AFTER_P1: { phase: string; build: string; because: string }[] = [
   { phase: "P4", build: "Counter billing, returns, H1 register", because: "A sale takes stock that already exists" },
   { phase: "P5", build: "Credit sales, payments, accounts, offline sync", because: "Built on top of sales and stock" },
   { phase: "P6", build: "Real pharmacies, GST returns", because: "Only when money and stock are proven right" },
+  { phase: "P7", build: "Mobile, field sales, AI assistant (read-only questions on one shared LLM)", because: "The assistant only reads data that sales, stock and reports already make correct" },
 ];
 
 /** Keyed by first name in lower case (the Hub user's name). */

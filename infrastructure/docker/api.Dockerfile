@@ -1,6 +1,6 @@
 # meno-api image: multi-stage, layered jar, non-root, healthcheck (infrastructure/AGENTS.md).
 # Build from the repo root:  docker build -f infrastructure/docker/api.Dockerfile -t meno-api backend/meno-api
-# Used by CI (build + Trivy scan) and by docker compose. The free App Service deploy ships the jar instead (ADR-0017).
+# Used by CI (build + Trivy scan) and by docker compose. The free App Service deploy ships the jar instead (ADR-0018).
 
 # ---- build ----
 FROM eclipse-temurin:21.0.13_9-jdk-noble AS build

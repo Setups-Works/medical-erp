@@ -1,6 +1,6 @@
 # Runbook: deploy meno-api
 
-Owner: Jeeva. Applies to the App Service setup (ADR-0017, [setup guide](../deployment/AZURE_APP_SERVICE.md)).
+Owner: Jeeva. Applies to the App Service setup (ADR-0018, [setup guide](../deployment/AZURE_APP_SERVICE.md)).
 
 ## Normal deploy (automatic)
 

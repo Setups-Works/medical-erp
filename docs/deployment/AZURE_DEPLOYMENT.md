@@ -2,7 +2,7 @@
 
 Owner: Jeeva. Approver: Nitheesh. Decision record: ADR-0005.
 
-> **Now (P1 until the pilot): the API runs on two App Services (`meno-api-staging`, `meno-api-production`) on an existing B1 plan, not a VM** ([ADR-0017](../decisions/0017-azure-app-service-free-tier.md)). Push to `develop` deploys staging, push to `main` deploys production, through `.github/workflows/deploy-api.yml`. Setup, app settings and URLs: **[AZURE_APP_SERVICE.md](AZURE_APP_SERVICE.md)**. The VM topology below is the target when we outgrow F1 or need Redis / nginx / monitoring on our own host.
+> **Now (P1 until the pilot): the API runs on two App Services (`meno-api-staging`, `meno-api-production`) on an existing B1 plan, not a VM** ([ADR-0018](../decisions/0018-azure-app-service.md)). Push to `develop` deploys staging, push to `main` deploys production, through `.github/workflows/deploy-api.yml`. Setup, app settings and URLs: **[AZURE_APP_SERVICE.md](AZURE_APP_SERVICE.md)**. The VM topology below is the target when we outgrow F1 or need Redis / nginx / monitoring on our own host.
 
 ## Target topology
 

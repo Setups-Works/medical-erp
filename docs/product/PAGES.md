@@ -2,7 +2,7 @@
 
 > Every screen MENO will have, grouped A–R (Q delivery and online, R desktop and mobile app screens). **Generated** by `scripts/docs/build_pages.py` from the page list in that script, `FEATURES.md` (phases) and `docs/team/OWNERSHIP_MATRIX.md` (owners): edit those, then re-run the script. MENO Hub shows this catalogue on its Product map with live status.
 
-**378 pages** in 19 sections. Frontend: Meyyarivu 118 · Nitheesh 101 · Ashok 82 · Gokul 76 · — 1.
+**380 pages** in 19 sections. Frontend: Meyyarivu 118 · Nitheesh 100 · Ashok 82 · Gokul 79 · — 1.
 
 - **Phase**: the phase in which the page is complete (latest phase among its features). Pages can appear earlier with partial functionality.
 - **Backend / Frontend / QA**: owners of the page's first feature prefix (QA is never the person who built it). Frontend is split between Meyyarivu, Nitheesh, Ashok and Gokul.
@@ -432,7 +432,9 @@ Every report: date range, filters, server pagination, export (Excel / PDF / CSV)
 | WhatsApp usage | `/admin/integrations/whatsapp/usage` | Messages by category, template status, cost and cap | NTF-08 | P5 | Nitheesh | Meyyarivu | OW | Ashok |
 | Owner digest | `/admin/notifications/digest` | End-of-day summary: contents, time, channel | NTF-07 | P5 | Nitheesh | Meyyarivu | OW | Ashok |
 | License | `/admin/license` | Plan, edition, expiry, limits and usage, masked key, renew | LIC-09, LIC-05, LIC-06, LIC-04, LIC-10 | P6 | Nitheesh | Nitheesh | OW | Ashok |
-| AI assistant | `/assistant` | Read-only questions over the shop's own data | PLT-21 | P7 | Nitheesh | Nitheesh | OW BM AC | Ashok |
+| Assistant settings | `/admin/assistant` | Turn the AI assistant on after the notice, party-names opt-in, quotas, usage and audit of questions | AIA-08, AIA-10, AIA-11 | P7 | Nitheesh | Gokul | OW | Ashok |
+| Assistant documents | `/admin/assistant/documents` | Upload SOPs, policies and supplier terms the assistant may search (optional) | AIA-12 | P7 | Nitheesh | Gokul | OW BM | Ashok |
+| AI assistant | `/assistant` | Read-only questions over the shop's own data: answer text plus data cards, data used, suggested questions; Ask in Ctrl+K; disabled offline | AIA-01, AIA-02, AIA-04, AIA-05, AIA-06, AIA-07, AIA-09, AIA-03 | P7 | Nitheesh | Gokul | OW BM AC | Ashok |
 | Staff training | `/help/training` | Role lessons, quizzes, certificates | ADM-13 | P7 | Nitheesh | Nitheesh | All | Meyyarivu |
 | Security centre | `/admin/security-center` | Security score, MFA coverage, admins, sessions, devices, risky events | SEC-12, SEC-13 | P5 | Nitheesh | Meyyarivu | OW | Ashok |
 | Fraud alerts | `/reports/fraud-alerts` | Insider-fraud alerts with case notes | SEC-05 | P5 | Nitheesh | Meyyarivu | OW BM | Ashok |

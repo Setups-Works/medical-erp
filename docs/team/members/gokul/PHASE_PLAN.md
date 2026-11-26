@@ -35,3 +35,4 @@ Frontend engineer (joined 25-11-2026). Feature tasks for PRC, GST, DSH, RPT, ANX
 
 ## P7 Growth
 - [ ] Reuse dashboard widgets in the owner mobile app with Meyyarivu
+- [ ] [FE] Assistant chat UI design (answer text, data cards, data-used line, suggested questions, offline state) reviewed with Meyyarivu before AIA-01

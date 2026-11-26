@@ -2,7 +2,7 @@
 
 > **Generated** by `scripts/docs/build_pilot_scope.py` from FEATURES.md. Change the rules or the DEFER / FORCE_A lists in that script, never this file. MENO Hub labels these tasks `pilot-a` and `pilot-b`.
 
-Everything else (256 features: Should, Could, P6–P7) is **after the pilot**. Enterprise items (§31) are planned but not needed by a pilot shop.
+Everything else (267 features: Should, Could, P6–P7) is **after the pilot**. Enterprise items (§31) are planned but not needed by a pilot shop.
 
 ## Pilot A — one retail pharmacy, offline counter
 
