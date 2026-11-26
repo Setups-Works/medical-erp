@@ -107,3 +107,14 @@ jobs:
         run: pnpm test
       - if: steps.web.outputs.present == 'true'
         run: pnpm --if-present check:design
+      # E2E smoke (TEST_STRATEGY.md): Playwright against the local MSW mocks, no backend or staging involved.
+      - if: steps.web.outputs.present == 'true'
+        run: pnpm --filter web exec playwright install --with-deps chromium
+      - if: steps.web.outputs.present == 'true'
+        run: pnpm --filter web e2e
+      - if: failure() && steps.web.outputs.present == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report
+          retention-days: 7
