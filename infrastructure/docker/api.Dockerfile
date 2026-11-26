@@ -3,7 +3,7 @@
 # Used by CI (build + Trivy scan) and by docker compose. The free App Service deploy ships the jar instead (ADR-0018).
 
 # ---- build ----
-FROM eclipse-temurin:21.0.13_9-jdk-noble AS build
+FROM eclipse-temurin:24.0.2_12-jdk-noble AS build
 WORKDIR /src
 # Dependencies first so they stay cached until the pom changes.
 COPY .mvn/ .mvn/
@@ -15,7 +15,7 @@ RUN ./mvnw -B -q -DskipTests package \
  && java -Djarmode=tools -jar target/meno-api-*.jar extract --layers --launcher --destination /extracted
 
 # ---- runtime ----
-FROM eclipse-temurin:21.0.13_9-jre-noble
+FROM eclipse-temurin:24.0.2_12-jre-noble
 RUN groupadd --system meno && useradd --system --gid meno --home /app --shell /usr/sbin/nologin meno
 WORKDIR /app
 # Least-changing layers first.
