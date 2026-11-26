@@ -82,6 +82,7 @@ erDiagram
 - `verification(id, tenant_id, user_id, channel[EMAIL|SMS], token_hash unique (SHA-256), expires_at, consumed_at, version)` — built (V202611262200), email links now, SMS OTP later
 - `permission(code)`, `role_permission(role, permission_code)` — built (V202611262101), global seed until per-tenant roles (PLT-07)
 - `user_role(user_id, role)` — temporary until role / permission tables (ADR-0014)
+- `password_reset(id, tenant_id, user_id, token_hash unique (SHA-256), expires_at, used_at, requested_ip, version)` — built (V202611262600), RLS; newest link only, single use (AUT-01)
 - `refresh_token(id, tenant_id, user_id, token_hash unique (SHA-256), family_id, expires_at, revoked_at, replaced_by_id, created_by_ip, user_agent, version)` — reuse of a rotated token revokes the family
 - RLS on these tables is built (#7, V202611262100); login, refresh, logout, sign-up, email-link verification and the bootstrap run with `app.rls_bypass` (TenantContext.callAsSystem), nothing else
 

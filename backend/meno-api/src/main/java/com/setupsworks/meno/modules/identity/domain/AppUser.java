@@ -131,6 +131,14 @@ public class AppUser {
         updatedAt = now;
     }
 
+    /** New password (already hashed); a reset also lifts any lockout from the old password's failures. */
+    public void changePassword(String newHash, Instant now) {
+        passwordHash = newHash;
+        failedAttempts = 0;
+        lockedUntil = null;
+        updatedAt = now;
+    }
+
     public void recordSuccessfulLogin(Instant now) {
         failedAttempts = 0;
         lockedUntil = null;

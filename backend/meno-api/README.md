@@ -46,6 +46,8 @@ With the `local` profile: <http://localhost:8080/swagger-ui.html> (spec: `/v3/ap
 | POST | `/api/v1/auth/logout` | cookie | Revokes the session family, clears the cookie |
 | GET | `/api/v1/auth/signup/options` | – | States (GST codes), start options, terms version, password minimum for the sign-up screen |
 | POST | `/api/v1/auth/signup` | – | Creates tenant + owner + consent, signs in (201); send `Idempotency-Key` (replay → 200, same account) |
+| POST | `/api/v1/auth/password/forgot` | – | `{"email"}` → always 202; emails a single-use link (30 min) |
+| POST | `/api/v1/auth/password/reset` | – | `{"token","password"}` → 204, ends every session; 410 if the link is used / expired |
 | POST | `/api/v1/auth/verify-email` | – | `{"token"}` from the emailed link → 204 |
 | POST | `/api/v1/auth/verify-email/resend` | Bearer | New link (older ones stop working) → 202 |
 | GET | `/api/v1/auth/verification` | Bearer | `{emailVerified, mobileVerified}` |
