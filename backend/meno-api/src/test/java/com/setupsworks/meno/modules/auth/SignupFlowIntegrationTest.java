@@ -46,7 +46,15 @@ class SignupFlowIntegrationTest {
     MockMvc mvc;
 
     @Autowired
+    TestcontainersConfiguration.AdminSql admin;
+
     JdbcTemplate jdbc;
+
+    @org.junit.jupiter.api.BeforeEach
+    void adminJdbc() {
+        // Assertions read across tenants: use the superuser connection, not the app's RLS-bound one.
+        jdbc = admin.jdbc();
+    }
 
     private static String body(String mobile, String email, String state, String honeypot) {
         return BODY.formatted(mobile, email, state, honeypot);
