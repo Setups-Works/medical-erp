@@ -1,0 +1,82 @@
+# CI for every pull request into develop / main (Hub #134). Make the two job names required checks in
+# branch protection: "Backend verify" and "API image + scan".
+# Not yet: frontend jobs (apps/web has no code yet), test-vector parity (P3), CodeQL (needs GitHub
+# Advanced Security on a private repo).
+# Rollback: delete this file or disable it in the Actions tab; nothing else depends on it.
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend/meno-api
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      # Unit + Modulith boundaries + PostgreSQL 17 integration tests (Docker is available on the runner).
+      - run: ./mvnw -B -ntp verify
+      # OpenApiExportTest rewrote the spec; a diff means the PR changed the API without committing it (rule 9).
+      - name: OpenAPI spec is committed
+        working-directory: .
+        run: |
+          if ! git diff --exit-code -- contracts/openapi/meno-api.yaml; then
+            echo "::error::contracts/openapi/meno-api.yaml is out of date. Run ./mvnw verify in backend/meno-api and commit it."
+            exit 1
+          fi
+      - name: Test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: backend/meno-api/target/surefire-reports/
+          retention-days: 7
+
+  image:
+    name: API image + scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: backend/meno-api
+          file: infrastructure/docker/api.Dockerfile
+          tags: meno-api:ci
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      # Fails on fixable CRITICAL vulnerabilities in the OS packages or the jar's dependencies.
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0, pinned by SHA (third-party action)
+        with:
+          image-ref: meno-api:ci
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+      # HIGH is reported but does not block yet.
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0, pinned by SHA (third-party action)
+        with:
+          image-ref: meno-api:ci
+          severity: HIGH
+          ignore-unfixed: true
+          exit-code: "0"
+          skip-setup-trivy: true

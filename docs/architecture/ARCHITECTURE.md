@@ -184,6 +184,8 @@ flowchart LR
 
 Details: [docs/deployment/AZURE_DEPLOYMENT.md](../deployment/AZURE_DEPLOYMENT.md).
 
+**Until the pilot ([ADR-0017](../decisions/0017-azure-app-service-free-tier.md)):** GitHub Actions tests every PR, then deploys the jar to a free Azure App Service: `develop` → staging, `main` → production, each followed by a smoke test. The VM + Docker Compose flow above is the target once we need Redis, nginx and monitoring on our own host. Setup: [AZURE_APP_SERVICE.md](../deployment/AZURE_APP_SERVICE.md).
+
 ## 7. Quality attributes and how we meet them
 
 | Attribute | Target | Mechanism |

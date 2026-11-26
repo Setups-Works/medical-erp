@@ -1,0 +1,104 @@
+# Auto-deploy meno-api to Azure App Service (free F1, Java 21, ADR-0017; Hub #135 / #141).
+#   push to develop -> GitHub Environment "staging"    -> staging App Service
+#   push to main    -> GitHub Environment "production" -> production App Service
+# Each Environment holds (Settings -> Environments):
+#   variable AZURE_WEBAPP_NAME             the App Service name (URL https://<name>.azurewebsites.net)
+#   secret   AZURE_WEBAPP_PUBLISH_PROFILE  the app's publish profile XML (portal -> app -> Download publish profile)
+# App settings (DB, JWT keys, ...) live on the App Service itself, never here. Setup: docs/deployment/AZURE_APP_SERVICE.md
+# Rollback: docs/runbooks/rollback.md (re-run the last good run of this workflow). To stop auto-deploys,
+# disable this workflow in the Actions tab.
+name: Deploy API
+
+on:
+  push:
+    branches: [develop, main]
+    paths:
+      - backend/meno-api/**
+      - .github/workflows/deploy-api.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Verify + package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend/meno-api
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      # Same gate as CI: nothing is deployed unless every test passes on this exact commit.
+      - run: ./mvnw -B -ntp verify
+      - name: Rename jar
+        run: cp target/meno-api-*.jar target/app.jar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: meno-api-jar
+          path: backend/meno-api/target/app.jar
+          retention-days: 30
+
+  deploy:
+    name: Deploy to ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    needs: build
+    # Only the two long-lived branches deploy; a manual run from any other branch stops here.
+    if: github.ref_name == 'develop' || github.ref_name == 'main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    environment:
+      name: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+      url: ${{ steps.deploy.outputs.webapp-url }}
+    # One deploy per environment at a time; a newer push waits instead of cancelling a half-done deploy.
+    concurrency:
+      group: deploy-api-${{ github.ref_name }}
+      cancel-in-progress: false
+    steps:
+      - name: Check environment settings
+        env:
+          APP: ${{ vars.AZURE_WEBAPP_NAME }}
+          PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        run: |
+          missing=0
+          [ -n "$APP" ] || { echo "::error::Variable AZURE_WEBAPP_NAME is not set in this GitHub Environment."; missing=1; }
+          [ -n "$PROFILE" ] || { echo "::error::Secret AZURE_WEBAPP_PUBLISH_PROFILE is not set in this GitHub Environment."; missing=1; }
+          exit $missing
+      - uses: actions/download-artifact@v4
+        with:
+          name: meno-api-jar
+      - id: deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: app.jar
+          type: JAR
+          clean: true
+          restart: true
+      # F1 apps sleep when idle and start slowly: allow up to ~10 minutes for the JVM and Flyway.
+      - name: Smoke test
+        env:
+          URL: ${{ steps.deploy.outputs.webapp-url }}
+          IS_PROD: ${{ github.ref_name == 'main' }}
+        run: |
+          for i in $(seq 1 40); do
+            if curl -fsS --max-time 20 "$URL/actuator/health" | grep -q '"UP"'; then
+              echo "Healthy: $URL/actuator/health"
+              break
+            fi
+            [ "$i" = 40 ] && { echo "::error::$URL did not report UP. See docs/runbooks/rollback.md"; exit 1; }
+            sleep 15
+          done
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$URL/api/v1/auth/login")
+          [ "$code" = 400 ] || { echo "::error::POST /api/v1/auth/login with an empty body returned $code, expected 400"; exit 1; }
+          if [ "$IS_PROD" = true ]; then
+            docs=$(curl -s -o /dev/null -w '%{http_code}' "$URL/v3/api-docs")
+            [ "$docs" = 404 ] || { echo "::error::Production serves /v3/api-docs ($docs). Set MENO_API_DOCS_ENABLED=false."; exit 1; }
+          fi
+          echo "Smoke test passed: $URL"

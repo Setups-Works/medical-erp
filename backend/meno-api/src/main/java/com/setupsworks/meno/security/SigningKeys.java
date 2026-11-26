@@ -36,11 +36,15 @@ final class SigningKeys {
 
     static ECKey load(JwtProperties properties) {
         if (properties.privateKeyPath() != null && properties.publicKeyPath() != null) {
-            return fromPem(properties.privateKeyPath(), properties.publicKeyPath(), properties.keyId());
+            return fromPem(read(properties.privateKeyPath()), read(properties.publicKeyPath()), properties.keyId());
+        }
+        if (hasText(properties.privateKeyPem()) && hasText(properties.publicKeyPem())) {
+            return fromPem(properties.privateKeyPem(), properties.publicKeyPem(), properties.keyId());
         }
         if (!properties.allowEphemeralKey()) {
             throw new IllegalStateException("Set MENO_JWT_PRIVATE_KEY_PATH and MENO_JWT_PUBLIC_KEY_PATH "
-                    + "(ES256 P-256 PEM files). See SigningKeys for the openssl commands.");
+                    + "(ES256 P-256 PEM files), or MENO_JWT_PRIVATE_KEY and MENO_JWT_PUBLIC_KEY (the PEM text). "
+                    + "See SigningKeys for the openssl commands.");
         }
         log.warn("Signing access tokens with a throw-away key: tokens stop working when the app restarts. "
                 + "Local/test only.");
@@ -61,17 +65,25 @@ final class SigningKeys {
         }
     }
 
-    private static ECKey fromPem(Path privatePath, Path publicPath, String keyId) {
+    private static String read(Path path) {
+        try {
+            return Files.readString(path);
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not read the JWT key file " + path, e);
+        }
+    }
+
+    private static ECKey fromPem(String privatePem, String publicPem, String keyId) {
         try {
             KeyFactory factory = KeyFactory.getInstance("EC");
             ECPrivateKey privateKey = (ECPrivateKey) factory.generatePrivate(
-                    new PKCS8EncodedKeySpec(pemBody(Files.readString(privatePath), "PRIVATE KEY")));
+                    new PKCS8EncodedKeySpec(pemBody(privatePem, "PRIVATE KEY")));
             ECPublicKey publicKey = (ECPublicKey) factory.generatePublic(
-                    new X509EncodedKeySpec(pemBody(Files.readString(publicPath), "PUBLIC KEY")));
+                    new X509EncodedKeySpec(pemBody(publicPem, "PUBLIC KEY")));
             return new ECKey.Builder(Curve.P_256, publicKey).privateKey(privateKey).keyID(keyId).build();
-        } catch (IOException | GeneralSecurityException e) {
+        } catch (GeneralSecurityException | IllegalArgumentException e) {
             // Never include key material in the message.
-            throw new IllegalStateException("Could not read the JWT key files (expect PKCS#8 / X.509 PEM, P-256)", e);
+            throw new IllegalStateException("Could not read the JWT keys (expect PKCS#8 / X.509 PEM, P-256)", e);
         }
     }
 
@@ -83,6 +95,12 @@ final class SigningKeys {
         if (from < 0 || to < 0) {
             throw new IllegalStateException("Expected a PEM block '" + begin + "' (use openssl genpkey, not ecparam)");
         }
-        return Base64.getMimeDecoder().decode(pem.substring(from + begin.length(), to));
+        // App settings often flatten newlines to spaces or a literal "\n"; the body is plain base64 either way.
+        String body = pem.substring(from + begin.length(), to).replace("\\n", "").replaceAll("\\s", "");
+        return Base64.getDecoder().decode(body);
+    }
+
+    private static boolean hasText(String value) {
+        return value != null && !value.isBlank();
     }
 }

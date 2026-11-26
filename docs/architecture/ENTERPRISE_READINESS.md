@@ -6,7 +6,7 @@
 
 | Tier | Who | Availability target | RPO / RTO | Support | Hosting |
 |---|---|---|---|---|---|
-| **Pilot** | 1–5 friendly shops | 99.0 % monthly (business hours focus) | 15 min / 4 h | Business hours, WhatsApp + phone | Current single-VM Docker Compose (AZURE_DEPLOYMENT.md) |
+| **Pilot** | 1–5 friendly shops | 99.0 % monthly (business hours focus) | 15 min / 4 h | Business hours, WhatsApp + phone | Single VM Docker Compose or App Service B1 (AZURE_DEPLOYMENT.md, ADR-0017); free F1 is for staging / pre-pilot only |
 | **Standard** | Paying single-store and small chains | 99.5 % | 15 min / 2 h | 9–9 six days, P1 response 1 h | Managed PostgreSQL with PITR, 2 app nodes |
 | **Enterprise** | Chains 10+ stores, large distributors | 99.9 % | 5 min / 1 h | 24×7 for P1, named account manager, quarterly review | Multi-zone, read replica, separate tenant DB option |
 
