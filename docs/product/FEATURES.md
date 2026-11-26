@@ -365,7 +365,7 @@ Added after mapping every page in [PAGES.md](PAGES.md) to a feature. Each page i
 
 | ID | Feature | Ed. | Ph. | Pri. |
 |---|---|---|---|---|
-| AUT-01 | Forgot / reset password (single-use emailed token, 30 min expiry, all sessions revoked on reset); sign in with email **or** username | B | P1 | M |
+| AUT-01 | Forgot / reset password (single-use emailed token, 30 min expiry, all sessions revoked on reset); sign in with email **or** mobile | B | P1 | M |
 | AUT-02 | Initial configuration wizard: tax settings, invoice number series, currency (INR), units, rounding, negative-stock policy (writes tenant settings, nothing hard-coded) | B | P2 | M |
 | AUT-03 | Onboarding checklist: setup steps with progress (company, licence, GST, branch, users, items, opening stock, printer) until the business is ready to bill | B | P2 | S |
 

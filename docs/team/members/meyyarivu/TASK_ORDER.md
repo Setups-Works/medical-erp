@@ -27,7 +27,7 @@
 | 9 | Page patterns: ListPage, FormPage, ReportPage, DocumentGrid; documented in `apps/web/AGENTS.md` | Groundwork | — |
 | 10 | Form validation kit: Zod schemas in `packages/validation`, field errors from Problem Details, no hard-coded option lists | Groundwork | — |
 | 11 | Auth pages: login, forgot/reset password, accept invitation, signup wizard; TanStack Query, error handling, MSW mocks | Groundwork | — |
-| 12 | AUT-01 Forgot / reset password (single-use emailed token, 30 min expiry, all sessions revoked on reset); sign in with email or username | Feature | Nitheesh |
+| 12 | AUT-01 Forgot / reset password (single-use emailed token, 30 min expiry, all sessions revoked on reset); sign in with email or mobile | Feature | Nitheesh |
 | 13 | AUT-04 Sign-up and verification: owner name, mobile OTP, email link, password policy, business name, state, partner code, trial / demo / license choice, DPDP notice acceptance stored with version; rate limits and bot checks | Feature | Nitheesh |
 | 14 | NAV-01 App sidebar navigation: Dashboard + 10 groups (Sales, Purchase, Inventory, Masters, Wholesale, Finance, CRM & Engagement, Reports, GST & Compliance, Administration) exactly as in NAVIGATION.md; hides items by edition and permission; collapsible rail; remembers open groups | Feature | Nitheesh |
 | 15 | Design-check script (`scripts/design/check-design.mjs`) running in pre-commit, Claude hook and CI | Readiness | — |
