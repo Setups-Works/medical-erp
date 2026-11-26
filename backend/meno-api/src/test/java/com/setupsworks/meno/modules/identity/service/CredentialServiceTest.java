@@ -3,6 +3,8 @@ package com.setupsworks.meno.modules.identity.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.Clock;
@@ -81,5 +83,22 @@ class CredentialServiceTest {
 
         assertThat(service.check("owner@test.local", "right-pass")).isInstanceOf(Result.Disabled.class);
         assertThat(service.findSignInAllowed(user.getId())).isEmpty();
+    }
+
+    @Test
+    void mobileInAnyCommonFormFindsTheSameUser() {
+        when(users.findByMobile("+919876543210")).thenReturn(Optional.of(user));
+
+        for (String mobile : new String[] {"9876543210", "+919876543210", "919876543210", "98765 43210", "98765-43210"}) {
+            assertThat(service.check(mobile, "right-pass")).isInstanceOf(Result.Ok.class);
+        }
+    }
+
+    @Test
+    void malformedIdentifierIsAWrongPasswordAndNeverQueried() {
+        for (String identifier : new String[] {"5876543210", "98765", "", "  ", "abc"}) {
+            assertThat(service.check(identifier, "right-pass")).isInstanceOf(Result.InvalidCredentials.class);
+        }
+        verify(users, never()).findByMobile(anyString());
     }
 }

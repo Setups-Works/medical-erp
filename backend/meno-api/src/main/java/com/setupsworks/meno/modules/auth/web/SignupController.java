@@ -77,7 +77,7 @@ class SignupController {
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
     @ApiResponse(responseCode = "403", description = "IDENTITY_SIGNUP_CLOSED",
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
-    @ApiResponse(responseCode = "409", description = "IDENTITY_EMAIL_TAKEN",
+    @ApiResponse(responseCode = "409", description = "IDENTITY_EMAIL_TAKEN, IDENTITY_MOBILE_TAKEN",
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
     @ApiResponse(responseCode = "422", description = "COMMON_IDEMPOTENCY_MISMATCH (key used for another sign-up)",
             content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
