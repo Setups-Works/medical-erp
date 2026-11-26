@@ -93,7 +93,7 @@ jobs:
           if [ -f apps/web/package.json ]; then echo "present=true" >> "$GITHUB_OUTPUT"
           else echo "present=false" >> "$GITHUB_OUTPUT"; echo "apps/web has no package.json yet: nothing to check."; fi
       - if: steps.web.outputs.present == 'true'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
       - if: steps.web.outputs.present == 'true'
         uses: actions/setup-node@v5
         with:
