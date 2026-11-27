@@ -15,5 +15,8 @@ public interface VerificationRepository extends JpaRepository<Verification, UUID
     List<Verification> findByUserIdAndChannelAndConsumedAtIsNullOrderByCreatedAtDesc(UUID userId,
             Verification.Channel channel);
 
+    Optional<Verification> findFirstByUserIdAndChannelAndConsumedAtIsNullOrderByCreatedAtDesc(UUID userId,
+            Verification.Channel channel);
+
     Optional<Verification> findFirstByUserIdAndChannelOrderByCreatedAtDesc(UUID userId, Verification.Channel channel);
 }

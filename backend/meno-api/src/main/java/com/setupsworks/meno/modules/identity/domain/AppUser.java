@@ -187,6 +187,13 @@ public class AppUser {
         }
     }
 
+    public void markMobileVerified(Instant now) {
+        if (mobileVerifiedAt == null) {
+            mobileVerifiedAt = now;
+            updatedAt = now;
+        }
+    }
+
     public boolean isEmailVerified() {
         return emailVerifiedAt != null;
     }

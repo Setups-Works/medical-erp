@@ -1,6 +1,7 @@
 package com.setupsworks.meno.modules.auth.web;
 
 import com.setupsworks.meno.modules.identity.api.EmailVerification;
+import com.setupsworks.meno.modules.identity.api.MobileVerification;
 import com.setupsworks.meno.security.TenantContext;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import org.springframework.http.HttpStatus;
@@ -24,18 +26,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Email verification for the /verify page (AUT-04, ONBOARDING.md step 2). */
+/** Email link and mobile OTP for the /verify page (AUT-04, ONBOARDING.md step 2). */
 @RestController
 @RequestMapping(path = "/api/v1/auth", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Verification", description = "Confirm the owner's email with the one-time link.")
+@Tag(name = "Verification", description = "Confirm the owner's email (one-time link) and mobile (SMS code).")
 class VerificationController {
 
     private static final String PROBLEM = "application/problem+json";
 
     private final EmailVerification verification;
+    private final MobileVerification mobile;
 
-    VerificationController(EmailVerification verification) {
+    VerificationController(EmailVerification verification, MobileVerification mobile) {
         this.verification = verification;
+        this.mobile = mobile;
     }
 
     @Operation(summary = "Confirm an email with the token from the link",
@@ -68,6 +72,39 @@ class VerificationController {
     @GetMapping("/verification")
     EmailVerification.Status status() {
         return verification.status(TenantContext.userId().orElseThrow());
+    }
+
+    @Operation(summary = "Send the 6-digit SMS code",
+            description = "To the mobile the user signed up with. Works for 5 minutes; resend after 30 s; older codes stop working.")
+    @ApiResponse(responseCode = "202", description = "Sent")
+    @ApiResponse(responseCode = "409", description = "IDENTITY_ALREADY_VERIFIED",
+            content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "429", description = "IDENTITY_VERIFICATION_TOO_SOON",
+            content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "503", description = "NOTIFICATION_CHANNEL_DISABLED (no SMS provider configured)",
+            content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
+    @PostMapping("/verify-mobile/send")
+    ResponseEntity<Void> sendMobileOtp() {
+        mobile.send(TenantContext.userId().orElseThrow());
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    @Operation(summary = "Confirm the SMS code", description = "3 tries per code; then ask for a new code.")
+    @ApiResponse(responseCode = "204", description = "Mobile verified")
+    @ApiResponse(responseCode = "400",
+            description = "IDENTITY_VERIFICATION_INVALID (property attemptsLeft), IDENTITY_VERIFICATION_EXPIRED",
+            content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "409", description = "IDENTITY_ALREADY_VERIFIED",
+            content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "423", description = "IDENTITY_VERIFICATION_LOCKED after 3 wrong codes; send a new code",
+            content = @Content(mediaType = PROBLEM, schema = @Schema(implementation = ProblemDetail.class)))
+    @PostMapping("/verify-mobile")
+    ResponseEntity<Void> verifyMobile(@Valid @RequestBody VerifyMobileRequest request) {
+        mobile.verify(TenantContext.userId().orElseThrow(), request.code());
+        return ResponseEntity.noContent().build();
+    }
+
+    record VerifyMobileRequest(@NotBlank @Pattern(regexp = "^[0-9]{6}$", message = "Enter the 6-digit code.") String code) {
     }
 
     record VerifyRequest(@NotBlank @Size(max = 100) String token) {

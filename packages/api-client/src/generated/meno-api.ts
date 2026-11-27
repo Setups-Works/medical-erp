@@ -241,6 +241,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/verify-mobile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm the SMS code
+         * @description 3 tries per code; then ask for a new code.
+         */
+        post: operations["verifyMobile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/verify-mobile/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send the 6-digit SMS code
+         * @description To the mobile the user signed up with. Works for 5 minutes; resend after 30 s; older codes stop working.
+         */
+        post: operations["sendMobileOtp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/gstin-verifications/{gstin}": {
         parameters: {
             query?: never;
@@ -744,6 +784,9 @@ export interface components {
             /** Format: uuid */
             tenantId?: string;
         };
+        VerifyMobileRequest: {
+            code: string;
+        };
         VerifyRequest: {
             token: string;
         };
@@ -1162,6 +1205,100 @@ export interface operations {
             };
             /** @description IDENTITY_VERIFICATION_TOO_SOON */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    verifyMobile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyMobileRequest"];
+            };
+        };
+        responses: {
+            /** @description Mobile verified */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description IDENTITY_VERIFICATION_INVALID (property attemptsLeft), IDENTITY_VERIFICATION_EXPIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description IDENTITY_ALREADY_VERIFIED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description IDENTITY_VERIFICATION_LOCKED after 3 wrong codes; send a new code */
+            423: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    sendMobileOtp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Sent */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description IDENTITY_ALREADY_VERIFIED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description IDENTITY_VERIFICATION_TOO_SOON */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description NOTIFICATION_CHANNEL_DISABLED (no SMS provider configured) */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -4,40 +4,6 @@
  */
 
 export interface paths {
-    "/api/v1/auth/verify-mobile/send": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Send the 6-digit SMS code (5 min validity, resend after 30 s, ONBOARDING.md step 2) */
-        post: operations["sendMobileOtp"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/verify-mobile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Confirm the SMS code (3 tries per code) */
-        post: operations["verifyMobile"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/invitations/{token}": {
         parameters: {
             query?: never;
@@ -103,9 +69,6 @@ export interface components {
                 roles: string[];
             };
         };
-        VerifyMobileRequest: {
-            code: string;
-        };
         InvitationView: {
             businessName: string;
             roleName: string;
@@ -130,82 +93,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    sendMobileOtp: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Sent */
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description IDENTITY_ALREADY_VERIFIED */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["Problem"];
-                };
-            };
-            /** @description IDENTITY_VERIFICATION_TOO_SOON */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["Problem"];
-                };
-            };
-        };
-    };
-    verifyMobile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VerifyMobileRequest"];
-            };
-        };
-        responses: {
-            /** @description Mobile verified */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description IDENTITY_VERIFICATION_INVALID (property attemptsLeft), IDENTITY_VERIFICATION_EXPIRED */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["Problem"];
-                };
-            };
-            /** @description IDENTITY_VERIFICATION_LOCKED after 3 wrong codes; send a new code */
-            423: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["Problem"];
-                };
-            };
-        };
-    };
     getInvitation: {
         parameters: {
             query?: never;

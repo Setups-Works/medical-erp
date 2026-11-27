@@ -1,8 +1,11 @@
 package com.setupsworks.meno.modules.identity.domain;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.setupsworks.meno.common.crypto.OneTimeTokens;
 import com.setupsworks.meno.common.persistence.Uuids;
 
 import jakarta.persistence.Column;
@@ -13,7 +16,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
-/** A one-time email link (SMS codes later). Single use, time-limited; only the token's hash is stored. */
+/**
+ * A one-time email link or SMS code. Single use, time-limited; only a hash is stored. SMS codes are short
+ * (6 digits), so their hash is salted with the row id and wrong tries are counted ({@link #attempts}).
+ */
 @Entity
 @Table(name = "verification")
 public class Verification {
@@ -48,6 +54,9 @@ public class Verification {
     @Column(name = "created_by")
     private UUID createdBy;
 
+    @Column(nullable = false)
+    private int attempts;
+
     @Version
     private long version;
 
@@ -64,6 +73,31 @@ public class Verification {
         this.expiresAt = expiresAt;
         this.createdAt = now;
         this.createdBy = userId;
+    }
+
+    /** New SMS code for {@code userId}; the hash is salted with this row's id so equal codes never collide. */
+    public static Verification sms(UUID tenantId, UUID userId, String code, Instant expiresAt, Instant now) {
+        Verification v = new Verification(tenantId, userId, Channel.SMS, "pending", expiresAt, now);
+        v.tokenHash = v.codeHash(code);
+        return v;
+    }
+
+    /** Constant-time check of an SMS code. */
+    public boolean matchesCode(String code) {
+        return MessageDigest.isEqual(tokenHash.getBytes(StandardCharsets.UTF_8),
+                codeHash(code).getBytes(StandardCharsets.UTF_8));
+    }
+
+    public int recordWrongAttempt() {
+        return ++attempts;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
+    private String codeHash(String code) {
+        return OneTimeTokens.sha256Hex(id + ":" + code);
     }
 
     public boolean isUsable(Instant now) {
