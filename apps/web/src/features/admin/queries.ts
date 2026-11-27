@@ -44,3 +44,11 @@ export const useSetRolePermissions = () =>
 export const useResetRole = () => useRoleMutation((code: string) => api.post("/api/v1/admin/roles/{code}/reset", { params: { code } }));
 
 export const useArchiveRole = () => useRoleMutation((code: string) => api.delete("/api/v1/admin/roles/{code}", { params: { code } }));
+
+/** One matrix cell: give or take one permission from one role. Idempotent on the API, so repeated clicks are safe. */
+export const useSetGrant = () =>
+  useRoleMutation(({ permission, role, granted }: { permission: string; role: string; granted: boolean }) =>
+    granted
+      ? api.put("/api/v1/admin/permissions/{permission}/roles/{role}", { params: { permission, role } })
+      : api.delete("/api/v1/admin/permissions/{permission}/roles/{role}", { params: { permission, role } }),
+  );

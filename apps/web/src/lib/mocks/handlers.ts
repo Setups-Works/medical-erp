@@ -304,6 +304,29 @@ const roleHandlers = [
       });
     }),
   ),
+  ...(["put", "delete"] as const).map((method) =>
+    http[method](
+      `${API}/admin/permissions/:permission/roles/:role`,
+      withAuth<{ permission: string; role: string }>(({ tenant, user, params }) => {
+        if (!canRoles(user, true)) return denied();
+        const all: readonly (readonly [string, string])[] = PERMISSION_MODULES.flatMap((m): readonly (readonly [string, string])[] => m.permissions);
+        const entry = all.find(([code]) => code === params.permission);
+        if (!entry) return problem(404, "IDENTITY_PERMISSION_NOT_FOUND", "Permission not found.");
+        const d = roleDetail(tenant, params.role);
+        if (d instanceof Response) return d;
+        if (d.locked) return problem(409, "IDENTITY_ROLE_LOCKED", `${d.label} always has every permission, so it can't be changed.`);
+        const codes = new Set(effectivePerms(tenant, params.role));
+        const changed = method === "put" ? !codes.has(params.permission) : codes.has(params.permission);
+        if (changed) {
+          if (method === "put") codes.add(params.permission);
+          else codes.delete(params.permission);
+          (tenant.rolePermissions ??= {})[params.role] = { codes: [...codes].sort(), version: d.permissionsVersion + 1 };
+          db.save();
+        }
+        return HttpResponse.json({ code: entry[0], description: entry[1], roleCodes: tenantRoles(tenant).filter((r) => effectivePerms(tenant, r.code).includes(params.permission)).map((r) => r.code) });
+      }),
+    ),
+  ),
   http.get(
     `${API}/admin/roles/:code`,
     withAuth<{ code: string }>(({ tenant, user, params }) => {

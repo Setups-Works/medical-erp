@@ -27,3 +27,15 @@ export function toggle(list: readonly string[], code: string, on: boolean): stri
 
 /** True when two permission lists hold the same codes. */
 export const sameSet = (a: readonly string[], b: readonly string[]): boolean => a.length === b.length && a.every((c) => b.includes(c));
+
+type Catalogue = { modules?: { code?: string; label?: string; permissions?: { code?: string; description?: string; roleCodes?: string[] }[] }[] };
+
+/** Modules with only the permissions whose description or code contains `q` (case-insensitive); empty modules go. */
+export function filterCatalogue<T extends Catalogue>(catalogue: T, q: string): NonNullable<T["modules"]> {
+  const needle = q.trim().toLowerCase();
+  const modules = (catalogue.modules ?? []) as NonNullable<T["modules"]>;
+  if (!needle) return modules;
+  return modules
+    .map((m) => ({ ...m, permissions: (m.permissions ?? []).filter((p) => `${p.description ?? ""} ${p.code ?? ""}`.toLowerCase().includes(needle)) }))
+    .filter((m) => m.permissions.length > 0) as NonNullable<T["modules"]>;
+}

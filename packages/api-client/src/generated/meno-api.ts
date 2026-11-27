@@ -21,6 +21,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/permissions/{permission}/roles/{role}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Give a role this permission
+         * @description Idempotent. For a default role this makes your own copy of its list (reset it on the role page).
+         */
+        put: operations["grantPermission"];
+        post?: never;
+        /**
+         * Take this permission from a role
+         * @description Idempotent.
+         */
+        delete: operations["revokePermission"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/roles": {
         parameters: {
             query?: never;
@@ -1264,6 +1288,88 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PermissionCatalogue"];
+                };
+            };
+        };
+    };
+    grantPermission: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                permission: string;
+                role: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The permission with the roles that hold it now */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionEntry"];
+                };
+            };
+            /** @description IDENTITY_PERMISSION_NOT_FOUND, IDENTITY_ROLE_NOT_FOUND (also another tenant's role) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionEntry"];
+                };
+            };
+            /** @description IDENTITY_ROLE_LOCKED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionEntry"];
+                };
+            };
+        };
+    };
+    revokePermission: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                permission: string;
+                role: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The permission with the roles that hold it now */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionEntry"];
+                };
+            };
+            /** @description IDENTITY_PERMISSION_NOT_FOUND, IDENTITY_ROLE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionEntry"];
+                };
+            };
+            /** @description IDENTITY_ROLE_LOCKED, IDENTITY_LAST_ADMIN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionEntry"];
                 };
             };
         };

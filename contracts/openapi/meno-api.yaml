@@ -44,6 +44,81 @@ paths:
       summary: "Every permission by module, with the roles that hold it for your business"
       tags:
       - Permissions
+  /api/v1/admin/permissions/{permission}/roles/{role}:
+    delete:
+      description: Idempotent.
+      operationId: revokePermission
+      parameters:
+      - in: path
+        name: permission
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: role
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionEntry"
+          description: The permission with the roles that hold it now
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionEntry"
+          description: "IDENTITY_PERMISSION_NOT_FOUND, IDENTITY_ROLE_NOT_FOUND"
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionEntry"
+          description: "IDENTITY_ROLE_LOCKED, IDENTITY_LAST_ADMIN"
+      summary: Take this permission from a role
+      tags:
+      - Permissions
+    put:
+      description: Idempotent. For a default role this makes your own copy of its
+        list (reset it on the role page).
+      operationId: grantPermission
+      parameters:
+      - in: path
+        name: permission
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: role
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionEntry"
+          description: The permission with the roles that hold it now
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionEntry"
+          description: "IDENTITY_PERMISSION_NOT_FOUND, IDENTITY_ROLE_NOT_FOUND (also\
+            \ another tenant's role)"
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionEntry"
+          description: IDENTITY_ROLE_LOCKED
+      summary: Give a role this permission
+      tags:
+      - Permissions
   /api/v1/admin/roles:
     get:
       operationId: listRoles
