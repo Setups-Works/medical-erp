@@ -24,7 +24,7 @@ export default defineConfig({
   webServer: {
     command: `pnpm exec msw init public --save=false && pnpm exec next dev -p ${PORT}`,
     url: `http://localhost:${PORT}/login/`,
-    env: { NEXT_PUBLIC_API_MOCKING: "all" },
+    env: { NEXT_PUBLIC_API_MOCKING: "all", NEXT_DIST_DIR: ".next-e2e" }, // own build folder: never mixes with `pnpm dev`
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
