@@ -109,7 +109,7 @@ erDiagram
 - `party_bank_account(id, tenant_id, party_id, account_type, bank_name, holder_name, account_no_enc, account_no_last4, ifsc, branch, upi_id, is_primary, approved_by, approved_at)` — account number encrypted at rest
 - `party_reminder(party_id, tenant_id, enabled, days_before int[], on_due boolean, custom_days int[], channels text[])`
 - `party_patient(party_id, tenant_id, dob, gender, allergies, chronic_conditions, doctor_id null, abha_no, consent_at)` — health data, permission-gated
-- Reference (not tenant-owned): `ref_pincode(pincode, state_code, district, city)`, `ref_ifsc(ifsc, bank, branch, city)` (PLT-22)
+- Reference (not tenant-owned): `ref_pincode(pincode, state_code, district, localities text[])`, `ref_ifsc(ifsc, bank, branch, address, city, district, state)` (PLT-22) — built (V202611272000) in module `platform`; everyone reads, only the platform realm writes (RLS). Registry `reference_dataset(code, source, licence, refresh_months, owner_module, loadable, row_count, source_date, loaded_at, loaded_by)` and history `reference_dataset_load(id, dataset_code, status[LOADED|REJECTED], file_name, file_sha256, rows_read/loaded/skipped, reason_code, problems jsonb, loaded_by, started_at, finished_at)`. Platform staff (ADR-0020): `platform_user`, `platform_permission`, `platform_user_permission` (RLS: platform realm only)
 
 ### documents and controls (DOCUMENT_FIELDS.md, FEATURES §25)
 - `period_lock(id, tenant_id, company_id, from_date, to_date, locked_by, locked_at, unlocked_by null, reason)` — posting checks it (PLT-23)

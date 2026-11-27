@@ -12,8 +12,6 @@ security:
 tags:
 - description: "MENO's default roles and your own: names, permissions, reset, archive."
   name: Roles
-- description: Set-up steps from sign-up to go-live; resume anywhere.
-  name: Onboarding
 - description: Open a staff invitation link and join the business.
   name: Invitations
 - description: "What each role may do, permission by permission."
@@ -22,16 +20,22 @@ tags:
   name: Auth
 - description: Create a pharmacy business (tenant) and its owner account.
   name: Sign-up
-- description: Invite staff with a role and branches; resend or revoke open invitations.
-  name: Team
 - description: "Staff accounts: roles, branch access, deactivate and reactivate."
   name: Users
-- description: Forgot and reset password with a single-use emailed link.
-  name: Password
 - description: Confirm the owner's email (one-time link) and mobile (SMS code).
   name: Verification
 - description: Verify a GSTIN and fetch its registration details.
   name: GSTIN
+- description: Set-up steps from sign-up to go-live; resume anywhere.
+  name: Onboarding
+- description: MENO staff only (ADR-0020). Tenant tokens get 403 here.
+  name: Platform
+- description: Invite staff with a role and branches; resend or revoke open invitations.
+  name: Team
+- description: "Shared lists (PIN codes, IFSC). 404 when unknown or not loaded yet."
+  name: Reference data
+- description: Forgot and reset password with a single-use emailed link.
+  name: Password
 paths:
   /api/v1/admin/permissions:
     get:
@@ -1417,6 +1421,214 @@ paths:
       summary: "Skip an optional step (team, data, devices, plan, practice)"
       tags:
       - Onboarding
+  /api/v1/platform/auth/login:
+    post:
+      description: "Returns a platform access token (no refresh token: sign in again\
+        \ when it expires). Accepted only by /api/v1/platform/*."
+      operationId: platformLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlatformLoginRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformSession"
+          description: Signed in
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PLATFORM_INVALID_CREDENTIALS
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PLATFORM_ACCOUNT_DISABLED
+        "423":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: PLATFORM_LOCKED
+      security: []
+      summary: MENO staff sign-in
+      tags:
+      - Platform
+  /api/v1/platform/auth/me:
+    get:
+      operationId: platformMe
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformStaff"
+          description: OK
+      summary: The signed-in staff member and their permissions
+      tags:
+      - Platform
+  /api/v1/platform/reference-data:
+    get:
+      operationId: referenceDatasets
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferenceDatasetList"
+          description: OK
+      summary: Reference lists with their refresh status
+      tags:
+      - Platform
+  /api/v1/platform/reference-data/{code}/loads:
+    get:
+      operationId: referenceLoads
+      parameters:
+      - in: path
+        name: code
+        required: true
+        schema:
+          type: string
+          pattern: "^[A-Z_]{2,40}$"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferenceLoadList"
+          description: Found
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: REFERENCE_DATASET_NOT_FOUND
+      summary: Last 20 load attempts of a list (loaded and refused)
+      tags:
+      - Platform
+    post:
+      description: "CSV as the source publishes it (India Post PIN directory, RBI\
+        \ IFSC list). sourceDate is the publication date of the file. A file much\
+        \ smaller than today's list is refused unless replaceAnyway=true."
+      operationId: loadReferenceFile
+      parameters:
+      - in: path
+        name: code
+        required: true
+        schema:
+          type: string
+          pattern: "^[A-Z_]{2,40}$"
+      - in: query
+        name: sourceDate
+        required: true
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: replaceAnyway
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferenceLoad"
+          description: Loaded
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: "REFERENCE_FILE_COLUMNS_MISSING, REFERENCE_FILE_NO_ROWS, REFERENCE_FILE_EMPTY,\
+            \ REFERENCE_FILE_UNREADABLE, REFERENCE_SOURCE_DATE_FUTURE"
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: COMMON_PERMISSION_DENIED (needs platform.reference.manage)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: "REFERENCE_LOAD_SHRINKS, REFERENCE_DATASET_NOT_LOADABLE"
+      summary: Load a new file for a list (replaces the whole list)
+      tags:
+      - Platform
+  /api/v1/reference/ifsc/{ifsc}:
+    get:
+      operationId: lookupIfsc
+      parameters:
+      - in: path
+        name: ifsc
+        required: true
+        schema:
+          type: string
+          pattern: "^[A-Za-z]{4}0[A-Za-z0-9]{6}$"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IfscInfo"
+          description: Found
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: REFERENCE_IFSC_NOT_FOUND
+      summary: Bank and branch for an IFSC
+      tags:
+      - Reference data
+  /api/v1/reference/pincodes/{pincode}:
+    get:
+      operationId: lookupPincode
+      parameters:
+      - in: path
+        name: pincode
+        required: true
+        schema:
+          type: string
+          pattern: "^[1-9][0-9]{5}$"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PincodeInfo"
+          description: Found
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: REFERENCE_PINCODE_NOT_FOUND
+      summary: "State, district and localities for a PIN code"
+      tags:
+      - Reference data
   /api/v1/team/invitations:
     get:
       operationId: listInvitations
@@ -1937,6 +2149,23 @@ components:
           type: string
         tradeName:
           type: string
+    IfscInfo:
+      type: object
+      properties:
+        address:
+          type: string
+        bank:
+          type: string
+        branch:
+          type: string
+        city:
+          type: string
+        district:
+          type: string
+        ifsc:
+          type: string
+        state:
+          type: string
     InvitationPreview:
       type: object
       properties:
@@ -2151,6 +2380,63 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/PermissionEntry"
+    PincodeInfo:
+      type: object
+      properties:
+        district:
+          type: string
+        localities:
+          type: array
+          items:
+            type: string
+        pincode:
+          type: string
+        stateCode:
+          type: string
+    PlatformLoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 0
+        password:
+          type: string
+          maxLength: 200
+          minLength: 0
+      required:
+      - email
+      - password
+    PlatformSession:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        expiresIn:
+          type: integer
+          format: int64
+        staff:
+          $ref: "#/components/schemas/PlatformStaff"
+        tokenType:
+          type: string
+    PlatformStaff:
+      type: object
+      properties:
+        email:
+          type: string
+        fullName:
+          type: string
+        id:
+          type: string
+          format: uuid
+        permissions:
+          type: array
+          items:
+            type: string
     ProblemDetail:
       type: object
       properties:
@@ -2190,6 +2476,120 @@ components:
           type: boolean
         ready:
           type: boolean
+    ReferenceDataset:
+      type: object
+      properties:
+        attribution:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        dueOn:
+          type: string
+          format: date
+        licence:
+          type: string
+        loadable:
+          type: boolean
+        loadedAt:
+          type: string
+          format: date-time
+        loadedByName:
+          type: string
+        name:
+          type: string
+        ownerModule:
+          type: string
+        phase:
+          type: string
+        refreshMonths:
+          type: integer
+          format: int32
+        rowCount:
+          type: integer
+          format: int32
+        sourceDate:
+          type: string
+          format: date
+        sourceName:
+          type: string
+        sourceUrl:
+          type: string
+        status:
+          type: string
+    ReferenceDatasetList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReferenceDataset"
+    ReferenceLoad:
+      type: object
+      properties:
+        datasetCode:
+          type: string
+        fileBytes:
+          type: integer
+          format: int64
+        fileName:
+          type: string
+        fileSha256:
+          type: string
+        finishedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid
+        loadedByName:
+          type: string
+        problems:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReferenceProblem"
+        reasonCode:
+          type: string
+        replacedAnyway:
+          type: boolean
+        rowsLoaded:
+          type: integer
+          format: int32
+        rowsRead:
+          type: integer
+          format: int32
+        rowsSkipped:
+          type: integer
+          format: int32
+        skippedByReason:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        sourceDate:
+          type: string
+          format: date
+        startedAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+    ReferenceLoadList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReferenceLoad"
+    ReferenceProblem:
+      type: object
+      properties:
+        line:
+          type: integer
+          format: int32
+        reason:
+          type: string
     RenameRoleRequest:
       type: object
       properties:

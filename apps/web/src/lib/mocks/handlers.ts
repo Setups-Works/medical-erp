@@ -28,6 +28,7 @@ import {
   STEPS,
   TERMS_VERSION,
 } from "./seed";
+import { platformHandlers } from "./platform";
 
 const API = "*/api/v1";
 
@@ -406,6 +407,7 @@ const roleHandlers = [
 ];
 
 export const builtHandlers = [
+  ...platformHandlers,
   // ---------------------------------------------------------------- auth
   http.post(`${API}/auth/login`, async ({ request }) => {
     const b = await body(request);

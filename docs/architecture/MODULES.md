@@ -12,6 +12,7 @@ Base-plan names are kept as **sub-domains** inside fewer, larger modules so begi
 | `tenancy` | tenant, state, company, licence, branch, financial_year, number_series, tenant_setting, onboarding_progress (+ seeded lookup_option, setting_definition, onboarding_step) | company, branch | `TenantFacade`, `GoLiveCheck` SPI (`TenantContext` lives in shared `security`), `BranchFacade` later | `TenantWentLive`, `BranchCreated` | — | 1 |
 | `identity` | app_user, role, permission, role_permission, user_branch, consent, verification | users, roles | `SignupFacade`, `EmailVerification`, `CredentialCheck` (`PermissionChecker` lives in shared `security`) | `UserInvited` | tenancy, notification (EmailSender for one-time links) | 1 |
 | `subscription` | plan, license, license_event, license_activation_attempt, usage (LICENSING.md) | subscription, licensing | `EntitlementGuard.requireEdition/Feature/Capacity/Writable`, `EditionGuard.require(WHOLESALE)` | `LicenseActivated`, `LicenseChanged`, `PlanChanged` | tenancy | 5 |
+| `platform` | platform_user, platform_permission, reference_dataset(+_load), ref_pincode, ref_ifsc | — (new, ADR-0020) | `ReferenceLookup.pincode/ifsc`; built: staff login, `/api/v1/platform/reference-data`, `/api/v1/reference/*` | — | — | 2 |
 | `audit` | audit_log | audit | `AuditRecorder` | — | — | 1 |
 | `notification` | notification, template, channel_config | notifications | `Notifier.send(...)` | — | tenancy | 4 |
 | `files` | stored_file | — | `FileStore.put/get` (signed URLs) | — | — | 2 |

@@ -34,4 +34,10 @@ export const keys = {
     detail: (code: string) => ["roles", "detail", code] as const,
     catalogue: ["roles", "catalogue"] as const,
   },
+
+  // platform (MENO staff, ADR-0020): reference data PLT-22 — Nitheesh
+  platform: {
+    datasets: ["platform", "reference-data"] as const,
+    loads: (code: string) => ["platform", "reference-data", code, "loads"] as const,
+  },
 };

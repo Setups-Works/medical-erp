@@ -49,3 +49,12 @@ export type RoleColumn = S["RoleColumn"];
 
 export type InvitationView = S["InvitationPreview"];
 export type AcceptInvitationRequest = S["AcceptInvitationRequest"];
+// platform (MENO staff realm, ADR-0020) and reference data (PLT-22)
+export type PlatformSession = S["PlatformSession"];
+export type PlatformStaff = S["PlatformStaff"];
+export type PlatformLoginRequest = S["PlatformLoginRequest"];
+export type ReferenceDataset = S["ReferenceDataset"];
+export type ReferenceLoad = S["ReferenceLoad"];
+export type ReferenceProblem = S["ReferenceProblem"];
+export type PincodeInfo = S["PincodeInfo"];
+export type IfscInfo = S["IfscInfo"];

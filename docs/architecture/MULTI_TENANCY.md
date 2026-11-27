@@ -27,7 +27,7 @@ erDiagram
 
 ## Platform (super-admin) access
 
-The `PLATFORM_ADMIN` role uses a separate connection role with `BYPASSRLS`, only in `/api/v1/platform/*` endpoints, every call audited. Support staff impersonation requires the tenant admin's time-boxed consent.
+Platform staff are a separate realm (ADR-0020): `platform_user`, their own login and a token with no tenant that only `/api/v1/platform/*` accepts. Today that realm reads no tenant data at all. When support access arrives, it will use a separate connection role with `BYPASSRLS`, only in `/api/v1/platform/*` endpoints, every call audited. Support staff impersonation requires the tenant admin's time-boxed consent.
 
 ## Future
 
