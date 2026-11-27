@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { TeamInvitation } from "@meno/api-client";
 import { Badge, Button, formatDate, Icon, type Tint } from "@meno/ui";
 import { problemMessage } from "@/lib/problem";
@@ -19,9 +19,24 @@ export function InvitationRow({ invitation: i, canManage = true }: { invitation:
   const resend = useInvitationAction("resend");
   const revoke = useInvitationAction("revoke");
   const [confirmRevoke, setConfirmRevoke] = useState(false);
+  const keepRef = useRef<HTMLButtonElement>(null);
+  const revokeRef = useRef<HTMLButtonElement>(null);
+  const toggled = useRef(false);
   const status = STATUS[i.status ?? "PENDING"];
   const open = i.status === "PENDING" || i.status === "EXPIRED";
   const error = resend.error ?? revoke.error;
+
+  // The button pressed unmounts when the inline confirm swaps in or out, which would drop keyboard
+  // focus to <body>. Land on the safe choice ("Keep") when asking, and back on "Revoke" when cancelled.
+  useEffect(() => {
+    if (!toggled.current) return;
+    (confirmRevoke ? keepRef : revokeRef).current?.focus();
+  }, [confirmRevoke]);
+
+  function askRevoke(next: boolean) {
+    toggled.current = true;
+    setConfirmRevoke(next);
+  }
 
   return (
     <li className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-3">
@@ -40,10 +55,18 @@ export function InvitationRow({ invitation: i, canManage = true }: { invitation:
         {error && <p className="text-[12.5px] text-critical">{problemMessage(error, "Couldn't update the invitation.")}</p>}
       </div>
       {open && canManage && (
-        <div className="flex items-center gap-1">
+        <div
+          className="flex items-center gap-1"
+          onKeyDown={(e) => {
+            if (confirmRevoke && e.key === "Escape") {
+              e.stopPropagation();
+              askRevoke(false);
+            }
+          }}
+        >
           {confirmRevoke ? (
             <>
-              <Button variant="ghost" size="sm" onClick={() => setConfirmRevoke(false)}>
+              <Button ref={keepRef} variant="ghost" size="sm" onClick={() => askRevoke(false)}>
                 Keep
               </Button>
               <Button variant="outline" size="sm" loading={revoke.isPending} onClick={() => revoke.mutate(i.id ?? "")} aria-label={`Confirm revoking ${i.fullName}'s invitation`}>
@@ -55,7 +78,7 @@ export function InvitationRow({ invitation: i, canManage = true }: { invitation:
               <Button variant="ghost" size="sm" loading={resend.isPending} onClick={() => resend.mutate(i.id ?? "")} aria-label={`Resend ${i.fullName}'s invitation`}>
                 Resend
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setConfirmRevoke(true)} aria-label={`Revoke ${i.fullName}'s invitation`}>
+              <Button ref={revokeRef} variant="ghost" size="sm" onClick={() => askRevoke(true)} aria-label={`Revoke ${i.fullName}'s invitation`}>
                 Revoke
               </Button>
             </>
