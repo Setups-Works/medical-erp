@@ -75,6 +75,7 @@ Radii: `rounded-xs` 4 (badges) · `rounded-tab` 6 (tabs, icon buttons) · `round
 | Filter pill | `<FilterPill>` — 28 px; selected = ink pill |
 | Segmented | `<Segmented>` grey track + raised active segment |
 | Select / combobox | shadcn `Select` / `Combobox` from `@meno/ui` — never native date/time inputs; use `<DatePicker>` |
+| Suggest input | `<SuggestInput>` from `@meno/ui` — free text with a dropdown of likely answers (City from the PIN's post offices). ↑/↓, Enter, Esc. Never a native `<datalist>` |
 | Menus, dialogs, sheets | Radix-based components from `@meno/ui` only |
 
 Hover `--hover`, pressed `--press`, 140 ms `--ease`. Focus ring from global `:focus-visible` (2 px `--data` 55 %) — never remove it.

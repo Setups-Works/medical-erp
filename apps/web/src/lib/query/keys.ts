@@ -35,6 +35,11 @@ export const keys = {
     catalogue: ["roles", "catalogue"] as const,
   },
 
+  // reference lookups (PLT-22, ADR-0021) — Nitheesh
+  reference: {
+    pincode: (pin: string) => ["reference", "pincode", pin] as const,
+  },
+
   // platform (MENO staff, ADR-0020): reference data PLT-22 — Nitheesh
   platform: {
     datasets: ["platform", "reference-data"] as const,

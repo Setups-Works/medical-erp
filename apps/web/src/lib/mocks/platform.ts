@@ -11,7 +11,7 @@ const STAFF = { id: "0192f3a4-0000-7000-8000-000000000001", email: "admin@meno.t
 
 type Dataset = {
   code: string; name: string; description: string; sourceName: string; sourceUrl?: string; licence: string; attribution?: string;
-  refreshMonths: number; ownerModule: string; phase: string; loadable: boolean; rowCount: number; sourceDate?: string; loadedAt?: string; loadedByName?: string;
+  refreshMonths: number; ownerModule: string; phase: string; loadable: boolean; rowCount: number; sourceDate?: string; loadedAt?: string; loadedByName?: string; onlineLookup?: string;
 };
 type Load = {
   id: string; datasetCode: string; status: "LOADED" | "REJECTED"; fileName: string; fileSha256: string; fileBytes: number; sourceDate: string;
@@ -21,7 +21,7 @@ type Load = {
 type State = { datasets: Dataset[]; loads: Load[]; sessions: string[] };
 
 const SEED: Dataset[] = [
-  { code: "PINCODE", name: "PIN codes", description: "PIN code to state, district and post-office localities. Fills addresses.", sourceName: "India Post, All India Pincode Directory (data.gov.in)", sourceUrl: "https://data.gov.in/catalog/all-india-pincode-directory", licence: "Government Open Data License – India", attribution: "Contains data from India Post, published on data.gov.in under GODL-India.", refreshMonths: 12, ownerModule: "platform", phase: "P2", loadable: true, rowCount: 0 },
+  { code: "PINCODE", name: "PIN codes", description: "PIN code to state, district and post-office localities. Fills addresses.", sourceName: "India Post, All India Pincode Directory (data.gov.in)", sourceUrl: "https://data.gov.in/catalog/all-india-pincode-directory", licence: "Government Open Data License – India", attribution: "Contains data from India Post, published on data.gov.in under GODL-India.", refreshMonths: 12, ownerModule: "platform", phase: "P2", loadable: true, rowCount: 0, onlineLookup: "postalpincode" },
   { code: "IFSC", name: "IFSC codes", description: "IFSC to bank, branch and address. Fills bank account details.", sourceName: "Reserve Bank of India, NEFT / RTGS bank branch lists", sourceUrl: "https://www.rbi.org.in/Scripts/bs_viewcontent.aspx?Id=2009", licence: "RBI public list; redistribution terms to confirm (R-30)", attribution: "Bank branch data from the Reserve Bank of India.", refreshMonths: 1, ownerModule: "platform", phase: "P2", loadable: true, rowCount: 0 },
   { code: "HSN", name: "HSN codes and GST rates", description: "HSN / SAC codes with their GST rates, effective-dated.", sourceName: "CBIC GST rate notifications", licence: "Government notification (public)", refreshMonths: 3, ownerModule: "taxation", phase: "P3", loadable: false, rowCount: 0 },
   { code: "CEILING_PRICE", name: "Ceiling prices", description: "NPPA / DPCO ceiling prices for scheduled formulations.", sourceName: "NPPA price notifications", licence: "Government notification (public)", refreshMonths: 1, ownerModule: "compliance", phase: "P4", loadable: false, rowCount: 0 },

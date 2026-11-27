@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -36,10 +37,38 @@ public final class PincodeFile {
     public record Result(List<Row> rows, ReferenceFile.Report report) {
     }
 
+    /** One post office from the online directory (state by name, as India Post spells it). */
+    public record Office(String name, String district, String state) {
+    }
+
     private static final class Agg {
         final Map<String, Integer> states = new LinkedHashMap<>();
         final Map<String, Integer> districts = new LinkedHashMap<>();
         final Set<String> localities = new LinkedHashSet<>();
+
+        /** Adds one post office; returns why it was skipped, or null. Same rules for files and online answers. */
+        String add(Map<String, String> byKey, String stateName, String rawDistrict, String rawOffice) {
+            String stateCode = byKey.get(stateKey(stateName));
+            if (stateCode == null) {
+                return "Unknown state '" + stateName + "'";
+            }
+            String district = ReferenceFile.readable(rawDistrict);
+            if (district.isEmpty() || district.length() > MAX_DISTRICT) {
+                return "District is empty or longer than " + MAX_DISTRICT + " characters";
+            }
+            states.merge(stateCode, 1, Integer::sum);
+            districts.merge(district, 1, Integer::sum);
+            String office = ReferenceFile.readable(OFFICE_TYPE.matcher(rawOffice == null ? "" : rawOffice)
+                    .replaceAll("").trim());
+            if (!office.isEmpty() && office.length() <= MAX_LOCALITY) {
+                localities.add(office);
+            }
+            return null;
+        }
+
+        Row row(String pin) {
+            return new Row(pin, mostCommon(states), mostCommon(districts), List.copyOf(localities));
+        }
     }
 
     private PincodeFile() {
@@ -60,34 +89,40 @@ public final class PincodeFile {
             report.read();
             int line = csv.line();
             String pin = ReferenceFile.cell(row, cols, "pincode");
-            String stateName = ReferenceFile.cell(row, cols, "state");
-            String district = ReferenceFile.readable(ReferenceFile.cell(row, cols, "district"));
             if (!PIN.matcher(pin).matches()) {
                 report.skip(line, "PIN code '" + pin + "' is not 6 digits starting 1-9");
                 continue;
             }
-            String stateCode = byKey.get(stateKey(stateName));
-            if (stateCode == null) {
-                report.skip(line, "Unknown state '" + stateName + "'");
-                continue;
-            }
-            if (district.isEmpty() || district.length() > MAX_DISTRICT) {
-                report.skip(line, "District is empty or longer than " + MAX_DISTRICT + " characters");
-                continue;
-            }
             Agg agg = pins.computeIfAbsent(pin, p -> new Agg());
-            agg.states.merge(stateCode, 1, Integer::sum);
-            agg.districts.merge(district, 1, Integer::sum);
-            String office = ReferenceFile.readable(OFFICE_TYPE.matcher(ReferenceFile.cell(row, cols, "office"))
-                    .replaceAll("").trim());
-            if (!office.isEmpty() && office.length() <= MAX_LOCALITY) {
-                agg.localities.add(office);
+            String skipped = agg.add(byKey, ReferenceFile.cell(row, cols, "state"),
+                    ReferenceFile.cell(row, cols, "district"), ReferenceFile.cell(row, cols, "office"));
+            if (skipped != null) {
+                report.skip(line, skipped);
+                if (agg.states.isEmpty()) {
+                    pins.remove(pin);
+                }
             }
         }
         List<Row> rows = new ArrayList<>(pins.size());
-        pins.forEach((pin, agg) -> rows.add(new Row(pin, mostCommon(agg.states), mostCommon(agg.districts),
-                List.copyOf(agg.localities))));
+        pins.forEach((pin, agg) -> rows.add(agg.row(pin)));
         return new Result(rows, report);
+    }
+
+    /**
+     * One PIN from the online directory's post offices (PLT-22 online lookup), by the same rules as a file row.
+     * Empty when the PIN is malformed or no office has a known state and a usable district.
+     */
+    public static Optional<Row> fromOffices(String pin, List<Office> offices, Map<String, String> stateCodes) {
+        if (pin == null || !PIN.matcher(pin).matches() || offices == null) {
+            return Optional.empty();
+        }
+        Map<String, String> byKey = new HashMap<>();
+        stateCodes.forEach((name, code) -> byKey.put(stateKey(name), code));
+        Agg agg = new Agg();
+        for (Office o : offices) {
+            agg.add(byKey, o.state(), o.district(), o.name());
+        }
+        return agg.states.isEmpty() ? Optional.empty() : Optional.of(agg.row(pin));
     }
 
     /** "TAMIL NADU", "Tamil Nadu", "The Dadra & Nagar Haveli and Daman & Diu" all compare by letters only. */

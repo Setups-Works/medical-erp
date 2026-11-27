@@ -488,6 +488,19 @@ export const builtHandlers = [
     return new HttpResponse(null, { status: 204 });
   }),
 
+  // ---------------------------------------------------------------- PIN lookup (PLT-22, ADR-0021)
+  http.get(
+    `${API}/reference/pincodes/:pincode`,
+    withAuth<{ pincode: string }>(({ params }) => {
+      const known: Record<string, { stateCode: string; district: string; localities: string[] }> = {
+        "600001": { stateCode: "33", district: "Chennai", localities: ["Parrys", "George Town"] },
+        "110001": { stateCode: "07", district: "Central Delhi", localities: ["Baroda House", "Connaught Place"] },
+      };
+      const hit = known[params.pincode];
+      return hit ? HttpResponse.json({ pincode: params.pincode, ...hit }) : problem(404, "REFERENCE_PINCODE_NOT_FOUND", "We don't know this PIN code. Type the district and city.");
+    }),
+  ),
+
   // ---------------------------------------------------------------- GSTIN (PTY-15)
   http.get(
     `${API}/gstin-verifications/:gstin`,

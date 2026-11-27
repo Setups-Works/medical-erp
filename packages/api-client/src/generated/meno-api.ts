@@ -1265,6 +1265,7 @@ export interface components {
             loadedAt?: string;
             loadedByName?: string;
             name?: string;
+            onlineLookup?: string;
             ownerModule?: string;
             phase?: string;
             /** Format: int32 */

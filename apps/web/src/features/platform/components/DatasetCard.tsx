@@ -60,6 +60,14 @@ export function DatasetCard({ dataset: d, canLoad }: { dataset: ReferenceDataset
         </dl>
       )}
 
+      {!later && d.onlineLookup && (
+        <div data-testid={`online-${code}`}>
+          <Callout tone="info">
+            {d.loadedAt ? "PIN codes missing from this list" : "Until a file is loaded, PIN codes"} are looked up online in India Post’s directory (api.postalpincode.in), so address forms still fill the state and district. The desktop app works offline only with a loaded list.
+          </Callout>
+        </div>
+      )}
+
       {!later && (
         <p className="text-[12.5px] text-ink-3">
           Source:{" "}

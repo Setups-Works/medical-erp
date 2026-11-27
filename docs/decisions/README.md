@@ -24,3 +24,4 @@ An ADR records one significant decision: context, decision, consequences. Write 
 | [0018](0018-azure-app-service.md) | Azure App Service (Java 21, shared B1 plan) for meno-api until the pilot | Accepted |
 | [0019](0019-per-tenant-roles-overlay.md) | Per-tenant roles as an overlay on MENO's default roles | Proposed |
 | [0020](0020-platform-staff-realm.md) | A separate realm for MENO platform staff | Proposed |
+| [0021](0021-pincode-online-lookup.md) | PIN codes missing from MENO's list are looked up online (api.postalpincode.in) | Accepted |

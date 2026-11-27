@@ -21,5 +21,23 @@ test.describe("onboarding", () => {
     await page.getByRole("button", { name: "Save and continue" }).click();
 
     await expect(page).toHaveURL(/\/onboarding\/pharmacy\/$/);
+
+    // PLT-22 / ADR-0021: a known PIN fills the empty district and offers its post offices as cities.
+    await page.getByLabel("PIN code").fill("600001");
+    await expect(page.getByTestId("pin-lookup")).toContainText("PIN 600001: Chennai");
+    await expect(page.getByLabel("District")).toHaveValue("Chennai");
+    // City is a dropdown of that PIN's post offices, and still takes any typed value.
+    const city = page.getByRole("combobox", { name: "City" });
+    await city.click();
+    await expect(page.getByRole("option")).toHaveText(["Parrys", "George Town", "Chennai"]);
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(city).toHaveValue("George Town");
+    await city.fill("Royapuram");
+    await expect(city).toHaveValue("Royapuram");
+    // An unknown PIN never blocks: it asks the person to type the details.
+    await page.getByLabel("PIN code").fill("560999");
+    await expect(page.getByTestId("pin-lookup")).toContainText("We don’t know this PIN");
   });
 });
