@@ -20,4 +20,12 @@ export const keys = {
     options: ["team", "options"] as const,
     invitations: ["team", "invitations"] as const,
   },
+
+  // users, roles, permissions (identity /admin) — Nitheesh
+  me: ["auth", "me"] as const,
+  users: {
+    all: ["users"] as const,
+    options: ["users", "options"] as const,
+    list: (q: string, status: string) => ["users", "list", q, status] as const,
+  },
 };

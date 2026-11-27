@@ -1,12 +1,10 @@
 package com.setupsworks.meno.modules.identity.domain;
 
 /**
- * Starting roles for P1 login only. ADR-0014: code must check permissions, never these names.
- * The role / permission / role_permission tables replace this enum in the identity task.
+ * Role codes that platform code itself has to create (sign-up and the first-owner bootstrap make an OWNER). Users
+ * hold any code from the {@code role} table ({@link RoleDefinition}); ADR-0014: code checks permissions, never these
+ * names.
  */
 public enum Role {
-    OWNER,
-    ADMIN,
-    PHARMACIST,
-    CASHIER
+    OWNER
 }

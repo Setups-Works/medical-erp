@@ -33,6 +33,11 @@ public class PermissionChecker {
         return currentRoles().stream().anyMatch(role -> permissionsOf(role).contains(permission));
     }
 
+    /** Everything the signed-in user may do (union over their roles), sorted; the UI hides what isn't here. */
+    public List<String> currentPermissions() {
+        return currentRoles().stream().flatMap(role -> permissionsOf(role).stream()).distinct().sorted().toList();
+    }
+
     /** 403 COMMON_PERMISSION_DENIED when the signed-in user lacks {@code permission}. */
     public void require(String permission) {
         if (!has(permission)) {

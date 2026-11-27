@@ -4,12 +4,10 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.setupsworks.meno.modules.identity.api.CredentialCheck;
 import com.setupsworks.meno.modules.identity.api.LoginAccount;
 import com.setupsworks.meno.modules.identity.domain.AppUser;
-import com.setupsworks.meno.modules.identity.domain.Role;
 import com.setupsworks.meno.modules.identity.repository.AppUserRepository;
 import com.setupsworks.meno.modules.tenancy.api.TenantFacade;
 
@@ -88,6 +86,6 @@ class CredentialService implements CredentialCheck {
 
     static LoginAccount toAccount(AppUser user) {
         return new LoginAccount(user.getId(), user.getTenantId(), user.getEmail(), user.getFullName(),
-                user.getRoles().stream().map(Role::name).collect(Collectors.toSet()));
+                user.getRoles());
     }
 }

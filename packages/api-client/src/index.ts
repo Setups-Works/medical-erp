@@ -33,6 +33,11 @@ export type TeamBranchOption = S["BranchOption"];
 export type TeamInvitation = S["TeamInvitation"];
 export type TeamInvitationPage = S["TeamInvitationPage"];
 export type TeamInvitationRequest = S["TeamInvitationRequest"];
+export type StaffUser = S["StaffUser"];
+export type StaffUserPage = S["StaffUserPage"];
+export type UserAdminOptions = S["UserAdminOptions"];
+export type UserRoleOption = S["UserRoleOption"];
+export type UserAccessRequest = S["UserAccessRequest"];
 
 // Proposed (contracts/openapi/proposed/auth.yaml), served by MSW until built.
 type P = Proposed["schemas"];

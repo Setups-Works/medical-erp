@@ -82,3 +82,17 @@ export const INVITABLE_ROLES = [
   { code: "ACCOUNTANT", label: "Accountant" },
 ];
 export const INVITATION_VALID_DAYS = 7;
+
+/** Every role (meno-api `role` table): assignable = invitable; allBranches from role.all_branches (V202611271500). */
+export const ALL_ROLES = [
+  { code: "OWNER", label: "Business owner", assignable: false, allBranches: true },
+  { code: "ADMIN", label: "Administrator", assignable: false, allBranches: false },
+  ...INVITABLE_ROLES.map((r) => ({ ...r, assignable: true, allBranches: false })),
+  { code: "CASHIER", label: "Cashier", assignable: false, allBranches: false },
+];
+
+/** role_permission seed as far as the built pages need it (identity + tenancy migrations). */
+export const ROLE_PERMISSIONS: Record<string, string[]> = {
+  OWNER: ["identity.invitation.manage", "identity.invitation.view", "identity.user.manage", "identity.user.view", "tenancy.onboarding.manage", "tenancy.onboarding.view"],
+  BRANCH_MANAGER: ["identity.user.view"],
+};

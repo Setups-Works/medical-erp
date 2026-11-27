@@ -18,6 +18,8 @@ tags:
   name: Sign-up
 - description: Invite staff with a role and branches; resend or revoke open invitations.
   name: Team
+- description: "Staff accounts: roles, branch access, deactivate and reactivate."
+  name: Users
 - description: Forgot and reset password with a single-use emailed link.
   name: Password
 - description: Confirm the owner's email (one-time link) and mobile (SMS code).
@@ -25,6 +27,219 @@ tags:
 - description: Verify a GSTIN and fetch its registration details.
   name: GSTIN
 paths:
+  /api/v1/admin/users:
+    get:
+      description: "Branch-limited managers see people who share one of their branches,\
+        \ and the owner."
+      operationId: listUsers
+      parameters:
+      - in: query
+        name: q
+        required: false
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 0
+      - in: query
+        name: status
+        required: false
+        schema:
+          type: string
+          default: ACTIVE
+          enum:
+          - ACTIVE
+          - DISABLED
+          - ALL
+      - in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+      - in: query
+        name: size
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+          maximum: 200
+          minimum: 1
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUserPage"
+          description: OK
+      summary: "Staff accounts you can see, by name (page envelope)"
+      tags:
+      - Users
+  /api/v1/admin/users/options:
+    get:
+      operationId: userOptions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAdminOptions"
+          description: OK
+      summary: Roles (with whether they can be changed here) and the branches you
+        can give access to
+      tags:
+      - Users
+  /api/v1/admin/users/{id}:
+    get:
+      operationId: getUser
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: The account; ETag = its version
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: IDENTITY_USER_NOT_FOUND (also another tenant's id)
+      summary: One staff account
+      tags:
+      - Users
+  /api/v1/admin/users/{id}/access:
+    put:
+      description: Whole sets. Branches are needed unless a role covers every branch.
+        Roles that aren't assignable can't be added or removed. Send the version you
+        loaded as If-Match ("3").
+      operationId: changeUserAccess
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - in: header
+        name: If-Match
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAccessRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: Saved; takes effect when the person's session refreshes
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: "IDENTITY_ROLE_INVALID, IDENTITY_ROLE_REQUIRED, IDENTITY_USER_BRANCH_INVALID,\
+            \ COMMON_IF_MATCH_INVALID, field errors"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: IDENTITY_USER_NOT_FOUND (also another tenant's id)
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: "COMMON_VERSION_CONFLICT, IDENTITY_LAST_ADMIN"
+        "428":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: COMMON_PRECONDITION_REQUIRED (no If-Match)
+      summary: Change roles and branches
+      tags:
+      - Users
+  /api/v1/admin/users/{id}/deactivate:
+    post:
+      operationId: deactivateUser
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: Deactivated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: IDENTITY_USER_NOT_FOUND (also another tenant's id)
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: "IDENTITY_CANNOT_DEACTIVATE_SELF, IDENTITY_LAST_ADMIN, IDENTITY_USER_ALREADY_INACTIVE"
+      summary: "Deactivate: the person can't sign in; their history stays"
+      tags:
+      - Users
+  /api/v1/admin/users/{id}/reactivate:
+    post:
+      operationId: reactivateUser
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: Active again
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: IDENTITY_USER_NOT_FOUND (also another tenant's id)
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StaffUser"
+          description: IDENTITY_USER_ALREADY_ACTIVE
+      summary: Reactivate a deactivated account (also clears a password lockout)
+      tags:
+      - Users
   /api/v1/auth/login:
     post:
       description: "identifier is the email or the Indian mobile (10 digits, +91 optional).\
@@ -105,7 +320,9 @@ paths:
       - Auth
   /api/v1/auth/me:
     get:
-      description: "User, tenant and roles from the access token."
+      description: "User, tenant and roles from the access token, and the permissions\
+        \ those roles carry (the UI shows only what the person may do; the API still\
+        \ checks)."
       operationId: me
       responses:
         "200":
@@ -1395,6 +1612,10 @@ components:
       properties:
         email:
           type: string
+        permissions:
+          type: array
+          items:
+            type: string
         roles:
           type: array
           items:
@@ -1492,6 +1713,13 @@ components:
           type: string
         label:
           type: string
+    RoleView:
+      type: object
+      properties:
+        code:
+          type: string
+        label:
+          type: string
     SettingInfo:
       type: object
       properties:
@@ -1564,6 +1792,63 @@ components:
       - password
       - startWith
       - stateCode
+    StaffUser:
+      type: object
+      properties:
+        allBranches:
+          type: boolean
+        branches:
+          type: array
+          items:
+            $ref: "#/components/schemas/BranchOption"
+        createdAt:
+          type: string
+          format: date-time
+        email:
+          type: string
+        fullName:
+          type: string
+        id:
+          type: string
+          format: uuid
+        lastLoginAt:
+          type: string
+          format: date-time
+        mobile:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoleView"
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+        version:
+          type: integer
+          format: int64
+        you:
+          type: boolean
+    StaffUserPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/StaffUser"
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalItems:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
     StateInfo:
       type: object
       properties:
@@ -1708,6 +1993,51 @@ components:
           type: string
         user:
           $ref: "#/components/schemas/UserView"
+    UserAccessRequest:
+      type: object
+      properties:
+        branchIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          maxItems: 50
+          minItems: 0
+          uniqueItems: true
+        roleCodes:
+          type: array
+          items:
+            type: string
+            maxLength: 50
+            minLength: 0
+          maxItems: 20
+          minItems: 0
+          uniqueItems: true
+      required:
+      - branchIds
+      - roleCodes
+    UserAdminOptions:
+      type: object
+      properties:
+        branches:
+          type: array
+          items:
+            $ref: "#/components/schemas/BranchOption"
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserRoleOption"
+    UserRoleOption:
+      type: object
+      properties:
+        allBranches:
+          type: boolean
+        assignable:
+          type: boolean
+        code:
+          type: string
+        label:
+          type: string
     UserView:
       type: object
       properties:

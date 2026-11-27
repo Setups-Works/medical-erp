@@ -87,6 +87,8 @@ type RequestOptions<O> = {
   body?: RequestBody<O>;
   formData?: FormData;
   idempotencyKey?: string;
+  /** Optimistic concurrency: the version you loaded, sent as `If-Match: "3"` (API_GUIDELINES.md, ETag = version). */
+  ifMatch?: number;
   signal?: AbortSignal;
 };
 
@@ -114,6 +116,7 @@ export function createApiClient(config: ApiClientConfig) {
     const branch = config.getBranchId?.();
     if (branch) headers.set("X-Branch-Id", branch);
     if (opts.idempotencyKey) headers.set("Idempotency-Key", opts.idempotencyKey);
+    if (opts.ifMatch !== undefined) headers.set("If-Match", `"${opts.ifMatch}"`);
     let body: BodyInit | undefined;
     if (opts.formData) body = opts.formData;
     else if (opts.body !== undefined) {

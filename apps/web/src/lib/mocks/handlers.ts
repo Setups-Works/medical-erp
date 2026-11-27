@@ -7,6 +7,7 @@ import { http, HttpResponse, type HttpResponseResolver } from "msw";
 import { checkGstin, financialYearEnd } from "@meno/validation";
 import { db, newId, type MockInvitation, type MockTenant, type MockUser } from "./db";
 import {
+  ALL_ROLES,
   BUSINESS_TYPE_LICENCES,
   FY_START_MONTH,
   GO_LIVE_MAX_DAYS_AHEAD,
@@ -18,6 +19,7 @@ import {
   MOCK_INVITE_TOKEN,
   MOCK_OTP,
   MOCK_RESET_TOKEN,
+  ROLE_PERMISSIONS,
   SETTINGS,
   START_OPTIONS,
   STATES,
@@ -178,6 +180,78 @@ const teamHandlers = [
   ),
 ];
 
+// ---------------------------------------------------------------- users (identity UserAdminController, PLT-06)
+const permissionsOf = (u: MockUser) => [...new Set(u.roles.flatMap((r) => ROLE_PERMISSIONS[r] ?? []))].sort();
+const coversAll = (roles: string[]) => roles.some((c) => ALL_ROLES.find((r) => r.code === c)?.allBranches);
+const denied = () => problem(403, "COMMON_PERMISSION_DENIED", "You don't have permission to do this.");
+function staffView(t: MockTenant, u: MockUser, me: MockUser) {
+  const all = coversAll(u.roles);
+  return {
+    id: u.id, fullName: u.fullName, email: u.email, mobile: u.mobile ? `+91${u.mobile}` : undefined, status: u.disabled ? "DISABLED" : "ACTIVE",
+    roles: ALL_ROLES.filter((r) => u.roles.includes(r.code)).map((r) => ({ code: r.code, label: r.label })),
+    branches: all ? [] : teamBranches(t).filter((b) => (u.branchIds ?? []).includes(b.id)), allBranches: all,
+    lastLoginAt: undefined, createdAt: u.createdAt ?? new Date().toISOString(), you: u.id === me.id, version: u.version ?? 0,
+  };
+}
+function staffOf(t: MockTenant, id: string) {
+  return db.get().users.find((u) => u.tenantId === t.id && u.id === id) ?? problem(404, "IDENTITY_USER_NOT_FOUND", "User not found.");
+}
+
+const userHandlers = [
+  http.get(`${API}/admin/users/options`, withAuth(({ tenant }) => HttpResponse.json({ roles: ALL_ROLES, branches: teamBranches(tenant) }))),
+  http.get(
+    `${API}/admin/users`,
+    withAuth(({ tenant, user, request }) => {
+      if (!permissionsOf(user).includes("identity.user.view")) return denied();
+      const url = new URL(request.url);
+      const q = (url.searchParams.get("q") ?? "").toLowerCase();
+      const status = url.searchParams.get("status") ?? "ACTIVE";
+      const items = db.get().users
+        .filter((u) => u.tenantId === tenant.id)
+        .filter((u) => status === "ALL" || (status === "DISABLED") === Boolean(u.disabled))
+        .filter((u) => !q || u.fullName.toLowerCase().includes(q) || u.email.includes(q) || u.mobile.includes(q))
+        .sort((a, b) => a.fullName.localeCompare(b.fullName))
+        .map((u) => staffView(tenant, u, user));
+      return HttpResponse.json({ items, page: 0, size: 200, totalItems: items.length, totalPages: items.length ? 1 : 0 });
+    }),
+  ),
+  http.put(
+    `${API}/admin/users/:id/access`,
+    withAuth<{ id: string }>(async ({ tenant, user, params, request }) => {
+      if (!permissionsOf(user).includes("identity.user.manage")) return denied();
+      const u = staffOf(tenant, params.id);
+      if (u instanceof Response) return u;
+      const b = await body(request);
+      const ifMatch = request.headers.get("If-Match");
+      if (!ifMatch) return problem(428, "COMMON_PRECONDITION_REQUIRED", "Reload the page and try again.");
+      if (Number(ifMatch.replace(/^W\//, "").replace(/"/g, "")) !== (u.version ?? 0)) return problem(409, "COMMON_VERSION_CONFLICT", "Someone else changed this just now. Reload to see the latest and try again.");
+      const roles = Array.isArray(b.roleCodes) ? (b.roleCodes as string[]) : [];
+      const touched = [...roles.filter((r) => !u.roles.includes(r)), ...u.roles.filter((r) => !roles.includes(r))];
+      if (touched.some((c) => !ALL_ROLES.find((r) => r.code === c)?.assignable)) return invalid("IDENTITY_ROLE_INVALID", "Choose a role from the list.");
+      if (!roles.length) return invalid("IDENTITY_ROLE_REQUIRED", "Choose at least one role.");
+      const branchIds = coversAll(roles) ? [] : Array.isArray(b.branchIds) ? (b.branchIds as string[]) : [];
+      if (!coversAll(roles) && (!branchIds.length || !branchIds.every((id) => tenant.branches.some((x) => x.id === id)))) return invalid("IDENTITY_USER_BRANCH_INVALID", "Choose at least one of your branches.");
+      Object.assign(u, { roles, branchIds, version: (u.version ?? 0) + 1 });
+      db.save();
+      return HttpResponse.json(staffView(tenant, u, user));
+    }),
+  ),
+  http.post(
+    `${API}/admin/users/:id/:action`,
+    withAuth<{ id: string; action: string }>(({ tenant, user, params }) => {
+      if (!permissionsOf(user).includes("identity.user.manage")) return denied();
+      const u = staffOf(tenant, params.id);
+      if (u instanceof Response) return u;
+      const deactivate = params.action === "deactivate";
+      if (deactivate && u.id === user.id) return problem(409, "IDENTITY_CANNOT_DEACTIVATE_SELF", "You can't deactivate your own account.");
+      if (deactivate === Boolean(u.disabled)) return problem(409, deactivate ? "IDENTITY_USER_ALREADY_INACTIVE" : "IDENTITY_USER_ALREADY_ACTIVE", deactivate ? "This account is already deactivated." : "This account is active.");
+      Object.assign(u, { disabled: deactivate, version: (u.version ?? 0) + 1 });
+      db.save();
+      return HttpResponse.json(staffView(tenant, u, user));
+    }),
+  ),
+];
+
 export const builtHandlers = [
   // ---------------------------------------------------------------- auth
   http.post(`${API}/auth/login`, async ({ request }) => {
@@ -185,7 +259,7 @@ export const builtHandlers = [
     // Same matching as meno-api: email (lower-cased) or the 10 mobile digits in any common form.
     const id = String(b.identifier ?? "").trim().toLowerCase();
     const digits = id.replace(/[\s-]/g, "").replace(/^(\+?91|0)(?=\d{10}$)/, "");
-    const user = db.get().users.find((u) => (id.includes("@") ? u.email === id : u.mobile === digits) && u.password === b.password);
+    const user = db.get().users.find((u) => (id.includes("@") ? u.email === id : u.mobile === digits) && u.password === b.password && !u.disabled);
     return user ? signIn(user) : problem(401, "AUTH_INVALID_CREDENTIALS", "Email, mobile or password is wrong.");
   }),
   http.post(`${API}/auth/refresh`, () => {
@@ -208,7 +282,7 @@ export const builtHandlers = [
   ),
   http.get(
     `${API}/auth/me`,
-    withAuth(({ user }) => HttpResponse.json({ userId: user.id, tenantId: user.tenantId, email: user.email, roles: user.roles })),
+    withAuth(({ user }) => HttpResponse.json({ userId: user.id, tenantId: user.tenantId, email: user.email, roles: user.roles, permissions: permissionsOf(user) })),
   ),
   http.get(`${API}/auth/signup/options`, () =>
     HttpResponse.json({ open: true, states: STATES, startOptions: START_OPTIONS, termsVersion: TERMS_VERSION, minPasswordLength: MIN_PASSWORD_LENGTH }),
@@ -486,6 +560,7 @@ export const builtHandlers = [
     return new HttpResponse(null, { status: 204 });
   }),
   ...teamHandlers,
+  ...userHandlers,
 ];
 
 export const proposedHandlers = [

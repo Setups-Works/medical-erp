@@ -42,6 +42,11 @@ export type MockUser = {
   fullName: string;
   mobile: string;
   roles: string[];
+  /** user_branch; absent for every-branch roles (owner). */
+  branchIds?: string[];
+  disabled?: boolean;
+  version?: number;
+  createdAt?: string;
   emailVerified: boolean;
   mobileVerified: boolean;
 };

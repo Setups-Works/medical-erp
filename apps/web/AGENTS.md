@@ -43,10 +43,12 @@ tests/e2e/                                      Playwright (Ashok; devs add happ
 | `/invite?token=` + mobile OTP on `/verify` | `features/auth` | **proposed** (`contracts/openapi/proposed/auth.yaml`), local MSW until built |
 | `/onboarding` + `business` `pharmacy` `licences` `branches` `books` `configuration` `go-live` | `features/onboarding` | real meno-api (`/api/v1/onboarding/*`, `/gstin-verifications/{gstin}`) |
 | `/onboarding/team` | `features/onboarding` `TeamStep` | real meno-api (`/api/v1/team/options`, `/team/invitations`, `…/{id}/resend`, `…/{id}/revoke`); Zod `teamInvite` in `@meno/validation` |
+| `/admin/users` | `features/users` `UsersScreen` (+ `UserPanel`, shared `InviteForm` / `InvitationRow` also used by `TeamStep`) | real meno-api (`/api/v1/admin/users`, `…/options`, `…/{id}/access`, `…/{id}/deactivate`, `…/{id}/reactivate`, `/api/v1/team/*`); Zod `userAccess`; actions shown by permission (`hooks/usePermissions` → `/auth/me`) inside the stand-in `features/admin` `AdminShell` |
 | `/onboarding/data` `devices` `plan` `practice` `license` `help` | `LaterStep` ("Coming in Pn", skip if optional) | checklist `available: false` |
 
 - `/invite` uses `?token=` (not `/invite/[token]`): a static export can't pre-render unknown tokens.
 - Session: access token in memory only (`lib/session.ts`); `meno_refresh` HttpOnly cookie restores it on reload via `/auth/refresh` (single-flight in `@meno/api-client`). Dev proxies `/api` to `MENO_API_ORIGIN` so the cookie is same-origin.
+- Updates of versioned resources pass `ifMatch: version` to `@meno/api-client` (sent as `If-Match: "3"`, API_GUIDELINES.md).
 - API types are generated (`pnpm gen:api`); `packages/api-client/src/overrides.ts` corrects 4 springdoc gaps until the backend annotations are fixed (listed in that file).
 - **Mocks are local-dev only**: `NEXT_PUBLIC_API_MOCKING=all|missing|off` works only under `next dev`; `next build` (staging, production) always uses the real API, the MSW code is pruned and `mockServiceWorker.js` is deleted from `out/`.
 

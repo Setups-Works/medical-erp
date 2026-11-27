@@ -4,6 +4,114 @@
  */
 
 export interface paths {
+    "/api/v1/admin/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Staff accounts you can see, by name (page envelope)
+         * @description Branch-limited managers see people who share one of their branches, and the owner.
+         */
+        get: operations["listUsers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Roles (with whether they can be changed here) and the branches you can give access to */
+        get: operations["userOptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One staff account */
+        get: operations["getUser"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{id}/access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Change roles and branches
+         * @description Whole sets. Branches are needed unless a role covers every branch. Roles that aren't assignable can't be added or removed. Send the version you loaded as If-Match ("3").
+         */
+        put: operations["changeUserAccess"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{id}/deactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Deactivate: the person can't sign in; their history stays */
+        post: operations["deactivateUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{id}/reactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reactivate a deactivated account (also clears a password lockout) */
+        post: operations["reactivateUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/login": {
         parameters: {
             query?: never;
@@ -73,7 +181,7 @@ export interface paths {
         };
         /**
          * Who am I
-         * @description User, tenant and roles from the access token.
+         * @description User, tenant and roles from the access token, and the permissions those roles carry (the UI shows only what the person may do; the API still checks).
          */
         get: operations["me"];
         put?: never;
@@ -760,6 +868,7 @@ export interface components {
         };
         MeResponse: {
             email?: string;
+            permissions?: string[];
             roles?: string[];
             /** Format: uuid */
             tenantId?: string;
@@ -811,6 +920,10 @@ export interface components {
             code?: string;
             label?: string;
         };
+        RoleView: {
+            code?: string;
+            label?: string;
+        };
         SettingInfo: {
             defaultValue?: string;
             key?: string;
@@ -834,6 +947,36 @@ export interface components {
             stateCode: string;
             /** @description Leave empty (bot trap) */
             website?: string;
+        };
+        StaffUser: {
+            allBranches?: boolean;
+            branches?: components["schemas"]["BranchOption"][];
+            /** Format: date-time */
+            createdAt?: string;
+            email?: string;
+            fullName?: string;
+            /** Format: uuid */
+            id?: string;
+            /** Format: date-time */
+            lastLoginAt?: string;
+            mobile?: string;
+            roles?: components["schemas"]["RoleView"][];
+            /** @enum {string} */
+            status?: "ACTIVE" | "DISABLED";
+            /** Format: int64 */
+            version?: number;
+            you?: boolean;
+        };
+        StaffUserPage: {
+            items?: components["schemas"]["StaffUser"][];
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            totalItems?: number;
+            /** Format: int32 */
+            totalPages?: number;
         };
         StateInfo: {
             code?: string;
@@ -902,6 +1045,20 @@ export interface components {
             tokenType?: string;
             user?: components["schemas"]["UserView"];
         };
+        UserAccessRequest: {
+            branchIds: string[];
+            roleCodes: string[];
+        };
+        UserAdminOptions: {
+            branches?: components["schemas"]["BranchOption"][];
+            roles?: components["schemas"]["UserRoleOption"][];
+        };
+        UserRoleOption: {
+            allBranches?: boolean;
+            assignable?: boolean;
+            code?: string;
+            label?: string;
+        };
         UserView: {
             email?: string;
             fullName?: string;
@@ -926,6 +1083,226 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    listUsers: {
+        parameters: {
+            query?: {
+                q?: string;
+                status?: "ACTIVE" | "DISABLED" | "ALL";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUserPage"];
+                };
+            };
+        };
+    };
+    userOptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserAdminOptions"];
+                };
+            };
+        };
+    };
+    getUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The account; ETag = its version */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description IDENTITY_USER_NOT_FOUND (also another tenant's id) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+        };
+    };
+    changeUserAccess: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserAccessRequest"];
+            };
+        };
+        responses: {
+            /** @description Saved; takes effect when the person's session refreshes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description IDENTITY_ROLE_INVALID, IDENTITY_ROLE_REQUIRED, IDENTITY_USER_BRANCH_INVALID, COMMON_IF_MATCH_INVALID, field errors */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description IDENTITY_USER_NOT_FOUND (also another tenant's id) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description COMMON_VERSION_CONFLICT, IDENTITY_LAST_ADMIN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description COMMON_PRECONDITION_REQUIRED (no If-Match) */
+            428: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+        };
+    };
+    deactivateUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Deactivated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description IDENTITY_USER_NOT_FOUND (also another tenant's id) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description IDENTITY_CANNOT_DEACTIVATE_SELF, IDENTITY_LAST_ADMIN, IDENTITY_USER_ALREADY_INACTIVE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+        };
+    };
+    reactivateUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Active again */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description IDENTITY_USER_NOT_FOUND (also another tenant's id) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description IDENTITY_USER_ALREADY_ACTIVE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+        };
+    };
     login: {
         parameters: {
             query?: never;
