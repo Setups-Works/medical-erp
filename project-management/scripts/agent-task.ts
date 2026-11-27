@@ -7,14 +7,19 @@
  *   npm run agent-task -- check   <n> <item…|all>      (1-based checklist numbers)
  *   npm run agent-task -- comment <n> "<text>"
  *   npm run agent-task -- review  <n> "<summary + PR link>" [--allow-open]
+ *   npm run agent-task -- page       "<page name or route>"   (read-only brief: docs to read, features, tasks)
+ *   npm run agent-task -- start-page "<page name or route>"   (take the page: BE + FE cards, both In progress, + brief)
  *
  * Acts as the hub user named in HUB_AGENT_AS (first name or email) in .env.local.
  * There is deliberately no "done": only Nitheesh moves a task to Done, in the hub, after review.
  * Writes go straight to MongoDB; open hub tabs update live through the change stream (src/lib/realtime.ts).
  */
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import mongoose from "mongoose";
 import { findMentions, logActivity, notify } from "../src/lib/actions";
 import { Board, Comment, Task, User } from "../src/lib/models";
+import { ensurePageTasks, findPages, pageTasks } from "../src/lib/page-tasks";
 
 for (const f of [".env.local", ".env"]) {
   try {
@@ -117,15 +122,157 @@ async function show(t: TaskDoc) {
   console.log(out.join("\n"));
 }
 
+// ---------- Page-wise work (docs/team/BUILD_A_PAGE.md) ----------
+
+const REPO = join(process.cwd(), "..");
+const readDoc = (rel: string) => (existsSync(join(REPO, rel)) ? readFileSync(join(REPO, rel), "utf8") : "");
+
+/** FEATURES.md rows for the given IDs, with the section header (it names the backend module). */
+function featureRows(ids: string[]) {
+  const out: string[] = [];
+  let section = "";
+  for (const line of readDoc("docs/product/FEATURES.md").split("\n")) {
+    if (line.startsWith("## ") || line.startsWith("### ")) section = line.replace(/^#+\s*/, "");
+    const id = ids.find((i) => line.startsWith(`| ${i} `));
+    if (id) out.push(`  ${id}  [${section}]\n      ${line.split("|").slice(2, -1).map((c) => c.trim()).join(" | ")}`);
+  }
+  return out;
+}
+
+/** Backend modules named in the FEATURES.md section headers of the page's features. */
+function modulesFor(ids: string[]) {
+  const mods = new Set<string>();
+  for (const row of featureRows(ids)) for (const m of row.match(/`([a-z]+)`/g) ?? []) mods.add(m.replace(/`/g, ""));
+  return [...mods].filter((m) => existsSync(join(REPO, "backend/meno-api/src/main/java/com/setupsworks/meno/modules", m)));
+}
+
+/** Other docs that mention the page's route or features (specs like ONBOARDING.md, MASTER_FIELDS.md). */
+function relatedDocs(route: string, ids: string[]) {
+  const skip = ["docs/product/PAGES.md", "docs/product/FEATURES.md"];
+  const dirs = ["docs/product", "docs/architecture", "docs/design", "docs/compliance", "docs/workflows", "docs/business-requirements"];
+  const hits: string[] = [];
+  const base = route.split("[")[0].split("?")[0].replace(/\/$/, "");
+  for (const d of dirs) {
+    if (!existsSync(join(REPO, d))) continue;
+    for (const f of readdirSync(join(REPO, d))) {
+      const rel = `${d}/${f}`;
+      if (!f.endsWith(".md") || skip.includes(rel)) continue;
+      const txt = readDoc(rel);
+      if ((base.length > 1 && txt.includes(`\`${base}`)) || ids.some((i) => txt.includes(i))) hits.push(rel);
+    }
+  }
+  return hits;
+}
+
+/** What exists already: the web screen (or placeholder) and backend controllers serving the route's first segment. */
+function existingCode(route: string) {
+  const out: string[] = [];
+  const segs = route.split("?")[0].split("/").filter(Boolean);
+  for (const g of ["", "(auth)", "(app)"]) {
+    const file = join("apps/web/src/app", g, ...segs, "page.tsx");
+    if (!existsSync(join(REPO, file))) continue;
+    const placeholder = /LaterStep|Placeholder/.test(readDoc(file));
+    out.push(`  web: ${file}${placeholder ? "  (placeholder only, build the real screen)" : ""}`);
+  }
+  if (!out.length) out.push("  web: no screen yet (create it under apps/web/src/app/...)");
+  const modsRoot = "backend/meno-api/src/main/java/com/setupsworks/meno/modules";
+  const seg = segs[0] ?? "";
+  for (const m of existsSync(join(REPO, modsRoot)) ? readdirSync(join(REPO, modsRoot)) : []) {
+    const web = join(modsRoot, m, "web");
+    if (!existsSync(join(REPO, web))) continue;
+    for (const f of readdirSync(join(REPO, web))) {
+      if (seg && readDoc(join(web, f)).includes(`"/api/v1/${seg}`)) out.push(`  backend: ${web}/${f}  (module ${m})`);
+    }
+  }
+  return out;
+}
+
+async function pageBrief(query: string) {
+  const found = await findPages(query);
+  if (!found.length) stop(`No page matches "${query}". See docs/product/PAGES.md or Hub → Pages.`);
+  if (found.length > 1) stop(`"${query}" matches ${found.length} pages; be more specific (use the route):\n  ${found.slice(0, 15).map((p) => `${p.name}  ${p.route}  (${p.group})`).join("\n  ")}`);
+  return found[0];
+}
+
+async function printBrief(p: Awaited<ReturnType<typeof pageBrief>>) {
+  const tasks = await pageTasks(p);
+  const ids = p.featureIds;
+  const mods = modulesFor(ids);
+  const slug = p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const be = tasks.be ? `#${tasks.be.number}` : "(none yet: run start-page)";
+  const fe = tasks.fe ? `#${tasks.fe.number}` : "(none yet: run start-page)";
+  const meta = (p.meta ?? {}) as Record<string, string>;
+  const out = [
+    `PAGE  ${p.name}  ${p.route}`,
+    `      ${p.notes}`,
+    `      Section: ${p.group} · Phase ${meta.phase} · Roles ${meta.roles} · QA ${meta.qa || "—"}`,
+    `      Hub tasks: BE ${be} · FE ${fe}`,
+    "",
+    "FEATURES (docs/product/FEATURES.md)",
+    ...(featureRows(ids).length ? featureRows(ids) : ["  (none listed)"]),
+    "",
+    "READ BEFORE CODING (in this order)",
+    "  AGENTS.md (root) · docs/team/BUILD_A_PAGE.md",
+    "  docs/product/GLOSSARY.md (once) · docs/architecture/VALIDATION_AND_BUSINESS_RULES.md",
+    "  docs/api/API_GUIDELINES.md · docs/database/DATA_MODEL.md · docs/architecture/MULTI_TENANCY.md",
+    "  docs/design/DESIGN_LANGUAGE.md · docs/design/NAVIGATION.md",
+    "  backend/meno-api/AGENTS.md · apps/web/AGENTS.md · packages/ui/AGENTS.md · packages/api-client/AGENTS.md",
+    ...mods.map((m) => `  backend/meno-api/src/main/java/com/setupsworks/meno/modules/${m}/AGENTS.md`),
+    ...relatedDocs(p.route, ids).map((d) => `  ${d}   (mentions this page / its features)`),
+    "",
+    "WHAT EXISTS",
+    ...existingCode(p.route),
+    mods.length ? `  feature modules: ${mods.join(", ")}` : "  feature module: see docs/architecture/MODULES.md",
+    "",
+    "DO",
+    `  1. git switch develop && git pull && git switch -c feature/${tasks.be?.number ?? "<BE#>"}-${slug}`,
+    "  2. SQL (if needed): new Flyway file V<yyyyMMddHHmm>__<what>.sql + DATA_MODEL.md",
+    "  3. Backend: endpoints + Bean Validation + service rules + integration tests (incl. cross-tenant); regenerate OpenAPI + api-client",
+    "  4. Frontend: screen in apps/web from packages/ui, TanStack Query hooks in features/<name>/queries.ts, Zod forms",
+    "  5. ./mvnw verify  ·  pnpm typecheck && pnpm test && pnpm check:design",
+    `  6. Tick checklists as items finish: npm run agent-task -- check <n> <items>`,
+    `  7. One PR into develop (both task numbers, screenshots light + dark, no AI attribution)`,
+    `  8. npm run agent-task -- review ${tasks.be?.number ?? "<BE#>"} "…PR link…"  and  review ${tasks.fe?.number ?? "<FE#>"} "…"`,
+    "  9. Stop. Nitheesh reviews and merges.",
+    "",
+    "Unclear rule? Comment on the task, mention the owner (@prakalya for business / tax rules), and stop. Never invent rules.",
+  ];
+  console.log(out.join("\n"));
+}
+
+async function startPage(query: string, me: UserLean) {
+  const p = await pageBrief(query);
+  const { be, fe, created } = await ensurePageTasks(p as never, { actor: String(me._id), assignee: String(me._id), actorName: me.name });
+  for (const t of [be, fe]) {
+    mustOwn(t, me);
+    if (t.column === "in_progress") continue;
+    if (!STARTABLE.includes(t.column)) {
+      console.warn(`Note: ${tag(t)} is in "${await columnName(t, t.column)}"; left where it is.`);
+      continue;
+    }
+    await move(t, me, "in_progress");
+    await addComment(t, me, `Started page ${p.name} ${p.route} (AI agent). Frontend + backend on one branch.`);
+  }
+  if (created.length) console.log(`Created ${created.map((s) => (s === "be" ? `BE #${be.number}` : `FE #${fe.number}`)).join(" and ")} for ${me.name}.`);
+  console.log(`BE #${be.number} and FE #${fe.number} are In progress.\n`);
+  await printBrief(p);
+}
+
 async function main() {
   const [cmd, num, ...rest] = process.argv.slice(2);
   if (!cmd || cmd === "help") {
-    console.log("Usage: npm run agent-task -- <show|start|check|comment|review> <task#> [...]  (see docs/team/AGENT_TASK_WORKFLOW.md)");
+    console.log('Usage: npm run agent-task -- <show|start|check|comment|review> <task#> [...]\n       npm run agent-task -- <page|start-page> "<page name or route>"  (see docs/team/BUILD_A_PAGE.md)');
     return;
   }
   if (cmd === "done") stop("Agents never move tasks to Done. Use `review`; Nitheesh moves it to Done after checking.");
   const uri = process.env.MONGODB_URI ?? stop("Set MONGODB_URI in .env.local (the hub database).");
   await mongoose.connect(uri);
+  if (cmd === "page" || cmd === "start-page") {
+    const query = [num, ...rest].filter(Boolean).join(" ");
+    if (!query) stop('Give the page name or route, e.g. "Team" or /onboarding/team.');
+    if (cmd === "page") return printBrief(await pageBrief(query));
+    return startPage(query, await actor());
+  }
   const t = await load(num);
   // Reading needs no identity; every write is done as HUB_AGENT_AS.
   if (cmd === "show") return show(t);
@@ -181,7 +328,7 @@ async function main() {
     }
 
     default:
-      stop(`Unknown command "${cmd}". Use show, start, check, comment or review.`);
+      stop(`Unknown command "${cmd}". Use show, start, check, comment, review, page or start-page.`);
   }
 }
 
