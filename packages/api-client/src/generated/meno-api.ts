@@ -4,6 +4,106 @@
  */
 
 export interface paths {
+    "/api/v1/admin/permissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Every permission by module, with the roles that hold it for your business */
+        get: operations["permissionCatalogue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Roles: defaults first, then your own, with how many people hold each */
+        get: operations["listRoles"];
+        put?: never;
+        /**
+         * Create your own role
+         * @description Empty, or starting with another role's permissions.
+         */
+        post: operations["createRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/roles/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One role with its permissions */
+        get: operations["getRole"];
+        /**
+         * Rename your own role
+         * @description If-Match: the role's version.
+         */
+        put: operations["renameRole"];
+        post?: never;
+        /**
+         * Remove your own role
+         * @description Archived, so old records keep its name. Refused while active people hold it or open invitations carry it.
+         */
+        delete: operations["archiveRole"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/roles/{code}/permissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set the role's permissions (whole list)
+         * @description If-Match: permissionsVersion (0 while a default role still has MENO's list). For a default role this makes your own copy of its list; reset brings MENO's back.
+         */
+        put: operations["setRolePermissions"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/roles/{code}/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Give a default role MENO's permissions back */
+        post: operations["resetRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/users": {
         parameters: {
             query?: never;
@@ -875,6 +975,11 @@ export interface components {
             /** Format: uuid */
             userId?: string;
         };
+        NewRoleRequest: {
+            copyFrom?: string;
+            description?: string;
+            label: string;
+        };
         Option: {
             code?: string;
             label?: string;
@@ -887,6 +992,20 @@ export interface components {
             };
             settings?: components["schemas"]["SettingInfo"][];
             states?: components["schemas"]["StateInfo"][];
+        };
+        PermissionCatalogue: {
+            modules?: components["schemas"]["PermissionModule"][];
+            roles?: components["schemas"]["RoleColumn"][];
+        };
+        PermissionEntry: {
+            code?: string;
+            description?: string;
+            roleCodes?: string[];
+        };
+        PermissionModule: {
+            code?: string;
+            label?: string;
+            permissions?: components["schemas"]["PermissionEntry"][];
         };
         ProblemDetail: {
             detail?: string;
@@ -912,13 +1031,59 @@ export interface components {
             live?: boolean;
             ready?: boolean;
         };
+        RenameRoleRequest: {
+            description?: string;
+            label: string;
+        };
         ResetPasswordRequest: {
             password: string;
             token: string;
         };
+        RoleColumn: {
+            code?: string;
+            custom?: boolean;
+            label?: string;
+            locked?: boolean;
+        };
+        RoleDetail: {
+            /** Format: int64 */
+            activeUsers?: number;
+            allBranches?: boolean;
+            code?: string;
+            custom?: boolean;
+            customised?: boolean;
+            description?: string;
+            label?: string;
+            locked?: boolean;
+            permissionCodes?: string[];
+            /** Format: int64 */
+            permissionsVersion?: number;
+            /** Format: int64 */
+            totalUsers?: number;
+            /** Format: int64 */
+            version?: number;
+        };
         RoleOption: {
             code?: string;
             label?: string;
+        };
+        RolePermissionsRequest: {
+            permissionCodes: string[];
+        };
+        RoleSummary: {
+            /** Format: int64 */
+            activeUsers?: number;
+            allBranches?: boolean;
+            code?: string;
+            custom?: boolean;
+            customised?: boolean;
+            description?: string;
+            label?: string;
+            locked?: boolean;
+            /** Format: int32 */
+            permissionCount?: number;
+            /** Format: int64 */
+            totalUsers?: number;
         };
         RoleView: {
             code?: string;
@@ -1083,6 +1248,312 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    permissionCatalogue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionCatalogue"];
+                };
+            };
+        };
+    };
+    listRoles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleSummary"][];
+                };
+            };
+        };
+    };
+    createRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewRoleRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_NOT_FOUND (copyFrom) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_NAME_TAKEN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+        };
+    };
+    getRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The role; ETag = the role's version (name). The permission list has its own version, permissionsVersion, for PUT {code}/permissions. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_NOT_FOUND (also another tenant's role) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+        };
+    };
+    renameRole: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string;
+            };
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RenameRoleRequest"];
+            };
+        };
+        responses: {
+            /** @description Saved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_NOT_EDITABLE (default role), IDENTITY_ROLE_NAME_TAKEN, COMMON_VERSION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description COMMON_PRECONDITION_REQUIRED (no If-Match) */
+            428: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+        };
+    };
+    archiveRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Archived */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description IDENTITY_ROLE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description IDENTITY_ROLE_NOT_EDITABLE (default role), IDENTITY_ROLE_IN_USE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    setRolePermissions: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string;
+            };
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RolePermissionsRequest"];
+            };
+        };
+        responses: {
+            /** @description Saved; applies within 30 seconds */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_PERMISSION_INVALID, field errors */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_LOCKED, IDENTITY_LAST_ADMIN, COMMON_VERSION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description COMMON_PRECONDITION_REQUIRED (no If-Match) */
+            428: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+        };
+    };
+    resetRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Reset */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description IDENTITY_ROLE_LOCKED, IDENTITY_ROLE_NOT_EDITABLE (own role), IDENTITY_LAST_ADMIN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+        };
+    };
     listUsers: {
         parameters: {
             query?: {

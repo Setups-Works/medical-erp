@@ -25,13 +25,16 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
     java.util.Optional<AppUser> findByIdAndTenantId(UUID id, UUID tenantId);
 
     /**
-     * Active users of the tenant who hold {@code permission} through any of their roles. Used to keep at least one
+     * Active users of the tenant who hold {@code permission} through any of their roles, using the tenant's own
+     * permission list for a role when it has one (role_override) and MENO's defaults otherwise. Used to keep at least one
      * person who can manage users (module rule 2) before a deactivation or role change commits.
      */
     @org.springframework.data.jpa.repository.Query(nativeQuery = true, value = """
             select count(distinct u.id) from app_user u
               join user_role ur on ur.user_id = u.id
+              left join role_override o on o.tenant_id = u.tenant_id and o.role = ur.role
               join role_permission rp on rp.role = ur.role
+                   and rp.tenant_id is not distinct from o.tenant_id
              where u.tenant_id = :tenantId and u.status = 'ACTIVE' and rp.permission_code = :permission""")
     long countActiveWithPermission(UUID tenantId, String permission);
 }

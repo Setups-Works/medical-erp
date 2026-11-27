@@ -101,7 +101,7 @@ public class UserAdminService {
     public UserAdminOptions options() {
         permissions.require(VIEW);
         Context ctx = context();
-        List<UserRoleOption> roleOptions = ctx.roles().values().stream()
+        List<UserRoleOption> roleOptions = ctx.roles().values().stream().filter(r -> !r.isArchived())
                 .map(r -> new UserRoleOption(r.getCode(), r.getLabel(), r.isInvitable(), r.isAllBranches()))
                 .toList();
         List<BranchOption> branches = ctx.branches().values().stream()
@@ -156,7 +156,8 @@ public class UserAdminService {
         touched.removeIf(code -> wanted.contains(code) && user.getRoles().contains(code));
         for (String code : touched) {
             RoleDefinition role = ctx.roles().get(code);
-            if (role == null || !role.isInvitable()) {
+            boolean addingArchived = role != null && role.isArchived() && wanted.contains(code);
+            if (role == null || !role.isInvitable() || addingArchived) {
                 throw new MenoException(HttpStatus.BAD_REQUEST, "IDENTITY_ROLE_INVALID",
                         role == null ? "Choose a role from the list." : role.getLabel() + " can't be changed here.");
             }
@@ -233,7 +234,8 @@ public class UserAdminService {
     private Context context() {
         UUID tenantId = TenantContext.requireTenantId();
         UUID actorId = TenantContext.userId().orElse(null);
-        Map<String, RoleDefinition> roleMap = roles.findAllByOrderBySortOrderAsc().stream()
+        // Archived roles stay in the map so people who still hold one show its name; options leave them out.
+        Map<String, RoleDefinition> roleMap = roles.findAllForTenant(tenantId).stream()
                 .collect(Collectors.toMap(RoleDefinition::getCode, Function.identity(), (a, b) -> a,
                         LinkedHashMap::new));
         Map<UUID, BranchOption> branches = branchDirectory.branches(tenantId).stream()
@@ -266,8 +268,10 @@ public class UserAdminService {
         return user;
     }
 
+    /** Someone active must still be able to manage users and roles (identity rule 2). */
     private void requireSomeoneCanManage(UUID tenantId, String message) {
-        if (users.countActiveWithPermission(tenantId, MANAGE) == 0) {
+        if (users.countActiveWithPermission(tenantId, MANAGE) == 0
+                || users.countActiveWithPermission(tenantId, RoleAdminService.MANAGE) == 0) {
             throw new MenoException(HttpStatus.CONFLICT, "IDENTITY_LAST_ADMIN", message);
         }
     }

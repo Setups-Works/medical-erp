@@ -38,6 +38,15 @@ export type StaffUserPage = S["StaffUserPage"];
 export type UserAdminOptions = S["UserAdminOptions"];
 export type UserRoleOption = S["UserRoleOption"];
 export type UserAccessRequest = S["UserAccessRequest"];
+export type RoleSummary = S["RoleSummary"];
+export type RoleDetail = S["RoleDetail"];
+export type NewRoleRequest = S["NewRoleRequest"];
+export type RenameRoleRequest = S["RenameRoleRequest"];
+export type RolePermissionsRequest = S["RolePermissionsRequest"];
+export type PermissionCatalogue = S["PermissionCatalogue"];
+export type PermissionModule = S["PermissionModule"];
+export type PermissionEntry = S["PermissionEntry"];
+export type RoleColumn = S["RoleColumn"];
 
 // Proposed (contracts/openapi/proposed/auth.yaml), served by MSW until built.
 type P = Proposed["schemas"];

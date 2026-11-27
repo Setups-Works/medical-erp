@@ -112,7 +112,7 @@ public class InvitationService {
     public TeamOptions options() {
         permissions.require(VIEW);
         UUID tenantId = TenantContext.requireTenantId();
-        List<RoleOption> roleOptions = roles.findByInvitableTrueOrderBySortOrderAsc().stream()
+        List<RoleOption> roleOptions = roles.findVisible(tenantId).stream().filter(RoleDefinition::isInvitable)
                 .map(r -> new RoleOption(r.getCode(), r.getLabel())).toList();
         List<BranchOption> branches = branchDirectory.branches(tenantId).stream().map(InvitationService::option)
                 .toList();
@@ -146,7 +146,7 @@ public class InvitationService {
             throw new MenoException(HttpStatus.SERVICE_UNAVAILABLE, "NOTIFICATION_CHANNEL_DISABLED",
                     "SMS isn't set up yet. Add an email address to send the invitation.");
         }
-        RoleDefinition role = roles.findById(cmd.roleCode()).filter(RoleDefinition::isInvitable)
+        RoleDefinition role = roles.findVisible(tenantId, cmd.roleCode()).filter(RoleDefinition::isInvitable)
                 .orElseThrow(() -> new MenoException(HttpStatus.BAD_REQUEST, "IDENTITY_ROLE_INVALID",
                         "Choose a role from the list."));
         Lookups lookups = lookups(tenantId);
@@ -234,7 +234,7 @@ public class InvitationService {
         Map<UUID, BranchOption> branches = branchDirectory.branches(tenantId).stream().map(InvitationService::option)
                 .collect(Collectors.toMap(BranchOption::id, Function.identity(), (a, b) -> a,
                         java.util.LinkedHashMap::new));
-        Map<String, String> labels = roles.findAllByOrderBySortOrderAsc().stream()
+        Map<String, String> labels = roles.findAllForTenant(tenantId).stream()
                 .collect(Collectors.toMap(RoleDefinition::getCode, RoleDefinition::getLabel));
         return new Lookups(branches, labels);
     }

@@ -17,6 +17,10 @@ export type MockTenant = {
   settings: Record<string, string>;
   progress: Record<string, "DONE" | "SKIPPED">;
   invitations?: MockInvitation[];
+  /** The tenant's own roles (PLT-07). */
+  customRoles?: { code: string; label: string; description?: string; version: number; archived?: boolean }[];
+  /** role_override: the tenant's own permission list per role, with its version. */
+  rolePermissions?: Record<string, { codes: string[]; version: number }>;
   live: boolean;
   goLiveDate?: string;
 };

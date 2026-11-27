@@ -19,6 +19,8 @@ import {
   MOCK_INVITE_TOKEN,
   MOCK_OTP,
   MOCK_RESET_TOKEN,
+  PERMISSION_MODULES,
+  ROLE_DESCRIPTIONS,
   ROLE_PERMISSIONS,
   SETTINGS,
   START_OPTIONS,
@@ -181,14 +183,23 @@ const teamHandlers = [
 ];
 
 // ---------------------------------------------------------------- users (identity UserAdminController, PLT-06)
-const permissionsOf = (u: MockUser) => [...new Set(u.roles.flatMap((r) => ROLE_PERMISSIONS[r] ?? []))].sort();
+/** Defaults plus the tenant's own live roles (role table, V202611271600). */
+const tenantRoles = (t: MockTenant) => [
+  ...ALL_ROLES.map((r) => ({ ...r, custom: false, locked: r.code === "OWNER", description: ROLE_DESCRIPTIONS[r.code], version: 0 })),
+  ...(t.customRoles ?? []).filter((r) => !r.archived).map((r) => ({ ...r, assignable: true, allBranches: false, custom: true, locked: false })),
+];
+const effectivePerms = (t: MockTenant, role: string) => t.rolePermissions?.[role]?.codes ?? ROLE_PERMISSIONS[role] ?? [];
+const permissionsOf = (u: MockUser) => {
+  const t = db.get().tenants[u.tenantId];
+  return [...new Set(u.roles.flatMap((r) => (t ? effectivePerms(t, r) : (ROLE_PERMISSIONS[r] ?? []))))].sort();
+};
 const coversAll = (roles: string[]) => roles.some((c) => ALL_ROLES.find((r) => r.code === c)?.allBranches);
 const denied = () => problem(403, "COMMON_PERMISSION_DENIED", "You don't have permission to do this.");
 function staffView(t: MockTenant, u: MockUser, me: MockUser) {
   const all = coversAll(u.roles);
   return {
     id: u.id, fullName: u.fullName, email: u.email, mobile: u.mobile ? `+91${u.mobile}` : undefined, status: u.disabled ? "DISABLED" : "ACTIVE",
-    roles: ALL_ROLES.filter((r) => u.roles.includes(r.code)).map((r) => ({ code: r.code, label: r.label })),
+    roles: tenantRoles(t).filter((r) => u.roles.includes(r.code)).map((r) => ({ code: r.code, label: r.label })),
     branches: all ? [] : teamBranches(t).filter((b) => (u.branchIds ?? []).includes(b.id)), allBranches: all,
     lastLoginAt: undefined, createdAt: u.createdAt ?? new Date().toISOString(), you: u.id === me.id, version: u.version ?? 0,
   };
@@ -198,7 +209,7 @@ function staffOf(t: MockTenant, id: string) {
 }
 
 const userHandlers = [
-  http.get(`${API}/admin/users/options`, withAuth(({ tenant }) => HttpResponse.json({ roles: ALL_ROLES, branches: teamBranches(tenant) }))),
+  http.get(`${API}/admin/users/options`, withAuth(({ tenant }) => HttpResponse.json({ roles: tenantRoles(tenant).map(({ code, label, assignable, allBranches }) => ({ code, label, assignable, allBranches })), branches: teamBranches(tenant) }))),
   http.get(
     `${API}/admin/users`,
     withAuth(({ tenant, user, request }) => {
@@ -227,7 +238,7 @@ const userHandlers = [
       if (Number(ifMatch.replace(/^W\//, "").replace(/"/g, "")) !== (u.version ?? 0)) return problem(409, "COMMON_VERSION_CONFLICT", "Someone else changed this just now. Reload to see the latest and try again.");
       const roles = Array.isArray(b.roleCodes) ? (b.roleCodes as string[]) : [];
       const touched = [...roles.filter((r) => !u.roles.includes(r)), ...u.roles.filter((r) => !roles.includes(r))];
-      if (touched.some((c) => !ALL_ROLES.find((r) => r.code === c)?.assignable)) return invalid("IDENTITY_ROLE_INVALID", "Choose a role from the list.");
+      if (touched.some((c) => !tenantRoles(tenant).find((r) => r.code === c)?.assignable)) return invalid("IDENTITY_ROLE_INVALID", "Choose a role from the list.");
       if (!roles.length) return invalid("IDENTITY_ROLE_REQUIRED", "Choose at least one role.");
       const branchIds = coversAll(roles) ? [] : Array.isArray(b.branchIds) ? (b.branchIds as string[]) : [];
       if (!coversAll(roles) && (!branchIds.length || !branchIds.every((id) => tenant.branches.some((x) => x.id === id)))) return invalid("IDENTITY_USER_BRANCH_INVALID", "Choose at least one of your branches.");
@@ -248,6 +259,125 @@ const userHandlers = [
       Object.assign(u, { disabled: deactivate, version: (u.version ?? 0) + 1 });
       db.save();
       return HttpResponse.json(staffView(tenant, u, user));
+    }),
+  ),
+];
+
+// ---------------------------------------------------------------- roles (identity RoleAdminController, PLT-07)
+/** The version in If-Match ("3" or W/"3"); NaN when missing, which never matches. */
+const ifMatchOf = (request: Request) => Number((request.headers.get("If-Match") ?? "").replace(/^W\//, "").replace(/"/g, "") || NaN);
+const conflict = () => problem(409, "COMMON_VERSION_CONFLICT", "Someone else changed this just now. Reload to see the latest and try again.");
+function holders(t: MockTenant, code: string) {
+  const people = db.get().users.filter((u) => u.tenantId === t.id && u.roles.includes(code));
+  return { activeUsers: people.filter((u) => !u.disabled).length, totalUsers: people.length };
+}
+function roleDetail(t: MockTenant, code: string) {
+  const r = tenantRoles(t).find((x) => x.code === code);
+  if (!r) return problem(404, "IDENTITY_ROLE_NOT_FOUND", "Role not found.");
+  const own = t.rolePermissions?.[code];
+  return {
+    code: r.code, label: r.label, description: r.description, custom: r.custom, customised: !r.custom && Boolean(own), locked: r.locked, allBranches: r.allBranches,
+    permissionCodes: [...effectivePerms(t, code)].sort(), ...holders(t, code), version: r.version, permissionsVersion: own?.version ?? 0,
+  };
+}
+const canRoles = (u: MockUser, manage = false) => permissionsOf(u).includes(manage ? "identity.role.manage" : "identity.role.view");
+const labelTaken = (t: MockTenant, label: string, except = "") => tenantRoles(t).some((r) => r.code !== except && r.label.toLowerCase() === label.trim().toLowerCase());
+
+const roleHandlers = [
+  http.get(
+    `${API}/admin/roles`,
+    withAuth(({ tenant, user }) => {
+      if (!canRoles(user)) return denied();
+      return HttpResponse.json(
+        tenantRoles(tenant).map((r) => ({ code: r.code, label: r.label, description: r.description, custom: r.custom, customised: !r.custom && Boolean(tenant.rolePermissions?.[r.code]), locked: r.locked, allBranches: r.allBranches, permissionCount: effectivePerms(tenant, r.code).length, ...holders(tenant, r.code) })),
+      );
+    }),
+  ),
+  http.get(
+    `${API}/admin/permissions`,
+    withAuth(({ tenant, user }) => {
+      if (!canRoles(user)) return denied();
+      const roles = tenantRoles(tenant);
+      return HttpResponse.json({
+        modules: PERMISSION_MODULES.map((m) => ({ code: m.code, label: m.label, permissions: m.permissions.map(([code, description]) => ({ code, description, roleCodes: roles.filter((r) => effectivePerms(tenant, r.code).includes(code)).map((r) => r.code) })) })),
+        roles: roles.map((r) => ({ code: r.code, label: r.label, custom: r.custom, locked: r.locked })),
+      });
+    }),
+  ),
+  http.get(
+    `${API}/admin/roles/:code`,
+    withAuth<{ code: string }>(({ tenant, user, params }) => {
+      if (!canRoles(user)) return denied();
+      const d = roleDetail(tenant, params.code);
+      return d instanceof Response ? d : HttpResponse.json(d);
+    }),
+  ),
+  http.post(
+    `${API}/admin/roles`,
+    withAuth(async ({ tenant, user, request }) => {
+      if (!canRoles(user, true)) return denied();
+      const b = await body(request);
+      const label = str(b.label);
+      if (!label) return invalid("HTTP_400", "Enter a name for the role.");
+      if (labelTaken(tenant, label)) return problem(409, "IDENTITY_ROLE_NAME_TAKEN", "A role with this name already exists.");
+      if (str(b.copyFrom) && !tenantRoles(tenant).some((r) => r.code === b.copyFrom)) return problem(404, "IDENTITY_ROLE_NOT_FOUND", "Role not found.");
+      const code = `CUSTOM_${newId().replace(/-/g, "").slice(0, 12).toUpperCase()}`;
+      (tenant.customRoles ??= []).push({ code, label, description: str(b.description), version: 0 });
+      (tenant.rolePermissions ??= {})[code] = { codes: str(b.copyFrom) ? [...effectivePerms(tenant, String(b.copyFrom))] : [], version: 1 };
+      db.save();
+      return HttpResponse.json(roleDetail(tenant, code), { status: 201 });
+    }),
+  ),
+  http.put(
+    `${API}/admin/roles/:code`,
+    withAuth<{ code: string }>(async ({ tenant, user, params, request }) => {
+      if (!canRoles(user, true)) return denied();
+      const role = (tenant.customRoles ?? []).find((r) => r.code === params.code && !r.archived);
+      if (!role) return tenantRoles(tenant).some((r) => r.code === params.code) ? problem(409, "IDENTITY_ROLE_NOT_EDITABLE", "MENO's default roles keep their names. Create your own role to use another name.") : problem(404, "IDENTITY_ROLE_NOT_FOUND", "Role not found.");
+      const b = await body(request);
+      if (ifMatchOf(request) !== role.version) return conflict();
+      if (labelTaken(tenant, String(b.label ?? ""), role.code)) return problem(409, "IDENTITY_ROLE_NAME_TAKEN", "A role with this name already exists.");
+      Object.assign(role, { label: String(b.label).trim(), description: str(b.description), version: role.version + 1 });
+      db.save();
+      return HttpResponse.json(roleDetail(tenant, role.code));
+    }),
+  ),
+  http.put(
+    `${API}/admin/roles/:code/permissions`,
+    withAuth<{ code: string }>(async ({ tenant, user, params, request }) => {
+      if (!canRoles(user, true)) return denied();
+      const d = roleDetail(tenant, params.code);
+      if (d instanceof Response) return d;
+      if (d.locked) return problem(409, "IDENTITY_ROLE_LOCKED", `${d.label} always has every permission, so it can't be changed.`);
+      const b = await body(request);
+      if (ifMatchOf(request) !== d.permissionsVersion) return conflict();
+      (tenant.rolePermissions ??= {})[params.code] = { codes: Array.isArray(b.permissionCodes) ? (b.permissionCodes as string[]) : [], version: d.permissionsVersion + 1 };
+      db.save();
+      return HttpResponse.json(roleDetail(tenant, params.code));
+    }),
+  ),
+  http.post(
+    `${API}/admin/roles/:code/reset`,
+    withAuth<{ code: string }>(({ tenant, user, params }) => {
+      if (!canRoles(user, true)) return denied();
+      const d = roleDetail(tenant, params.code);
+      if (d instanceof Response) return d;
+      if (d.custom) return problem(409, "IDENTITY_ROLE_NOT_EDITABLE", "Only MENO's default roles can be reset.");
+      delete tenant.rolePermissions?.[params.code];
+      db.save();
+      return HttpResponse.json(roleDetail(tenant, params.code));
+    }),
+  ),
+  http.delete(
+    `${API}/admin/roles/:code`,
+    withAuth<{ code: string }>(({ tenant, user, params }) => {
+      if (!canRoles(user, true)) return denied();
+      const role = (tenant.customRoles ?? []).find((r) => r.code === params.code && !r.archived);
+      if (!role) return problem(409, "IDENTITY_ROLE_NOT_EDITABLE", "MENO's default roles can't be removed.");
+      if (holders(tenant, role.code).activeUsers > 0) return problem(409, "IDENTITY_ROLE_IN_USE", "People still have this role or are invited with it. Give them another role first.");
+      role.archived = true;
+      db.save();
+      return new HttpResponse(null, { status: 204 });
     }),
   ),
 ];
@@ -561,6 +691,7 @@ export const builtHandlers = [
   }),
   ...teamHandlers,
   ...userHandlers,
+  ...roleHandlers,
 ];
 
 export const proposedHandlers = [
