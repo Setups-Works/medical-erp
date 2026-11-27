@@ -94,33 +94,43 @@ class UserAdminIntegrationTest {
         long version = version(owner, url);
 
         // Field and business rules.
-        call(put(url + "/access"), owner.bearer(), access("OWNER", b2, version))
+        call(put(url + "/access").header("If-Match", etag(version)), owner.bearer(), access("OWNER", b2))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_INVALID"));
-        call(put(url + "/access"), owner.bearer(), """
-                {"roleCodes":[],"branchIds":["%s"],"version":%d}""".formatted(b2, version))
+        call(put(url + "/access").header("If-Match", etag(version)), owner.bearer(), """
+                {"roleCodes":[],"branchIds":["%s"]}""".formatted(b2))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_REQUIRED"));
-        call(put(url + "/access"), owner.bearer(), access("BRANCH_MANAGER", UUID.randomUUID().toString(), version))
+        call(put(url + "/access").header("If-Match", etag(version)), owner.bearer(), access("BRANCH_MANAGER", UUID.randomUUID().toString()))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("IDENTITY_USER_BRANCH_INVALID"));
-        call(put(url + "/access"), owner.bearer(), """
-                {"roleCodes":["BRANCH_MANAGER"],"branchIds":[],"version":%d}""".formatted(version))
+        call(put(url + "/access").header("If-Match", etag(version)), owner.bearer(), """
+                {"roleCodes":["BRANCH_MANAGER"],"branchIds":[]}""")
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("IDENTITY_USER_BRANCH_INVALID"));
         call(put(url + "/access"), owner.bearer(), "{\"roleCodes\":[\"PHARMACIST\"]}")
                 .andExpect(status().isBadRequest());
 
+        // The version travels in If-Match: missing is 428, unreadable 400; GET answers it as the ETag.
+        call(put(url + "/access"), owner.bearer(), access("BRANCH_MANAGER", b2))
+                .andExpect(status().isPreconditionRequired())
+                .andExpect(jsonPath("$.code").value("COMMON_PRECONDITION_REQUIRED"));
+        call(put(url + "/access").header("If-Match", "*"), owner.bearer(), access("BRANCH_MANAGER", b2))
+                .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("COMMON_IF_MATCH_INVALID"));
+        call(get(url), owner.bearer(), null)
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header()
+                        .string("ETag", etag(version)));
+
         // Priya becomes branch manager of the second shop; a stale version is refused afterwards.
-        call(put(url + "/access"), owner.bearer(), access("BRANCH_MANAGER", b2, version))
+        call(put(url + "/access").header("If-Match", etag(version)), owner.bearer(), access("BRANCH_MANAGER", b2))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.roles[0].code").value("BRANCH_MANAGER"))
                 .andExpect(jsonPath("$.branches[0].code").value("B2"))
                 .andExpect(jsonPath("$.version").value(version + 1));
-        call(put(url + "/access"), owner.bearer(), access("PHARMACIST", ho, version))
+        call(put(url + "/access").header("If-Match", etag(version)), owner.bearer(), access("PHARMACIST", ho))
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("COMMON_VERSION_CONFLICT"));
 
         // The owner role is never taken away here, and nobody deactivates themselves.
         String self = "/api/v1/admin/users/" + owner.userId();
-        call(put(self + "/access"), owner.bearer(), access("PHARMACIST", ho, version(owner, self)))
+        call(put(self + "/access").header("If-Match", etag(version(owner, self))), owner.bearer(), access("PHARMACIST", ho))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_INVALID"));
         call(post(self + "/deactivate"), owner.bearer(), null)
                 .andExpect(status().isConflict())
@@ -166,7 +176,7 @@ class UserAdminIntegrationTest {
         call(get("/api/v1/admin/users/" + elsewhere.getId()), bm, null).andExpect(status().isNotFound());
         call(post("/api/v1/admin/users/" + colleague.getId() + "/deactivate"), bm, null)
                 .andExpect(status().isForbidden()).andExpect(jsonPath("$.code").value("COMMON_PERMISSION_DENIED"));
-        call(put("/api/v1/admin/users/" + colleague.getId() + "/access"), bm, access("PHARMACIST", b2, 0))
+        call(put("/api/v1/admin/users/" + colleague.getId() + "/access").header("If-Match", etag(0)), bm, access("PHARMACIST", b2))
                 .andExpect(status().isForbidden());
     }
 
@@ -184,14 +194,15 @@ class UserAdminIntegrationTest {
                 .andExpect(jsonPath("$.items[0].id").value(b.userId().toString()));
         call(get(url), b.bearer(), null)
                 .andExpect(status().isNotFound()).andExpect(jsonPath("$.code").value("IDENTITY_USER_NOT_FOUND"));
-        call(put(url + "/access"), b.bearer(), access("PHARMACIST", branchB, 0)).andExpect(status().isNotFound());
+        call(put(url + "/access").header("If-Match", etag(0)), b.bearer(), access("PHARMACIST", branchB)).andExpect(status().isNotFound());
         call(post(url + "/deactivate"), b.bearer(), null).andExpect(status().isNotFound());
         call(post(url + "/reactivate"), b.bearer(), null).andExpect(status().isNotFound());
         // A's branch can't be given to B's people either.
         String selfB = "/api/v1/admin/users/" + b.userId();
         AppUser staffB = staff(b, "Bala B", "PHARMACIST", branchB);
-        call(put("/api/v1/admin/users/" + staffB.getId() + "/access"), b.bearer(),
-                access("PHARMACIST", branchA, version(b, "/api/v1/admin/users/" + staffB.getId())))
+        call(put("/api/v1/admin/users/" + staffB.getId() + "/access")
+                .header("If-Match", etag(version(b, "/api/v1/admin/users/" + staffB.getId()))), b.bearer(),
+                access("PHARMACIST", branchA))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("IDENTITY_USER_BRANCH_INVALID"));
 
@@ -221,9 +232,13 @@ class UserAdminIntegrationTest {
         return v.longValue();
     }
 
-    private static String access(String role, String branchId, long version) {
+    private static String access(String role, String branchId) {
         return """
-                {"roleCodes":["%s"],"branchIds":["%s"],"version":%d}""".formatted(role, branchId, version);
+                {"roleCodes":["%s"],"branchIds":["%s"]}""".formatted(role, branchId);
+    }
+
+    private static String etag(long version) {
+        return "\"" + version + "\"";
     }
 
     /** A staff account as an accepted invitation would leave it (the /invite page isn't built yet). */

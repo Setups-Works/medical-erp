@@ -165,7 +165,7 @@ export interface paths {
         get?: never;
         /**
          * Change roles and branches
-         * @description Whole sets. Branches are needed unless a role covers every branch. Roles that aren't assignable can't be added or removed. Send the version you loaded.
+         * @description Whole sets. Branches are needed unless a role covers every branch. Roles that aren't assignable can't be added or removed. Send the version you loaded as If-Match ("3").
          */
         put: operations["changeUserAccess"];
         post?: never;
@@ -1214,8 +1214,6 @@ export interface components {
         UserAccessRequest: {
             branchIds: string[];
             roleCodes: string[];
-            /** Format: int64 */
-            version: number;
         };
         UserAdminOptions: {
             branches?: components["schemas"]["BranchOption"][];
@@ -1591,7 +1589,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description The account */
+            /** @description The account; ETag = its version */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1614,7 +1612,9 @@ export interface operations {
     changeUserAccess: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "If-Match"?: string;
+            };
             path: {
                 id: string;
             };
@@ -1635,7 +1635,7 @@ export interface operations {
                     "application/json": components["schemas"]["StaffUser"];
                 };
             };
-            /** @description IDENTITY_ROLE_INVALID, IDENTITY_ROLE_REQUIRED, IDENTITY_USER_BRANCH_INVALID, field errors */
+            /** @description IDENTITY_ROLE_INVALID, IDENTITY_ROLE_REQUIRED, IDENTITY_USER_BRANCH_INVALID, COMMON_IF_MATCH_INVALID, field errors */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1655,6 +1655,15 @@ export interface operations {
             };
             /** @description COMMON_VERSION_CONFLICT, IDENTITY_LAST_ADMIN */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description COMMON_PRECONDITION_REQUIRED (no If-Match) */
+            428: {
                 headers: {
                     [name: string]: unknown;
                 };
