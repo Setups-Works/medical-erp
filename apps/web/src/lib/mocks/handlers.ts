@@ -264,6 +264,8 @@ const userHandlers = [
 ];
 
 // ---------------------------------------------------------------- roles (identity RoleAdminController, PLT-07)
+/** The version in If-Match ("3" or W/"3"); NaN when missing, which never matches. */
+const ifMatchOf = (request: Request) => Number((request.headers.get("If-Match") ?? "").replace(/^W\//, "").replace(/"/g, "") || NaN);
 const conflict = () => problem(409, "COMMON_VERSION_CONFLICT", "Someone else changed this just now. Reload to see the latest and try again.");
 function holders(t: MockTenant, code: string) {
   const people = db.get().users.filter((u) => u.tenantId === t.id && u.roles.includes(code));
@@ -333,7 +335,7 @@ const roleHandlers = [
       const role = (tenant.customRoles ?? []).find((r) => r.code === params.code && !r.archived);
       if (!role) return tenantRoles(tenant).some((r) => r.code === params.code) ? problem(409, "IDENTITY_ROLE_NOT_EDITABLE", "MENO's default roles keep their names. Create your own role to use another name.") : problem(404, "IDENTITY_ROLE_NOT_FOUND", "Role not found.");
       const b = await body(request);
-      if (b.version !== role.version) return conflict();
+      if (ifMatchOf(request) !== role.version) return conflict();
       if (labelTaken(tenant, String(b.label ?? ""), role.code)) return problem(409, "IDENTITY_ROLE_NAME_TAKEN", "A role with this name already exists.");
       Object.assign(role, { label: String(b.label).trim(), description: str(b.description), version: role.version + 1 });
       db.save();
@@ -348,7 +350,7 @@ const roleHandlers = [
       if (d instanceof Response) return d;
       if (d.locked) return problem(409, "IDENTITY_ROLE_LOCKED", `${d.label} always has every permission, so it can't be changed.`);
       const b = await body(request);
-      if (b.permissionsVersion !== d.permissionsVersion) return conflict();
+      if (ifMatchOf(request) !== d.permissionsVersion) return conflict();
       (tenant.rolePermissions ??= {})[params.code] = { codes: Array.isArray(b.permissionCodes) ? (b.permissionCodes as string[]) : [], version: d.permissionsVersion + 1 };
       db.save();
       return HttpResponse.json(roleDetail(tenant, params.code));
