@@ -24,6 +24,22 @@ test.describe("platform reference data", () => {
     await expect(page.getByText("Email or password is wrong.")).toBeVisible();
   });
 
+  test("staff pages use the app sidebar with the platform menu", async ({ page, isMobile }) => {
+    await signIn(page);
+    if (isMobile) await page.getByTestId("menu-button").click();
+    const menu = page.getByRole("navigation", { name: "Main" });
+    await menu.getByRole("button", { name: "Operations" }).click();
+    await expect(menu.getByRole("link", { name: "Reference data" })).toHaveAttribute("aria-current", "page");
+    await menu.getByRole("button", { name: "Customers" }).click();
+    await expect(menu.locator("[aria-disabled=true]", { hasText: "License console" })).toContainText("Soon");
+    if (isMobile) await page.keyboard.press("Escape");
+    await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toContainText("Reference data");
+    await page.getByTestId("platform-account").click();
+    await expect(page.getByTestId("platform-staff-name")).toHaveText("MENO Admin");
+    await page.getByTestId("platform-sign-out").click();
+    await expect(page).toHaveURL(/\/platform\/login\//);
+  });
+
   test("staff load a PIN code file, a bad file is refused, and a reload asks to sign in again", async ({ page }) => {
     await signIn(page);
     const pin = page.getByTestId("dataset-PINCODE");

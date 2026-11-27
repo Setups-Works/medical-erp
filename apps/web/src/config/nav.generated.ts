@@ -92,3 +92,17 @@ export const NAV_ITEMS: readonly NavItemSpec[] = [
   {"group":"Administration","label":"Integrations","route":"/admin/integrations","edition":"B","features":["ADM-01"],"live":false},
   {"group":"Administration","label":"Subscriptions","route":"/admin/subscription","edition":"B","features":["PLT-14"],"live":false},
 ];
+
+/** MENO staff sidebar (NAVIGATION.md "Platform sidebar"). */
+export const PLATFORM_ITEMS: readonly NavItemSpec[] = [
+  {"group":"Overview","label":"Platform dashboard","route":"/platform","edition":"B","features":["DSH-09","PLT-15"],"live":false},
+  {"group":"Customers","label":"Onboarding pipeline","route":"/platform/onboarding","edition":"B","features":["PLT-28"],"live":false},
+  {"group":"Customers","label":"License console","route":"/platform/licenses","edition":"B","features":["LIC-08","LIC-02","LIC-11"],"live":false},
+  {"group":"Customers","label":"Plan catalogue","route":"/platform/plans","edition":"B","features":["LIC-01"],"live":false},
+  {"group":"Operations","label":"Reference data","route":"/platform/reference-data","edition":"B","features":["PLT-22"],"permission":"platform.reference.view","live":true},
+  {"group":"Operations","label":"Feature flags & releases","route":"/platform/releases","edition":"B","features":["PLT-39"],"live":false},
+  {"group":"Operations","label":"Reliability","route":"/platform/reliability","edition":"B","features":["PLT-41","PLT-43","SEC-15"],"live":false},
+  {"group":"Security","label":"Security assurance","route":"/platform/security","edition":"B","features":["PLT-44","SEC-07","SEC-08","SEC-10","SEC-14"],"live":false},
+  {"group":"Security","label":"Privileged access","route":"/platform/privileged-access","edition":"B","features":["SEC-06"],"live":false},
+  {"group":"Security","label":"Keys & secrets","route":"/platform/keys","edition":"B","features":["SEC-03","SEC-04"],"live":false},
+];

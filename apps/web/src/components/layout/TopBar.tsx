@@ -1,19 +1,16 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { Button, Icon } from "@meno/ui";
-import { locate } from "@/config/nav";
+import type { NavItemSpec } from "@/config/nav";
 import { WIDE, useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { sidebarStore, useSidebar } from "@/stores/sidebar";
-import { UserMenu } from "./UserMenu";
 
 /**
  * 48 px top bar (DESIGN_LANGUAGE §5): menu button, breadcrumb from the menu, theme, user menu. Branch switcher,
  * command search (NAV-02) and notifications join it with their features.
  */
-export function TopBar() {
-  const here = locate(usePathname());
+export function TopBar({ here, account }: { here: NavItemSpec | null; account: React.ReactNode }) {
   const { expanded, drawer } = useSidebar();
   const wide = useMediaQuery(WIDE);
   const { scheme, toggle } = useTheme();
@@ -49,7 +46,7 @@ export function TopBar() {
         <Button variant="ghost" size="icon" onClick={toggle} aria-label={scheme === "dark" ? "Switch to light" : "Switch to dark"}>
           <Icon name={scheme === "dark" ? "sun" : "moon"} />
         </Button>
-        <UserMenu />
+        {account}
       </div>
     </header>
   );
