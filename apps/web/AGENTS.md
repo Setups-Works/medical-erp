@@ -43,7 +43,8 @@ tests/e2e/                                      Playwright (Ashok; devs add happ
 | `/invite?token=` | `features/auth` `InviteScreen` | real meno-api (`GET /api/v1/invitations/{token}`, `POST …/accept`, public; signs in like login) |
 | `/onboarding` + `business` `pharmacy` `licences` `branches` `books` `configuration` `go-live` | `features/onboarding` | real meno-api (`/api/v1/onboarding/*`, `/gstin-verifications/{gstin}`) |
 | `/onboarding/team` | `features/onboarding` `TeamStep` | real meno-api (`/api/v1/team/options`, `/team/invitations`, `…/{id}/resend`, `…/{id}/revoke`); Zod `teamInvite` in `@meno/validation` |
-| `/admin/users` | `features/users` `UsersScreen` (+ `UserPanel`, shared `InviteForm` / `InvitationRow` also used by `TeamStep`) | real meno-api (`/api/v1/admin/users`, `…/options`, `…/{id}/access`, `…/{id}/deactivate`, `…/{id}/reactivate`, `/api/v1/team/*`); Zod `userAccess`; actions shown by permission (`hooks/usePermissions` → `/auth/me`) inside the stand-in `features/admin` `AdminShell` |
+| `/dashboard` | `features/dashboard` `DashboardScreen`: greeting, set-up progress until go-live (`tenancy.onboarding.view`), the screens you can open (from the menu), KPI placeholder until RPT-01 / DSH-08 | real meno-api (`/auth/me`, `/onboarding`) |
+| `/admin/users` | `features/users` `UsersScreen` (+ `UserPanel`, shared `InviteForm` / `InvitationRow` also used by `TeamStep`) | real meno-api (`/api/v1/admin/users`, `…/options`, `…/{id}/access`, `…/{id}/deactivate`, `…/{id}/reactivate`, `/api/v1/team/*`); Zod `userAccess`; actions shown by permission (`hooks/usePermissions` → `/auth/me`) inside `features/admin` `AdminShell` (Users / Roles / Permissions tabs in the app shell) |
 | `/admin/roles` | `features/admin` `RolesScreen` (+ `RoleEditor`, `NewRoleForm`) | real meno-api (`/api/v1/admin/roles`, `…/{code}`, `…/{code}/permissions`, `…/{code}/reset`, `DELETE …/{code}`, `/api/v1/admin/permissions`); Zod `roleForm` |
 | `/admin/permissions` | `features/admin` `PermissionsScreen` (matrix: permissions × roles, sticky first column, search) | real meno-api (`/api/v1/admin/permissions`, `PUT`/`DELETE …/{permission}/roles/{role}`); not optimistic, a box ticks once saved |
 | `/platform/login`, `/platform/reference-data` | `features/platform` (`PlatformLoginScreen`, `ReferenceDataScreen`, `DatasetCard`, `LoadFileForm`, `LoadHistory`) in `PlatformShell` | real meno-api (`/api/v1/platform/auth/login`, `/platform/reference-data`, `…/{code}/loads` multipart); MENO staff only (ADR-0020): own in-memory session (`features/platform/session.ts`) and client (`lib/platformApi.ts`, never refreshes), so a reload means signing in again. Zod `platformLogin`, `referenceLoad`. Mock staff: admin@meno.test / platform-pass-12 |
@@ -55,9 +56,14 @@ tests/e2e/                                      Playwright (Ashok; devs add happ
 - API types are generated (`pnpm gen:api`); `packages/api-client/src/overrides.ts` corrects 4 springdoc gaps until the backend annotations are fixed (listed in that file).
 - **Mocks are local-dev only**: `NEXT_PUBLIC_API_MOCKING=all|missing|off` works only under `next dev`; `next build` (staging, production) always uses the real API, the MSW code is pruned and `mockServiceWorker.js` is deleted from `out/`.
 
-## Navigation
+## Navigation (NAV-01)
 
-The sidebar menu is defined in `docs/design/NAVIGATION.md` (Dashboard + 9 groups, routes, edition, feature IDs). `src/config/nav.ts` must match it; don't add menu items that aren't in that table.
+The sidebar menu is defined in `docs/design/NAVIGATION.md` (Dashboard + 10 groups: routes, edition, feature IDs, section, `G` shortcut, permission). `pnpm gen:nav` writes `src/config/nav.generated.ts` from it, from PAGES.md (sub-pages) and from the route folders (an item is live once `app/(app)<route>/page.tsx` exists); never edit that file or add menu items in code. `src/config/nav.ts` holds the logic only (`buildMenu`, `canOpen`, `locate`, `goToKeys`).
+
+- Shell: `app/(app)/layout.tsx` → `RequireSession` + `components/layout/AppShell` (`Sidebar`, `TopBar`, `UserMenu`). Every signed-in workspace page goes under `app/(app)/`; onboarding and platform keep their own frames.
+- Sidebar prefs (rail / open, open groups) live in `stores/sidebar.ts` (localStorage). ≥ 1280 px the panel pushes the page; narrower it covers it; < 768 px it opens from the top bar.
+- Edition filtering is ready (`CompanyEdition`) but shows both editions until `company.edition` ships (PLT-02).
+- `G` go-to keys come from the Shortcut column (`hooks/useGoToShortcuts.ts`); the rest of the registry is NAV-04.
 
 ## Feature ownership
 

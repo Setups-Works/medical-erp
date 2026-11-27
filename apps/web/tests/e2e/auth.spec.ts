@@ -1,19 +1,19 @@
 import { expect, test } from "@playwright/test";
-import { OWNER, signIn, signUpThroughForm } from "./fixtures";
+import { OWNER, signIn, signOut, signUpThroughForm } from "./fixtures";
 
 // PLT-01 / AUT-04 sign-up, PLT-08 sign in with email or mobile + logout from all devices.
 test.describe("auth", () => {
   test("owner signs up, signs out, and signs back in with email or mobile", async ({ page }) => {
     await signUpThroughForm(page);
     await page.goto("/dashboard/");
-    await page.getByTestId("sign-out").click();
+    await signOut(page);
     await expect(page).toHaveURL(/\/login\/$/);
 
     await signIn(page, OWNER.email.toUpperCase());
     await expect(page).toHaveURL(/\/onboarding\//);
 
     await page.goto("/dashboard/");
-    await page.getByTestId("sign-out").click();
+    await signOut(page);
     await signIn(page, "+91 98765 43210");
     await expect(page).toHaveURL(/\/onboarding\//);
   });
@@ -21,7 +21,7 @@ test.describe("auth", () => {
   test("wrong password and a malformed identifier show friendly errors", async ({ page }) => {
     await signUpThroughForm(page);
     await page.goto("/dashboard/");
-    await page.getByTestId("sign-out").click();
+    await signOut(page);
 
     await signIn(page, "12345");
     await expect(page.getByText("10-digit mobile number")).toBeVisible();
@@ -34,7 +34,7 @@ test.describe("auth", () => {
   test("the same mobile can't open a second account", async ({ page }) => {
     await signUpThroughForm(page);
     await page.goto("/dashboard/");
-    await page.getByTestId("sign-out").click();
+    await signOut(page);
 
     await page.goto("/signup/");
     await page.getByLabel("Your name").fill("Second Owner");
@@ -53,7 +53,7 @@ test.describe("auth", () => {
   test("sign out of all devices ends the session", async ({ page }) => {
     await signUpThroughForm(page);
     await page.goto("/dashboard/");
-    await page.getByTestId("sign-out-all").click();
+    await signOut(page, true);
     await expect(page).toHaveURL(/\/login\/$/);
 
     await page.goto("/dashboard/");
