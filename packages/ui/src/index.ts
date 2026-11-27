@@ -2,6 +2,7 @@ export { cn } from "./cn";
 export { Button, type ButtonProps } from "./components/button";
 export { Input, PasswordInput, Textarea, Checkbox, controlClass, type InputProps } from "./components/input";
 export { Field, FieldGroup } from "./components/field";
+export { SuggestInput, type SuggestInputProps } from "./components/suggest-input";
 export { Select, type SelectOption } from "./components/select";
 export { ChoiceCards, Segmented } from "./components/choice";
 export { DatePicker } from "./components/date-picker";

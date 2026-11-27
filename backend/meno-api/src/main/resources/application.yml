@@ -129,6 +129,11 @@ meno:
       base-url: ${MENO_GSTIN_BASE_URL:https://api.gstverify.dubey.app}
       api-key: ${MENO_GSTIN_API_KEY:}
       timeout: ${MENO_GSTIN_TIMEOUT:PT8S}
+    pincode:
+      # Online PIN directory for PINs missing from MENO's own list (ADR-0021): postalpincode (default) | none.
+      provider: ${MENO_PINCODE_PROVIDER:postalpincode}
+      base-url: ${MENO_PINCODE_BASE_URL:https://api.postalpincode.in}
+      timeout: ${MENO_PINCODE_TIMEOUT:PT5S}
   party:
     gstin:
       cache-ttl: ${MENO_GSTIN_CACHE_TTL:PT24H}

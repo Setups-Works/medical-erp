@@ -1,4 +1,5 @@
 import {
+  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   BarChart3,
@@ -54,6 +55,7 @@ import { cn } from "../cn";
 
 /** Every icon used in the apps, by name. lucide only (DESIGN_LANGUAGE §10). Add names here when you need one. */
 const ICONS = {
+  alert: AlertTriangle,
   "arrow-left": ArrowLeft,
   "arrow-right": ArrowRight,
   "bar-chart": BarChart3,

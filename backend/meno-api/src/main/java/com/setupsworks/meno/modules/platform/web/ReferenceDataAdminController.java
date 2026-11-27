@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.setupsworks.meno.common.error.MenoException;
+import com.setupsworks.meno.modules.integrations.api.PincodeDirectory;
 import com.setupsworks.meno.modules.platform.domain.ReferenceFile;
 import com.setupsworks.meno.modules.platform.service.ReferenceDataService;
 
@@ -43,16 +44,22 @@ class ReferenceDataAdminController {
     private static final String CODE = "^[A-Z_]{2,40}$";
 
     private final ReferenceDataService service;
+    private final PincodeDirectory directory;
 
-    ReferenceDataAdminController(ReferenceDataService service) {
+    ReferenceDataAdminController(ReferenceDataService service, PincodeDirectory directory) {
         this.service = service;
+        this.directory = directory;
     }
 
-    /** status: NOT_LOADED, CURRENT, DUE (refresh is due), LATER (another module loads it in {@code phase}). */
+    /**
+     * status: NOT_LOADED, CURRENT, DUE (refresh is due), LATER (another module loads it in {@code phase}).
+     * onlineLookup: for PINCODE, the online directory asked for PINs missing from the list ("postalpincode",
+     * ADR-0021); null when lookups use the list only.
+     */
     record ReferenceDataset(String code, String name, String description, String sourceName, String sourceUrl,
             String licence, String attribution, int refreshMonths, String ownerModule, String phase, boolean loadable,
             String status, int rowCount, LocalDate sourceDate, Instant loadedAt, String loadedByName,
-            LocalDate dueOn) {
+            LocalDate dueOn, String onlineLookup) {
     }
 
     record ReferenceDatasetList(List<ReferenceDataset> items) {
@@ -74,7 +81,7 @@ class ReferenceDataAdminController {
     @Operation(summary = "Reference lists with their refresh status")
     @GetMapping
     ReferenceDatasetList referenceDatasets() {
-        return new ReferenceDatasetList(service.list().stream().map(ReferenceDataAdminController::view).toList());
+        return new ReferenceDatasetList(service.list().stream().map(this::view).toList());
     }
 
     @Operation(summary = "Last 20 load attempts of a list (loaded and refused)")
@@ -113,12 +120,13 @@ class ReferenceDataAdminController {
         }
     }
 
-    private static ReferenceDataset view(ReferenceDataService.Dataset d) {
+    private ReferenceDataset view(ReferenceDataService.Dataset d) {
         com.setupsworks.meno.modules.platform.domain.ReferenceDataset r = d.row();
         return new ReferenceDataset(r.getCode(), r.getName(), r.getDescription(), r.getSourceName(), r.getSourceUrl(),
                 r.getLicence(), r.getAttribution(), r.getRefreshMonths(), r.getOwnerModule(), r.getPhase(),
                 r.isLoadable(), d.status().name(), r.getRowCount(), r.getSourceDate(), r.getLoadedAt(),
-                d.loadedByName(), d.dueOn());
+                d.loadedByName(), d.dueOn(),
+                "PINCODE".equals(r.getCode()) && !"none".equals(directory.source()) ? directory.source() : null);
     }
 
     private static ReferenceLoad view(ReferenceDataService.Load l) {

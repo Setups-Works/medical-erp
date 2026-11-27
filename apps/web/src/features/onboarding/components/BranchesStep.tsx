@@ -4,12 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { BranchDetails, BranchView, OnboardingOptions } from "@meno/api-client";
-import { Badge, Button, Callout, Field, Icon, Input, Select } from "@meno/ui";
+import { Badge, Button, Callout, Field, Icon, Input, Select, SuggestInput } from "@meno/ui";
 import { branchStep, type BranchForm, type BranchStep as Values } from "@meno/validation";
 import { applyApiError } from "@/lib/problem";
 import { useBranches, useCompany, useOnboardingOptions, useSaveBranch } from "../queries";
 import { useGoNext } from "../useGoNext";
 import { StepFrame } from "./StepFrame";
+import { PinLookup } from "@/features/reference/components/PinLookup";
+import { citySuggestions, usePincode } from "@/features/reference/queries";
 
 const CODE_FIELDS = { TENANCY_BRANCH_CODE_TAKEN: "code", TENANCY_BRANCH_STATE_MISMATCH: "stateCode", TENANCY_STATE_UNKNOWN: "stateCode" } as const;
 
@@ -118,6 +120,7 @@ function BranchFormView({
     },
   });
   const { errors, isSubmitting } = form.formState;
+  const cities = citySuggestions(usePincode(form.watch("pin")).data);
 
   const onSubmit = form.handleSubmit(async (v) => {
     setFormError(null);
@@ -153,13 +156,22 @@ function BranchFormView({
         <Field label="PIN code" error={errors.pin?.message} required>
           <Input inputMode="numeric" maxLength={6} className="font-mono" {...form.register("pin")} />
         </Field>
-        <Field label="City" error={errors.city?.message} required>
-          <Input {...form.register("city")} />
+        <Field label="City" error={errors.city?.message} hint={cities.length ? "Pick a post office or type the city." : undefined} required>
+          <Controller control={form.control} name="city" render={({ field }) => <SuggestInput ref={field.ref} name={field.name} value={field.value ?? ""} onChange={field.onChange} onBlur={field.onBlur} suggestions={cities} />} />
         </Field>
         <Field label="District" error={errors.district?.message} optional>
           <Input {...form.register("district")} />
         </Field>
       </div>
+      <PinLookup
+        pin={form.watch("pin")}
+        stateCode={form.watch("stateCode")}
+        states={states}
+        onFound={(p) => {
+          // Fill only what is still empty; the state stays the company's (a branch must be in it).
+          if (!form.getValues("district") && p.district) form.setValue("district", p.district, { shouldDirty: true });
+        }}
+      />
       <Field label="State" error={errors.stateCode?.message} hint="A branch must be in the company's state." required>
         <Controller control={form.control} name="stateCode" render={({ field }) => <Select ref={field.ref} value={field.value} onValueChange={field.onChange} options={states} />} />
       </Field>

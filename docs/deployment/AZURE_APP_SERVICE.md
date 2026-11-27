@@ -92,6 +92,8 @@ Portal → Create → Web App: **Publish: Code**, **Runtime stack: Java 21**, **
 | `MENO_COOKIE_SECURE` | `true` | `true` | no |
 | `MENO_API_DOCS_ENABLED` | `true` | `false` | no |
 | `MENO_BOOTSTRAP_TENANT` / `_EMAIL` / `_PASSWORD` | first start only, then delete | first start only, then delete | password yes |
+| `MENO_PLATFORM_BOOTSTRAP_EMAIL` / `_NAME` / `_PASSWORD` | first MENO staff admin (ADR-0020): created on a start while `platform_user` is empty; password ≥ 12 characters or the API won't start; delete the password once signed in | same | password yes |
+| `MENO_PINCODE_PROVIDER` | `postalpincode` (default; online lookup for PINs missing from the list, ADR-0021) | `postalpincode` | no |
 
 Generate keys (once per environment, never commit them):
 

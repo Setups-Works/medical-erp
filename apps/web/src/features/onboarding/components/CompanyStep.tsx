@@ -4,10 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { isApiError, type CompanyDetails, type GstinView, type OnboardingOptions } from "@meno/api-client";
-import { Badge, Button, Callout, Field, FieldGroup, Input, Segmented, Select } from "@meno/ui";
+import { Badge, Button, Callout, Field, FieldGroup, Input, Segmented, Select, SuggestInput } from "@meno/ui";
 import { checkGstin, companyStep, type CompanyForm, type CompanyStep as Values } from "@meno/validation";
 import { applyApiError, problemMessage } from "@/lib/problem";
 import { useSessionUser } from "@/lib/session";
+import { PinLookup } from "@/features/reference/components/PinLookup";
+import { citySuggestions, usePincode } from "@/features/reference/queries";
 import { useCompany, useGstinLookup, useOnboardingOptions, useSaveCompany } from "../queries";
 import { useGoNext } from "../useGoNext";
 import { applyGstin, companyFormFrom, gstStatusTone, toSelect } from "../utils";
@@ -65,6 +67,7 @@ function CompanyFormView({ options, saved, save, onError }: { options: Onboardin
   const gstinOk = gstin.length === 15 && checkGstin(gstin) === null;
   // State follows the GSTIN (the most common GST set-up mistake is a wrong state, ONBOARDING.md §0).
   const stateLocked = gstinOk;
+  const cities = citySuggestions(usePincode(form.watch("pin")).data);
   const tone = gstStatusTone(fetched?.status);
   useEffect(() => {
     if (gstinOk && form.getValues("stateCode") !== gstin.slice(0, 2)) form.setValue("stateCode", gstin.slice(0, 2), { shouldValidate: form.formState.isSubmitted });
@@ -176,13 +179,23 @@ function CompanyFormView({ options, saved, save, onError }: { options: Onboardin
           <Field label="PIN code" error={errors.pin?.message} required>
             <Input inputMode="numeric" maxLength={6} autoComplete="postal-code" className="font-mono" {...form.register("pin")} />
           </Field>
-          <Field label="City" error={errors.city?.message} required>
-            <Input autoComplete="address-level2" {...form.register("city")} />
+          <Field label="City" error={errors.city?.message} hint={cities.length ? "Pick a post office or type the city." : undefined} required>
+            <Controller control={form.control} name="city" render={({ field }) => <SuggestInput ref={field.ref} name={field.name} value={field.value ?? ""} onChange={field.onChange} onBlur={field.onBlur} suggestions={cities} />} />
           </Field>
           <Field label="District" error={errors.district?.message} optional>
             <Input {...form.register("district")} />
           </Field>
         </div>
+        <PinLookup
+          pin={form.watch("pin")}
+          stateCode={form.watch("stateCode")}
+          states={states}
+          onFound={(p) => {
+            // Fill only what is still empty: never overwrite what the person or the GST portal entered.
+            if (!form.getValues("district") && p.district) form.setValue("district", p.district, { shouldDirty: true });
+            if (!stateLocked && !form.getValues("stateCode") && p.stateCode) form.setValue("stateCode", p.stateCode, { shouldDirty: true, shouldValidate: true });
+          }}
+        />
         <Field label="State" error={errors.stateCode?.message} hint={stateLocked ? "Set by the GSTIN's first two digits." : undefined} required>
           <Controller
             control={form.control}

@@ -79,4 +79,28 @@ class ReferenceFilesTest {
         assertThat(PincodeFile.stateKey("THE DADRA & NAGAR HAVELI AND DAMAN & DIU"))
                 .isEqualTo(PincodeFile.stateKey("Dadra and Nagar Haveli and Daman and Diu"));
     }
+
+    @Test
+    void onlineOfficesUseTheSameRulesAsFileRows() {
+        var row = PincodeFile.fromOffices("110001", List.of(
+                new PincodeFile.Office("Baroda House", "Central Delhi", "Delhi"),
+                new PincodeFile.Office("Connaught Place H.O", "Central Delhi", "DELHI"),
+                new PincodeFile.Office("Elsewhere B.O", "New Delhi", "Delhi"),
+                new PincodeFile.Office("Lost S.O", "X", "Atlantis")), STATES);
+
+        assertThat(row).hasValueSatisfying(r -> {
+            assertThat(r.stateCode()).isEqualTo("07");
+            assertThat(r.district()).isEqualTo("Central Delhi");
+            assertThat(r.localities()).containsExactly("Baroda House", "Connaught Place", "Elsewhere");
+        });
+    }
+
+    @Test
+    void onlineOfficesWithNoKnownStateOrABadPinGiveNothing() {
+        assertThat(PincodeFile.fromOffices("500001", List.of(new PincodeFile.Office("A", "B", "Atlantis")), STATES))
+                .isEmpty();
+        assertThat(PincodeFile.fromOffices("060001", List.of(new PincodeFile.Office("A", "B", "Delhi")), STATES))
+                .isEmpty();
+        assertThat(PincodeFile.fromOffices("110001", List.of(), STATES)).isEmpty();
+    }
 }

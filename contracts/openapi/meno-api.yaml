@@ -2499,6 +2499,8 @@ components:
           type: string
         name:
           type: string
+        onlineLookup:
+          type: string
         ownerModule:
           type: string
         phase:
