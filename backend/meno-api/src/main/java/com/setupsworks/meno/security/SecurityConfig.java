@@ -49,6 +49,9 @@ class SecurityConfig {
                                 "/api/v1/auth/logout", "/api/v1/auth/signup", "/api/v1/auth/verify-email",
                                 "/api/v1/auth/password/forgot", "/api/v1/auth/password/reset").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/signup/options").permitAll()
+                        // Accept invitation (PLT-06): the invitee has no account yet; the link token is the key.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/invitations/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/invitations/*/accept").permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**", "/error").permitAll()
                         // Only exist when MENO_API_DOCS_ENABLED=true (off in production).
                         .requestMatchers("/v3/api-docs", "/v3/api-docs/**", "/v3/api-docs.yaml",

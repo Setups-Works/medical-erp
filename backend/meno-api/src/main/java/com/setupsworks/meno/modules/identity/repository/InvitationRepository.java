@@ -16,6 +16,9 @@ public interface InvitationRepository extends JpaRepository<Invitation, UUID> {
 
     Optional<Invitation> findByIdAndTenantId(UUID id, UUID tenantId);
 
+    /** The invitee's link, before any tenant is known (runs with the RLS bypass; the hash is unique). */
+    Optional<Invitation> findByTokenHash(String tokenHash);
+
     boolean existsByTenantIdAndEmailAndStatus(UUID tenantId, String email, Invitation.Status status);
 
     boolean existsByTenantIdAndMobileAndStatus(UUID tenantId, String mobile, Invitation.Status status);

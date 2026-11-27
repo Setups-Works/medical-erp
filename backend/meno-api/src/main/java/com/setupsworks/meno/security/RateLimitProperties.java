@@ -17,7 +17,7 @@ public record RateLimitProperties(@DefaultValue("true") boolean enabled, Map<Str
         rules = rules == null ? Map.of() : Map.copyOf(rules);
     }
 
-    /** {@code capacity} requests per {@code window} for {@code method path} (exact path). */
+    /** {@code capacity} requests per {@code window} for {@code method path} (exact path, or {@code *} per segment). */
     public record Rule(String method, String path, int capacity, Duration window) {
     }
 }
