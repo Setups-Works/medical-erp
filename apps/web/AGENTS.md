@@ -44,6 +44,7 @@ tests/e2e/                                      Playwright (Ashok; devs add happ
 | `/onboarding` + `business` `pharmacy` `licences` `branches` `books` `configuration` `go-live` | `features/onboarding` | real meno-api (`/api/v1/onboarding/*`, `/gstin-verifications/{gstin}`) |
 | `/onboarding/team` | `features/onboarding` `TeamStep` | real meno-api (`/api/v1/team/options`, `/team/invitations`, `…/{id}/resend`, `…/{id}/revoke`); Zod `teamInvite` in `@meno/validation` |
 | `/admin/users` | `features/users` `UsersScreen` (+ `UserPanel`, shared `InviteForm` / `InvitationRow` also used by `TeamStep`) | real meno-api (`/api/v1/admin/users`, `…/options`, `…/{id}/access`, `…/{id}/deactivate`, `…/{id}/reactivate`, `/api/v1/team/*`); Zod `userAccess`; actions shown by permission (`hooks/usePermissions` → `/auth/me`) inside the stand-in `features/admin` `AdminShell` |
+| `/admin/roles` | `features/admin` `RolesScreen` (+ `RoleEditor`, `NewRoleForm`) | real meno-api (`/api/v1/admin/roles`, `…/{code}`, `…/{code}/permissions`, `…/{code}/reset`, `DELETE …/{code}`, `/api/v1/admin/permissions`); Zod `roleForm` |
 | `/onboarding/data` `devices` `plan` `practice` `license` `help` | `LaterStep` ("Coming in Pn", skip if optional) | checklist `available: false` |
 
 - `/invite` uses `?token=` (not `/invite/[token]`): a static export can't pre-render unknown tokens.

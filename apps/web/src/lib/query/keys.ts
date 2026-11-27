@@ -28,4 +28,10 @@ export const keys = {
     options: ["users", "options"] as const,
     list: (q: string, status: string) => ["users", "list", q, status] as const,
   },
+  roles: {
+    all: ["roles"] as const,
+    list: ["roles", "list"] as const,
+    detail: (code: string) => ["roles", "detail", code] as const,
+    catalogue: ["roles", "catalogue"] as const,
+  },
 };

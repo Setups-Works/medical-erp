@@ -93,6 +93,44 @@ export const ALL_ROLES = [
 
 /** role_permission seed as far as the built pages need it (identity + tenancy migrations). */
 export const ROLE_PERMISSIONS: Record<string, string[]> = {
-  OWNER: ["identity.invitation.manage", "identity.invitation.view", "identity.user.manage", "identity.user.view", "tenancy.onboarding.manage", "tenancy.onboarding.view"],
+  OWNER: [
+    "identity.invitation.manage",
+    "identity.invitation.view",
+    "identity.role.manage",
+    "identity.role.view",
+    "identity.user.manage",
+    "identity.user.view",
+    "party.customer.create",
+    "party.supplier.create",
+    "tenancy.onboarding.manage",
+    "tenancy.onboarding.view",
+  ],
   BRANCH_MANAGER: ["identity.user.view"],
+};
+
+/** permission + permission_module seeds (V202611262101 … V202611271600). */
+export const PERMISSION_MODULES = [
+  { code: "tenancy", label: "Business set-up", permissions: [["tenancy.onboarding.view", "See the onboarding checklist and steps"], ["tenancy.onboarding.manage", "Fill in onboarding steps and go live"]] },
+  {
+    code: "identity",
+    label: "Users and roles",
+    permissions: [
+      ["identity.invitation.manage", "Invite staff, resend and revoke invitations"],
+      ["identity.invitation.view", "See staff invitations and the roles and branches they can carry"],
+      ["identity.role.manage", "Create, rename and archive roles and change their permissions"],
+      ["identity.role.view", "See roles and the permissions each one carries"],
+      ["identity.user.manage", "Change a person's roles and branches, deactivate and reactivate accounts"],
+      ["identity.user.view", "See staff accounts, their roles and branches"],
+    ],
+  },
+  { code: "party", label: "Customers and suppliers", permissions: [["party.customer.create", "Create customers"], ["party.supplier.create", "Create suppliers"]] },
+] as const;
+
+export const ROLE_DESCRIPTIONS: Record<string, string> = {
+  OWNER: "Runs the business. Has every permission and sees every branch.",
+  BRANCH_MANAGER: "Runs their branches: sales, stock, approvals and staff.",
+  PHARMACIST: "Prescriptions, medicine search, billing and registers.",
+  BILLING_OPERATOR: "Counter billing, invoices, customers and returns within limits.",
+  INVENTORY_MANAGER: "Purchases, GRN, batches, expiry, stock audit and transfers.",
+  ACCOUNTANT: "Ledgers, receipts, payments, expenses, GST and financial reports.",
 };
