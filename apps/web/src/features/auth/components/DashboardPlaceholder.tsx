@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Card, Icon, PageHeader } from "@meno/ui";
+import { usePermissions } from "@/hooks/usePermissions";
 import { useSessionUser } from "@/lib/session";
 import { useLogout, useLogoutAll } from "../queries";
 import { AuthShell } from "./AuthShell";
@@ -16,6 +17,7 @@ export function DashboardPlaceholder() {
   const logout = useLogout();
   const logoutAll = useLogoutAll();
   const router = useRouter();
+  const permissions = usePermissions();
   const toLogin = { onSettled: () => router.replace("/login/") };
   return (
     <AuthShell wide>
@@ -30,6 +32,12 @@ export function DashboardPlaceholder() {
             <Icon name="check-circle" />
             Set-up checklist
           </Link>
+          {permissions.has("identity.user.view") && (
+            <Link href="/admin/users/" className="inline-flex h-8 items-center gap-1.5 rounded-ctl px-3 text-[13px] text-ink shadow-[inset_0_0_0_1px_var(--line-2)] hover:bg-hover" data-testid="admin-users-link">
+              <Icon name="users" />
+              Users
+            </Link>
+          )}
           <Button variant="ghost" onClick={() => logout.mutate(undefined, toLogin)} data-testid="sign-out">
             <Icon name="log-out" />
             Sign out
