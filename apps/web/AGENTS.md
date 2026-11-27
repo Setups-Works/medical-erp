@@ -48,6 +48,7 @@ tests/e2e/                                      Playwright (Ashok; devs add happ
 
 - `/invite` uses `?token=` (not `/invite/[token]`): a static export can't pre-render unknown tokens.
 - Session: access token in memory only (`lib/session.ts`); `meno_refresh` HttpOnly cookie restores it on reload via `/auth/refresh` (single-flight in `@meno/api-client`). Dev proxies `/api` to `MENO_API_ORIGIN` so the cookie is same-origin.
+- Updates of versioned resources pass `ifMatch: version` to `@meno/api-client` (sent as `If-Match: "3"`, API_GUIDELINES.md).
 - API types are generated (`pnpm gen:api`); `packages/api-client/src/overrides.ts` corrects 4 springdoc gaps until the backend annotations are fixed (listed in that file).
 - **Mocks are local-dev only**: `NEXT_PUBLIC_API_MOCKING=all|missing|off` works only under `next dev`; `next build` (staging, production) always uses the real API, the MSW code is pruned and `mockServiceWorker.js` is deleted from `out/`.
 

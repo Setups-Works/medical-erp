@@ -58,7 +58,9 @@ function useUserMutation<TVars>(fn: (vars: TVars) => Promise<StaffUser>) {
 }
 
 export const useChangeAccess = () =>
-  useUserMutation(({ id, body }: { id: string; body: UserAccessRequest }) => api.put("/api/v1/admin/users/{id}/access", { params: { id }, body }));
+  useUserMutation(({ id, body, version }: { id: string; body: UserAccessRequest; version: number }) =>
+    api.put("/api/v1/admin/users/{id}/access", { params: { id }, body, ifMatch: version }),
+  );
 
 export const useSetUserActive = () =>
   useUserMutation(({ id, active }: { id: string; active: boolean }) =>

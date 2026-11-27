@@ -222,7 +222,9 @@ const userHandlers = [
       const u = staffOf(tenant, params.id);
       if (u instanceof Response) return u;
       const b = await body(request);
-      if (b.version !== (u.version ?? 0)) return problem(409, "COMMON_VERSION_CONFLICT", "Someone else changed this just now. Reload to see the latest and try again.");
+      const ifMatch = request.headers.get("If-Match");
+      if (!ifMatch) return problem(428, "COMMON_PRECONDITION_REQUIRED", "Reload the page and try again.");
+      if (Number(ifMatch.replace(/^W\//, "").replace(/"/g, "")) !== (u.version ?? 0)) return problem(409, "COMMON_VERSION_CONFLICT", "Someone else changed this just now. Reload to see the latest and try again.");
       const roles = Array.isArray(b.roleCodes) ? (b.roleCodes as string[]) : [];
       const touched = [...roles.filter((r) => !u.roles.includes(r)), ...u.roles.filter((r) => !roles.includes(r))];
       if (touched.some((c) => !ALL_ROLES.find((r) => r.code === c)?.assignable)) return invalid("IDENTITY_ROLE_INVALID", "Choose a role from the list.");

@@ -181,6 +181,7 @@ Each block: **owns** (tables) · **endpoints** · **use cases** · **rules → e
 | `COMMON_VALIDATION` | 400 | Field errors from Bean Validation |
 | `COMMON_IDEMPOTENCY_MISMATCH` | 422 | Same key, different body |
 | `COMMON_VERSION_CONFLICT` | 409 | Stale `If-Match` |
+| `COMMON_PRECONDITION_REQUIRED` / `COMMON_IF_MATCH_INVALID` | 428 / 400 | Update sent without `If-Match`, or one that isn't a version (`common.web.Versions`) |
 | `ACCOUNTING_PERIOD_LOCKED` | 422 | Date in a locked period |
 | `LICENSE_EXPIRED` / `LICENSE_LIMIT_REACHED` | 402 / 422 | Entitlement |
 | `PARTY_INVALID_GSTIN` / `PARTY_LICENCE_EXPIRED` | 422 | Party rules |

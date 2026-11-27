@@ -3,6 +3,7 @@ package com.setupsworks.meno.modules.identity.web;
 import java.util.Set;
 import java.util.UUID;
 
+import com.setupsworks.meno.common.web.Versions;
 import com.setupsworks.meno.modules.identity.service.UserAdminService;
 import com.setupsworks.meno.modules.identity.service.UserAdminService.AccessChange;
 import com.setupsworks.meno.modules.identity.service.UserAdminService.StaffUser;
@@ -19,16 +20,18 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,24 +69,30 @@ class UserAdminController {
     }
 
     @Operation(summary = "One staff account")
-    @ApiResponse(responseCode = "200", description = "The account")
+    @ApiResponse(responseCode = "200", description = "The account; ETag = its version")
     @ApiResponse(responseCode = "404", description = "IDENTITY_USER_NOT_FOUND (also another tenant's id)")
     @GetMapping("/{id}")
-    StaffUser getUser(@PathVariable UUID id) {
-        return service.get(id);
+    ResponseEntity<StaffUser> getUser(@PathVariable UUID id) {
+        StaffUser user = service.get(id);
+        return ResponseEntity.ok().header(HttpHeaders.ETAG, Versions.etag(user.version())).body(user);
     }
 
     @Operation(summary = "Change roles and branches",
             description = "Whole sets. Branches are needed unless a role covers every branch. Roles that aren't "
-                    + "assignable can't be added or removed. Send the version you loaded.")
+                    + "assignable can't be added or removed. Send the version you loaded as If-Match (\"3\").")
     @ApiResponse(responseCode = "200", description = "Saved; takes effect when the person's session refreshes")
     @ApiResponse(responseCode = "400", description = "IDENTITY_ROLE_INVALID, IDENTITY_ROLE_REQUIRED, "
-            + "IDENTITY_USER_BRANCH_INVALID, field errors")
+            + "IDENTITY_USER_BRANCH_INVALID, COMMON_IF_MATCH_INVALID, field errors")
     @ApiResponse(responseCode = "404", description = "IDENTITY_USER_NOT_FOUND (also another tenant's id)")
     @ApiResponse(responseCode = "409", description = "COMMON_VERSION_CONFLICT, IDENTITY_LAST_ADMIN")
+    @ApiResponse(responseCode = "428", description = "COMMON_PRECONDITION_REQUIRED (no If-Match)")
     @PutMapping("/{id}/access")
-    StaffUser changeUserAccess(@PathVariable UUID id, @Valid @RequestBody UserAccessRequest r) {
-        return service.changeAccess(id, new AccessChange(r.roleCodes(), r.branchIds(), r.version()));
+    ResponseEntity<StaffUser> changeUserAccess(@PathVariable UUID id,
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @Valid @RequestBody UserAccessRequest r) {
+        StaffUser user = service.changeAccess(id, new AccessChange(r.roleCodes(), r.branchIds(),
+                Versions.fromIfMatch(ifMatch)));
+        return ResponseEntity.ok().header(HttpHeaders.ETAG, Versions.etag(user.version())).body(user);
     }
 
     @Operation(summary = "Deactivate: the person can't sign in; their history stays")
@@ -107,7 +116,6 @@ class UserAdminController {
 
     record UserAccessRequest(
             @NotNull @Size(max = 20) Set<@NotBlank @Size(max = 50) String> roleCodes,
-            @NotNull @Size(max = 50) Set<@NotNull UUID> branchIds,
-            @NotNull @PositiveOrZero Long version) {
+            @NotNull @Size(max = 50) Set<@NotNull UUID> branchIds) {
     }
 }
