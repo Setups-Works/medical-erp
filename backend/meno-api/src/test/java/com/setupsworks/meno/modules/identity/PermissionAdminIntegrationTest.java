@@ -124,8 +124,8 @@ class PermissionAdminIntegrationTest {
         call(get("/api/v1/admin/roles/" + code), bearer, null)
                 .andExpect(jsonPath("$.permissionCodes[?(@ == 'identity.role.manage')]").isNotEmpty())
                 .andExpect(jsonPath("$.permissionCodes[?(@ == 'identity.user.manage')]").isNotEmpty());
-        call(put("/api/v1/admin/roles/" + code + "/permissions"), bearer,
-                "{\"permissionCodes\":[],\"permissionsVersion\":1}")
+        call(put("/api/v1/admin/roles/" + code + "/permissions").header("If-Match", "\"1\""), bearer,
+                "{\"permissionCodes\":[]}")
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("IDENTITY_LAST_ADMIN"));
         // Once the owner is back, the co-manager can lose it.
         setOwnerActive(owner, true);
