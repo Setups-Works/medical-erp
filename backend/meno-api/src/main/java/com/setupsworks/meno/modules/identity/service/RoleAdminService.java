@@ -208,6 +208,36 @@ public class RoleAdminService {
         return detail(tenantId, role);
     }
 
+    /**
+     * One cell of the permission matrix (/admin/permissions): give {@code role} the permission or take it away.
+     * Idempotent, so no version is needed: the answer is the same whoever clicks last. Answers the permission with
+     * the roles that now hold it.
+     */
+    @Transactional
+    public PermissionEntry setGrant(String permission, String code, boolean granted) {
+        permissions.require(MANAGE);
+        UUID tenantId = TenantContext.requireTenantId();
+        RolePermissionStore.CatalogueEntry entry = store.catalogue().stream().filter(e -> e.code().equals(permission))
+                .findFirst().orElseThrow(() -> new MenoException(HttpStatus.NOT_FOUND,
+                        "IDENTITY_PERMISSION_NOT_FOUND", "Permission not found."));
+        editable(tenantId, code);
+        Set<String> current = new TreeSet<>(store.effective(tenantId, code));
+        boolean changed = granted ? current.add(permission) : current.remove(permission);
+        if (changed) {
+            store.replace(tenantId, code, current, TenantContext.userId().orElse(null), clock.instant());
+            requireAdminsRemain(tenantId);
+            evictAfterCommit(tenantId);
+            log.info("Permission {} {} role {} in tenant {}", permission, granted ? "given to" : "taken from", code,
+                    tenantId);
+        }
+        List<RoleDefinition> visible = roles.findVisible(tenantId);
+        Map<String, Set<String>> effective = store.effective(tenantId, visible.stream().map(RoleDefinition::getCode)
+                .toList());
+        List<String> holders = visible.stream().map(RoleDefinition::getCode)
+                .filter(c -> effective.get(c).contains(permission)).toList();
+        return new PermissionEntry(entry.code(), entry.description(), holders);
+    }
+
     /** A default role goes back to MENO's list (and follows future default changes again). */
     @Transactional
     public RoleDetail resetToDefaults(String code) {
