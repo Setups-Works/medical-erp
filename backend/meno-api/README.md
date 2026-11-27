@@ -19,6 +19,8 @@ P1 so far: login only (modules `tenancy`, `identity`, `auth`; shared `security`,
    export MENO_BOOTSTRAP_TENANT="Demo Pharmacy"     # first start only, empty DB
    export MENO_BOOTSTRAP_EMAIL=owner@example.com
    export MENO_BOOTSTRAP_PASSWORD=owner-password
+   export MENO_PLATFORM_BOOTSTRAP_EMAIL=admin@example.com      # first MENO staff (/platform), first start only
+   export MENO_PLATFORM_BOOTSTRAP_PASSWORD=admin-password-12   # 12+ characters; remove after the first start
    ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
    ```
 

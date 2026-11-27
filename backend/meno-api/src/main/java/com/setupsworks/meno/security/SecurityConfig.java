@@ -52,11 +52,14 @@ class SecurityConfig {
                         // Accept invitation (PLT-06): the invitee has no account yet; the link token is the key.
                         .requestMatchers(HttpMethod.GET, "/api/v1/invitations/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/invitations/*/accept").permitAll()
+                        // Platform staff (ADR-0020): their own login, and their tokens work only under /platform.
+                        .requestMatchers(HttpMethod.POST, "/api/v1/platform/auth/login").permitAll()
+                        .requestMatchers("/api/v1/platform/**").access(PlatformRealm.PLATFORM_ONLY)
                         .requestMatchers("/actuator/health", "/actuator/health/**", "/error").permitAll()
                         // Only exist when MENO_API_DOCS_ENABLED=true (off in production).
                         .requestMatchers("/v3/api-docs", "/v3/api-docs/**", "/v3/api-docs.yaml",
                                 "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().access(PlatformRealm.TENANT_ONLY))
                 .oauth2ResourceServer(o -> o.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
                 .addFilterAfter(new TenantContextFilter(), BearerTokenAuthenticationFilter.class)
                 // Before authentication, so floods are cut off cheaply.

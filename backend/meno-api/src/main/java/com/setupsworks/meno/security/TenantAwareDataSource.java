@@ -10,13 +10,14 @@ import org.springframework.jdbc.datasource.DelegatingDataSource;
 
 /**
  * Copies {@link TenantContext} into the PostgreSQL session on every connection checkout, so the RLS policies
- * ({@code app_current_tenant()}, {@code app_rls_bypass()}) see it. Both values are always written, so a pooled
+ * ({@code app_current_tenant()}, {@code app_rls_bypass()}, {@code app_platform()}) see it. All three values are always written, so a pooled
  * connection never keeps the previous request's tenant. Transactions take their connection once, at the start.
  */
 class TenantAwareDataSource extends DelegatingDataSource {
 
     private static final String SET_CONTEXT =
-            "select set_config('app.tenant_id', ?, false), set_config('app.rls_bypass', ?, false)";
+            "select set_config('app.tenant_id', ?, false), set_config('app.rls_bypass', ?, false), "
+                    + "set_config('app.platform', ?, false)";
 
     TenantAwareDataSource(DataSource target) {
         super(target);
@@ -36,6 +37,7 @@ class TenantAwareDataSource extends DelegatingDataSource {
         try (PreparedStatement ps = connection.prepareStatement(SET_CONTEXT)) {
             ps.setString(1, TenantContext.tenantId().map(Object::toString).orElse(""));
             ps.setString(2, TenantContext.isSystem() ? "on" : "off");
+            ps.setString(3, TenantContext.isPlatform() ? "on" : "off");
             ps.execute();
         } catch (SQLException e) {
             connection.close();
