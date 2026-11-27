@@ -17,6 +17,8 @@ To do ──start──▶ In progress ──review──▶ In review ──(Ni
 
 **Agents never move a task to Done.** The script has no `done` command on purpose.
 
+**Building a page?** Say "build the <X> page" to your agent: it runs `npm run agent-task -- start-page "<X>"` (creates the page's BE + FE tasks for you, moves them to In progress, prints a brief) and follows [BUILD_A_PAGE.md](BUILD_A_PAGE.md): SQL + backend + frontend on one branch, one PR. Nitheesh reviews and merges.
+
 ## One-time setup (each developer)
 
 In `project-management/.env.local` (never committed):
@@ -38,6 +40,8 @@ Run from `project-management/`. `<n>` is the task number shown on the card (`449
 | `npm run agent-task -- start <n>` | Moves the task from Backlog / To do to **In progress** and comments "Started (AI agent)." |
 | `npm run agent-task -- check <n> 1 3 4` | Ticks checklist items by number (`all` ticks every item). |
 | `npm run agent-task -- comment <n> "text"` | Adds a comment. `@name` mentions notify that person. |
+| `npm run agent-task -- page "<name or route>"` | Prints a page's brief: features, docs to read, existing code, its BE / FE tasks. Read-only. |
+| `npm run agent-task -- start-page "<name or route>"` | Takes a page: creates / links its BE + FE tasks for you, moves both to **In progress**, prints the brief. |
 | `npm run agent-task -- review <n> "summary"` | Moves **In progress → In review** and posts the summary with `@nitheesh`. Refuses while checklist items are open unless you add `--allow-open`. |
 
 ## Steps for the agent
