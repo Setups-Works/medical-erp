@@ -101,4 +101,14 @@ npm run agent-task -- review <FE#> "what changed · PR link · how verified · o
 
 ### 8. Stop
 
-Don't start the next page until the developer says so. **Nitheesh reviews and merges** (nobody merges their own PR), moves both tasks to Done and ticks **BE ready / FE ready** on the Pages row. Ashok (QA) ticks **QA passed**; the page is ticked **Completed** when accepted. If the PR comes back, read the comments (`npm run agent-task -- show <n>`), fix on the same branch, and `review` again.
+Don't start the next page until the developer says so. **Nitheesh reviews and merges** (nobody merges their own PR). Ashok (QA) ticks **QA passed**.
+
+### 9. Ticks after merge (automatic)
+
+Nitheesh, or his agent, runs one command once the PR is merged:
+
+```bash
+npm run agent-task -- complete-page "<page name or route>"
+```
+
+It ticks **BE ready + FE ready**, moves the page's BE and FE cards to **Done**, marks the page **Completed**, and moves every feature on that page whose pages are **all** Completed to **Done** (Hub → Features tick). The Hub does the same when someone ticks in the Pages list: BE + FE ready completes the page, a completed page completes its finished features (`project-management/src/lib/feature-sync.ts`). `npm run agent-task -- sync-features` re-checks every feature (safe to re-run). Ticks only move forward: reopening a page never reopens a feature. Both commands refuse anyone but Nitheesh. If the PR comes back, read the comments (`npm run agent-task -- show <n>`), fix on the same branch, and `review` again.

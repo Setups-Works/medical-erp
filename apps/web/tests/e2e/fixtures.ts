@@ -32,3 +32,9 @@ export async function signIn(page: Page, identifier: string, password = OWNER.pa
   await page.getByTestId("login-password").fill(password);
   await page.getByTestId("login-password").press("Enter");
 }
+
+/** Sign out from the app shell's user menu (top bar). `everywhere` = "Sign out of all devices". */
+export async function signOut(page: Page, everywhere = false) {
+  await page.getByTestId("user-menu").click();
+  await page.getByTestId(everywhere ? "sign-out-all" : "sign-out").click();
+}

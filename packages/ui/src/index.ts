@@ -7,5 +7,6 @@ export { ChoiceCards, Segmented } from "./components/choice";
 export { DatePicker } from "./components/date-picker";
 export { OtpInput } from "./components/otp-input";
 export { Card, Badge, Kbd, Callout, Skeleton, Wordmark, Progress, PageHeader, EmptyState, type Tint } from "./components/display";
+export { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "./components/popover";
 export { Icon, type IconName } from "./icons/icon";
 export { formatDate, formatFinancialYear, formatMoney } from "./format";

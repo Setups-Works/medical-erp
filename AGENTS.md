@@ -117,7 +117,7 @@ We deliver **one page at a time, end to end: one developer builds its SQL (if ne
 4. Build SQL (if needed) → backend (with cross-tenant tests, OpenAPI + api-client regenerated) → frontend (wired to the real API).
 5. `./mvnw verify` and `pnpm typecheck && pnpm test && pnpm check:design`.
 6. One PR into `develop` with both task numbers; then `review` both tasks.
-7. Stop. **Nitheesh reviews and merges** (nobody merges their own PR), moves the tasks to Done and ticks BE ready / FE ready; Ashok ticks QA passed.
+7. Stop. **Nitheesh reviews and merges** (nobody merges their own PR), then runs `npm run agent-task -- complete-page "<page>"`: BE / FE ready, both cards Done, page Completed and its finished features ticked on Hub → Features. Ashok ticks QA passed.
 
 A missing business / tax rule → comment on the task, mention `@prakalya`, stop.
 
@@ -132,6 +132,7 @@ When the developer gives you a **Hub task number** (`#512`, "task 512"), you kee
 | A checklist item is really finished (code + tests + docs) | `npm run agent-task -- check <n> <item…>` |
 | Plan agreed, blocker hit, PR opened | `npm run agent-task -- comment <n> "short, factual"` |
 | PR open and checks green | `npm run agent-task -- review <n> "what changed · PR link · how verified · open points"` |
+| PR merged (Nitheesh only) | `npm run agent-task -- complete-page "<page>"` (or `sync-features` to re-check every feature) |
 
 - Never move a task to **Done**: only Nitheesh does, after the PR merges.
 - Only tasks assigned to the developer (`HUB_AGENT_AS` in `project-management/.env.local`). If `.env.local` is missing, tell the developer to set it up; don't create one with guessed values.

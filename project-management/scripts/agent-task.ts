@@ -9,17 +9,23 @@
  *   npm run agent-task -- review  <n> "<summary + PR link>" [--allow-open]
  *   npm run agent-task -- page       "<page name or route>"   (read-only brief: docs to read, features, tasks)
  *   npm run agent-task -- start-page "<page name or route>"   (take the page: BE + FE cards, both In progress, + brief)
+ *   npm run agent-task -- complete-page "<page name or route>" (Nitheesh only, after merge: BE + FE ready, cards Done,
+ *                                                               page Completed, then its finished features → Done)
+ *   npm run agent-task -- sync-features                       (Nitheesh only: every feature whose pages are all
+ *                                                               Completed → Done; safe to re-run)
  *
  * Acts as the hub user named in HUB_AGENT_AS (first name or email) in .env.local.
- * There is deliberately no "done": only Nitheesh moves a task to Done, in the hub, after review.
+ * There is deliberately no "done" for a single task: only Nitheesh moves tasks to Done, after review. complete-page and
+ * sync-features do it for him and refuse anyone else.
  * Writes go straight to MongoDB; open hub tabs update live through the change stream (src/lib/realtime.ts).
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import mongoose from "mongoose";
 import { findMentions, logActivity, notify } from "../src/lib/actions";
-import { Board, Comment, Task, User } from "../src/lib/models";
-import { ensurePageTasks, findPages, pageTasks } from "../src/lib/page-tasks";
+import { Board, Comment, PageCheck, Task, User } from "../src/lib/models";
+import { completeIfBuilt, syncFeatures } from "../src/lib/feature-sync";
+import { ensurePageTasks, findPages, pageKey, pageTasks } from "../src/lib/page-tasks";
 
 for (const f of [".env.local", ".env"]) {
   try {
@@ -258,19 +264,46 @@ async function startPage(query: string, me: UserLean) {
   await printBrief(p);
 }
 
+function mustReview(me: UserLean) {
+  if (me.name.split(" ")[0].toLowerCase() !== REVIEWER) stop(`Only ${REVIEWER} completes pages and features (after the PR is merged).`);
+}
+
+function printMoved(moved: { number: number; featureId: string }[]) {
+  console.log(moved.length ? `Features → Done: ${moved.map((m) => `#${m.number} ${m.featureId}`).join(", ")}` : "No feature has all its pages completed yet.");
+}
+
+/** After the page's PR is merged: tick BE + FE ready, move both cards to Done, complete the page, sync its features. */
+async function completePage(query: string, me: UserLean) {
+  mustReview(me);
+  const p = await pageBrief(query);
+  const tasks = await pageTasks(p);
+  const now = new Date();
+  await PageCheck.findOneAndUpdate({ key: pageKey(p) }, { be: { done: true, by: me._id, at: now }, fe: { done: true, by: me._id, at: now } }, { upsert: true });
+  for (const t of [tasks.be, tasks.fe]) if (t && t.column !== "done") await move(t, me, "done");
+  const completed = await completeIfBuilt(pageKey(p), String(me._id));
+  console.log(`${p.name} ${p.route}: BE + FE ready${tasks.be ? `, BE #${tasks.be.number}` : ""}${tasks.fe ? `, FE #${tasks.fe.number}` : ""} Done, page ${completed ? "Completed" : "was already Completed"}.`);
+  printMoved(await syncFeatures(String(me._id), p.featureIds));
+}
+
 async function main() {
   const [cmd, num, ...rest] = process.argv.slice(2);
   if (!cmd || cmd === "help") {
-    console.log('Usage: npm run agent-task -- <show|start|check|comment|review> <task#> [...]\n       npm run agent-task -- <page|start-page> "<page name or route>"  (see docs/team/BUILD_A_PAGE.md)');
+    console.log('Usage: npm run agent-task -- <show|start|check|comment|review> <task#> [...]\n       npm run agent-task -- <page|start-page|complete-page> "<page name or route>"  (see docs/team/BUILD_A_PAGE.md)\n       npm run agent-task -- sync-features');
     return;
   }
   if (cmd === "done") stop("Agents never move tasks to Done. Use `review`; Nitheesh moves it to Done after checking.");
   const uri = process.env.MONGODB_URI ?? stop("Set MONGODB_URI in .env.local (the hub database).");
   await mongoose.connect(uri);
-  if (cmd === "page" || cmd === "start-page") {
+  if (cmd === "sync-features") {
+    const me = await actor();
+    mustReview(me);
+    return printMoved(await syncFeatures(String(me._id)));
+  }
+  if (cmd === "page" || cmd === "start-page" || cmd === "complete-page") {
     const query = [num, ...rest].filter(Boolean).join(" ");
     if (!query) stop('Give the page name or route, e.g. "Team" or /onboarding/team.');
     if (cmd === "page") return printBrief(await pageBrief(query));
+    if (cmd === "complete-page") return completePage(query, await actor());
     return startPage(query, await actor());
   }
   const t = await load(num);
@@ -328,7 +361,7 @@ async function main() {
     }
 
     default:
-      stop(`Unknown command "${cmd}". Use show, start, check, comment, review, page or start-page.`);
+      stop(`Unknown command "${cmd}". Use show, start, check, comment, review, page, start-page, complete-page or sync-features.`);
   }
 }
 

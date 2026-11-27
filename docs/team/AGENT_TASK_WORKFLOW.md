@@ -43,6 +43,8 @@ Run from `project-management/`. `<n>` is the task number shown on the card (`449
 | `npm run agent-task -- page "<name or route>"` | Prints a page's brief: features, docs to read, existing code, its BE / FE tasks. Read-only. |
 | `npm run agent-task -- start-page "<name or route>"` | Takes a page: creates / links its BE + FE tasks for you, moves both to **In progress**, prints the brief. |
 | `npm run agent-task -- review <n> "summary"` | Moves **In progress → In review** and posts the summary with `@nitheesh`. Refuses while checklist items are open unless you add `--allow-open`. |
+| `npm run agent-task -- complete-page "<page>"` | **Nitheesh only, after merge.** BE + FE ready, both page cards → Done, page Completed, then its features whose pages are all Completed → Done. |
+| `npm run agent-task -- sync-features` | **Nitheesh only.** Every feature whose pages are all Completed → Done (Hub → Features). Safe to re-run. |
 
 ## Steps for the agent
 
