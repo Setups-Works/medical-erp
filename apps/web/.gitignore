@@ -2,6 +2,7 @@
 public/mockServiceWorker.js
 next-env.d.ts
 
-# Playwright output (pnpm e2e)
+# Playwright output (pnpm e2e); .next-e2e is the e2e dev server's own build folder (next.config.ts)
+.next-e2e/
 playwright-report/
 test-results/
