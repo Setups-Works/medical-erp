@@ -277,9 +277,11 @@ public class InvitationService {
             afterCommit(() -> emailSender.send(email));
         }
         if (invitation.getMobile() != null && smsSender.enabled()) {
+            String template = "%s invited you to MENO as %s. Join: %s (valid %d days)";
+            // The log-only channel prints logText, so the link token never reaches a log file.
             OutgoingSms sms = new OutgoingSms(invitation.getMobile(),
-                    "%s invited you to MENO as %s. Join: %s (valid %d days)".formatted(business, roleLabel, link,
-                            days));
+                    template.formatted(business, roleLabel, link, days),
+                    template.formatted(business, roleLabel, "[invite link]", days));
             afterCommit(() -> smsSender.send(sms));
         }
     }
