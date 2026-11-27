@@ -1,7 +1,6 @@
 export { ApiError, createApiClient, isApiError, type ApiClient, type ApiClientConfig, type Body, type FieldError, type Paths, type Response, type TokenResponse } from "./client";
 export type { BranchDetails, Branches, BranchView, SignupOptions } from "./overrides";
 import type { components as Built } from "./generated/meno-api";
-import type { components as Proposed } from "./generated/proposed";
 
 /** Schema aliases so features never hand-write request or response types (AGENTS.md rule 9). */
 type S = Built["schemas"];
@@ -48,7 +47,5 @@ export type PermissionModule = S["PermissionModule"];
 export type PermissionEntry = S["PermissionEntry"];
 export type RoleColumn = S["RoleColumn"];
 
-// Proposed (contracts/openapi/proposed/auth.yaml), served by MSW until built.
-type P = Proposed["schemas"];
-export type InvitationView = P["InvitationView"];
-export type AcceptInvitationRequest = P["AcceptInvitationRequest"];
+export type InvitationView = S["InvitationPreview"];
+export type AcceptInvitationRequest = S["AcceptInvitationRequest"];

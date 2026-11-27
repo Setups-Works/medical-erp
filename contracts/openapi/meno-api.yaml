@@ -14,6 +14,8 @@ tags:
   name: Roles
 - description: Set-up steps from sign-up to go-live; resume anywhere.
   name: Onboarding
+- description: Open a staff invitation link and join the business.
+  name: Invitations
 - description: "What each role may do, permission by permission."
   name: Permissions
 - description: "Sign in, refresh, sign out. Errors are Problem Details with a `code`."
@@ -998,6 +1000,80 @@ paths:
       summary: Verify a GSTIN and fetch its details
       tags:
       - GSTIN
+  /api/v1/invitations/{token}:
+    get:
+      operationId: getInvitation
+      parameters:
+      - in: path
+        name: token
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationPreview"
+          description: Invitation
+        "410":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: "IDENTITY_INVITATION_INVALID (unknown, expired, used or revoked:\
+            \ one answer, so tokens can't be probed)"
+      security: []
+      summary: "Who invited you, to which business, with which role"
+      tags:
+      - Invitations
+  /api/v1/invitations/{token}/accept:
+    post:
+      description: Sets meno_refresh like login. The role and branches come from the
+        invitation.
+      operationId: acceptInvitation
+      parameters:
+      - in: path
+        name: token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AcceptInvitationRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+          description: Joined and signed in (same body as login)
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: "Field errors, IDENTITY_PASSWORD_TOO_SHORT"
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: "IDENTITY_EMAIL_TAKEN, IDENTITY_MOBILE_TAKEN, IDENTITY_INVITATION_EMAIL_REQUIRED,\
+            \ IDENTITY_INVITATION_BRANCH_GONE"
+        "410":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+          description: IDENTITY_INVITATION_INVALID
+      security: []
+      summary: "Join: create your account from the invitation and sign in"
+      tags:
+      - Invitations
   /api/v1/onboarding:
     get:
       operationId: checklist
@@ -1499,6 +1575,26 @@ paths:
       - Team
 components:
   schemas:
+    AcceptInvitationRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        mobile:
+          type: string
+          minLength: 1
+          pattern: "[6-9][0-9]{9}"
+        password:
+          type: string
+          maxLength: 128
+          minLength: 0
+      required:
+      - fullName
+      - mobile
+      - password
     Address:
       type: object
       properties:
@@ -1841,6 +1937,34 @@ components:
           type: string
         tradeName:
           type: string
+    InvitationPreview:
+      type: object
+      properties:
+        branchNames:
+          type: array
+          items:
+            type: string
+        businessName:
+          type: string
+        contactMasked:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        invitedByName:
+          type: string
+        minPasswordLength:
+          type: integer
+          format: int32
+        roleName:
+          type: string
+      required:
+      - businessName
+      - contactMasked
+      - expiresAt
+      - invitedByName
+      - minPasswordLength
+      - roleName
     LicenceEntry:
       type: object
       properties:

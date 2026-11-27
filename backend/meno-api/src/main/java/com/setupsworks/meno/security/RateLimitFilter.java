@@ -31,6 +31,9 @@ class RateLimitFilter extends OncePerRequestFilter {
     private record Window(long startMillis, int count) {
     }
 
+    /** Rule paths may hold {@code *} for one segment (e.g. a link token); plain paths still match exactly. */
+    private static final org.springframework.util.AntPathMatcher PATHS = new org.springframework.util.AntPathMatcher();
+
     private final RateLimitProperties properties;
     private final Clock clock;
     private final Map<String, Window> windows = new ConcurrentHashMap<>();
@@ -47,7 +50,7 @@ class RateLimitFilter extends OncePerRequestFilter {
             for (var entry : properties.rules().entrySet()) {
                 RateLimitProperties.Rule rule = entry.getValue();
                 if (rule.method().equalsIgnoreCase(request.getMethod())
-                        && rule.path().equals(request.getRequestURI())) {
+                        && PATHS.match(rule.path(), request.getRequestURI())) {
                     long retryAfter = hit(entry.getKey(), rule, clientIp(request));
                     if (retryAfter > 0) {
                         reject(response, retryAfter);

@@ -121,6 +121,21 @@ public class AppUser {
         return user;
     }
 
+    /**
+     * A person who joined from a staff invitation (PLT-06): the role and branches the owner chose, and the email
+     * counted as verified because the link reached that inbox. {@code invitedBy} becomes created_by.
+     */
+    public static AppUser invited(UUID tenantId, String email, String mobileE164, String passwordHash, String fullName,
+            String roleCode, Set<UUID> branchIds, UUID invitedBy, Instant now) {
+        AppUser user = new AppUser(tenantId, email, passwordHash, fullName, Set.of(roleCode), now);
+        user.mobile = mobileE164;
+        user.createdBy = invitedBy;
+        user.updatedBy = invitedBy;
+        branchIds.forEach(b -> user.branches.add(new UserBranch(tenantId, b, invitedBy, now)));
+        user.markEmailVerified(now);
+        return user;
+    }
+
     public static String normalizeEmail(String email) {
         return email == null ? null : email.trim().toLowerCase(Locale.ROOT);
     }

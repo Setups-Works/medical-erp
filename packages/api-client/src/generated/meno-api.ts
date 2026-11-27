@@ -533,6 +533,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/invitations/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Who invited you, to which business, with which role */
+        get: operations["getInvitation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/invitations/{token}/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Join: create your account from the invitation and sign in
+         * @description Sets meno_refresh like login. The role and branches come from the invitation.
+         */
+        post: operations["acceptInvitation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/onboarding": {
         parameters: {
             query?: never;
@@ -819,6 +856,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AcceptInvitationRequest: {
+            fullName: string;
+            mobile: string;
+            password: string;
+        };
         Address: {
             city?: string;
             line1?: string;
@@ -956,6 +998,17 @@ export interface components {
             stateCode?: string;
             status?: string;
             tradeName?: string;
+        };
+        InvitationPreview: {
+            branchNames?: string[];
+            businessName: string;
+            contactMasked: string;
+            /** Format: date-time */
+            expiresAt: string;
+            invitedByName: string;
+            /** Format: int32 */
+            minPasswordLength: number;
+            roleName: string;
         };
         LicenceEntry: {
             number?: string;
@@ -2447,6 +2500,90 @@ export interface operations {
             };
             /** @description PARTY_GSTIN_SERVICE_UNAVAILABLE (also when no provider is set) */
             503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    getInvitation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Invitation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationPreview"];
+                };
+            };
+            /** @description IDENTITY_INVITATION_INVALID (unknown, expired, used or revoked: one answer, so tokens can't be probed) */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    acceptInvitation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcceptInvitationRequest"];
+            };
+        };
+        responses: {
+            /** @description Joined and signed in (same body as login) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenResponse"];
+                };
+            };
+            /** @description Field errors, IDENTITY_PASSWORD_TOO_SHORT */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description IDENTITY_EMAIL_TAKEN, IDENTITY_MOBILE_TAKEN, IDENTITY_INVITATION_EMAIL_REQUIRED, IDENTITY_INVITATION_BRANCH_GONE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description IDENTITY_INVITATION_INVALID */
+            410: {
                 headers: {
                     [name: string]: unknown;
                 };

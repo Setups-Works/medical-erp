@@ -1,7 +1,7 @@
 /**
- * MSW handlers. `builtHandlers` imitate meno-api as built on feature/7-tenancy-onboarding (same paths, codes and
- * rules, so screens behave the same against the real API). `proposedHandlers` serve the endpoints that only exist
- * in contracts/openapi/proposed/auth.yaml. Mode "missing" uses only the proposed ones.
+ * MSW handlers. `builtHandlers` imitate meno-api (same paths, codes and rules, so screens behave the same against the
+ * real API). `proposedHandlers` serve endpoints that only exist in contracts/openapi/proposed/auth.yaml (none right
+ * now). Mode "missing" uses only the proposed ones.
  */
 import { http, HttpResponse, type HttpResponseResolver } from "msw";
 import { checkGstin, financialYearEnd } from "@meno/validation";
@@ -715,9 +715,7 @@ export const builtHandlers = [
   ...teamHandlers,
   ...userHandlers,
   ...roleHandlers,
-];
-
-export const proposedHandlers = [
+  // ---------------------------------------------------------------- accept invitation (auth InvitationController)
   http.get(`${API}/invitations/:token`, ({ params }) =>
     params.token === MOCK_INVITE_TOKEN && !db.get().usedInvites.includes(String(params.token))
       ? HttpResponse.json({
@@ -747,3 +745,5 @@ export const proposedHandlers = [
     return signIn(user);
   }),
 ];
+
+export const proposedHandlers: typeof builtHandlers = [];

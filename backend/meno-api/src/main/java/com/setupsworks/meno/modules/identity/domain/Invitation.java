@@ -149,6 +149,19 @@ public class Invitation {
         touched(by, now);
     }
 
+    /** The person opened the link and joined as {@code userId}; the link can't be used again. */
+    public void accept(UUID userId, Instant now) {
+        requirePending();
+        status = Status.ACCEPTED;
+        acceptedUserId = userId;
+        acceptedAt = now;
+        touched(userId, now);
+    }
+
+    public boolean isUsable(Instant now) {
+        return status == Status.PENDING && expiresAt.isAfter(now);
+    }
+
     private void requirePending() {
         if (status != Status.PENDING) {
             throw new IllegalStateException("Invitation " + id + " is " + status);
