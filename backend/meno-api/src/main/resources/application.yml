@@ -75,6 +75,10 @@ meno:
       resend-cooldown: ${MENO_VERIFICATION_RESEND_COOLDOWN:PT60S}
       # Trailing slash: the web app is a static export with trailingSlash (apps/web/next.config.ts).
       email-link-base: ${MENO_PUBLIC_WEB_URL:http://localhost:3000}/verify/?token=
+      # Mobile OTP (ONBOARDING.md step 2): 6 digits, 5 min, 3 tries, resend after 30 s.
+      sms-ttl: ${MENO_SMS_OTP_TTL:PT5M}
+      sms-resend-cooldown: ${MENO_SMS_OTP_RESEND_COOLDOWN:PT30S}
+      sms-max-attempts: ${MENO_SMS_OTP_MAX_ATTEMPTS:3}
     bootstrap:
       tenant-name: ${MENO_BOOTSTRAP_TENANT:}
       full-name: ${MENO_BOOTSTRAP_NAME:Owner}
@@ -83,6 +87,10 @@ meno:
 
   mail:
     from: ${MENO_MAIL_FROM:MENO <no-reply@meno.local>}
+  sms:
+    # none (default): SMS off, mobile OTP answers 503 NOTIFICATION_CHANNEL_DISABLED. log: local dev only (prints the
+    # message). A real provider is chosen under INT-02 (P5).
+    provider: ${MENO_SMS_PROVIDER:none}
   signup:
     # false closes public sign-up (POST /api/v1/auth/signup answers IDENTITY_SIGNUP_CLOSED).
     enabled: ${MENO_SIGNUP_ENABLED:true}
@@ -114,6 +122,8 @@ meno:
       password-forgot: { method: POST, path: /api/v1/auth/password/forgot, capacity: "${MENO_RATE_LIMIT_PASSWORD_FORGOT:5}", window: PT15M }
       password-reset: { method: POST, path: /api/v1/auth/password/reset, capacity: "${MENO_RATE_LIMIT_PASSWORD_RESET:10}", window: PT15M }
       verify-email-resend: { method: POST, path: /api/v1/auth/verify-email/resend, capacity: "${MENO_RATE_LIMIT_RESEND:5}", window: PT1H }
+      verify-mobile: { method: POST, path: /api/v1/auth/verify-mobile, capacity: "${MENO_RATE_LIMIT_VERIFY:10}", window: PT10M }
+      verify-mobile-send: { method: POST, path: /api/v1/auth/verify-mobile/send, capacity: "${MENO_RATE_LIMIT_RESEND:5}", window: PT1H }
 
 springdoc:
   # Off unless asked for: local and staging set MENO_API_DOCS_ENABLED=true, production leaves it false.

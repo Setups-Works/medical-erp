@@ -50,6 +50,8 @@ With the `local` profile: <http://localhost:8080/swagger-ui.html> (spec: `/v3/ap
 | POST | `/api/v1/auth/password/reset` | – | `{"token","password"}` → 204, ends every session; 410 if the link is used / expired |
 | POST | `/api/v1/auth/verify-email` | – | `{"token"}` from the emailed link → 204 |
 | POST | `/api/v1/auth/verify-email/resend` | Bearer | New link (older ones stop working) → 202 |
+| POST | `/api/v1/auth/verify-mobile/send` | Bearer | 6-digit SMS code (5 min, resend after 30 s) → 202; 503 while `MENO_SMS_PROVIDER=none` |
+| POST | `/api/v1/auth/verify-mobile` | Bearer | `{"code"}` → 204; 3 tries then 423 |
 | GET | `/api/v1/auth/verification` | Bearer | `{emailVerified, mobileVerified}` |
 | GET | `/api/v1/auth/me` | Bearer | User id, tenant id, email, roles from the token |
 | GET | `/api/v1/onboarding` | Bearer | Checklist: steps, status, next step to resume |

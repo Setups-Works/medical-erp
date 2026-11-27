@@ -401,9 +401,7 @@ export const builtHandlers = [
       return HttpResponse.json(readiness(tenant, owner(tenant)));
     }),
   ),
-];
-
-export const proposedHandlers = [
+  // Mobile OTP (meno-api VerificationController); local code is MOCK_OTP.
   http.post(`${API}/auth/verify-mobile/send`, () => new HttpResponse(null, { status: 202 })),
   http.post(`${API}/auth/verify-mobile`, async ({ request }) => {
     const code = String((await body(request)).code ?? "");
@@ -415,6 +413,9 @@ export const proposedHandlers = [
     }
     return new HttpResponse(null, { status: 204 });
   }),
+];
+
+export const proposedHandlers = [
   http.get(`${API}/invitations/:token`, ({ params }) =>
     params.token === MOCK_INVITE_TOKEN && !db.get().usedInvites.includes(String(params.token))
       ? HttpResponse.json({

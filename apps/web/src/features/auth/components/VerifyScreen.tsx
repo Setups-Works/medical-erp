@@ -116,8 +116,9 @@ function MobileCard({ verified }: { verified: boolean }) {
   const verify = useVerifyMobile();
   const [code, setCode] = useState("");
   const countdown = useCountdown();
-  // Mobile OTP is proposed (contracts/openapi/proposed/auth.yaml); meno-api answers 404 until it ships.
-  const notBuilt = isApiError(send.error) && (send.error.status === 404 || send.error.status === 405);
+  // meno-api answers 503 NOTIFICATION_CHANNEL_DISABLED while no SMS provider is configured (INT-02); older APIs 404.
+  const notBuilt =
+    isApiError(send.error) && (send.error.code === "NOTIFICATION_CHANNEL_DISABLED" || send.error.status === 404 || send.error.status === 405);
 
   return (
     <Card className="flex flex-col gap-3" data-testid="verify-mobile">

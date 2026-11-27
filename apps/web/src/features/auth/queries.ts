@@ -105,7 +105,6 @@ export function useResetPassword() {
   return useMutation({ mutationFn: (body: { token: string; password: string }) => api.post("/api/v1/auth/password/reset", { body }) });
 }
 
-// Proposed endpoints (contracts/openapi/proposed/auth.yaml) — served by local MSW until meno-api builds them.
 export function useSendMobileOtp() {
   return useMutation({ mutationFn: () => api.post("/api/v1/auth/verify-mobile/send") });
 }
@@ -118,6 +117,7 @@ export function useVerifyMobile() {
   });
 }
 
+// Proposed endpoints (contracts/openapi/proposed/auth.yaml) — served by local MSW until meno-api builds them.
 export function useInvitation(token: string | null) {
   return useQuery({
     queryKey: keys.invitation(token ?? ""),
