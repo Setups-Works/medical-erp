@@ -511,6 +511,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/team/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Invitations, newest first (page envelope) */
+        get: operations["listInvitations"];
+        put?: never;
+        /**
+         * Invite a person
+         * @description Email or mobile (or both), an invitable role and at least one branch. The link is sent after the invitation is saved; it works for the configured number of days.
+         */
+        post: operations["inviteStaff"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/team/invitations/{id}/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send the invitation again with a new link (the old link stops working) */
+        post: operations["resendInvitation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/team/invitations/{id}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke an open invitation (its link stops working; the record stays for audit) */
+        post: operations["revokeInvitation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/team/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Roles that can be invited, the tenant's branches, and whether SMS delivery is set up */
+        get: operations["teamOptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -535,6 +607,13 @@ export interface components {
             booksStartDate: string;
             /** Format: date */
             financialYearStart: string;
+        };
+        BranchOption: {
+            code?: string;
+            headOffice?: boolean;
+            /** Format: uuid */
+            id?: string;
+            name?: string;
         };
         BranchRequest: {
             addressLine1: string;
@@ -728,6 +807,10 @@ export interface components {
             password: string;
             token: string;
         };
+        RoleOption: {
+            code?: string;
+            label?: string;
+        };
         SettingInfo: {
             defaultValue?: string;
             key?: string;
@@ -767,6 +850,50 @@ export interface components {
             required?: boolean;
             route?: string;
             status?: string;
+        };
+        TeamInvitation: {
+            branches?: components["schemas"]["BranchOption"][];
+            email?: string;
+            /** Format: date-time */
+            expiresAt?: string;
+            fullName?: string;
+            /** Format: uuid */
+            id?: string;
+            mobile?: string;
+            roleCode?: string;
+            roleLabel?: string;
+            /** Format: int32 */
+            sendCount?: number;
+            /** Format: date-time */
+            sentAt?: string;
+            /** @enum {string} */
+            status?: "PENDING" | "EXPIRED" | "ACCEPTED" | "REVOKED";
+        };
+        TeamInvitationPage: {
+            items?: components["schemas"]["TeamInvitation"][];
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            totalItems?: number;
+            /** Format: int32 */
+            totalPages?: number;
+        };
+        TeamInvitationRequest: {
+            branchIds: string[];
+            /** Format: email */
+            email?: string;
+            fullName: string;
+            mobile?: string;
+            roleCode: string;
+        };
+        TeamOptions: {
+            branches?: components["schemas"]["BranchOption"][];
+            /** Format: int64 */
+            invitationValidDays?: number;
+            roles?: components["schemas"]["RoleOption"][];
+            smsAvailable?: boolean;
         };
         TokenResponse: {
             accessToken?: string;
@@ -1829,6 +1956,189 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Checklist"];
+                };
+            };
+        };
+    };
+    listInvitations: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitationPage"];
+                };
+            };
+        };
+    };
+    inviteStaff: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TeamInvitationRequest"];
+            };
+        };
+        responses: {
+            /** @description Created and sent */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+            /** @description IDENTITY_INVITATION_CONTACT_REQUIRED, IDENTITY_ROLE_INVALID, IDENTITY_INVITATION_BRANCH_INVALID, field errors */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+            /** @description IDENTITY_EMAIL_TAKEN, IDENTITY_MOBILE_TAKEN, IDENTITY_INVITATION_PENDING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+            /** @description NOTIFICATION_CHANNEL_DISABLED (mobile only, no SMS provider) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+        };
+    };
+    resendInvitation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Sent again */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+            /** @description IDENTITY_INVITATION_NOT_FOUND (also another tenant's id) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+            /** @description IDENTITY_INVITATION_NOT_PENDING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+            /** @description IDENTITY_INVITATION_TOO_SOON */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+        };
+    };
+    revokeInvitation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Revoked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+            /** @description IDENTITY_INVITATION_NOT_FOUND (also another tenant's id) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+            /** @description IDENTITY_INVITATION_NOT_PENDING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvitation"];
+                };
+            };
+        };
+    };
+    teamOptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamOptions"];
                 };
             };
         };

@@ -14,4 +14,10 @@ export const keys = {
     step: (step: string) => ["onboarding", "step", step] as const,
     readiness: ["onboarding", "go-live"] as const,
   },
+
+  // team (identity invitations) — Nitheesh
+  team: {
+    options: ["team", "options"] as const,
+    invitations: ["team", "invitations"] as const,
+  },
 };

@@ -55,7 +55,7 @@ export const STEPS = [
   { code: "BRANCHES", required: true, available: true, phase: "P2", route: "/onboarding/branches" },
   { code: "BOOKS", required: true, available: true, phase: "P2", route: "/onboarding/books" },
   { code: "CONFIGURATION", required: true, available: true, phase: "P2", route: "/onboarding/configuration" },
-  { code: "TEAM", required: false, available: false, phase: "P2", route: "/onboarding/team" },
+  { code: "TEAM", required: false, available: true, phase: "P2", route: "/onboarding/team" },
   { code: "DATA", required: false, available: false, phase: "P3", route: "/onboarding/data" },
   { code: "DEVICES", required: false, available: false, phase: "P4", route: "/onboarding/devices" },
   { code: "PLAN", required: false, available: false, phase: "P5", route: "/onboarding/plan" },
@@ -72,3 +72,13 @@ export const START_OPTIONS = ["TRIAL", "DEMO", "LICENSE_KEY"];
 export const MOCK_OTP = "123456";
 export const MOCK_INVITE_TOKEN = "demo-invite";
 export const MOCK_RESET_TOKEN = "demo-reset";
+
+/** Invitable roles (meno-api `role` table, V202611271200). */
+export const INVITABLE_ROLES = [
+  { code: "BRANCH_MANAGER", label: "Branch manager" },
+  { code: "PHARMACIST", label: "Pharmacist" },
+  { code: "BILLING_OPERATOR", label: "Billing operator" },
+  { code: "INVENTORY_MANAGER", label: "Inventory manager" },
+  { code: "ACCOUNTANT", label: "Accountant" },
+];
+export const INVITATION_VALID_DAYS = 7;

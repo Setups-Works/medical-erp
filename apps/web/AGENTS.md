@@ -42,7 +42,8 @@ tests/e2e/                                      Playwright (Ashok; devs add happ
 | `/login` `/signup` `/verify` `/forgot-password` `/reset-password?token=` | `features/auth` | real meno-api (`/auth/login` with email or mobile, `/auth/logout-all`, `/auth/signup`, `/auth/signup/options`, `/auth/verification`, `/auth/verify-email[/resend]`, `/auth/password/forgot`, `/auth/password/reset`) |
 | `/invite?token=` + mobile OTP on `/verify` | `features/auth` | **proposed** (`contracts/openapi/proposed/auth.yaml`), local MSW until built |
 | `/onboarding` + `business` `pharmacy` `licences` `branches` `books` `configuration` `go-live` | `features/onboarding` | real meno-api (`/api/v1/onboarding/*`, `/gstin-verifications/{gstin}`) |
-| `/onboarding/team` `data` `devices` `plan` `practice` `license` `help` | `LaterStep` ("Coming in Pn", skip if optional) | checklist `available: false` |
+| `/onboarding/team` | `features/onboarding` `TeamStep` | real meno-api (`/api/v1/team/options`, `/team/invitations`, `…/{id}/resend`, `…/{id}/revoke`); Zod `teamInvite` in `@meno/validation` |
+| `/onboarding/data` `devices` `plan` `practice` `license` `help` | `LaterStep` ("Coming in Pn", skip if optional) | checklist `available: false` |
 
 - `/invite` uses `?token=` (not `/invite/[token]`): a static export can't pre-render unknown tokens.
 - Session: access token in memory only (`lib/session.ts`); `meno_refresh` HttpOnly cookie restores it on reload via `/auth/refresh` (single-flight in `@meno/api-client`). Dev proxies `/api` to `MENO_API_ORIGIN` so the cookie is same-origin.

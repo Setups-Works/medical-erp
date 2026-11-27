@@ -27,6 +27,12 @@ export type Readiness = S["Readiness"];
 export type ReadinessCheck = S["Check"];
 export type GstinView = S["GstinView"];
 export type ResetPasswordRequest = S["ResetPasswordRequest"];
+export type TeamOptions = S["TeamOptions"];
+export type TeamRoleOption = S["RoleOption"];
+export type TeamBranchOption = S["BranchOption"];
+export type TeamInvitation = S["TeamInvitation"];
+export type TeamInvitationPage = S["TeamInvitationPage"];
+export type TeamInvitationRequest = S["TeamInvitationRequest"];
 
 // Proposed (contracts/openapi/proposed/auth.yaml), served by MSW until built.
 type P = Proposed["schemas"];

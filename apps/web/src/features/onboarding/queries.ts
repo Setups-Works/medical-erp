@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { BooksRequest, BranchRequest, BusinessRequest, CompanyRequest, LicencesRequest } from "@meno/api-client";
+import type { BooksRequest, BranchRequest, BusinessRequest, CompanyRequest, LicencesRequest, TeamInvitationRequest } from "@meno/api-client";
 import { api } from "@/lib/api";
 import { keys } from "@/lib/query/keys";
 
@@ -78,4 +78,32 @@ export function useGoLive() {
 /** GSTIN Fetch (PTY-15): a user-triggered lookup, so a mutation rather than a cached query. */
 export function useGstinLookup() {
   return useMutation({ mutationFn: (gstin: string) => api.get("/api/v1/gstin-verifications/{gstin}", { params: { gstin } }) });
+}
+
+// ---------------------------------------------------------------- team step (identity /api/v1/team, AUT-09)
+
+const t = keys.team;
+
+/** Invitable roles, the tenant's branches and whether SMS delivery exists; branches change on the branches step. */
+export const useTeamOptions = () => useQuery({ queryKey: t.options, queryFn: () => api.get("/api/v1/team/options") });
+export const useInvitations = () => useQuery({ queryKey: t.invitations, queryFn: () => api.get("/api/v1/team/invitations", { query: { page: 0, size: 200 } }) });
+
+/** An invite also marks the Team step done, so the checklist is refreshed with the list. */
+export function useInviteStaff() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: TeamInvitationRequest) => api.post("/api/v1/team/invitations", { body }),
+    onSuccess: () => Promise.all([qc.invalidateQueries({ queryKey: t.invitations }), qc.invalidateQueries({ queryKey: k.checklist })]),
+  });
+}
+
+export function useInvitationAction(action: "resend" | "revoke") {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      action === "resend"
+        ? api.post("/api/v1/team/invitations/{id}/resend", { params: { id } })
+        : api.post("/api/v1/team/invitations/{id}/revoke", { params: { id } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: t.invitations }),
+  });
 }

@@ -9,7 +9,6 @@ import { LaterBadge } from "./OnboardingShell";
 
 /** What each later step will cover (ONBOARDING.md §2), shown until the step's feature ships. */
 const PLANNED: Record<string, string[]> = {
-  TEAM: ["Invite staff by mobile or email with a role", "Choose which branches each person can use", "Counter PIN set on first sign-in"],
   DATA: ["Start fresh with the medicine database", "Excel / CSV templates", "Move from the software you use today, with a dry run you approve"],
   DEVICES: ["Download the desktop app for Windows / macOS", "Register this computer to a branch and counter", "Print a test page and scan a test barcode"],
   PLAN: ["Pick a plan for your edition", "Or enter a license key"],

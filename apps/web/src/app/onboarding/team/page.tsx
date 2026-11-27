@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { LaterStep } from "@/features/onboarding/components/LaterStep";
+import { TeamStep } from "@/features/onboarding/components/TeamStep";
 
 export const metadata: Metadata = { title: "Team" };
 
 export default function Page() {
-  return <LaterStep code="TEAM" />;
+  return <TeamStep />;
 }
