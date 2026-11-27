@@ -65,7 +65,8 @@ class OnboardingFlowIntegrationTest {
         call(get("/api/v1/onboarding"), owner, null)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nextStep").value("BUSINESS"))
-                .andExpect(jsonPath("$.steps[?(@.code == 'TEAM')].status").value("NOT_AVAILABLE"));
+                .andExpect(jsonPath("$.steps[?(@.code == 'TEAM')].status").value("TODO"))
+                .andExpect(jsonPath("$.steps[?(@.code == 'DATA')].status").value("NOT_AVAILABLE"));
         call(get("/api/v1/onboarding/options"), owner, null)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lists.business_type[0].code").value("RETAIL"))
@@ -138,6 +139,11 @@ class OnboardingFlowIntegrationTest {
 
         // Optional step skip; required steps can't be skipped.
         call(post("/api/v1/onboarding/steps/BOOKS/skip"), owner, null).andExpect(status().isConflict());
+
+        // Required steps done; the optional Team step is next until it is done or skipped.
+        call(get("/api/v1/onboarding"), owner, null).andExpect(jsonPath("$.nextStep").value("TEAM"));
+        call(post("/api/v1/onboarding/steps/TEAM/skip"), owner, null).andExpect(status().isOk())
+                .andExpect(jsonPath("$.steps[?(@.code == 'TEAM')].status").value("SKIPPED"));
 
         // Every step done, but the owner's email is not confirmed yet -> not ready.
         call(get("/api/v1/onboarding"), owner, null).andExpect(jsonPath("$.nextStep").value("GO_LIVE"));

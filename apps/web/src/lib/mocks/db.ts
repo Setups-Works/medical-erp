@@ -16,8 +16,22 @@ export type MockTenant = {
   books?: { financialYearStart: string; financialYearEnd: string; booksStartDate: string; label: string };
   settings: Record<string, string>;
   progress: Record<string, "DONE" | "SKIPPED">;
+  invitations?: MockInvitation[];
   live: boolean;
   goLiveDate?: string;
+};
+
+export type MockInvitation = {
+  id: string;
+  fullName: string;
+  email?: string;
+  mobile?: string;
+  roleCode: string;
+  branchIds: string[];
+  status: "PENDING" | "ACCEPTED" | "REVOKED";
+  sentAt: string;
+  expiresAt: string;
+  sendCount: number;
 };
 
 export type MockUser = {

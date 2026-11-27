@@ -38,7 +38,7 @@ class ConfiguredSmsSender implements SmsSender {
             log.warn("SMS to {} not sent: meno.sms.provider is none", masked(sms.to()));
             return;
         }
-        log.info("[local SMS] to {}: {}", masked(sms.to()), sms.text());
+        log.info("[local SMS] to {}: {}", masked(sms.to()), sms.logText());
     }
 
     private static String masked(String to) {

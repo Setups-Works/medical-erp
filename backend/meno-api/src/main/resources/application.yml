@@ -79,6 +79,11 @@ meno:
       sms-ttl: ${MENO_SMS_OTP_TTL:PT5M}
       sms-resend-cooldown: ${MENO_SMS_OTP_RESEND_COOLDOWN:PT30S}
       sms-max-attempts: ${MENO_SMS_OTP_MAX_ATTEMPTS:3}
+    # Staff invitations (AUT-09 Team step). ⚠ 7-day link lifetime is a starting value to confirm.
+    invitation:
+      ttl: ${MENO_INVITATION_TTL:P7D}
+      resend-cooldown: ${MENO_INVITATION_RESEND_COOLDOWN:PT60S}
+      link-base: ${MENO_PUBLIC_WEB_URL:http://localhost:3000}/invite/?token=
     bootstrap:
       tenant-name: ${MENO_BOOTSTRAP_TENANT:}
       full-name: ${MENO_BOOTSTRAP_NAME:Owner}

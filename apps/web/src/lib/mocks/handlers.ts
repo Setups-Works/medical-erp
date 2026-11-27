@@ -5,12 +5,14 @@
  */
 import { http, HttpResponse, type HttpResponseResolver } from "msw";
 import { checkGstin, financialYearEnd } from "@meno/validation";
-import { db, newId, type MockTenant, type MockUser } from "./db";
+import { db, newId, type MockInvitation, type MockTenant, type MockUser } from "./db";
 import {
   BUSINESS_TYPE_LICENCES,
   FY_START_MONTH,
   GO_LIVE_MAX_DAYS_AHEAD,
   GSTIN_REQUIRED,
+  INVITABLE_ROLES,
+  INVITATION_VALID_DAYS,
   LISTS,
   MIN_PASSWORD_LENGTH,
   MOCK_INVITE_TOKEN,
@@ -105,6 +107,76 @@ const invalid = (code: string, message: string) => problem(400, code, message);
 type Json = Record<string, unknown>;
 const body = async (request: Request) => (await request.json()) as Json;
 const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
+
+// ---------------------------------------------------------------- team (identity TeamController, AUT-09)
+const roleLabel = (code: string) => INVITABLE_ROLES.find((r) => r.code === code)?.label ?? code;
+const teamBranches = (t: MockTenant) =>
+  [...t.branches].sort((a, b) => Number(b.headOffice) - Number(a.headOffice)).map((b) => ({ id: b.id, name: b.details.name ?? "", code: b.details.code ?? "", headOffice: b.headOffice }));
+function invitationView(t: MockTenant, i: MockInvitation) {
+  const status = i.status === "PENDING" && Date.parse(i.expiresAt) <= Date.now() ? "EXPIRED" : i.status;
+  const branches = teamBranches(t).filter((b) => i.branchIds.includes(b.id));
+  return { id: i.id, fullName: i.fullName, email: i.email, mobile: i.mobile, roleCode: i.roleCode, roleLabel: roleLabel(i.roleCode), branches, status, sentAt: i.sentAt, expiresAt: i.expiresAt, sendCount: i.sendCount };
+}
+const expiry = () => new Date(Date.now() + INVITATION_VALID_DAYS * 86_400_000).toISOString();
+function pendingInvitation(t: MockTenant, id: string) {
+  const i = (t.invitations ?? []).find((x) => x.id === id);
+  if (!i) return problem(404, "IDENTITY_INVITATION_NOT_FOUND", "Invitation not found.");
+  if (i.status !== "PENDING") return problem(409, "IDENTITY_INVITATION_NOT_PENDING", "This invitation was already accepted or revoked.");
+  return i;
+}
+
+const teamHandlers = [
+  http.get(`${API}/team/options`, withAuth(({ tenant }) => HttpResponse.json({ roles: INVITABLE_ROLES, branches: teamBranches(tenant), smsAvailable: false, invitationValidDays: INVITATION_VALID_DAYS }))),
+  http.get(
+    `${API}/team/invitations`,
+    withAuth(({ tenant }) => {
+      const items = [...(tenant.invitations ?? [])].reverse().map((i) => invitationView(tenant, i));
+      return HttpResponse.json({ items, page: 0, size: 50, totalItems: items.length, totalPages: items.length ? 1 : 0 });
+    }),
+  ),
+  http.post(
+    `${API}/team/invitations`,
+    withAuth(async ({ tenant, user, request }) => {
+      const b = await body(request);
+      const email = str(b.email)?.toLowerCase();
+      const mobile = str(b.mobile) ? `+91${str(b.mobile)}` : undefined;
+      const branchIds = Array.isArray(b.branchIds) ? (b.branchIds as string[]) : [];
+      if (!email && !mobile) return invalid("IDENTITY_INVITATION_CONTACT_REQUIRED", "Enter an email address or a mobile number.");
+      if (!email) return problem(503, "NOTIFICATION_CHANNEL_DISABLED", "SMS isn't set up yet. Add an email address to send the invitation.");
+      if (!INVITABLE_ROLES.some((r) => r.code === b.roleCode)) return invalid("IDENTITY_ROLE_INVALID", "Choose a role from the list.");
+      if (!branchIds.length || !branchIds.every((id) => tenant.branches.some((x) => x.id === id))) return invalid("IDENTITY_INVITATION_BRANCH_INVALID", "Choose at least one of your branches.");
+      if (db.get().users.some((u) => u.tenantId === user.tenantId && u.email === email)) return problem(409, "IDENTITY_EMAIL_TAKEN", "Someone on your team already uses this email.");
+      const list = (tenant.invitations ??= []);
+      if (list.some((i) => i.status === "PENDING" && ((email && i.email === email) || (mobile && i.mobile === mobile))))
+        return problem(409, "IDENTITY_INVITATION_PENDING", "This person already has an open invitation. Resend it instead.");
+      const row: MockInvitation = { id: newId(), fullName: String(b.fullName).trim(), email, mobile, roleCode: String(b.roleCode), branchIds, status: "PENDING", sentAt: new Date().toISOString(), expiresAt: expiry(), sendCount: 1 };
+      list.push(row);
+      if (!tenant.live) mark(tenant, "TEAM");
+      db.save();
+      return HttpResponse.json(invitationView(tenant, row), { status: 201 });
+    }),
+  ),
+  http.post(
+    `${API}/team/invitations/:id/resend`,
+    withAuth<{ id: string }>(({ tenant, params }) => {
+      const i = pendingInvitation(tenant, params.id);
+      if (i instanceof Response) return i;
+      Object.assign(i, { sentAt: new Date().toISOString(), expiresAt: expiry(), sendCount: i.sendCount + 1 });
+      db.save();
+      return HttpResponse.json(invitationView(tenant, i));
+    }),
+  ),
+  http.post(
+    `${API}/team/invitations/:id/revoke`,
+    withAuth<{ id: string }>(({ tenant, params }) => {
+      const i = pendingInvitation(tenant, params.id);
+      if (i instanceof Response) return i;
+      i.status = "REVOKED";
+      db.save();
+      return HttpResponse.json(invitationView(tenant, i));
+    }),
+  ),
+];
 
 export const builtHandlers = [
   // ---------------------------------------------------------------- auth
@@ -413,6 +485,7 @@ export const builtHandlers = [
     }
     return new HttpResponse(null, { status: 204 });
   }),
+  ...teamHandlers,
 ];
 
 export const proposedHandlers = [

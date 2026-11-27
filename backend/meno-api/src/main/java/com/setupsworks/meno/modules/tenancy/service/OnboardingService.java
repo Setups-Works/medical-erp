@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import com.setupsworks.meno.common.error.MenoException;
 import com.setupsworks.meno.common.gst.Gstin;
 import com.setupsworks.meno.modules.tenancy.api.GoLiveCheck;
+import com.setupsworks.meno.modules.tenancy.api.OnboardingSteps;
 import com.setupsworks.meno.modules.tenancy.api.TenantWentLive;
 import com.setupsworks.meno.modules.tenancy.domain.Branch;
 import com.setupsworks.meno.modules.tenancy.domain.Company;
@@ -51,7 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
  * After go-live the steps are read-only here; later changes go through Settings (with audit).
  */
 @Service
-public class OnboardingService {
+public class OnboardingService implements OnboardingSteps {
 
     public static final String DONE = "DONE";
     public static final String SKIPPED = "SKIPPED";
@@ -163,6 +164,18 @@ public class OnboardingService {
         }
         mark(tenantId, step, SKIPPED);
         return checklist();
+    }
+
+    /** A step whose data another module owns (Team → identity invitations) is done once that data is saved. */
+    @Override
+    @Transactional
+    public void markDone(UUID tenantId, String step) {
+        if (!steps.existsById(step)) {
+            throw new IllegalArgumentException("Unknown onboarding step " + step);
+        }
+        if (!tenant(tenantId).isLive()) {
+            mark(tenantId, step, DONE);
+        }
     }
 
     // ---------------------------------------------------------------- business profile (AUT-05)

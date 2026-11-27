@@ -81,7 +81,10 @@ erDiagram
 - `consent(id, tenant_id, user_id, kind[TERMS_AND_PRIVACY], version, accepted_at, created_at, created_by)` — built (V202611262001), append-only (AUT-04)
 - `verification(id, tenant_id, user_id, channel[EMAIL|SMS], token_hash unique (SHA-256; SMS codes salted with the row id), expires_at, consumed_at, attempts (V202611271000), version)` — built (V202611262200): email links and 6-digit SMS OTP (3 tries)
 - `permission(code)`, `role_permission(role, permission_code)` — built (V202611262101), global seed until per-tenant roles (PLT-07)
-- `user_role(user_id, role)` — temporary until role / permission tables (ADR-0014)
+- `user_role(user_id, role)` — temporary until role / permission tables (ADR-0014); `role` FK to `role(code)` (V202611271200)
+- `role(code, label, invitable, sort_order)` — built (V202611271200), platform seed (no tenant_id) until per-tenant roles (PLT-07); `invitable` = offered on the Team step (Branch manager, Pharmacist, Billing operator, Inventory manager, Accountant). `role_permission.role` FK to it
+- `invitation(id, tenant_id, full_name, email null lower-case, mobile null E.164, role_code → role, status[PENDING|ACCEPTED|REVOKED], token_hash unique (SHA-256), expires_at, sent_at, send_count, accepted_user_id, accepted_at, revoked_at, audit cols, version)` — built (V202611271200), RLS; CHECK email or mobile; one PENDING per email / mobile per tenant (partial unique indexes); "expired" = PENDING past expires_at (AUT-09, PLT-06)
+- `invitation_branch(invitation_id, tenant_id, branch_id → branch)` — built (V202611271200), RLS; branches the person will work at (becomes `user_branch` on acceptance)
 - `password_reset(id, tenant_id, user_id, token_hash unique (SHA-256), expires_at, used_at, requested_ip, version)` — built (V202611262600), RLS; newest link only, single use (AUT-01)
 - `refresh_token(id, tenant_id, user_id, token_hash unique (SHA-256), family_id, expires_at, revoked_at, replaced_by_id, created_by_ip, user_agent, version)` — reuse of a rotated token revokes the family
 - RLS on these tables is built (#7, V202611262100); login, refresh, logout, sign-up, email-link verification and the bootstrap run with `app.rls_bypass` (TenantContext.callAsSystem), nothing else
