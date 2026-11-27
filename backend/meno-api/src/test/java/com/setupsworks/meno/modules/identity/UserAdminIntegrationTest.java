@@ -86,6 +86,11 @@ class UserAdminIntegrationTest {
                 .andExpect(jsonPath("$.items[?(@.id == '%s')].you".formatted(owner.userId())).value(true))
                 .andExpect(jsonPath("$.items[?(@.id == '%s')].branches[0].code".formatted(priya.getId()))
                         .value("HO"));
+        // A page far past the end is just empty (no overflow into a negative index).
+        call(get("/api/v1/admin/users?status=ALL&page=2147483647&size=200"), owner.bearer(), null)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").isEmpty())
+                .andExpect(jsonPath("$.totalItems").value(2));
         call(get("/api/v1/admin/users?q=priya"), owner.bearer(), null)
                 .andExpect(jsonPath("$.totalItems").value(1))
                 .andExpect(jsonPath("$.items[0].roles[0].label").value("Pharmacist"));

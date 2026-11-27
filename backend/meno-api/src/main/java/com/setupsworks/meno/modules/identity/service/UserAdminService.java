@@ -126,9 +126,10 @@ public class UserAdminService {
                         .thenComparing(AppUser::getId))
                 .map(u -> view(ctx, u))
                 .toList();
-        int from = Math.min(page * size, all.size());
-        int to = Math.min(from + size, all.size());
-        int totalPages = (all.size() + size - 1) / size;
+        // long maths: page and size come from the query string, and page * size must not wrap to a negative index.
+        int from = (int) Math.min((long) page * size, all.size());
+        int to = (int) Math.min((long) from + size, all.size());
+        int totalPages = (int) (((long) all.size() + size - 1) / size);
         return new StaffUserPage(all.subList(from, to), page, size, all.size(), totalPages);
     }
 
