@@ -10,8 +10,12 @@ servers:
 security:
 - bearerAuth: []
 tags:
+- description: "MENO's default roles and your own: names, permissions, reset, archive."
+  name: Roles
 - description: Set-up steps from sign-up to go-live; resume anywhere.
   name: Onboarding
+- description: "What each role may do, permission by permission."
+  name: Permissions
 - description: "Sign in, refresh, sign out. Errors are Problem Details with a `code`."
   name: Auth
 - description: Create a pharmacy business (tenant) and its owner account.
@@ -27,6 +31,224 @@ tags:
 - description: Verify a GSTIN and fetch its registration details.
   name: GSTIN
 paths:
+  /api/v1/admin/permissions:
+    get:
+      operationId: permissionCatalogue
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionCatalogue"
+          description: OK
+      summary: "Every permission by module, with the roles that hold it for your business"
+      tags:
+      - Permissions
+  /api/v1/admin/roles:
+    get:
+      operationId: listRoles
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RoleSummary"
+          description: OK
+      summary: "Roles: defaults first, then your own, with how many people hold each"
+      tags:
+      - Roles
+    post:
+      description: "Empty, or starting with another role's permissions."
+      operationId: createRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewRoleRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: Created
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: IDENTITY_ROLE_NOT_FOUND (copyFrom)
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: IDENTITY_ROLE_NAME_TAKEN
+      summary: Create your own role
+      tags:
+      - Roles
+  /api/v1/admin/roles/{code}:
+    delete:
+      description: "Archived, so old records keep its name. Refused while active people\
+        \ hold it or open invitations carry it."
+      operationId: archiveRole
+      parameters:
+      - in: path
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Archived
+        "404":
+          description: IDENTITY_ROLE_NOT_FOUND
+        "409":
+          description: "IDENTITY_ROLE_NOT_EDITABLE (default role), IDENTITY_ROLE_IN_USE"
+      summary: Remove your own role
+      tags:
+      - Roles
+    get:
+      operationId: getRole
+      parameters:
+      - in: path
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: The role
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: IDENTITY_ROLE_NOT_FOUND (also another tenant's role)
+      summary: One role with its permissions
+      tags:
+      - Roles
+    put:
+      operationId: renameRole
+      parameters:
+      - in: path
+        name: code
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RenameRoleRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: Saved
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: IDENTITY_ROLE_NOT_FOUND
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: "IDENTITY_ROLE_NOT_EDITABLE (default role), IDENTITY_ROLE_NAME_TAKEN,\
+            \ COMMON_VERSION_CONFLICT"
+      summary: Rename your own role
+      tags:
+      - Roles
+  /api/v1/admin/roles/{code}/permissions:
+    put:
+      description: For a default role this makes your own copy of its list; reset
+        brings MENO's back.
+      operationId: setRolePermissions
+      parameters:
+      - in: path
+        name: code
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RolePermissionsRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: Saved; applies within 30 seconds
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: "IDENTITY_PERMISSION_INVALID, field errors"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: IDENTITY_ROLE_NOT_FOUND
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: "IDENTITY_ROLE_LOCKED, IDENTITY_LAST_ADMIN, COMMON_VERSION_CONFLICT"
+      summary: Set the role's permissions (whole list)
+      tags:
+      - Roles
+  /api/v1/admin/roles/{code}/reset:
+    post:
+      operationId: resetRole
+      parameters:
+      - in: path
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: Reset
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: IDENTITY_ROLE_NOT_FOUND
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleDetail"
+          description: "IDENTITY_ROLE_LOCKED, IDENTITY_ROLE_NOT_EDITABLE (own role),\
+            \ IDENTITY_LAST_ADMIN"
+      summary: Give a default role MENO's permissions back
+      tags:
+      - Roles
   /api/v1/admin/users:
     get:
       description: "Branch-limited managers see people who share one of their branches,\
@@ -1615,6 +1837,25 @@ components:
         userId:
           type: string
           format: uuid
+    NewRoleRequest:
+      type: object
+      properties:
+        copyFrom:
+          type: string
+          maxLength: 50
+          minLength: 0
+        description:
+          type: string
+          maxLength: 300
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        label:
+          type: string
+          maxLength: 60
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+      required:
+      - label
     Option:
       type: object
       properties:
@@ -1642,6 +1883,39 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/StateInfo"
+    PermissionCatalogue:
+      type: object
+      properties:
+        modules:
+          type: array
+          items:
+            $ref: "#/components/schemas/PermissionModule"
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoleColumn"
+    PermissionEntry:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        roleCodes:
+          type: array
+          items:
+            type: string
+    PermissionModule:
+      type: object
+      properties:
+        code:
+          type: string
+        label:
+          type: string
+        permissions:
+          type: array
+          items:
+            $ref: "#/components/schemas/PermissionEntry"
     ProblemDetail:
       type: object
       properties:
@@ -1681,6 +1955,26 @@ components:
           type: boolean
         ready:
           type: boolean
+    RenameRoleRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 300
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        label:
+          type: string
+          maxLength: 60
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        version:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - label
+      - version
     ResetPasswordRequest:
       type: object
       properties:
@@ -1695,6 +1989,50 @@ components:
       required:
       - password
       - token
+    RoleColumn:
+      type: object
+      properties:
+        code:
+          type: string
+        custom:
+          type: boolean
+        label:
+          type: string
+        locked:
+          type: boolean
+    RoleDetail:
+      type: object
+      properties:
+        activeUsers:
+          type: integer
+          format: int64
+        allBranches:
+          type: boolean
+        code:
+          type: string
+        custom:
+          type: boolean
+        customised:
+          type: boolean
+        description:
+          type: string
+        label:
+          type: string
+        locked:
+          type: boolean
+        permissionCodes:
+          type: array
+          items:
+            type: string
+        permissionsVersion:
+          type: integer
+          format: int64
+        totalUsers:
+          type: integer
+          format: int64
+        version:
+          type: integer
+          format: int64
     RoleOption:
       type: object
       properties:
@@ -1702,6 +2040,51 @@ components:
           type: string
         label:
           type: string
+    RolePermissionsRequest:
+      type: object
+      properties:
+        permissionCodes:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            pattern: "^[a-z]+(\\.[a-z-]+){2}$"
+          maxItems: 500
+          minItems: 0
+          uniqueItems: true
+        permissionsVersion:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - permissionCodes
+      - permissionsVersion
+    RoleSummary:
+      type: object
+      properties:
+        activeUsers:
+          type: integer
+          format: int64
+        allBranches:
+          type: boolean
+        code:
+          type: string
+        custom:
+          type: boolean
+        customised:
+          type: boolean
+        description:
+          type: string
+        label:
+          type: string
+        locked:
+          type: boolean
+        permissionCount:
+          type: integer
+          format: int32
+        totalUsers:
+          type: integer
+          format: int64
     RoleView:
       type: object
       properties:
