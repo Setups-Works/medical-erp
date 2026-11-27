@@ -15,6 +15,7 @@ import { withSlash } from "@/features/onboarding/utils";
 export const ADMIN_TABS: { href: string; label: string; icon: IconName; permission: string }[] = [
   { href: "/admin/users/", label: "Users", icon: "users", permission: "identity.user.view" },
   { href: "/admin/roles/", label: "Roles", icon: "shield", permission: "identity.role.view" },
+  { href: "/admin/permissions/", label: "Permissions", icon: "key", permission: "identity.role.view" },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

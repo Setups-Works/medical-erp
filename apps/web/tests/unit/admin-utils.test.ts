@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { peopleCount, roleBadges, sameSet, toggle } from "@/features/admin/utils";
+import { filterCatalogue, peopleCount, roleBadges, sameSet, toggle } from "@/features/admin/utils";
 
 describe("admin utils", () => {
   it("names where a role comes from", () => {
@@ -20,5 +20,20 @@ describe("admin utils", () => {
     expect(toggle(["a.x.y", "b.x.y"], "a.x.y", false)).toEqual(["b.x.y"]);
     expect(sameSet(["a", "b"], ["b", "a"])).toBe(true);
     expect(sameSet(["a"], ["a", "b"])).toBe(false);
+  });
+});
+
+describe("filterCatalogue", () => {
+  const catalogue = {
+    modules: [
+      { code: "identity", label: "Users and roles", permissions: [{ code: "identity.user.view", description: "See staff accounts" }] },
+      { code: "party", label: "Customers and suppliers", permissions: [{ code: "party.customer.create", description: "Create customers" }] },
+    ],
+  };
+  it("keeps everything for an empty search and drops empty modules otherwise", () => {
+    expect(filterCatalogue(catalogue, " ")).toHaveLength(2);
+    expect(filterCatalogue(catalogue, "CUSTOMER").map((m) => m.code)).toEqual(["party"]);
+    expect(filterCatalogue(catalogue, "identity.user").map((m) => m.code)).toEqual(["identity"]);
+    expect(filterCatalogue(catalogue, "nothing")).toEqual([]);
   });
 });
