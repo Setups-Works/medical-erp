@@ -117,7 +117,7 @@ export function useVerifyMobile() {
   });
 }
 
-// Proposed endpoints (contracts/openapi/proposed/auth.yaml) — served by local MSW until meno-api builds them.
+// Accept invitation (identity / auth InvitationController, PLT-06): public, the link token is the key.
 export function useInvitation(token: string | null) {
   return useQuery({
     queryKey: keys.invitation(token ?? ""),

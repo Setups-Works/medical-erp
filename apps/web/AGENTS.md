@@ -40,7 +40,7 @@ tests/e2e/                                      Playwright (Ashok; devs add happ
 | Route | Screen | API |
 |---|---|---|
 | `/login` `/signup` `/verify` `/forgot-password` `/reset-password?token=` | `features/auth` | real meno-api (`/auth/login` with email or mobile, `/auth/logout-all`, `/auth/signup`, `/auth/signup/options`, `/auth/verification`, `/auth/verify-email[/resend]`, `/auth/password/forgot`, `/auth/password/reset`) |
-| `/invite?token=` + mobile OTP on `/verify` | `features/auth` | **proposed** (`contracts/openapi/proposed/auth.yaml`), local MSW until built |
+| `/invite?token=` | `features/auth` `InviteScreen` | real meno-api (`GET /api/v1/invitations/{token}`, `POST …/accept`, public; signs in like login) |
 | `/onboarding` + `business` `pharmacy` `licences` `branches` `books` `configuration` `go-live` | `features/onboarding` | real meno-api (`/api/v1/onboarding/*`, `/gstin-verifications/{gstin}`) |
 | `/onboarding/team` | `features/onboarding` `TeamStep` | real meno-api (`/api/v1/team/options`, `/team/invitations`, `…/{id}/resend`, `…/{id}/revoke`); Zod `teamInvite` in `@meno/validation` |
 | `/admin/users` | `features/users` `UsersScreen` (+ `UserPanel`, shared `InviteForm` / `InvitationRow` also used by `TeamStep`) | real meno-api (`/api/v1/admin/users`, `…/options`, `…/{id}/access`, `…/{id}/deactivate`, `…/{id}/reactivate`, `/api/v1/team/*`); Zod `userAccess`; actions shown by permission (`hooks/usePermissions` → `/auth/me`) inside the stand-in `features/admin` `AdminShell` |

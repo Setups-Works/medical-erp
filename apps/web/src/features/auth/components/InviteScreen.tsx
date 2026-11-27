@@ -72,7 +72,7 @@ function AcceptForm({ token, invitation }: { token: string; invitation: Invitati
     try {
       await accept.mutateAsync({ fullName, mobile, password });
     } catch (e) {
-      setFormError(applyApiError(e, form.setError, { IDENTITY_PASSWORD_TOO_SHORT: "password" }));
+      setFormError(applyApiError(e, form.setError, { IDENTITY_PASSWORD_TOO_SHORT: "password", IDENTITY_MOBILE_TAKEN: "mobile" }));
       return;
     }
     router.replace("/dashboard/");
