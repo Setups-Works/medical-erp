@@ -145,6 +145,7 @@ Actions → **Deploy API** → Run workflow on `develop` (or merge any backend c
 ## Day to day
 
 - Merge to `develop` → staging updates in about 5 minutes. Merge `develop` → `main` (release PR) → production updates.
+- Several merges in a row → only the newest commit deploys (older builds are cancelled). Most of a deploy is the JVM start on the shared B1: when the plan's CPU is at 100 % (four apps, 1 vCPU) Spring Boot takes 90 s to 7 min to start, so check plan CPU first when a deploy is slow.
 - Something broke: [docs/runbooks/rollback.md](../runbooks/rollback.md). Normal procedure: [docs/runbooks/deploy.md](../runbooks/deploy.md).
 - Logs: app → Monitoring → Log stream (or `az webapp log tail -n <app> -g nitheesh_group`).
 - Always On is enabled, so there is no cold start; the smoke test still waits up to 10 minutes for the JVM and Flyway after a deploy.

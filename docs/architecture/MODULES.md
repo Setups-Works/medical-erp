@@ -8,16 +8,16 @@ Base-plan names are kept as **sub-domains** inside fewer, larger modules so begi
 
 | Module | Owns (tables, roughly) | Base-plan names merged in | Public API (examples) | Publishes events | Allowed deps | Phase |
 |---|---|---|---|---|---|---|
-| `auth` | refresh_token, login_attempt, device | auth | `AuthFacade.currentUser()` | `UserLoggedIn` | identity, tenancy | 1 |
-| `tenancy` | tenant, company, branch, financial_year, number_series, tenant_setting | company, branch | `TenantContext`, `BranchFacade` | `BranchCreated` | — | 1 |
-| `identity` | app_user, role, permission, role_permission, user_branch | users, roles | `PermissionChecker` | `UserInvited` | tenancy | 1 |
+| `auth` | refresh_token, login_attempt, password_reset, device | auth | `AuthFacade.currentUser()`; built: login, refresh, logout, sign-up, verify, forgot / reset password | `UserLoggedIn` | identity, notification (reset email) | 1 |
+| `tenancy` | tenant, state, company, licence, branch, financial_year, number_series, tenant_setting, onboarding_progress (+ seeded lookup_option, setting_definition, onboarding_step) | company, branch | `TenantFacade`, `GoLiveCheck` SPI (`TenantContext` lives in shared `security`), `BranchFacade` later | `TenantWentLive`, `BranchCreated` | — | 1 |
+| `identity` | app_user, role, permission, role_permission, user_branch, consent, verification | users, roles | `SignupFacade`, `EmailVerification`, `CredentialCheck` (`PermissionChecker` lives in shared `security`) | `UserInvited` | tenancy, notification (EmailSender for one-time links) | 1 |
 | `subscription` | plan, license, license_event, license_activation_attempt, usage (LICENSING.md) | subscription, licensing | `EntitlementGuard.requireEdition/Feature/Capacity/Writable`, `EditionGuard.require(WHOLESALE)` | `LicenseActivated`, `LicenseChanged`, `PlanChanged` | tenancy | 5 |
 | `audit` | audit_log | audit | `AuditRecorder` | — | — | 1 |
 | `notification` | notification, template, channel_config | notifications | `Notifier.send(...)` | — | tenancy | 4 |
 | `files` | stored_file | — | `FileStore.put/get` (signed URLs) | — | — | 2 |
 | `sync` | device_registration, sync_batch, sync_conflict | — | `/api/v1/sync/*` | `OfflineInvoiceAccepted` | sales, inventory, catalog, party | 5 |
 | `catalog` | item (medicine), manufacturer, salt/composition, category, unit, hsn, barcode, rack_location, substitute | medicine, categories | `CatalogFacade.findItem` | `ItemChanged` | taxation | 2 |
-| `party` | party (supplier/customer/retailer), party_gst, party_contact, credit_terms | suppliers, customers | `PartyFacade.creditStatus` | `PartyChanged` | tenancy | 2 |
+| `party` | party (supplier/customer/retailer), party_gst, party_contact, credit_terms | suppliers, customers | `PartyFacade.creditStatus`; built: `/api/v1/gstin-verifications/{gstin}` | `PartyChanged` | tenancy, integrations | 2 |
 | `pricing` | price_list, price_list_item, scheme, discount_rule | pricing | `PricingEngine.price(lines)` | — | catalog, party | 3 |
 | `purchase` | purchase_order, purchase_invoice(+lines), grn, import_job | purchase | `PurchaseFacade` | `PurchasePosted` | catalog, party, pricing, taxation, inventory, files | 3 |
 | `inventory` | batch, inventory_movement, stock_balance, stock_transfer, stock_adjustment, stock_count | inventory | `StockFacade.consume/receive/available` | `StockLow`, `BatchExpiring` | catalog, tenancy | 3 |

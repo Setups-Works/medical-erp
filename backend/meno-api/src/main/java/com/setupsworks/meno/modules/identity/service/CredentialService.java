@@ -29,7 +29,7 @@ class CredentialService implements CredentialCheck {
     private final PasswordEncoder passwordEncoder;
     private final IdentityProperties properties;
     private final Clock clock;
-    /** Checked when the email is unknown so the response time does not reveal which emails exist. */
+    /** Checked when the email / mobile is unknown so the response time does not reveal which accounts exist. */
     private final String dummyHash;
 
     CredentialService(AppUserRepository users, TenantFacade tenants, PasswordEncoder passwordEncoder,
@@ -44,9 +44,9 @@ class CredentialService implements CredentialCheck {
 
     @Override
     @Transactional
-    public Result check(String email, String rawPassword) {
+    public Result check(String identifier, String rawPassword) {
         Instant now = clock.instant();
-        AppUser user = users.findByEmail(AppUser.normalizeEmail(email)).orElse(null);
+        AppUser user = findByIdentifier(identifier).orElse(null);
         if (user == null) {
             passwordEncoder.matches(rawPassword, dummyHash);
             return new Result.InvalidCredentials();
@@ -66,6 +66,17 @@ class CredentialService implements CredentialCheck {
         return new Result.Ok(toAccount(user));
     }
 
+    /** An "@" means email; anything else must be a valid Indian mobile, or nobody matches. */
+    private Optional<AppUser> findByIdentifier(String identifier) {
+        if (identifier == null || identifier.isBlank()) {
+            return Optional.empty();
+        }
+        if (identifier.contains("@")) {
+            return users.findByEmail(AppUser.normalizeEmail(identifier));
+        }
+        return AppUser.normalizeMobile(identifier).flatMap(users::findByMobile);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<LoginAccount> findSignInAllowed(UUID userId) {
@@ -75,7 +86,7 @@ class CredentialService implements CredentialCheck {
                 .map(CredentialService::toAccount);
     }
 
-    private static LoginAccount toAccount(AppUser user) {
+    static LoginAccount toAccount(AppUser user) {
         return new LoginAccount(user.getId(), user.getTenantId(), user.getEmail(), user.getFullName(),
                 user.getRoles().stream().map(Role::name).collect(Collectors.toSet()));
     }

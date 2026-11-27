@@ -96,7 +96,7 @@ const notificationSchema = new Schema(
   {
     user: { type: ObjectId, ref: "User", required: true, index: true },
     actor: { type: ObjectId, ref: "User" },
-    type: { type: String, enum: ["assigned", "mentioned", "commented"], required: true },
+    type: { type: String, enum: ["assigned", "mentioned", "commented", "review"], required: true },
     text: { type: String, required: true },
     boardId: { type: ObjectId, ref: "Board" },
     taskId: { type: ObjectId, ref: "Task" },
@@ -119,15 +119,40 @@ const productItemSchema = new Schema({
 });
 productItemSchema.index({ kind: 1, order: 1 });
 
-/** Manual "page completed" ticks from the Pages list; survives re-imports (keyed by section + page name). */
+/** One delivery tick on a page (backend endpoints ready, frontend ready, QA passed): who ticked it and when. */
+const pageStageSchema = new Schema({ done: { type: Boolean, default: false }, by: { type: ObjectId, ref: "User" }, at: Date }, { _id: false });
+
+/**
+ * Manual ticks from the Pages list; survives re-imports (keyed by section + page name).
+ * `done` is the final "built, tested and accepted"; be / fe / qa track the steps towards it.
+ */
 const pageCheckSchema = new Schema(
   {
     key: { type: String, required: true, unique: true },
     done: { type: Boolean, default: false },
     by: { type: ObjectId, ref: "User" },
+    doneAt: Date, // own timestamp: updatedAt also moves when a BE / FE / QA tick changes
+    be: { type: pageStageSchema, default: () => ({}) },
+    fe: { type: pageStageSchema, default: () => ({}) },
+    qa: { type: pageStageSchema, default: () => ({}) },
+    // The page's own Backend / Frontend work cards (created from the Pages list)
+    beTask: { type: ObjectId, ref: "Task", default: null },
+    feTask: { type: ObjectId, ref: "Task", default: null },
   },
   { timestamps: true },
 );
+
+/** One-time password reset link. Only the SHA-256 of the token is stored; Mongo's TTL index removes expired rows. */
+const passwordResetSchema = new Schema(
+  {
+    user: { type: ObjectId, ref: "User", required: true, index: true },
+    tokenHash: { type: String, required: true, unique: true },
+    expiresAt: { type: Date, required: true },
+    usedAt: { type: Date, default: null },
+  },
+  { timestamps: { createdAt: true, updatedAt: false } },
+);
+passwordResetSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const counterSchema = new Schema({ _id: String, seq: { type: Number, default: 0 } });
 
@@ -144,6 +169,7 @@ export const Notification = model("Notification", notificationSchema);
 export const Counter = model("Counter", counterSchema);
 export const ProductItem = model("ProductItem", productItemSchema);
 export const PageCheck = model("PageCheck", pageCheckSchema);
+export const PasswordReset = model("PasswordReset", passwordResetSchema);
 
 export async function nextTaskNumber(): Promise<number> {
   const c = await Counter.findByIdAndUpdate("task", { $inc: { seq: 1 } }, { upsert: true, new: true }).lean();

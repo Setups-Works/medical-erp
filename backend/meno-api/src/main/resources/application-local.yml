@@ -6,6 +6,9 @@ meno:
       allow-ephemeral-key: true
   auth:
     refresh-cookie-secure: ${MENO_COOKIE_SECURE:false}
+  sms:
+    # Prints SMS (with the OTP) to the log so you can verify a mobile locally. Never use log outside local.
+    provider: ${MENO_SMS_PROVIDER:log}
 springdoc:
   api-docs:
     enabled: ${MENO_API_DOCS_ENABLED:true}

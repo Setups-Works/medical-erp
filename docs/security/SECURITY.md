@@ -8,6 +8,7 @@ Owner: Nitheesh (application), Jeeva (infrastructure), Ashok (testing). Threat m
 - Access token: JWT (15 min, signed RS256 or ES256, key rotation via `kid`). Refresh token: opaque, 30 days, **rotated on every use**, reuse detection revokes the family. Stored hashed.
 - Web: tokens in `HttpOnly; Secure; SameSite=Strict` cookies (same origin via Nginx) + CSRF token for state-changing requests. Desktop: tokens in OS keychain via Electron `safeStorage`.
 - Login throttling + lockout after 10 failures (15 min). 2FA TOTP for admins (P5).
+- Rate limits per client IP in the API itself (App Service has no nginx): login, refresh, sign-up, email verify / resend → 429 `COMMON_RATE_LIMITED` (`meno.rate-limit.*`, built 26-11-2026). Client IP via Tomcat RemoteIpValve (`forward-headers-strategy: native`), so only trusted proxies can set X-Forwarded-For.
 - Offline desktop login: PIN hash, valid N days since last online login (see OFFLINE_SYNC.md).
 
 ## Authorisation

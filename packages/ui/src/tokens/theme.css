@@ -1,0 +1,92 @@
+/*
+ * Tailwind v4 mapping of the tokens in tokens.css, plus shadcn variable names (DESIGN_LANGUAGE.md §2).
+ * Import after `@import "tailwindcss"` in the app's globals.css.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-side: var(--side);
+  --color-raised: var(--raised);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-line-3: var(--line-3);
+  --color-hover: var(--hover);
+  --color-press: var(--press);
+  --color-coral: var(--coral);
+  --color-critical: var(--critical);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-data: var(--data);
+  --color-accent: var(--accent-color);
+  --color-accent-wash: var(--accent-wash);
+  --color-accent-line: var(--accent-line);
+
+  /* shadcn names → our tokens */
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-card: var(--raised);
+  --color-popover: var(--raised);
+  --color-muted: var(--side);
+  --color-muted-foreground: var(--ink-3);
+  --color-border: var(--line-2);
+  --color-input: var(--line-2);
+  --color-ring: var(--data);
+  --color-primary: var(--ink);
+  --color-primary-foreground: var(--paper);
+  --color-destructive: var(--critical);
+
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-geist), system-ui, sans-serif;
+  --font-brand: var(--font-brand-serif), Georgia, serif;
+
+  --radius-xs: 4px;
+  --radius-tab: 6px;
+  --radius-ctl: 8px;
+  --radius-tile: 10px;
+  --radius-card: 12px;
+  --radius-dlg: 16px;
+  --radius-pill: 999px;
+
+  --shadow-pop: var(--shadow-pop);
+  --shadow-hair: var(--shadow-hair);
+  --ease-meno: var(--ease);
+  --ease-meno-out: var(--ease-out);
+}
+
+@layer base {
+  html,
+  body {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+  }
+  input,
+  textarea,
+  button,
+  select {
+    font: inherit;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--data) 22%, transparent);
+  }
+}

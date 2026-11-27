@@ -35,7 +35,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 class AuthFlowIntegrationTest {
 
     private static final String LOGIN = """
-            {"email":"owner@test.local","password":"%s"}""";
+            {"identifier":"owner@test.local","password":"%s"}""";
 
     @Autowired
     MockMvc mvc;
@@ -68,6 +68,14 @@ class AuthFlowIntegrationTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("AUTH_REFRESH_REUSED"));
         mvc.perform(post("/api/v1/auth/refresh").cookie(rotated)).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void healthIsUpWithoutAnSmtpServer() throws Exception {
+        // Staging ran without MENO_MAIL_HOST and the mail health check turned /actuator/health DOWN (503).
+        mvc.perform(get("/actuator/health"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("UP"));
     }
 
     @Test

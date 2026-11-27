@@ -8,6 +8,7 @@ import com.setupsworks.meno.modules.identity.domain.AppUser;
 import com.setupsworks.meno.modules.identity.domain.Role;
 import com.setupsworks.meno.modules.identity.repository.AppUserRepository;
 import com.setupsworks.meno.modules.tenancy.api.TenantFacade;
+import com.setupsworks.meno.security.TenantContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+
 
 /**
  * Creates the first tenant and its OWNER on an empty database, from MENO_BOOTSTRAP_* env vars.
@@ -32,9 +35,11 @@ class BootstrapOwner implements ApplicationRunner {
     private final PasswordEncoder passwordEncoder;
     private final IdentityProperties properties;
     private final Clock clock;
+    private final TransactionTemplate tx;
 
     BootstrapOwner(AppUserRepository users, TenantFacade tenants, PasswordEncoder passwordEncoder,
-            IdentityProperties properties, Clock clock) {
+            IdentityProperties properties, Clock clock, PlatformTransactionManager transactionManager) {
+        this.tx = new TransactionTemplate(transactionManager);
         this.users = users;
         this.tenants = tenants;
         this.passwordEncoder = passwordEncoder;
@@ -43,8 +48,12 @@ class BootstrapOwner implements ApplicationRunner {
     }
 
     @Override
-    @Transactional
     public void run(ApplicationArguments args) {
+        // No tenant exists yet: counting users and creating the first tenant must see past RLS.
+        TenantContext.runAsSystem(() -> tx.executeWithoutResult(status -> bootstrap()));
+    }
+
+    private void bootstrap() {
         if (users.count() > 0) {
             return;
         }

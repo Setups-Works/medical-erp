@@ -1,6 +1,6 @@
 # GSTIN fetch (PTY-15, INT-17)
 
-> Status: **planned for P3**. Provider **not decided** ⚠ (R-31): Jeeva compares providers and Nitheesh decides in P2. Live learning demo: MENO Hub → Learn → Day 22. Field rules: [MASTER_FIELDS.md](MASTER_FIELDS.md) §1.1 and §1.5.
+> Status: **endpoint built 26-11-2026** (`GET /api/v1/gstin-verifications/{gstin}`, `party` + `integrations`), provider switch `MENO_GSTIN_PROVIDER` = `none` (default) | `gstverify`. Fetch buttons on the forms and the audit table are still to do. Provider **not decided** ⚠ (R-31): Jeeva compares providers and Nitheesh decides in P2. Live learning demo: MENO Hub → Learn → Day 22. Field rules: [MASTER_FIELDS.md](MASTER_FIELDS.md) §1.1 and §1.5.
 
 ## 1. What it does
 

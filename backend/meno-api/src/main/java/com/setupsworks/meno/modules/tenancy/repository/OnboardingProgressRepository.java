@@ -1,0 +1,13 @@
+package com.setupsworks.meno.modules.tenancy.repository;
+
+import java.util.List;
+import java.util.UUID;
+
+import com.setupsworks.meno.modules.tenancy.domain.TenantRows;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OnboardingProgressRepository
+        extends JpaRepository<TenantRows.OnboardingProgress, TenantRows.ProgressKey> {
+    List<TenantRows.OnboardingProgress> findByTenantId(UUID tenantId);
+}

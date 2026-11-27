@@ -34,7 +34,7 @@
 | 16 | PLT-06 Users, invitations, branch access, deactivate | Feature | — |
 | 17 | PLT-07 Roles & configurable permissions (`module.resource.action`); default roles: Super Admin, Business Owner, Branch Manager, Pharmacist, Billing Operator, Inventory Manager, Accountant, Wholesale Manager, Sales Representative, Auditor, Delivery (see ROLES_AND_DASHBOARDS.md) | Feature | — |
 | 18 | PLT-08 Login with email/phone + password, refresh-token rotation, logout all devices | Feature | — |
-| 19 | AUT-01 Forgot / reset password (single-use emailed token, 30 min expiry, all sessions revoked on reset); sign in with email or username | Feature | Meyyarivu |
+| 19 | AUT-01 Forgot / reset password (single-use emailed token, 30 min expiry, all sessions revoked on reset); sign in with email or mobile | Feature | Meyyarivu |
 | 20 | AUT-04 Sign-up and verification: owner name, mobile OTP, email link, password policy, business name, state, partner code, trial / demo / license choice, DPDP notice acceptance stored with version; rate limits and bot checks | Feature | Meyyarivu |
 | 21 | NAV-01 App sidebar navigation: Dashboard + 10 groups (Sales, Purchase, Inventory, Masters, Wholesale, Finance, CRM & Engagement, Reports, GST & Compliance, Administration) exactly as in NAVIGATION.md; hides items by edition and permission; collapsible rail; remembers open groups | Feature | Meyyarivu |
 | 22 | SEC-04 Secrets management: all secrets in Key Vault, none on disk or in env files, short-lived DB credentials, rotation schedule, secret scanning in CI | Feature | Jeeva |

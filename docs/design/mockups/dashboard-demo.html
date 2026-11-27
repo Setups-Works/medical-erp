@@ -527,7 +527,7 @@ const CATALOG = DRUGDB.map((d,i) => { const h=seed(d.product_id), mrp=Math.round
 const CUSTOMERS=[["Walk-in customer","—"],["Meena Raghavan","90000 00010"],["K. Arun","90000 00011"],["S. Fathima","90000 00012"]];
 const DOCTORS=[["Dr. R. Kumar","DEMO-1234 · TN"],["Dr. A. Shanthi","DEMO-5521 · TN"]];
 const ROLE_CAP=10;
-const P = {inCart:false,col:1,split:false,lines:[],sel:-1,cust:0,doc:-1,rx:"",mode:"UPI",tender:"",billNo:125,held:[],res:[],ri:0,err:"",wk:null,wkOpen:false};
+const P = {inCart:false,col:1,split:false,lines:[],sel:-1,cust:0,doc:-1,rx:"",mode:"UPI",payRef:"",tender:"",billNo:125,held:[],res:[],ri:0,err:"",wk:null,wkOpen:false};
 /* Walk-in details (POS-30, DOCUMENT_FIELDS §2): kept on the bill as a snapshot, not as a customer, unless "Save as customer" is ticked. */
 const WK0 = () => ({name:"",mobile:"",age:"",gender:"",addr:"",consent:false,save:false});
 P.wk = WK0();
@@ -616,7 +616,7 @@ function renderSide(){
   document.querySelectorAll("#modes button").forEach(b=>b.classList.toggle("on",b.dataset.m===P.mode));
   const tender=Number(P.tender||0)*100, change=tender-T.grand;
   $("tenderBox").innerHTML = P.mode==="Cash" ? `<div class="tender"><span>Received</span><input class="cell" id="tender" value="${P.tender}" placeholder="0" inputmode="decimal" style="width:96px;margin-left:0" aria-label="Cash received"><span style="margin-left:auto">Change</span><b>${tender?(change>=0?rs(change):"short "+rs(-change)):"—"}</b></div>`
-    : P.mode==="UPI" ? `<div class="tender"><span>Show QR on customer screen · reference auto-filled</span></div>` : P.mode==="Card" ? `<div class="tender"><span>Card terminal · last 4 digits on slip</span></div>` : `<div class="tender"><span>Due in 30 days · limit ₹2,000.00</span></div>`;
+    : P.mode==="UPI" ? `<div class="tender"><span>QR on customer screen</span><input class="cell" id="payRef" value="${esc(P.payRef)}" placeholder="UPI ref. (12 digits)" inputmode="numeric" maxlength="12" style="width:150px;margin-left:auto" aria-label="UPI reference number"></div>` : P.mode==="Card" ? `<div class="tender"><span>Card terminal</span><input class="cell" id="payRef" value="${esc(P.payRef)}" placeholder="Last 4 digits" inputmode="numeric" maxlength="4" style="width:110px;margin-left:auto" aria-label="Card last 4 digits"></div>` : `<div class="tender"><span>Due in 30 days · limit ₹2,000.00</span></div>`;
   lucide.createIcons();
 }
 function renderPos(){ renderCart(); renderSide(); lucide.createIcons(); }
@@ -734,7 +734,7 @@ function save(){
     if(W.save){ PERSONS.push({name,phone,type:"Retail (person)",addr:W.addr.trim(),state:OUR_STATE,credit:0,limit:0,outstanding:0}); CUSTOMERS.push([name,phone]); P.cust=CUSTOMERS.length-1; toast(`${name} saved as a customer`); }
     else if(name||mob) walkin={name,mobile:phone,age,gender:W.gender,addr:W.addr.trim(),consentAt:mob?"24 Nov 2026 10:48 am":""}; }
   const no=`AM/26-27/${String(P.billNo).padStart(6,"0")}`;
-  const bill=snapshot(P.lines,{no,date:"24 Nov 2026",time:"10:48 am",cust:CUSTOMERS[P.cust],walkin,doc:P.doc>=0?DOCTORS[P.doc]:null,rx:P.rx,mode:P.mode,tender:Number(P.tender||0)*100});
+  const bill=snapshot(P.lines,{no,date:"24 Nov 2026",time:"10:48 am",cust:CUSTOMERS[P.cust],walkin,doc:P.doc>=0?DOCTORS[P.doc]:null,rx:P.rx,mode:P.mode,payRef:P.payRef,tender:Number(P.tender||0)*100});
   BILLS.unshift(bill);
   $("receipt").innerHTML=`<div class="receipt" role="dialog" aria-label="Bill saved"><div class="ok"><i data-lucide="check"></i>Bill ${no} saved</div>
     <div class="slip" style="font-family:var(--sans)"><div><span>${bill.cust[0]}</span><span>${bill.mode}</span></div><div><span>${bill.rows.length} lines · GST ${rs(bill.T.gst)}</span><span>${bill.date}</span></div>
@@ -742,7 +742,7 @@ function save(){
     <div class="rc-acts"><button class="btn outline" id="viewInv">Print invoice <kbd class="kb">P</kbd></button><button class="btn primary" id="newBill">New bill <kbd style="background:rgba(255,255,255,.18)">Enter</kbd></button></div></div>`;
   $("receipt").classList.add("open"); lucide.createIcons(); $("newBill").focus();
   $("viewInv").onclick=()=>openInvoice(bill);
-  $("newBill").onclick=()=>{ $("receipt").classList.remove("open"); Object.assign(P,{lines:[],sel:-1,cust:0,doc:-1,rx:"",tender:"",err:"",billNo:P.billNo+1,wk:WK0(),wkOpen:false}); renderPos(); $("q").focus(); };
+  $("newBill").onclick=()=>{ $("receipt").classList.remove("open"); Object.assign(P,{lines:[],sel:-1,cust:0,doc:-1,rx:"",payRef:"",tender:"",err:"",billNo:P.billNo+1,wk:WK0(),wkOpen:false}); renderPos(); $("q").focus(); };
 }
 /* Arrow-key grid over the bill lines: columns are batch, qty, disc %. */
 const COLS=["b","qty","disc"];
@@ -799,13 +799,13 @@ function posInit(){
     if(e.target.closest("#custClear")){ P.cust=0; renderSide(); $("q").focus(); return; }
     if(e.target.closest("#wkToggle")){ P.wkOpen=!(P.wkOpen||needsName()); renderSide(); if(P.wkOpen) $("wkName").focus(); return; }
     if(e.target.closest("#wkLink")){ const i=wkMatch(P.wk.mobile); if(i>0){ P.cust=i; P.wk=WK0(); P.wkOpen=false; P.err=""; renderSide(); toast(`Bill linked to ${CUSTOMERS[i][0]}`); $("q").focus(); } return; } if(e.target.closest("#custBtn")) pickCust(); if(e.target.closest("#docBtn")) pickDoc();
-    const m=e.target.closest("#modes button"); if(m){ P.mode=m.dataset.m; P.err=""; renderSide(); if(P.mode==="Cash") $("tender").focus(); } });
+    const m=e.target.closest("#modes button"); if(m){ P.mode=m.dataset.m; P.payRef=""; P.err=""; renderSide(); if(P.mode==="Cash") $("tender").focus(); } });
   const WKF={wkName:"name",wkMob:"mobile",wkAge:"age",wkAddr:"addr"};
   document.querySelector(".pos-side").addEventListener("input",e=>{ const wf=WKF[e.target.id]; if(wf){ P.wk[wf]=wf==="mobile"||wf==="age"?e.target.value.replace(/\D/g,""):e.target.value; if(WK_ERR[P.err]) P.err=""; if(wf==="mobile"){ $("wkHint").innerHTML=wkHintHtml(); } return; }
-    if(e.target.id==="rxNo") P.rx=e.target.value; if(e.target.id==="tender"){ P.tender=e.target.value.replace(/[^\d.]/g,""); const pos=e.target.selectionStart; renderSide(); const t=$("tender"); t.focus(); t.setSelectionRange(pos,pos); } });
+    if(e.target.id==="rxNo") P.rx=e.target.value; if(e.target.id==="payRef"){ e.target.value=e.target.value.replace(/\D/g,""); P.payRef=e.target.value; } if(e.target.id==="tender"){ P.tender=e.target.value.replace(/[^\d.]/g,""); const pos=e.target.selectionStart; renderSide(); const t=$("tender"); t.focus(); t.setSelectionRange(pos,pos); } });
   $("holdBtn").onclick=hold; $("saveBtn").onclick=save;
   document.querySelector(".pos-side").addEventListener("keydown",e=>{ const m=e.target.closest("#modes button"); if(!m||(e.key!=="ArrowLeft"&&e.key!=="ArrowRight")) return;
-    e.preventDefault(); const order=["Cash","UPI","Card","Credit"]; P.mode=order[(order.indexOf(P.mode)+(e.key==="ArrowRight"?1:-1)+4)%4]; P.err=""; renderSide(); document.querySelector(`#modes button[data-m="${P.mode}"]`).focus(); });
+    e.preventDefault(); const order=["Cash","UPI","Card","Credit"]; P.mode=order[(order.indexOf(P.mode)+(e.key==="ArrowRight"?1:-1)+4)%4]; P.payRef=""; P.err=""; renderSide(); document.querySelector(`#modes button[data-m="${P.mode}"]`).focus(); });
 }
 // POS keys (POS_KEYBOARD.md). Active only on the POS screen.
 addEventListener("keydown", e => {
@@ -816,7 +816,7 @@ addEventListener("keydown", e => {
   if ($("receipt").classList.contains("open")) { if(e.key==="Enter"||e.key==="Escape"){ e.preventDefault(); $("newBill").click(); } if(e.key.toLowerCase()==="p"){ e.preventDefault(); $("viewInv").click(); } return; }
   const k=e.key, F={F2:()=>{$("q").focus();$("q").select();},F3:pickCust,F4:pickDoc,F6:hold,F7:recall,
     F8:()=>{ if(P.lines.length) focusCell(Math.max(P.sel,0),2); else toast("Add a medicine first"); },
-    F9:()=>{ const order=["Cash","UPI","Card","Credit"]; P.mode=order[(order.indexOf(P.mode)+1)%4]; renderSide(); toast("Payment: "+P.mode); },F10:save};
+    F9:()=>{ const order=["Cash","UPI","Card","Credit"]; P.mode=order[(order.indexOf(P.mode)+1)%4]; P.payRef=""; renderSide(); toast("Payment: "+P.mode); },F10:save};
   if (F[k]) { e.preventDefault(); F[k](); return; }
   if (e.ctrlKey && (k==="Delete"||k==="Backspace") && P.lines.length) { e.preventDefault(); P.lines.splice(Math.max(P.sel,0),1); P.sel=Math.min(P.sel,P.lines.length-1); renderPos(); $("q").focus(); return; }
   if (k==="Escape") { document.querySelectorAll(".picker.open").forEach(x=>x.classList.remove("open")); $("results").classList.remove("open"); $("q").focus(); }
@@ -873,7 +873,7 @@ function invoiceA4(B){
       ${T.disc?`<div class="muted" style="font-size:7.4pt;margin-top:3px">You saved ₹${r2(T.disc)} on this bill.</div>`:""}</div>
   </div>
   <div class="bx-row" style="grid-template-columns:1fr 1fr">
-    <div><span class="lab">Payment</span><div class="kv"><span>Mode</span><b>${B.mode}</b>${B.mode==="Cash"&&B.tender?`<span>Received</span><b>${r2(B.tender)}</b><span>Change returned</span><b>${r2(B.tender-T.grand)}</b>`:B.mode==="UPI"?`<span>UPI reference</span><b class="n">4127 8890 1123</b>`:B.mode==="Card"?`<span>Card</span><b>•••• 4242</b>`:`<span>Due date</span><b>24 Dec 2026</b>`}<span>Amount paid</span><b>${r2(B.mode==="Credit"?0:T.grand)}</b></div></div>
+    <div><span class="lab">Payment</span><div class="kv"><span>Mode</span><b>${B.mode}</b>${B.mode==="Cash"&&B.tender?`<span>Received</span><b>${r2(B.tender)}</b><span>Change returned</span><b>${r2(B.tender-T.grand)}</b>`:B.mode==="UPI"?`<span>UPI reference</span><b class="n">${B.payRef?esc(B.payRef.replace(/(\d{4})(?=\d)/g,"$1 ")):"—"}</b>`:B.mode==="Card"?`<span>Card</span><b>${B.payRef?"•••• "+esc(B.payRef):"—"}</b>`:`<span>Due date</span><b>24 Dec 2026</b>`}<span>Amount paid</span><b>${r2(B.mode==="Credit"?0:T.grand)}</b></div></div>
     <div style="display:flex;gap:10px;align-items:center"><div class="qr">UPI QR<br>(demo)</div><div class="kv" style="flex:1"><span>UPI</span><b>aruna@upi</b><span>Bank</span><b>Demo Bank</b><span>A/c no.</span><b>XXXX XXXX 1234</b><span>IFSC</span><b>DEMO0000001</b></div></div>
   </div>
   <div class="bx-row" style="grid-template-columns:1.3fr .85fr .85fr">
@@ -892,7 +892,7 @@ function invoiceThermal(B){
   ${B.rows.map(r=>`<div class="th-it"><b>${r.name}</b>${r.sch?` [${r.sch}]`:""}<div class="th-row th-sm"><span>${r.batch} · ${r.exp} · HSN ${r.hsn}</span><span>GST ${r.gp}%</span></div><div class="th-row"><span>${r.qty} x ${r2(r.mrp)}${r.dp?` −${r.dp}%`:""}</span><span>${r2(r.amt)}</span></div></div>`).join("")}${hr}
   ${rates.map(k=>{const x=T.rates[k];return `<div class="th-row th-sm"><span>${k}% on ${r2(x.taxable)}</span><span>C ${r2(x.cgst)} S ${r2(x.sgst)}</span></div>`;}).join("")}
   <div class="th-row"><span>Taxable</span><span>${r2(T.taxable)}</span></div><div class="th-row"><span>GST</span><span>${r2(T.gst)}</span></div>${T.disc?`<div class="th-row"><span>Discount</span><span>−${r2(T.disc)}</span></div>`:""}<div class="th-row"><span>Round off</span><span>${T.ro<0?"−":"+"}${r2(Math.abs(T.ro))}</span></div>${hr}
-  <div class="th-gt"><span>TOTAL</span><span>₹${r2(T.grand)}</span></div><div class="th-row th-sm"><span>Paid by ${B.mode}</span><span>${B.mode==="Cash"&&B.tender?`Change ${r2(B.tender-T.grand)}`:""}</span></div>${hr}
+  <div class="th-gt"><span>TOTAL</span><span>₹${r2(T.grand)}</span></div><div class="th-row th-sm"><span>Paid by ${B.mode}${B.payRef?(B.mode==="Card"?" ••"+esc(B.payRef):" ref "+esc(B.payRef)):""}</span><span>${B.mode==="Cash"&&B.tender?`Change ${r2(B.tender-T.grand)}`:""}</span></div>${hr}
   <div class="th-c th-sm">Rupees ${words(T.grand/100)} Only<br>Pharmacist ${SHOP.pharmacist[0]} · ${SHOP.pharmacist[1]}<br>Check batch and expiry before leaving.<br>Billed with MENO</div></div>`;
 }
 const INV={bill:null,fmt:"a4"};
@@ -917,7 +917,7 @@ function sampleBills(){
   if(sampleBills.done) return; sampleBills.done=true;
   const pickId = s => (CATALOG.find(c=>c.name.toLowerCase().includes(s))||CATALOG[0]).id;
   const mk = (ids,meta) => snapshot(ids.map(([s,q,d])=>{ const it=CATALOG.find(c=>c.id===pickId(s)); return {id:it.id,b:fefo(it)[1],qty:q,disc:d||0}; }),meta);
-  BILLS.push(mk([["dolo 650",2],["telma 40",1,5],["ecosprin",1],["handwash",1]],{no:"AM/26-27/000124",date:"24 Nov 2026",time:"10:42 am",cust:CUSTOMERS[1],doc:DOCTORS[0],rx:"RX-0998",mode:"UPI",tender:0}));
+  BILLS.push(mk([["dolo 650",2],["telma 40",1,5],["ecosprin",1],["handwash",1]],{no:"AM/26-27/000124",date:"24 Nov 2026",time:"10:42 am",cust:CUSTOMERS[1],doc:DOCTORS[0],rx:"RX-0998",mode:"UPI",payRef:"412788901123",tender:0}));
   BILLS.push(mk([["electral",3],["cetirizine",1]],{no:"AM/26-27/000123",date:"24 Nov 2026",time:"10:31 am",cust:CUSTOMERS[0],doc:null,rx:"",mode:"Cash",tender:20000}));
 }
 
@@ -1298,7 +1298,7 @@ function blank(k){
   const base={kind:k,no:"",status:"New",party:-1,date:TODAY_ISO,branch:"Anna Nagar",rateMode:"Exclusive",creditDays:"",remarks:"",lines:[]};
   return Object.assign(base, k==="po"?{expected:addDays(TODAY_ISO,3),validTill:addDays(TODAY_ISO,15),source:"Manual",quoteRef:"",sendVia:"Email",contact:"",deliveryNote:""}
     : k==="pi"?{supNo:"",supDate:TODAY_ISO,recvDate:TODAY_ISO,warehouse:"Main store",po:"",grn:"",itc:"Yes",eway:"",transport:"",lrNo:"",lrDate:"",freight:"",other:"",billTotal:"",attach:""}
-    : {orderNo:"",orderDate:"",priceList:"Standard (PTR)",salesman:"",route:"",payMode:"Credit",transport:"",vehicle:"",lrNo:"",lrDate:"",cases:"",weight:"",freight:"",insurance:"",packing:"",other:"",billDisc:"",override:false});
+    : {orderNo:"",orderDate:"",priceList:"Standard (PTR)",salesman:"",route:"",payMode:"Credit",chqNo:"",chqDate:"",bank:"",payRef:"",transport:"",vehicle:"",lrNo:"",lrDate:"",cases:"",weight:"",freight:"",insurance:"",packing:"",other:"",billDisc:"",override:false});
 }
 function applyParty(D){
   const p=party(D); if(!p) return; D.creditDays=String(p.credit);
@@ -1427,9 +1427,12 @@ function docHeader(D){
     ${dfld("branch","Receive into (branch)",1,dsl("branch",BRANCHES))}${dfld("warehouse","Warehouse / location",1,dsl("warehouse",WAREHOUSES),"Cold-chain items go to the cold room")}${dfld("rateMode","Rates on the bill are",1,dsl("rateMode",[["Exclusive","Exclusive of GST"],["Inclusive","Inclusive of GST"]]),"Default from the supplier")}${dfld("itc","Input tax credit",1,dsl("itc",[["Yes","Claimable"],["No","Not claimable"]]))}
     ${pos}${credit}${due}${dro("MSME status",`<b>${p?p.msme:"—"}</b>`,p&&p.msme!=="Not registered"?"MSME due-date tracking applies (PTY-23) ⚠":"")}
     <div class="d-sec">Transport and e-way bill</div>${dfld("transport","Transporter",0,dtx("transport"))}${dfld("lrNo","L.R. no.",0,dtx("lrNo"))}${dfld("lrDate","L.R. date",0,dtx("lrDate",{type:"date"}))}${dfld("eway","E-way bill no.",0,dtx("eway",{ph:"12 digits, if any"}))}`; }
+  const pm=D.payMode, payRefF = pm==="Cheque"
+    ? dfld("chqNo","Cheque no.",1,dtx("chqNo",{ph:"6 digits"}))+dfld("chqDate","Cheque date",1,dtx("chqDate",{type:"date"}),D.chqDate&&D.chqDate>D.date?"Post-dated: goes to Cheques in hand until the date (ACC-02)":"A later date makes it post-dated")+dfld("bank","Drawn on (bank)",1,dtx("bank",{ph:"Bank and branch"}))
+    : pm==="UPI"||pm==="NEFT / RTGS" ? dfld("payRef",pm==="UPI"?"UPI ref. no.":"UTR / ref. no.",0,dtx("payRef",{ph:pm==="UPI"?"12 digits":"From the bank advice"}),"Printed on the invoice; used to match the bank credit (ACC-13)") : "";
   return `${partyF}${dro("Invoice no.",`<b>${D.no||"Assigned on posting"}</b>`)}${dfld("date","Invoice date",1,dtx("date",{type:"date"}))}
     ${dfld("orderNo","Order no.",0,dtx("orderNo",{ph:"Retailer's order"}))}${dfld("orderDate","Order date",0,dtx("orderDate",{type:"date"}))}${dfld("priceList","Price list",1,dsl("priceList",Object.keys(PRICE_LISTS)),"From the party; sets the rate")}${dfld("salesman","Salesman",0,dsl("salesman",SALESMEN,{blank:"None"}),"Commission (WHS-09)")}
-    ${dfld("route","Route",0,dtx("route"))}${dfld("payMode","Payment",1,dsl("payMode",["Credit","Cash","UPI","Cheque","NEFT / RTGS"]))}${credit}${due}
+    ${dfld("route","Route",0,dtx("route"))}${dfld("payMode","Payment",1,dsl("payMode",["Credit","Cash","UPI","Cheque","NEFT / RTGS"]))}${payRefF}${credit}${due}
     ${pos}${dro("E-invoice IRN",`<span>Generated after posting</span><b>—</b>`,"Only when the company is in scope ⚠",null,1)}${dro("Both parties' DL nos.",`<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p?p.dl:"—"}</span>`,"Printed on the invoice (CMP-05)",null,2)}
     <div class="d-sec">Dispatch and e-way bill</div>${dfld("transport","Transport",0,dtx("transport"))}${dfld("vehicle","Vehicle no.",0,dtx("vehicle",{ph:"e.g. TN 01 AB 0000"}))}${dfld("lrNo","L.R. no.",0,dtx("lrNo"))}${dfld("lrDate","L.R. date",0,dtx("lrDate",{type:"date"}))}
     ${dfld("cases","Cases",0,dtx("cases",{num:1}))}${dfld("weight","Weight (kg)",0,dtx("weight",{num:1}))}`;
@@ -1595,6 +1598,10 @@ function validateDoc(D){
     if(D.recvDate&&D.recvDate<D.supDate) e.recvDate="Goods can't arrive before the bill date.";
     const bt=String(D.billTotal).trim(); if(bt===""||isNaN(+bt)) e.billTotal="Type the total printed on the supplier's bill."; else if(Math.abs(pz(bt)-T.grand)>100) e.billTotal=`Lines add up to ${rs(T.grand)}; the bill says ${rs(pz(bt))}.`; }
   if(k==="si"&&p&&D.payMode==="Credit"&&p.outstanding+T.grand>p.limit&&!D.override) e.credit="Credit limit exceeded. Tick “Allow with approval” or take payment.";
+  if(k==="si"&&D.payMode==="Cheque"){ if(!/^\d{6}$/.test(String(D.chqNo||"").trim())) e.chqNo="Cheque number is 6 digits.";
+    if(!D.chqDate) e.chqDate="Enter the cheque date."; else if(D.chqDate<addDays(D.date,-90)) e.chqDate="Cheque is more than 3 months old (stale).";
+    if(!String(D.bank||"").trim()) e.bank="Enter the bank the cheque is drawn on."; }
+  if(k==="si"&&D.payMode==="UPI"&&String(D.payRef||"").trim()&&!/^\d{12}$/.test(String(D.payRef).replace(/\s/g,""))) e.payRef="UPI reference is 12 digits.";
   if(!D.lines.length) e.lines="Add at least one item.";
   D.lines.forEach((l,i)=>{ const E=(f,m)=>e[`l${i}_${f}`]=m, g=l.gst, mrp=parseFloat(l.mrp), rate=parseFloat(l.rate), qty=Number(l.qty), free=Number(l.free||0);
     if(!Number.isInteger(qty)||qty<=0) E("qty","Quantity must be a whole number above 0.");
@@ -1692,7 +1699,7 @@ function docA4(D){
       ${ch.map(([x,l])=>`<span>${l}</span><b>${r2(pz(D[x]))}</b>`).join("")}
       <span>Round off</span><b>${T.ro<0?"−":"+"}${r2(Math.abs(T.ro))}</b><span class="gt">${k==="po"?"Order value":"Grand total"}</span><b class="gt">₹${r2(T.grand)}</b></div></div>
   </div>
-  ${k==="si"?`<div class="bx-row" style="grid-template-columns:1fr 1fr"><div><span class="lab">Payment</span><div class="kv"><span>Mode</span><b>${D.payMode}</b><span>Due date</span><b style="font-weight:700">${fmtD(dueOf(D))}</b><span>Credit days</span><b>${D.creditDays||0}</b></div></div>
+  ${k==="si"?`<div class="bx-row" style="grid-template-columns:1fr 1fr"><div><span class="lab">Payment</span><div class="kv"><span>Mode</span><b>${D.payMode}</b>${D.payMode==="Cheque"?`<span>Cheque no.</span><b>${esc(D.chqNo||"—")}</b><span>Cheque date</span><b>${D.chqDate?fmtD(D.chqDate):"—"}</b><span>Bank</span><b>${esc(D.bank||"—")}</b>`:(D.payMode==="UPI"||D.payMode==="NEFT / RTGS")?`<span>${D.payMode==="UPI"?"UPI ref.":"UTR / ref."}</span><b>${esc(D.payRef||"—")}</b>`:""}<span>Due date</span><b style="font-weight:700">${fmtD(dueOf(D))}</b><span>Credit days</span><b>${D.creditDays||0}</b></div></div>
     <div style="display:flex;gap:10px;align-items:center"><div class="qr">IRN QR<br>(demo)</div><div class="kv" style="flex:1"><span>UPI</span><b>aruna@upi</b><span>Bank</span><b>Demo Bank</b><span>A/c no.</span><b>XXXX XXXX 1234</b><span>IFSC</span><b>DEMO0000001</b></div></div></div>`:""}
   <div class="bx-row" style="grid-template-columns:1.3fr .85fr .85fr">
     <div class="a4-terms"><span class="lab">Terms</span><ol>${terms.map(t=>`<li>${t}</li>`).join("")}</ol></div>
@@ -1709,6 +1716,29 @@ const STATES=[["33","Tamil Nadu"],["29","Karnataka"],["34","Puducherry"],["32","
 const stCode = n => (STATES.find(s=>s[1]===n)||[""])[0];
 // Demo PIN master: PIN → state, district, area. In MENO: the PIN master (PTY-18).
 const PINS={"600001":["Tamil Nadu","Chennai","Chennai GPO"],"600005":["Tamil Nadu","Chennai","Triplicane"],"600017":["Tamil Nadu","Chennai","T. Nagar"],"600040":["Tamil Nadu","Chennai","Anna Nagar"],"600042":["Tamil Nadu","Chennai","Velachery"],"600045":["Tamil Nadu","Chengalpattu","Tambaram"],"600053":["Tamil Nadu","Tiruvallur","Ambattur"],"560011":["Karnataka","Bengaluru Urban","Jayanagar"],"605001":["Puducherry","Puducherry","Puducherry"],"682011":["Kerala","Ernakulam","Kochi"]};
+/* GSTIN fetch (PTY-15, INT-17; docs/product/GSTIN_FETCH.md). The GST verify API sends no CORS headers, so a page opened
+   from a file can't call it: Fetch tries it live, then falls back to this snapshot of real responses
+   (scripts/design/gstin_snapshot.py). Hub → Learn → Day 22 calls it live through the Hub server. */
+/*GSTSNAP:start*/const GSTSNAP = {"33AAJCN0778N1ZZ":{"gstin":"33AAJCN0778N1ZZ","lgnm":"NATURESJOY HERBAL COSMETICS PRIVATE LIMITED","tradeNam":"NATURESJOY HERBAL COSMETICS PRIVATE LIMITED","sts":"Active","rgdt":"12/12/2023","ctb":"Private Limited Company","dty":"Regular","stj":"State - Tamil Nadu,Division - KANCHEEPURAM,Zone - Poonamallee,Circle - PORUR","ctj":"State - CBIC,Zone - CHENNAI,Commissionerate - CHENNAI-SOUTH,Division - PORUR,Range - RANGE I (Jurisdictional Office)","cxdt":"","nba":["Supplier of Services","Retail Business","Wholesale Business","Factory / Manufacturing"],"einvoiceStatus":"No","pradr":{"adr":"NO. 5, AGS COLONY, THILAGAR NAGAR, ALWATHIRU NAGAR, Chennai, Chennai, Tamil Nadu, 600087"},"principal_address":"NO. 5, AGS COLONY, THILAGAR NAGAR, ALWATHIRU NAGAR, Chennai, Chennai, Tamil Nadu, 600087","structured_address":{"address_line1":"NO. 5, AGS COLONY","address_line2":"THILAGAR NAGAR, ALWATHIRU NAGAR, Chennai","city":"Chennai","state":"Tamil Nadu","pincode":"600087"}}};/*GSTSNAP:end*/
+const GST_STATE_NAMES={"01":"Jammu and Kashmir","02":"Himachal Pradesh","03":"Punjab","04":"Chandigarh","05":"Uttarakhand","06":"Haryana","07":"Delhi","08":"Rajasthan","09":"Uttar Pradesh","10":"Bihar","11":"Sikkim","12":"Arunachal Pradesh","13":"Nagaland","14":"Manipur","15":"Mizoram","16":"Tripura","17":"Meghalaya","18":"Assam","19":"West Bengal","20":"Jharkhand","21":"Odisha","22":"Chhattisgarh","23":"Madhya Pradesh","24":"Gujarat","26":"Dadra and Nagar Haveli and Daman and Diu","27":"Maharashtra","29":"Karnataka","30":"Goa","31":"Lakshadweep","32":"Kerala","33":"Tamil Nadu","34":"Puducherry","35":"Andaman and Nicobar Islands","36":"Telangana","37":"Andhra Pradesh","38":"Ladakh","97":"Other Territory"};
+const B36="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+// Check character: base-36 values of characters 1–14, weights 1,2,1,2…, add the two base-36 digits of each product.
+function gstinCheck(g){ let s=0; for(let i=0;i<14;i++){ const v=B36.indexOf(g[i])*(i%2?2:1); s+=Math.floor(v/36)+v%36; } return B36[(36-s%36)%36]; }
+function gstinProblem(g){
+  if(!/^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(g)) return "GSTIN is 15 characters, e.g. 33AAJCN0778N1ZZ.";
+  if(!GST_STATE_NAMES[g.slice(0,2)]) return `State code ${g.slice(0,2)} doesn't exist.`;
+  const c=gstinCheck(g); return c===g[14]?"":`The last character should be ${c}, not ${g[14]}: probably a typo. No lookup was made.`;
+}
+async function gstLookup(g){
+  try{
+    const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),8000);
+    const r=await fetch(`https://api.gstverify.dubey.app/api/v1/gst/details?gstin=${encodeURIComponent(g)}&full=false`,{signal:ctl.signal,headers:{Accept:"application/json"}});
+    clearTimeout(t);
+    if(r.status===400) return {src:"live"};
+    const j=await r.json(); if(j&&j.success&&j.data) return {d:j.data,src:"live"};
+  }catch(e){ /* blocked by CORS (file page), offline or slow: use the snapshot */ }
+  return GSTSNAP[g]?{d:GSTSNAP[g],src:"snapshot"}:{src:"snapshot"};
+}
 const PM_TYPES={sup:["Manufacturer","Distributor","Stockist","C&F agent","Super stockist","Other"],cus:["Retail (person)","Retailer (pharmacy)","Hospital","Clinic","Institution","Doctor"]};
 const PM_GROUPS={sup:["Pharma distributors","Surgical suppliers","FMCG suppliers"],cus:["Walk-in","Regular patients","Retail pharmacies","Hospitals and clinics"]};
 const DL_FORMS={sup:["20B","21B","20C","21C","20G"],cus:["20","21","20B","21B","20C","21C"]};
@@ -1726,7 +1756,7 @@ function pmBlank(kind){
     dls:[{form:kind==="sup"?"20B":"20",no:"",from:"",to:"",scan:""}],fssai:"",fssaiExp:"",ndps:"",
     bankOn:kind==="sup",banks:[{type:"Primary",bank:"",holder:"",acc:"",acc2:"",ifsc:"",branch:"",upi:""}],remind:kind==="sup",remindDays:"3",remEmail:true,remWa:true,remSms:false,
     pan:"",related:false,msme:"Not applicable",udyam:"",msmeCert:"",tds:false,tdsSec:TDS_SECS[0],tcs:false,tcsSec:TCS_SECS[0],
-    gstType:"Regular",gstStatus:"Not checked",rateMode:"Exclusive",
+    gstType:"Regular",gstStatus:"Not checked",rateMode:"Exclusive",legal:"",portal:null,
     alsoOther:false,transporter:"",transMode:"Road",vehType:"Van",disc:"",cdisc:"",sdisc:"",agent:"None",agentComm:"",limit:"",credit:kind==="sup"?"30":"0",interest:"",interestBasis:"Simple · 365 days",terms:kind==="sup"?"Standard purchase terms":"Standard sales terms",opening:"",openingDr:kind==="sup"?"Cr":"Dr",active:true,
     salesman:"",salesComm:"",route:"",priceList:"Standard (PTR)",loyalty:"",
     dob:"",age:"",gender:"",allergies:"",chronic:"",doctor:"",abha:"",consent:false};
@@ -1838,7 +1868,8 @@ const PM_REQ_DL = F => PM.kind==="sup" ? F.ptype!=="Other" : F.ptype==="Retailer
 function pmTab(){
   const F=PM.F, sup=PM.kind==="sup", person=isPerson(F), t=PM.tab;
   if(t==="books") return `<div class="f-grid">
-    ${pF("gstin","GSTIN",F.gstType==="Regular"||F.gstType==="Composition",`<div style="display:flex;gap:8px">${pIn("gstin",{up:1,max:15,ph:"e.g. 33AAAAA0000A1Z5"})}<button class="btn outline" type="button" data-pa="fetch">Fetch</button></div>`,"Fetch fills name, state, PAN and GST status (GST service ⚠)",1)}
+    ${pF("gstin","GSTIN",F.gstType==="Regular"||F.gstType==="Composition",`<div style="display:flex;gap:8px">${pIn("gstin",{up:1,max:15,ph:"e.g. 33AAAAA0000A1Z5"})}<button class="btn outline" type="button" data-pa="fetch">${PM.fetching?"Fetching…":"Fetch"}</button></div>`,F.portal?`From the GST portal${PM.fetchSrc==="snapshot"?" (saved snapshot)":""}: ${esc(F.portal.lgnm||"")} · ${F.gstStatus}`:"Fetch checks the GSTIN, then fills name, legal name, address, PAN and GST status (PTY-15 · provider ⚠)",1)}
+    ${F.legal?pF("legal","Legal name (GST)",0,pIn("legal",{ro:1}),"From the GST portal; GSTR-1 and e-invoices use it",1):""}
     ${pF("name",sup?"Supplier name":"Customer name",1,pIn("name",{ph:sup?"Legal or trade name":"Name as on bills"}),"Duplicates are blocked")}
     ${pF("printName","Print name",0,pIn("printName"),"Printed on documents; defaults to the name")}
     ${pF("code",sup?"Supplier code":"Customer code",0,pIn("code"),"Auto from the number series if blank")}
@@ -1877,7 +1908,8 @@ function pmTab(){
     return `<div class="f-grid">${pF("gstType","GST registration type",1,pSel("gstType",["Regular","Composition","Unregistered","SEZ","Overseas"]),F.gstType==="Composition"||F.gstType==="Unregistered"?(sup?"No input tax credit on their bills":"Billed as B2C"):"")}
     <div class="fld"><label>GST status</label><div class="ro"><span>From Fetch</span><b style="color:${F.gstStatus==="Active"?"var(--success)":F.gstStatus==="Cancelled"?"var(--critical)":"var(--ink-3)"}">${F.gstStatus}</b></div></div>
     ${sup?pF("rateMode","Rates on their bills",1,pSel("rateMode",["Exclusive","Inclusive"]),"Default for purchase entry; can change per bill"):""}
-    <div class="fld"><label>State · place of supply</label><div class="ro"><span>${esc(st||"From the billing address")}</span><b>${st?(inter?"IGST":"CGST + SGST"):"—"}</b></div></div></div>`; }
+    <div class="fld"><label>State · place of supply</label><div class="ro"><span>${esc(st||"From the billing address")}</span><b>${st?(inter?"IGST":"CGST + SGST"):"—"}</b></div></div></div>
+    ${F.portal?`${pSec("From the GST portal (read-only, kept with the party)")}<div class="f-grid">${[["Registration type",F.portal.dty],["GST status",F.portal.sts],["Registration date",(F.portal.rgdt||"").replace(/\//g,"-")],["Cancelled on",(F.portal.cxdt||"").replace(/\//g,"-")||"—"],["Constitution of business",F.portal.ctb],["E-invoice enabled",F.portal.einvoiceStatus],["Nature of business",(F.portal.nba||[]).join(", ")],["Principal address",F.portal.principal_address],["State jurisdiction",F.portal.stj],["Centre jurisdiction",F.portal.ctj]].map(([k,v])=>`<div class="fld"><label>${k}</label><div class="ro"><span>${esc(String(v||"—"))}</span></div></div>`).join("")}</div>`:""}`; }
   return `<div class="f-grid">
     ${pF("alsoOther",sup?"Also a customer":"Also a supplier",0,`<div class="tg-row" style="padding-top:6px">${pTg("alsoOther","One party, one ledger, both roles ⚠")}</div>`)}
     ${sup?"":pF("priceList","Price list",0,pSel("priceList",Object.keys(PRICE_LISTS)),"Sets the wholesale rate")}
@@ -1957,12 +1989,25 @@ function pmForm(){
   <div class="savebar"><span class="msg ${n?"err":""}">${n?`${n} field${n>1?"s":""} to fix`:PM.dirty?"Unsaved changes":"No changes yet"}</span><span class="sp"></span><span class="msg">Ctrl ← → switch tabs</span><button class="btn outline" data-pa="cancel">Cancel</button><button class="btn primary" data-pa="save">Save ${sup?"supplier":"customer"}</button></div></div>`;
 }
 function pmRefresh(){ const a=document.activeElement, id=a&&a.id, pos=a&&a.selectionStart; renderPM(); const n=id&&$(id); if(n){ n.focus({preventScroll:true}); try{ if(pos!=null) n.setSelectionRange(pos,pos); }catch(_){} } }
-function pmFetch(){
-  const F=PM.F, g=String(F.gstin).trim().toUpperCase();
-  if(!/^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(g)){ PM.errs.gstin="Enter a valid 15-character GSTIN to fetch."; pmRefresh(); return; }
-  const st=(STATES.find(s=>s[0]===g.slice(0,2))||[])[1];
-  F.gstin=g; F.pan=g.slice(2,12); F.gstStatus="Active"; F.gstType="Regular"; if(st&&F.addresses[0]&&!F.addresses[0].state) F.addresses[0].state=st;
-  delete PM.errs.gstin; PM.dirty=true; pmRefresh(); toast(`GSTIN details fetched (demo): ${st||"unknown state"}, status Active. Check the name and address.`);
+async function pmFetch(){
+  const F=PM.F, g=String(F.gstin).trim().toUpperCase(), bad=gstinProblem(g);
+  if(bad){ PM.errs.gstin=bad; pmRefresh(); return; }
+  if(PM.fetching) return;
+  delete PM.errs.gstin; F.gstin=g; PM.fetching=true; pmRefresh();
+  const r=await gstLookup(g); PM.fetching=false;
+  if(!r.d){ PM.errs.gstin=r.src==="live"?"The GST portal doesn't know this GSTIN. Check the number, or type the details by hand.":"Couldn't reach the GST service from this file and the GSTIN isn't in the saved snapshot. Try 33AAJCN0778N1ZZ, use Hub → Learn → Day 22 for live lookups, or type the details by hand."; pmRefresh(); return; }
+  const d=r.d, a=d.structured_address||{}, code=g.slice(0,2), stName=a.state||GST_STATE_NAMES[code]||"";
+  if(stName&&!STATES.some(x=>x[1]===stName)) STATES.push([code,stName]);
+  if(/^\d{6}$/.test(a.pincode||"")&&!PINS[a.pincode]) PINS[a.pincode]=[stName,a.city||"",a.city||""];
+  const status=/^active$/i.test(d.sts||"")?"Active":/cancel/i.test(d.sts||"")?"Cancelled":/suspend/i.test(d.sts||"")?"Suspended":(d.sts||"Not checked");
+  Object.assign(F,{name:d.tradeNam||d.lgnm||F.name,printName:d.tradeNam||d.lgnm||F.printName,legal:d.lgnm||"",pan:g.slice(2,12),gstStatus:status,
+    gstType:/composition/i.test(d.dty||"")?"Composition":/sez/i.test(d.dty||"")?"SEZ":"Regular",portal:d});
+  // A GST-registered customer is a business, not a walk-in person.
+  if(PM.kind==="cus"&&isPerson(F)) F.ptype="Retailer (pharmacy)";
+  const b=F.addresses.find(x=>x.type==="Billing")||F.addresses[0];
+  if(b) Object.assign(b,{label:b.label||"Principal place of business",l1:a.address_line1||b.l1,l2:a.address_line2||b.l2,pin:a.pincode||b.pin,state:stName||b.state,district:a.city||b.district,city:a.city||b.city});
+  PM.fetchSrc=r.src; PM.dirty=true; pmRefresh();
+  toast(`${r.src==="live"?"Fetched live from the GST portal":"Filled from the saved GST snapshot (live call blocked from a file)"}: ${d.lgnm} · ${status}. Check the Books, GST and Income tax tabs.`);
 }
 function pmSave(){
   PM.errs=pmValidate(); const keys=Object.keys(PM.errs);

@@ -4,8 +4,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.setupsworks.meno.common.persistence.Uuids;
 
@@ -24,6 +27,8 @@ import jakarta.persistence.Version;
 @Entity
 @Table(name = "app_user")
 public class AppUser {
+
+    private static final Pattern INDIAN_MOBILE = Pattern.compile("(?:\\+?91|0)?([6-9][0-9]{9})");
 
     public enum Status { ACTIVE, DISABLED }
 
@@ -54,6 +59,16 @@ public class AppUser {
 
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
+
+    /** E.164 (+91…); null for users created before sign-up existed. */
+    @Column
+    private String mobile;
+
+    @Column(name = "mobile_verified_at")
+    private Instant mobileVerifiedAt;
+
+    @Column(name = "email_verified_at")
+    private Instant emailVerifiedAt;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
@@ -91,8 +106,29 @@ public class AppUser {
         this.updatedAt = now;
     }
 
+    /** Owner from sign-up (AUT-04): mobile and email start unverified until OTP / email link land. */
+    public static AppUser signedUpOwner(UUID tenantId, String email, String mobileE164, String passwordHash,
+            String fullName, Set<Role> roles, Instant now) {
+        AppUser user = new AppUser(tenantId, email, passwordHash, fullName, roles, now);
+        user.mobile = mobileE164;
+        return user;
+    }
+
     public static String normalizeEmail(String email) {
         return email == null ? null : email.trim().toLowerCase(Locale.ROOT);
+    }
+
+    /**
+     * Indian mobile in E.164 ({@code +91} + 10 digits starting 6-9, VALIDATION_AND_BUSINESS_RULES.md "Phone (India)"),
+     * or empty when {@code raw} isn't one. Accepts the 10 digits with or without {@code +91} / {@code 91} / {@code 0},
+     * spaces and dashes (like the web form), because that is how people type their number at sign-in.
+     */
+    public static Optional<String> normalizeMobile(String raw) {
+        if (raw == null) {
+            return Optional.empty();
+        }
+        Matcher m = INDIAN_MOBILE.matcher(raw.replaceAll("[\\s-]", ""));
+        return m.matches() ? Optional.of("+91" + m.group(1)) : Optional.empty();
     }
 
     public boolean isActive() {
@@ -110,6 +146,14 @@ public class AppUser {
             lockedUntil = now.plus(lockDuration);
             failedAttempts = 0;
         }
+        updatedAt = now;
+    }
+
+    /** New password (already hashed); a reset also lifts any lockout from the old password's failures. */
+    public void changePassword(String newHash, Instant now) {
+        passwordHash = newHash;
+        failedAttempts = 0;
+        lockedUntil = null;
         updatedAt = now;
     }
 
@@ -134,6 +178,32 @@ public class AppUser {
 
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public void markEmailVerified(Instant now) {
+        if (emailVerifiedAt == null) {
+            emailVerifiedAt = now;
+            updatedAt = now;
+        }
+    }
+
+    public void markMobileVerified(Instant now) {
+        if (mobileVerifiedAt == null) {
+            mobileVerifiedAt = now;
+            updatedAt = now;
+        }
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerifiedAt != null;
+    }
+
+    public boolean isMobileVerified() {
+        return mobileVerifiedAt != null;
+    }
+
+    public String getMobile() {
+        return mobile;
     }
 
     public String getFullName() {

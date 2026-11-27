@@ -16,7 +16,17 @@ updates:
     directory: /infrastructure/docker
     target-branch: develop
     schedule: { interval: weekly, day: monday }
+    # Java stays on the LTS line (21) until an ADR moves it; patch / minor updates still come.
+    ignore:
+      - dependency-name: eclipse-temurin
+        update-types: [version-update:semver-major]
   - package-ecosystem: docker-compose
     directory: /
     target-branch: develop
     schedule: { interval: weekly, day: monday }
+    # PostgreSQL major = ADR-0013 + Azure server upgrade; Redis major when Redis is first used.
+    ignore:
+      - dependency-name: postgres
+        update-types: [version-update:semver-major]
+      - dependency-name: redis
+        update-types: [version-update:semver-major]

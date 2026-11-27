@@ -53,16 +53,21 @@ public class AuthService {
         this.clock = clock;
     }
 
-    public AuthResult login(String email, String password, ClientInfo client) {
-        LoginAccount account = switch (credentials.check(email, password)) {
+    public AuthResult login(String identifier, String password, ClientInfo client) {
+        LoginAccount account = switch (credentials.check(identifier, password)) {
             case CredentialCheck.Result.Ok ok -> ok.account();
             case CredentialCheck.Result.InvalidCredentials ignored -> throw new MenoException(
-                    HttpStatus.UNAUTHORIZED, "AUTH_INVALID_CREDENTIALS", "Email or password is wrong.");
+                    HttpStatus.UNAUTHORIZED, "AUTH_INVALID_CREDENTIALS", "Email, mobile or password is wrong.");
             case CredentialCheck.Result.Locked ignored -> throw new MenoException(
                     HttpStatus.LOCKED, "AUTH_LOCKED", "Too many failed attempts. Try again later.");
             case CredentialCheck.Result.Disabled ignored -> throw new MenoException(
                     HttpStatus.FORBIDDEN, "AUTH_ACCOUNT_DISABLED", "This account is disabled.");
         };
+        return issueTokens(account, Uuids.v7(), client, clock.instant());
+    }
+
+    /** Signs in an account that was just created and checked elsewhere (sign-up): new session family. */
+    public AuthResult startSession(LoginAccount account, ClientInfo client) {
         return issueTokens(account, Uuids.v7(), client, clock.instant());
     }
 
@@ -97,6 +102,12 @@ public class AuthService {
         }
         refreshTokens.findByTokenHash(hash(rawRefreshToken))
                 .ifPresent(token -> refreshTokens.revokeFamily(token.getFamilyId(), clock.instant()));
+    }
+
+    /** PLT-08 "logout all devices": every session family of the user ends; other users are untouched. */
+    public void logoutAll(UUID userId) {
+        int revoked = refreshTokens.revokeAllForUser(userId, clock.instant());
+        log.info("User {} signed out of all devices ({} sessions revoked)", userId, revoked);
     }
 
     public Duration refreshTokenTtl() {

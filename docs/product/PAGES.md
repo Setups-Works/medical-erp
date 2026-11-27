@@ -15,7 +15,7 @@ Public and first-run pages.
 
 | Page | Route | What it does | Feature IDs | Phase | Backend | Frontend | Roles | QA |
 |---|---|---|---|---|---|---|---|---|
-| Login | `/login` | Email or username, password, MFA for admins | AUT-01, PLT-08, PLT-09 | P5 | Nitheesh | Meyyarivu | All | Ashok |
+| Login | `/login` | Email or mobile, password, MFA for admins | AUT-01, PLT-08, PLT-09 | P5 | Nitheesh | Meyyarivu | All | Ashok |
 | Forgot password | `/forgot-password` | Request a reset link | AUT-01 | P1 | Nitheesh | Meyyarivu | All | Ashok |
 | Reset password | `/reset-password` | Single-use token, strong password rules | AUT-01 | P1 | Nitheesh | Meyyarivu | All | Ashok |
 | Accept invitation | `/invite/[token]` | Join a company with an invited role | PLT-06 | P1 | Nitheesh | Nitheesh | All | Ashok |
