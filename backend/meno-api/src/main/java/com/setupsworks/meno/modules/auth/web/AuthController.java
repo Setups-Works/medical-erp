@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.setupsworks.meno.modules.auth.service.AuthService;
 import com.setupsworks.meno.security.JwtTokenService;
+import com.setupsworks.meno.security.PermissionChecker;
 import com.setupsworks.meno.security.TenantContext;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,10 +45,12 @@ class AuthController {
 
     private final AuthService authService;
     private final SessionResponses responses;
+    private final PermissionChecker permissions;
 
-    AuthController(AuthService authService, SessionResponses responses) {
+    AuthController(AuthService authService, SessionResponses responses, PermissionChecker permissions) {
         this.authService = authService;
         this.responses = responses;
+        this.permissions = permissions;
     }
 
     @Operation(summary = "Sign in with email or mobile and password",
@@ -112,7 +115,8 @@ class AuthController {
                 .build();
     }
 
-    @Operation(summary = "Who am I", description = "User, tenant and roles from the access token.")
+    @Operation(summary = "Who am I", description = "User, tenant and roles from the access token, and the "
+            + "permissions those roles carry (the UI shows only what the person may do; the API still checks).")
     @ApiResponse(responseCode = "200", description = "Current user")
     @ApiResponse(responseCode = "401", description = "Missing, expired or invalid access token")
     @GetMapping("/me")
@@ -121,7 +125,8 @@ class AuthController {
                 UUID.fromString(jwt.getSubject()),
                 UUID.fromString(jwt.getClaimAsString(JwtTokenService.CLAIM_TENANT)),
                 jwt.getClaimAsString(JwtTokenService.CLAIM_EMAIL),
-                jwt.getClaimAsStringList(JwtTokenService.CLAIM_ROLES));
+                jwt.getClaimAsStringList(JwtTokenService.CLAIM_ROLES),
+                permissions.currentPermissions());
     }
 
     /** identifier: email or Indian mobile. Its format is checked in identity, where a bad one looks like a wrong password. */
@@ -131,6 +136,6 @@ class AuthController {
     }
 
 
-    record MeResponse(UUID userId, UUID tenantId, String email, List<String> roles) {
+    record MeResponse(UUID userId, UUID tenantId, String email, List<String> roles, List<String> permissions) {
     }
 }

@@ -25,7 +25,7 @@ class OwnerEmailVerifiedCheck implements GoLiveCheck {
 
     @Override
     public boolean passed(UUID tenantId) {
-        var owners = users.findByTenantId(tenantId).stream().filter(u -> u.getRoles().contains(Role.OWNER)).toList();
+        var owners = users.findByTenantId(tenantId).stream().filter(u -> u.getRoles().contains(Role.OWNER.name())).toList();
         return !owners.isEmpty() && owners.stream().allMatch(u -> u.isEmailVerified());
     }
 

@@ -2,7 +2,7 @@ package com.setupsworks.meno.modules.identity.service;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.util.EnumSet;
+import java.util.Set;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -96,7 +96,7 @@ class SignupService implements SignupFacade {
         AppUser owner;
         try {
             owner = users.saveAndFlush(AppUser.signedUpOwner(tenantId, email, mobile,
-                    passwordEncoder.encode(command.password()), command.ownerName().trim(), EnumSet.of(Role.OWNER),
+                    passwordEncoder.encode(command.password()), command.ownerName().trim(), Set.of(Role.OWNER.name()),
                     now));
         } catch (DataIntegrityViolationException e) {
             // Two sign-ups with the same email or mobile at the same moment: the unique index decides.

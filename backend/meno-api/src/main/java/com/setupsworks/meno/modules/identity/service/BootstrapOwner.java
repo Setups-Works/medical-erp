@@ -1,7 +1,7 @@
 package com.setupsworks.meno.modules.identity.service;
 
 import java.time.Clock;
-import java.util.EnumSet;
+import java.util.Set;
 import java.util.UUID;
 
 import com.setupsworks.meno.modules.identity.domain.AppUser;
@@ -70,7 +70,7 @@ class BootstrapOwner implements ApplicationRunner {
         UUID tenantId = tenants.createTenant(bootstrap.tenantName());
         AppUser owner = users.save(new AppUser(tenantId, bootstrap.email(),
                 passwordEncoder.encode(bootstrap.password()), bootstrap.fullName(),
-                EnumSet.of(Role.OWNER), clock.instant()));
+                Set.of(Role.OWNER.name()), clock.instant()));
         log.info("Created the first tenant {} and owner user {}", tenantId, owner.getId());
     }
 }

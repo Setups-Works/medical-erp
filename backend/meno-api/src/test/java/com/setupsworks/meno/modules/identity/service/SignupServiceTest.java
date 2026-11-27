@@ -144,7 +144,7 @@ class SignupServiceTest {
     void sameIdempotencyKeyReturnsTheEarlierOwner() {
         UUID key = UUID.randomUUID();
         AppUser owner = AppUser.signedUpOwner(tenantId, "owner@shop.test", "+919876543210", "x", "Owner",
-                java.util.EnumSet.of(com.setupsworks.meno.modules.identity.domain.Role.OWNER), NOW);
+                java.util.Set.of("OWNER"), NOW);
         when(tenants.findBySignupKey(key)).thenReturn(Optional.of(tenantId));
         when(users.findByEmail("owner@shop.test")).thenReturn(Optional.of(owner));
 

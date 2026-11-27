@@ -2,7 +2,8 @@ package com.setupsworks.meno.modules.identity.domain;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.EnumSet;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
@@ -15,6 +16,7 @@ import com.setupsworks.meno.common.persistence.Uuids;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -85,30 +87,35 @@ public class AppUser {
     @Version
     private long version;
 
+    /** Role codes from the {@code role} table (FK); permissions come from role_permission, never from the name. */
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private Set<Role> roles = EnumSet.noneOf(Role.class);
+    private Set<String> roles = new LinkedHashSet<>();
+
+    /** Branches the user works at (user_branch); empty when a role covers every branch. */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_branch", joinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserBranch> branches = new LinkedHashSet<>();
 
     protected AppUser() {
     }
 
-    public AppUser(UUID tenantId, String email, String passwordHash, String fullName, Set<Role> roles, Instant now) {
+    public AppUser(UUID tenantId, String email, String passwordHash, String fullName, Set<String> roles, Instant now) {
         this.id = Uuids.v7();
         this.tenantId = tenantId;
         this.email = normalizeEmail(email);
         this.passwordHash = passwordHash;
         this.fullName = fullName;
         this.status = Status.ACTIVE;
-        this.roles = EnumSet.copyOf(roles);
+        this.roles = new LinkedHashSet<>(roles);
         this.createdAt = now;
         this.updatedAt = now;
     }
 
     /** Owner from sign-up (AUT-04): mobile and email start unverified until OTP / email link land. */
     public static AppUser signedUpOwner(UUID tenantId, String email, String mobileE164, String passwordHash,
-            String fullName, Set<Role> roles, Instant now) {
+            String fullName, Set<String> roles, Instant now) {
         AppUser user = new AppUser(tenantId, email, passwordHash, fullName, roles, now);
         user.mobile = mobileE164;
         return user;
@@ -210,7 +217,100 @@ public class AppUser {
         return fullName;
     }
 
-    public Set<Role> getRoles() {
+    public Set<String> getRoles() {
         return Set.copyOf(roles);
+    }
+
+    public Set<UUID> getBranchIds() {
+        Set<UUID> ids = new LinkedHashSet<>();
+        branches.forEach(b -> ids.add(b.branchId));
+        return ids;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Instant getLastLoginAt() {
+        return lastLoginAt;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    /**
+     * New roles and branches (PLT-06). Whole sets are replaced; the service has already checked the roles exist and
+     * the branches belong to this tenant.
+     */
+    public void changeAccess(Collection<String> newRoles, Collection<UUID> branchIds, UUID by, Instant now) {
+        roles.clear();
+        roles.addAll(newRoles);
+        Set<UserBranch> wanted = new LinkedHashSet<>();
+        branchIds.forEach(b -> wanted.add(new UserBranch(tenantId, b, by, now)));
+        branches.retainAll(wanted);
+        branches.addAll(wanted);
+        touch(by, now);
+    }
+
+    /** Can't sign in or refresh a session any more; history (documents, audit) keeps pointing at this user. */
+    public void deactivate(UUID by, Instant now) {
+        status = Status.DISABLED;
+        touch(by, now);
+    }
+
+    public void reactivate(UUID by, Instant now) {
+        status = Status.ACTIVE;
+        failedAttempts = 0;
+        lockedUntil = null;
+        touch(by, now);
+    }
+
+    private void touch(UUID by, Instant now) {
+        updatedBy = by;
+        updatedAt = now;
+    }
+
+    /** One row of user_branch. tenant_id is repeated so the row has its own RLS policy and tenant index. */
+    @Embeddable
+    public static class UserBranch {
+
+        @Column(name = "tenant_id", nullable = false)
+        private UUID tenantId;
+
+        @Column(name = "branch_id", nullable = false)
+        private UUID branchId;
+
+        @Column(name = "created_at", nullable = false)
+        private Instant createdAt;
+
+        @Column(name = "created_by")
+        private UUID createdBy;
+
+        protected UserBranch() {
+        }
+
+        UserBranch(UUID tenantId, UUID branchId, UUID createdBy, Instant createdAt) {
+            this.tenantId = tenantId;
+            this.branchId = branchId;
+            this.createdBy = createdBy;
+            this.createdAt = createdAt;
+        }
+
+        /** Same branch = same row; when it was added doesn't matter for set membership. */
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof UserBranch other && java.util.Objects.equals(branchId, other.branchId)
+                    && java.util.Objects.equals(tenantId, other.tenantId);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(tenantId, branchId);
+        }
     }
 }

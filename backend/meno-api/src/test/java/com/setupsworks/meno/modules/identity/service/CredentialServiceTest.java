@@ -11,13 +11,12 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.EnumSet;
+import java.util.Set;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.setupsworks.meno.modules.identity.api.CredentialCheck.Result;
 import com.setupsworks.meno.modules.identity.domain.AppUser;
-import com.setupsworks.meno.modules.identity.domain.Role;
 import com.setupsworks.meno.modules.identity.repository.AppUserRepository;
 import com.setupsworks.meno.modules.tenancy.api.TenantFacade;
 
@@ -44,7 +43,7 @@ class CredentialServiceTest {
     void setUp() {
         service = new CredentialService(users, tenants, encoder, props, Clock.fixed(NOW, ZoneOffset.UTC));
         user = new AppUser(tenantId, "Owner@Test.Local", encoder.encode("right-pass"), "Owner",
-                EnumSet.of(Role.OWNER), NOW);
+                Set.of("OWNER"), NOW);
         when(users.findByEmail("owner@test.local")).thenReturn(Optional.of(user));
         when(users.findById(user.getId())).thenReturn(Optional.of(user));
         when(tenants.isActive(tenantId)).thenReturn(true);

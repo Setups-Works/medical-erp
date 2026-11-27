@@ -25,6 +25,10 @@ public class RoleDefinition {
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
 
+    /** Holders see every branch (ROLES_AND_DASHBOARDS.md: Business Owner); everyone else only their user_branch rows. */
+    @Column(name = "all_branches", nullable = false)
+    private boolean allBranches;
+
     protected RoleDefinition() {
     }
 
@@ -38,5 +42,13 @@ public class RoleDefinition {
 
     public boolean isInvitable() {
         return invitable;
+    }
+
+    public boolean isAllBranches() {
+        return allBranches;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
     }
 }
