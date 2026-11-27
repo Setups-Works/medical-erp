@@ -780,6 +780,115 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/platform/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * MENO staff sign-in
+         * @description Returns a platform access token (no refresh token: sign in again when it expires). Accepted only by /api/v1/platform/*.
+         */
+        post: operations["platformLogin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/platform/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The signed-in staff member and their permissions */
+        get: operations["platformMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/platform/reference-data": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reference lists with their refresh status */
+        get: operations["referenceDatasets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/platform/reference-data/{code}/loads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Last 20 load attempts of a list (loaded and refused) */
+        get: operations["referenceLoads"];
+        put?: never;
+        /**
+         * Load a new file for a list (replaces the whole list)
+         * @description CSV as the source publishes it (India Post PIN directory, RBI IFSC list). sourceDate is the publication date of the file. A file much smaller than today's list is refused unless replaceAnyway=true.
+         */
+        post: operations["loadReferenceFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reference/ifsc/{ifsc}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bank and branch for an IFSC */
+        get: operations["lookupIfsc"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reference/pincodes/{pincode}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** State, district and localities for a PIN code */
+        get: operations["lookupPincode"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/team/invitations": {
         parameters: {
             query?: never;
@@ -999,6 +1108,15 @@ export interface components {
             status?: string;
             tradeName?: string;
         };
+        IfscInfo: {
+            address?: string;
+            bank?: string;
+            branch?: string;
+            city?: string;
+            district?: string;
+            ifsc?: string;
+            state?: string;
+        };
         InvitationPreview: {
             branchNames?: string[];
             businessName: string;
@@ -1084,6 +1202,33 @@ export interface components {
             label?: string;
             permissions?: components["schemas"]["PermissionEntry"][];
         };
+        PincodeInfo: {
+            district?: string;
+            localities?: string[];
+            pincode?: string;
+            stateCode?: string;
+        };
+        PlatformLoginRequest: {
+            /** Format: email */
+            email: string;
+            password: string;
+        };
+        PlatformSession: {
+            accessToken?: string;
+            /** Format: date-time */
+            expiresAt?: string;
+            /** Format: int64 */
+            expiresIn?: number;
+            staff?: components["schemas"]["PlatformStaff"];
+            tokenType?: string;
+        };
+        PlatformStaff: {
+            email?: string;
+            fullName?: string;
+            /** Format: uuid */
+            id?: string;
+            permissions?: string[];
+        };
         ProblemDetail: {
             detail?: string;
             /** Format: uri */
@@ -1107,6 +1252,70 @@ export interface components {
             latestDate?: string;
             live?: boolean;
             ready?: boolean;
+        };
+        ReferenceDataset: {
+            attribution?: string;
+            code?: string;
+            description?: string;
+            /** Format: date */
+            dueOn?: string;
+            licence?: string;
+            loadable?: boolean;
+            /** Format: date-time */
+            loadedAt?: string;
+            loadedByName?: string;
+            name?: string;
+            ownerModule?: string;
+            phase?: string;
+            /** Format: int32 */
+            refreshMonths?: number;
+            /** Format: int32 */
+            rowCount?: number;
+            /** Format: date */
+            sourceDate?: string;
+            sourceName?: string;
+            sourceUrl?: string;
+            status?: string;
+        };
+        ReferenceDatasetList: {
+            items?: components["schemas"]["ReferenceDataset"][];
+        };
+        ReferenceLoad: {
+            datasetCode?: string;
+            /** Format: int64 */
+            fileBytes?: number;
+            fileName?: string;
+            fileSha256?: string;
+            /** Format: date-time */
+            finishedAt?: string;
+            /** Format: uuid */
+            id?: string;
+            loadedByName?: string;
+            problems?: components["schemas"]["ReferenceProblem"][];
+            reasonCode?: string;
+            replacedAnyway?: boolean;
+            /** Format: int32 */
+            rowsLoaded?: number;
+            /** Format: int32 */
+            rowsRead?: number;
+            /** Format: int32 */
+            rowsSkipped?: number;
+            skippedByReason?: {
+                [key: string]: number;
+            };
+            /** Format: date */
+            sourceDate?: string;
+            /** Format: date-time */
+            startedAt?: string;
+            status?: string;
+        };
+        ReferenceLoadList: {
+            items?: components["schemas"]["ReferenceLoad"][];
+        };
+        ReferenceProblem: {
+            /** Format: int32 */
+            line?: number;
+            reason?: string;
         };
         RenameRoleRequest: {
             description?: string;
@@ -3047,6 +3256,249 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Checklist"];
+                };
+            };
+        };
+    };
+    platformLogin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlatformLoginRequest"];
+            };
+        };
+        responses: {
+            /** @description Signed in */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformSession"];
+                };
+            };
+            /** @description PLATFORM_INVALID_CREDENTIALS */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description PLATFORM_ACCOUNT_DISABLED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description PLATFORM_LOCKED */
+            423: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    platformMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformStaff"];
+                };
+            };
+        };
+    };
+    referenceDatasets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceDatasetList"];
+                };
+            };
+        };
+    };
+    referenceLoads: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceLoadList"];
+                };
+            };
+            /** @description REFERENCE_DATASET_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    loadReferenceFile: {
+        parameters: {
+            query: {
+                sourceDate: string;
+                replaceAnyway?: boolean;
+            };
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Loaded */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceLoad"];
+                };
+            };
+            /** @description REFERENCE_FILE_COLUMNS_MISSING, REFERENCE_FILE_NO_ROWS, REFERENCE_FILE_EMPTY, REFERENCE_FILE_UNREADABLE, REFERENCE_SOURCE_DATE_FUTURE */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description COMMON_PERMISSION_DENIED (needs platform.reference.manage) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description REFERENCE_LOAD_SHRINKS, REFERENCE_DATASET_NOT_LOADABLE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    lookupIfsc: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ifsc: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IfscInfo"];
+                };
+            };
+            /** @description REFERENCE_IFSC_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    lookupPincode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pincode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PincodeInfo"];
+                };
+            };
+            /** @description REFERENCE_PINCODE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
                 };
             };
         };

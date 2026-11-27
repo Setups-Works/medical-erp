@@ -79,6 +79,12 @@ export type ApiClientConfig = {
   onSession: (tokens: TokenResponse | null) => void;
   getBranchId?: () => string | null;
   fetch?: typeof fetch;
+  /**
+   * false for the platform (MENO staff) client: its tokens have no refresh cookie, and a tenant refresh must never
+   * swap a tenant token into it (ADR-0020). A 401 then calls onUnauthorized instead.
+   */
+  refreshOnUnauthorized?: boolean;
+  onUnauthorized?: () => void;
 };
 
 type RequestOptions<O> = {
@@ -139,7 +145,9 @@ export function createApiClient(config: ApiClientConfig) {
       throw new ApiError(0, { title: "Network error" });
     }
 
-    if (res.status === 401 && !retried && !NO_REFRESH.has(path) && token) {
+    if (res.status === 401 && token && config.refreshOnUnauthorized === false) {
+      config.onUnauthorized?.();
+    } else if (res.status === 401 && !retried && !NO_REFRESH.has(path) && token) {
       const renewed = await refresh();
       if (renewed) return send(method, path, opts, true);
     }

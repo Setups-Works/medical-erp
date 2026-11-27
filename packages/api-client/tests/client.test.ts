@@ -40,6 +40,18 @@ describe("api client", () => {
     expect(seen.filter((s) => s.includes("/auth/refresh"))).toHaveLength(1);
   });
 
+  it("never refreshes for the platform client: a 401 ends its session instead (ADR-0020)", async () => {
+    const fetch = vi.fn(async (_url: string, _init?: RequestInit) => json(401, { code: "UNAUTHORIZED" }));
+    const onSession = vi.fn();
+    const onUnauthorized = vi.fn();
+    const api = createApiClient({ baseUrl: "", getAccessToken: () => "staff", onSession, refreshOnUnauthorized: false, onUnauthorized, fetch: fetch as never });
+    const err = await api.get("/api/v1/platform/reference-data").catch((e: unknown) => e);
+    expect((err as ApiError).status).toBe(401);
+    expect(fetch.mock.calls.some(([url]) => String(url).includes("/auth/refresh"))).toBe(false);
+    expect(onUnauthorized).toHaveBeenCalledOnce();
+    expect(onSession).not.toHaveBeenCalled();
+  });
+
   it("sends Idempotency-Key and fills path params", async () => {
     const fetch = vi.fn(async (_url: string, _init: RequestInit) => json(200, { ready: true, live: true }));
     const api = createApiClient({ baseUrl: "http://x", getAccessToken: () => null, onSession: () => {}, fetch: fetch as never });
