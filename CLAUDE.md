@@ -3,6 +3,7 @@
 # Claude Code specifics
 
 - Prefer Read/Edit/Write over shell heredocs when changing project files.
+- "Build / create the <X> page" → use the `build-page` skill (`.claude/skills/build-page`, playbook `docs/team/BUILD_A_PAGE.md`).
 - Role sub-agents live in `.claude/agents/` (backend-engineer, frontend-engineer, qa-engineer, devops-engineer, business-analyst, architecture-reviewer). Use the one that matches the folder you are changing.
 - Before finishing a task: backend `./mvnw verify`, frontend `pnpm typecheck && pnpm test && pnpm check:design`.
 - Don't commit or push unless asked. Branch from `develop`, never commit `.env*`, use Conventional Commits.

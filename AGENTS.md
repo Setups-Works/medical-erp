@@ -105,6 +105,22 @@ Full tree with explanations: `docs/architecture/FOLDER_STRUCTURE.md`.
 
 Full process: `docs/team/WORKFLOW.md`. How to work with AI agents: `docs/team/AI_WORKFLOW.md`.
 
+### Building a page (page-wise development)
+
+We deliver **one page at a time, end to end: one developer builds its SQL (if needed), backend and frontend together**, on one branch, in one PR. The page list is `docs/product/PAGES.md`, tracked on MENO Hub → **Pages**, where each started page shows its `BE #n` and `FE #n` tasks.
+
+**When a developer asks you to build, create or make a page** ("build the Team page", "create /onboarding/team"), follow **`docs/team/BUILD_A_PAGE.md`** step by step without asking for more instructions:
+
+1. `npm run agent-task -- start-page "<page name or route>"` (from `project-management/`): creates/links the page's BE + FE Hub tasks for the developer, moves them to In progress, and prints the brief.
+2. Read **every** doc the brief lists, plus the existing code it points to.
+3. Branch `feature/<BE#>-<page-name>` from `develop`.
+4. Build SQL (if needed) → backend (with cross-tenant tests, OpenAPI + api-client regenerated) → frontend (wired to the real API).
+5. `./mvnw verify` and `pnpm typecheck && pnpm test && pnpm check:design`.
+6. One PR into `develop` with both task numbers; then `review` both tasks.
+7. Stop. **Nitheesh reviews and merges** (nobody merges their own PR), moves the tasks to Done and ticks BE ready / FE ready; Ashok ticks QA passed.
+
+A missing business / tax rule → comment on the task, mention `@prakalya`, stop.
+
 ### Keep MENO Hub (PMS) updated — automatically
 
 When the developer gives you a **Hub task number** (`#512`, "task 512"), you keep its card up to date yourself, without being asked again. Run these from `project-management/` (full rules: `docs/team/AGENT_TASK_WORKFLOW.md`):
@@ -150,6 +166,7 @@ When the developer gives you a **Hub task number** (`#512`, "task 512"), you kee
 | GST / pricing / rounding maths | `docs/architecture/CALCULATIONS.md` |
 | **Validation rules, no hard-coding** | `docs/architecture/VALIDATION_AND_BUSINESS_RULES.md` |
 | Every page, its route, phase and owners | `docs/product/PAGES.md` |
+| **Build a page end to end (SQL + backend + frontend, one PR)** | `docs/team/BUILD_A_PAGE.md` (`npm run agent-task -- start-page "<page>"`) |
 | Roles and their dashboards | `docs/product/ROLES_AND_DASHBOARDS.md` |
 | Who owns which module / screen | `docs/team/OWNERSHIP_MATRIX.md` |
 | App sidebar | `docs/design/NAVIGATION.md` |

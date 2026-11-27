@@ -119,12 +119,25 @@ const productItemSchema = new Schema({
 });
 productItemSchema.index({ kind: 1, order: 1 });
 
-/** Manual "page completed" ticks from the Pages list; survives re-imports (keyed by section + page name). */
+/** One delivery tick on a page (backend endpoints ready, frontend ready, QA passed): who ticked it and when. */
+const pageStageSchema = new Schema({ done: { type: Boolean, default: false }, by: { type: ObjectId, ref: "User" }, at: Date }, { _id: false });
+
+/**
+ * Manual ticks from the Pages list; survives re-imports (keyed by section + page name).
+ * `done` is the final "built, tested and accepted"; be / fe / qa track the steps towards it.
+ */
 const pageCheckSchema = new Schema(
   {
     key: { type: String, required: true, unique: true },
     done: { type: Boolean, default: false },
     by: { type: ObjectId, ref: "User" },
+    doneAt: Date, // own timestamp: updatedAt also moves when a BE / FE / QA tick changes
+    be: { type: pageStageSchema, default: () => ({}) },
+    fe: { type: pageStageSchema, default: () => ({}) },
+    qa: { type: pageStageSchema, default: () => ({}) },
+    // The page's own Backend / Frontend work cards (created from the Pages list)
+    beTask: { type: ObjectId, ref: "Task", default: null },
+    feTask: { type: ObjectId, ref: "Task", default: null },
   },
   { timestamps: true },
 );

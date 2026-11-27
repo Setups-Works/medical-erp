@@ -26,13 +26,30 @@ export const GET = route(async (req) => {
     const phase = features.map((f) => f.phase).filter(Boolean).sort().at(-1) ?? "";
     return { id: String(i._id), kind: i.kind, group: i.group, name: i.name, route: i.route, edition: i.edition, notes: i.notes, meta: i.meta ?? {}, features, done, started, total: features.length, phase };
   };
-  const checks = new Map((await PageCheck.find().lean()).map((c) => [c.key, c]));
   const names = new Map((await User.find().select("name").lean()).map((u) => [String(u._id), u.name]));
+  const checks = new Map((await PageCheck.find().lean()).map((c) => [c.key, c]));
+  const pageTaskIds = [...checks.values()].flatMap((c) => [c.beTask, c.feTask]).filter(Boolean);
+  const pageTasks = new Map(
+    (await Task.find({ _id: { $in: pageTaskIds }, archived: false }).select("number column boardId assignees").lean()).map((t) => [String(t._id), t]),
+  );
+  const pageTask = (id: unknown) => {
+    const t = id ? pageTasks.get(String(id)) : undefined;
+    return t ? { taskId: String(t._id), number: t.number, boardId: String(t.boardId), column: t.column, assignee: t.assignees[0] ? (names.get(String(t.assignees[0])) ?? null) : null } : null;
+  };
   const all = items.map((i) => {
     const x = shape(i);
     if (i.kind !== "page") return x;
     const c = checks.get(`${i.group}|${i.name}`);
-    return { ...x, checked: !!c?.done, checkedBy: c?.done && c.by ? names.get(String(c.by)) : null, checkedAt: c?.done ? c.updatedAt : null };
+    const stage = (st: { done?: boolean | null; by?: unknown; at?: Date | null } | null | undefined) =>
+      st?.done ? { done: true, by: st.by ? (names.get(String(st.by)) ?? null) : null, at: st.at ?? null } : { done: false, by: null, at: null };
+    return {
+      ...x,
+      checked: !!c?.done,
+      checkedBy: c?.done && c.by ? names.get(String(c.by)) : null,
+      checkedAt: c?.done ? (c.doneAt ?? c.updatedAt) : null,
+      stages: { be: stage(c?.be), fe: stage(c?.fe), qa: stage(c?.qa) },
+      tasks: { be: pageTask(c?.beTask), fe: pageTask(c?.feTask) },
+    };
   });
   return {
     menu: all.filter((i) => i.kind === "menu"),

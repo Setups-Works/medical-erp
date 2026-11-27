@@ -23,7 +23,12 @@ export type MapItem = {
   checked?: boolean;
   checkedBy?: string | null;
   checkedAt?: string | null;
+  stages?: Record<PageStage, StageTick>;
+  tasks?: Record<"be" | "fe", PageTask | null>;
 };
+export type PageTask = { taskId: string; number: number; boardId: string; column: string; assignee: string | null };
+export type PageStage = "be" | "fe" | "qa";
+export type StageTick = { done: boolean; by: string | null; at: string | null };
 export type ProductMap = { menu: MapItem[]; capabilities: MapItem[]; pages: MapItem[]; roles: MapItem[]; features: MapItem[] };
 
 export const useProductMap = () => useSWR<ProductMap>("/api/product-map", (u: string) => api<ProductMap>(u));
