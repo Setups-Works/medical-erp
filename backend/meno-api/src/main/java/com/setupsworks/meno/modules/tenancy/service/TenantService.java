@@ -75,6 +75,12 @@ class TenantService implements TenantFacade {
         return code != null && states.findById(code).map(s -> s.isActiveOn(LocalDate.now(clock))).orElse(false);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<String> displayName(UUID tenantId) {
+        return tenants.findById(tenantId).map(Tenant::getName);
+    }
+
     /** "Sri Ram Medicals" → "sri-ram-medicals", then "-2", "-3"… if taken. */
     private String uniqueCodeFor(String name) {
         String base = name.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-").replaceAll("(^-|-$)", "");

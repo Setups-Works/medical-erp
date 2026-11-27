@@ -24,4 +24,7 @@ public interface TenantFacade {
 
     /** True when {@code code} is a GST state code in force today. */
     boolean isActiveState(String code);
+
+    /** The business name shown to people (e.g. in a staff invitation), if the tenant exists. */
+    Optional<String> displayName(UUID tenantId);
 }

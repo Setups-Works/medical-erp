@@ -16,6 +16,8 @@ tags:
   name: Auth
 - description: Create a pharmacy business (tenant) and its owner account.
   name: Sign-up
+- description: Invite staff with a role and branches; resend or revoke open invitations.
+  name: Team
 - description: Forgot and reset password with a single-use emailed link.
   name: Password
 - description: Confirm the owner's email (one-time link) and mobile (SMS code).
@@ -800,6 +802,162 @@ paths:
       summary: "Skip an optional step (team, data, devices, plan, practice)"
       tags:
       - Onboarding
+  /api/v1/team/invitations:
+    get:
+      operationId: listInvitations
+      parameters:
+      - in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+      - in: query
+        name: size
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+          maximum: 200
+          minimum: 1
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitationPage"
+          description: OK
+      summary: "Invitations, newest first (page envelope)"
+      tags:
+      - Team
+    post:
+      description: "Email or mobile (or both), an invitable role and at least one\
+        \ branch. The link is sent after the invitation is saved; it works for the\
+        \ configured number of days."
+      operationId: inviteStaff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeamInvitationRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: Created and sent
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: "IDENTITY_INVITATION_CONTACT_REQUIRED, IDENTITY_ROLE_INVALID,\
+            \ IDENTITY_INVITATION_BRANCH_INVALID, field errors"
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: "IDENTITY_EMAIL_TAKEN, IDENTITY_MOBILE_TAKEN, IDENTITY_INVITATION_PENDING"
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: "NOTIFICATION_CHANNEL_DISABLED (mobile only, no SMS provider)"
+      summary: Invite a person
+      tags:
+      - Team
+  /api/v1/team/invitations/{id}/resend:
+    post:
+      operationId: resendInvitation
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: Sent again
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: IDENTITY_INVITATION_NOT_FOUND (also another tenant's id)
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: IDENTITY_INVITATION_NOT_PENDING
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: IDENTITY_INVITATION_TOO_SOON
+      summary: Send the invitation again with a new link (the old link stops working)
+      tags:
+      - Team
+  /api/v1/team/invitations/{id}/revoke:
+    post:
+      operationId: revokeInvitation
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: Revoked
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: IDENTITY_INVITATION_NOT_FOUND (also another tenant's id)
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInvitation"
+          description: IDENTITY_INVITATION_NOT_PENDING
+      summary: Revoke an open invitation (its link stops working; the record stays
+        for audit)
+      tags:
+      - Team
+  /api/v1/team/options:
+    get:
+      operationId: teamOptions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamOptions"
+          description: OK
+      summary: "Roles that can be invited, the tenant's branches, and whether SMS\
+        \ delivery is set up"
+      tags:
+      - Team
 components:
   schemas:
     Address:
@@ -839,6 +997,18 @@ components:
       required:
       - booksStartDate
       - financialYearStart
+    BranchOption:
+      type: object
+      properties:
+        code:
+          type: string
+        headOffice:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
     BranchRequest:
       type: object
       properties:
@@ -1315,6 +1485,13 @@ components:
       required:
       - password
       - token
+    RoleOption:
+      type: object
+      properties:
+        code:
+          type: string
+        label:
+          type: string
     SettingInfo:
       type: object
       properties:
@@ -1416,6 +1593,109 @@ components:
           type: string
         status:
           type: string
+    TeamInvitation:
+      type: object
+      properties:
+        branches:
+          type: array
+          items:
+            $ref: "#/components/schemas/BranchOption"
+        email:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        fullName:
+          type: string
+        id:
+          type: string
+          format: uuid
+        mobile:
+          type: string
+        roleCode:
+          type: string
+        roleLabel:
+          type: string
+        sendCount:
+          type: integer
+          format: int32
+        sentAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - PENDING
+          - EXPIRED
+          - ACCEPTED
+          - REVOKED
+    TeamInvitationPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/TeamInvitation"
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalItems:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    TeamInvitationRequest:
+      type: object
+      properties:
+        branchIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          maxItems: 50
+          minItems: 0
+          uniqueItems: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 0
+        fullName:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "[^\\p{Cntrl}]*"
+        mobile:
+          type: string
+          pattern: "|[6-9][0-9]{9}"
+        roleCode:
+          type: string
+          maxLength: 50
+          minLength: 0
+      required:
+      - branchIds
+      - fullName
+      - roleCode
+    TeamOptions:
+      type: object
+      properties:
+        branches:
+          type: array
+          items:
+            $ref: "#/components/schemas/BranchOption"
+        invitationValidDays:
+          type: integer
+          format: int64
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoleOption"
+        smsAvailable:
+          type: boolean
     TokenResponse:
       type: object
       properties:
