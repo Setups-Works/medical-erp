@@ -49,6 +49,13 @@ describe("api client", () => {
     expect(fetch.mock.calls[1]![0]).toBe("http://x/api/v1/invitations/a%20b");
   });
 
+  it("sends the loaded version as a quoted If-Match", async () => {
+    const fetch = vi.fn(async (_url: string, _init: RequestInit) => json(200, {}));
+    const api = createApiClient({ baseUrl: "", getAccessToken: () => null, onSession: () => {}, fetch: fetch as never });
+    await api.put("/api/v1/admin/users/{id}/access", { params: { id: "u1" }, body: { roleCodes: ["PHARMACIST"], branchIds: [] }, ifMatch: 3 });
+    expect(new Headers(fetch.mock.calls[0]![1].headers).get("If-Match")).toBe('"3"');
+  });
+
   it("turns a network failure into NETWORK_ERROR", async () => {
     const api = createApiClient({ baseUrl: "", getAccessToken: () => null, onSession: () => {}, fetch: vi.fn().mockRejectedValue(new TypeError("offline")) });
     await expect(api.get("/api/v1/auth/signup/options")).rejects.toMatchObject({ code: "NETWORK_ERROR", status: 0 });

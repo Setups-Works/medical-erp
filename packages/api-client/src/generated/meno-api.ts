@@ -75,7 +75,10 @@ export interface paths {
         };
         /** One role with its permissions */
         get: operations["getRole"];
-        /** Rename your own role */
+        /**
+         * Rename your own role
+         * @description If-Match: the role's version.
+         */
         put: operations["renameRole"];
         post?: never;
         /**
@@ -98,7 +101,7 @@ export interface paths {
         get?: never;
         /**
          * Set the role's permissions (whole list)
-         * @description For a default role this makes your own copy of its list; reset brings MENO's back.
+         * @description If-Match: permissionsVersion (0 while a default role still has MENO's list). For a default role this makes your own copy of its list; reset brings MENO's back.
          */
         put: operations["setRolePermissions"];
         post?: never;
@@ -189,7 +192,7 @@ export interface paths {
         get?: never;
         /**
          * Change roles and branches
-         * @description Whole sets. Branches are needed unless a role covers every branch. Roles that aren't assignable can't be added or removed. Send the version you loaded.
+         * @description Whole sets. Branches are needed unless a role covers every branch. Roles that aren't assignable can't be added or removed. Send the version you loaded as If-Match ("3").
          */
         put: operations["changeUserAccess"];
         post?: never;
@@ -1055,8 +1058,6 @@ export interface components {
         RenameRoleRequest: {
             description?: string;
             label: string;
-            /** Format: int64 */
-            version: number;
         };
         ResetPasswordRequest: {
             password: string;
@@ -1092,8 +1093,6 @@ export interface components {
         };
         RolePermissionsRequest: {
             permissionCodes: string[];
-            /** Format: int64 */
-            permissionsVersion: number;
         };
         RoleSummary: {
             /** Format: int64 */
@@ -1238,8 +1237,6 @@ export interface components {
         UserAccessRequest: {
             branchIds: string[];
             roleCodes: string[];
-            /** Format: int64 */
-            version: number;
         };
         UserAdminOptions: {
             branches?: components["schemas"]["BranchOption"][];
@@ -1450,7 +1447,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description The role */
+            /** @description The role; ETag = the role's version (name). The permission list has its own version, permissionsVersion, for PUT {code}/permissions. */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1473,7 +1470,9 @@ export interface operations {
     renameRole: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "If-Match"?: string;
+            };
             path: {
                 code: string;
             };
@@ -1505,6 +1504,15 @@ export interface operations {
             };
             /** @description IDENTITY_ROLE_NOT_EDITABLE (default role), IDENTITY_ROLE_NAME_TAKEN, COMMON_VERSION_CONFLICT */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description COMMON_PRECONDITION_REQUIRED (no If-Match) */
+            428: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1551,7 +1559,9 @@ export interface operations {
     setRolePermissions: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "If-Match"?: string;
+            };
             path: {
                 code: string;
             };
@@ -1592,6 +1602,15 @@ export interface operations {
             };
             /** @description IDENTITY_ROLE_LOCKED, IDENTITY_LAST_ADMIN, COMMON_VERSION_CONFLICT */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDetail"];
+                };
+            };
+            /** @description COMMON_PRECONDITION_REQUIRED (no If-Match) */
+            428: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1697,7 +1716,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description The account */
+            /** @description The account; ETag = its version */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1720,7 +1739,9 @@ export interface operations {
     changeUserAccess: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "If-Match"?: string;
+            };
             path: {
                 id: string;
             };
@@ -1741,7 +1762,7 @@ export interface operations {
                     "application/json": components["schemas"]["StaffUser"];
                 };
             };
-            /** @description IDENTITY_ROLE_INVALID, IDENTITY_ROLE_REQUIRED, IDENTITY_USER_BRANCH_INVALID, field errors */
+            /** @description IDENTITY_ROLE_INVALID, IDENTITY_ROLE_REQUIRED, IDENTITY_USER_BRANCH_INVALID, COMMON_IF_MATCH_INVALID, field errors */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1761,6 +1782,15 @@ export interface operations {
             };
             /** @description COMMON_VERSION_CONFLICT, IDENTITY_LAST_ADMIN */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUser"];
+                };
+            };
+            /** @description COMMON_PRECONDITION_REQUIRED (no If-Match) */
+            428: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -105,7 +105,7 @@ function AccessForm({ user, options, onSaved }: { user: StaffUser; options: User
   const onSubmit = form.handleSubmit(async (v) => {
     setFormError(null);
     try {
-      const saved = await change.mutateAsync({ id: user.id ?? "", body: { roleCodes: v.roleCodes, branchIds: everyBranch ? [] : v.branchIds, version: user.version ?? 0 } });
+      const saved = await change.mutateAsync({ id: user.id ?? "", body: { roleCodes: v.roleCodes, branchIds: everyBranch ? [] : v.branchIds }, version: user.version ?? 0 });
       onSaved(saved.version ?? 0);
     } catch (e) {
       if (isApiError(e) && e.code === "COMMON_VERSION_CONFLICT") void qc.invalidateQueries({ queryKey: keys.users.all });

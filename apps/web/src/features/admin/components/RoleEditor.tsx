@@ -78,16 +78,16 @@ function PermissionsForm({ role, catalogue, editable, onSaved }: { role: RoleDet
   const dirty = !sameSet(chosen, original);
   const total = (catalogue.modules ?? []).reduce((n, m) => n + (m.permissions?.length ?? 0), 0);
 
-  const submit = () =>
-    save.mutate(
-      { code: role.code ?? "", body: { permissionCodes: chosen, permissionsVersion: role.permissionsVersion ?? 0 } },
-      {
-        onSuccess: onSaved,
-        onError: (e) => {
-          if (isApiError(e) && e.code === "COMMON_VERSION_CONFLICT") void qc.invalidateQueries({ queryKey: keys.roles.all });
-        },
-      },
-    );
+  // mutateAsync, not mutate(…, { onSuccess }): the refetch after saving remounts this form (keyed by version), and
+  // per-call callbacks of an unmounted caller never run, so the "Saved" notice would sometimes be lost.
+  const submit = async () => {
+    try {
+      await save.mutateAsync({ code: role.code ?? "", body: { permissionCodes: chosen }, version: role.permissionsVersion ?? 0 });
+      onSaved();
+    } catch (e) {
+      if (isApiError(e) && e.code === "COMMON_VERSION_CONFLICT") void qc.invalidateQueries({ queryKey: keys.roles.all });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 border-t border-line pt-4" data-testid="role-permissions">
@@ -119,7 +119,7 @@ function PermissionsForm({ role, catalogue, editable, onSaved }: { role: RoleDet
               Undo changes
             </Button>
           )}
-          <Button onClick={submit} loading={save.isPending} disabled={!dirty} data-testid="role-permissions-save">
+          <Button onClick={() => void submit()} loading={save.isPending} disabled={!dirty} data-testid="role-permissions-save">
             Save permissions
           </Button>
         </div>
@@ -136,7 +136,7 @@ function RenameForm({ role, onDone }: { role: RoleDetail; onDone: () => void }) 
   const onSubmit = form.handleSubmit(async (v) => {
     setFormError(null);
     try {
-      await rename.mutateAsync({ code: role.code ?? "", body: { label: v.label, description: v.description || undefined, version: role.version ?? 0 } });
+      await rename.mutateAsync({ code: role.code ?? "", body: { label: v.label, description: v.description || undefined }, version: role.version ?? 0 });
       onDone();
     } catch (e) {
       setFormError(applyApiError(e, form.setError, { IDENTITY_ROLE_NAME_TAKEN: "label" }));
@@ -175,7 +175,7 @@ function ResetAction({ role, onReset }: { role: RoleDetail; onReset: () => void 
           <Button variant="ghost" onClick={() => setConfirming(false)}>
             Keep my changes
           </Button>
-          <Button variant="outline" loading={reset.isPending} onClick={() => reset.mutate(role.code ?? "", { onSuccess: onReset })} data-testid="role-reset-confirm">
+          <Button variant="outline" loading={reset.isPending} onClick={() => void reset.mutateAsync(role.code ?? "").then(onReset, () => undefined)} data-testid="role-reset-confirm">
             Reset permissions
           </Button>
         </div>
@@ -200,7 +200,7 @@ function ArchiveAction({ role, onArchived }: { role: RoleDetail; onArchived: () 
           <Button variant="ghost" onClick={() => setConfirming(false)}>
             Keep role
           </Button>
-          <Button variant="destructive" loading={archive.isPending} onClick={() => archive.mutate(role.code ?? "", { onSuccess: onArchived })} data-testid="role-archive-confirm">
+          <Button variant="destructive" loading={archive.isPending} onClick={() => void archive.mutateAsync(role.code ?? "").then(onArchived, () => undefined)} data-testid="role-archive-confirm">
             Remove role
           </Button>
         </div>

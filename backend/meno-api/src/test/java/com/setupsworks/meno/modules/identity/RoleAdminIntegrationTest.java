@@ -105,35 +105,37 @@ class RoleAdminIntegrationTest {
         call(post("/api/v1/admin/roles"), bearer, "{\"label\":\"X\",\"copyFrom\":\"NOPE\"}")
                 .andExpect(status().isNotFound());
 
-        // Rename: own roles only, with the version.
-        call(put("/api/v1/admin/roles/" + code), bearer, "{\"label\":\"Staff auditor\",\"version\":0}")
+        // Rename: own roles only, with the version in If-Match (missing is 428).
+        call(put("/api/v1/admin/roles/" + code), bearer, "{\"label\":\"Staff auditor\"}")
+                .andExpect(status().isPreconditionRequired());
+        call(put("/api/v1/admin/roles/" + code).header("If-Match", etag(0)), bearer, "{\"label\":\"Staff auditor\"}")
                 .andExpect(status().isOk()).andExpect(jsonPath("$.label").value("Staff auditor"))
                 .andExpect(jsonPath("$.version").value(1));
-        call(put("/api/v1/admin/roles/" + code), bearer, "{\"label\":\"Again\",\"version\":0}")
+        call(put("/api/v1/admin/roles/" + code).header("If-Match", etag(0)), bearer, "{\"label\":\"Again\"}")
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("COMMON_VERSION_CONFLICT"));
-        call(put("/api/v1/admin/roles/PHARMACIST"), bearer, "{\"label\":\"Chemist\",\"version\":0}")
+        call(put("/api/v1/admin/roles/PHARMACIST").header("If-Match", etag(0)), bearer, "{\"label\":\"Chemist\"}")
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_NOT_EDITABLE"));
 
         // Permissions: known codes only, never on the locked owner role.
-        call(put("/api/v1/admin/roles/PHARMACIST/permissions"), bearer, perms(0, "identity.nope.view"))
+        call(put("/api/v1/admin/roles/PHARMACIST/permissions").header("If-Match", etag(0)), bearer, perms("identity.nope.view"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("IDENTITY_PERMISSION_INVALID"));
-        call(put("/api/v1/admin/roles/PHARMACIST/permissions"), bearer, perms(0, "Not A Code"))
+        call(put("/api/v1/admin/roles/PHARMACIST/permissions").header("If-Match", etag(0)), bearer, perms("Not A Code"))
                 .andExpect(status().isBadRequest());
-        call(put("/api/v1/admin/roles/OWNER/permissions"), bearer, perms(0))
+        call(put("/api/v1/admin/roles/OWNER/permissions").header("If-Match", etag(0)), bearer, perms())
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_LOCKED"));
-        call(put("/api/v1/admin/roles/PHARMACIST/permissions"), bearer, perms(0, "party.customer.create"))
+        call(put("/api/v1/admin/roles/PHARMACIST/permissions").header("If-Match", etag(0)), bearer, perms("party.customer.create"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customised").value(true))
                 .andExpect(jsonPath("$.permissionsVersion").value(1));
-        call(put("/api/v1/admin/roles/PHARMACIST/permissions"), bearer, perms(0))
+        call(put("/api/v1/admin/roles/PHARMACIST/permissions").header("If-Match", etag(0)), bearer, perms())
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("COMMON_VERSION_CONFLICT"));
 
         // A change reaches the people holding the role: the branch manager loses the user list, then gets it back.
         AppUser manager = staff(owner, "Mani Manager", "BRANCH_MANAGER", ho);
         String bm = "Bearer " + JsonPath.read(login(manager.getEmail()), "$.accessToken");
         call(get("/api/v1/admin/users"), bm, null).andExpect(status().isOk());
-        call(put("/api/v1/admin/roles/BRANCH_MANAGER/permissions"), bearer, perms(0))
+        call(put("/api/v1/admin/roles/BRANCH_MANAGER/permissions").header("If-Match", etag(0)), bearer, perms())
                 .andExpect(status().isOk()).andExpect(jsonPath("$.permissionCodes").isEmpty());
         call(get("/api/v1/admin/users"), bm, null).andExpect(status().isForbidden());
         call(post("/api/v1/admin/roles/BRANCH_MANAGER/reset"), bearer, null)
@@ -148,17 +150,17 @@ class RoleAdminIntegrationTest {
         call(get("/api/v1/team/options"), bearer, null)
                 .andExpect(jsonPath("$.roles[?(@.code == '%s')].label".formatted(code)).value("Staff auditor"));
         String url = "/api/v1/admin/users/" + manager.getId();
-        call(put(url + "/access"), bearer, access(code, ho, version(bearer, url))).andExpect(status().isOk());
+        call(put(url + "/access").header("If-Match", etag(version(bearer, url))), bearer, access(code, ho)).andExpect(status().isOk());
         call(delete("/api/v1/admin/roles/" + code), bearer, null)
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_IN_USE"));
-        call(put(url + "/access"), bearer, access("PHARMACIST", ho, version(bearer, url))).andExpect(status().isOk());
+        call(put(url + "/access").header("If-Match", etag(version(bearer, url))), bearer, access("PHARMACIST", ho)).andExpect(status().isOk());
         call(delete("/api/v1/admin/roles/PHARMACIST"), bearer, null)
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_NOT_EDITABLE"));
         call(delete("/api/v1/admin/roles/" + code), bearer, null).andExpect(status().isNoContent());
         call(get("/api/v1/admin/roles/" + code), bearer, null).andExpect(status().isNotFound());
         call(get("/api/v1/admin/roles"), bearer, null)
                 .andExpect(jsonPath("$[?(@.code == '%s')]".formatted(code)).isEmpty());
-        call(put(url + "/access"), bearer, access(code, ho, version(bearer, url)))
+        call(put(url + "/access").header("If-Match", etag(version(bearer, url))), bearer, access(code, ho))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_INVALID"));
 
         // Only people with identity.role.* see or change roles.
@@ -172,7 +174,7 @@ class RoleAdminIntegrationTest {
         String branchB = headOffice(b);
         String code = JsonPath.read(call(post("/api/v1/admin/roles"), a.bearer(), "{\"label\":\"Night shift\"}")
                 .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString(), "$.code");
-        call(put("/api/v1/admin/roles/PHARMACIST/permissions"), a.bearer(), perms(0, "party.customer.create"))
+        call(put("/api/v1/admin/roles/PHARMACIST/permissions").header("If-Match", etag(0)), a.bearer(), perms("party.customer.create"))
                 .andExpect(status().isOk());
 
         // B never sees A's role, gets 404 for it, can't invite or assign with it, and keeps MENO's defaults.
@@ -181,9 +183,9 @@ class RoleAdminIntegrationTest {
                 .andExpect(jsonPath("$[?(@.code == 'PHARMACIST')].customised").value(false));
         call(get("/api/v1/admin/roles/" + code), b.bearer(), null)
                 .andExpect(status().isNotFound()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_NOT_FOUND"));
-        call(put("/api/v1/admin/roles/" + code), b.bearer(), "{\"label\":\"Mine\",\"version\":0}")
+        call(put("/api/v1/admin/roles/" + code).header("If-Match", etag(0)), b.bearer(), "{\"label\":\"Mine\"}")
                 .andExpect(status().isNotFound());
-        call(put("/api/v1/admin/roles/" + code + "/permissions"), b.bearer(), perms(1))
+        call(put("/api/v1/admin/roles/" + code + "/permissions").header("If-Match", etag(1)), b.bearer(), perms())
                 .andExpect(status().isNotFound());
         call(delete("/api/v1/admin/roles/" + code), b.bearer(), null).andExpect(status().isNotFound());
         call(post("/api/v1/admin/roles"), b.bearer(), "{\"label\":\"Copy\",\"copyFrom\":\"%s\"}".formatted(code))
@@ -200,7 +202,7 @@ class RoleAdminIntegrationTest {
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_INVALID"));
         AppUser staffB = staff(b, "Bala B", "PHARMACIST", branchB);
         String url = "/api/v1/admin/users/" + staffB.getId();
-        call(put(url + "/access"), b.bearer(), access(code, branchB, version(b.bearer(), url)))
+        call(put(url + "/access").header("If-Match", etag(version(b.bearer(), url))), b.bearer(), access(code, branchB))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("IDENTITY_ROLE_INVALID"));
 
         call(get("/api/v1/admin/roles/" + code), a.bearer(), null).andExpect(status().isOk());
@@ -217,14 +219,17 @@ class RoleAdminIntegrationTest {
         return mvc.perform(req);
     }
 
-    private static String perms(long version, String... codes) {
+    private static String perms(String... codes) {
         String list = String.join("\",\"", codes);
-        return "{\"permissionCodes\":[%s],\"permissionsVersion\":%d}"
-                .formatted(codes.length == 0 ? "" : "\"" + list + "\"", version);
+        return "{\"permissionCodes\":[%s]}".formatted(codes.length == 0 ? "" : "\"" + list + "\"");
     }
 
-    private static String access(String role, String branchId, long version) {
-        return "{\"roleCodes\":[\"%s\"],\"branchIds\":[\"%s\"],\"version\":%d}".formatted(role, branchId, version);
+    private static String access(String role, String branchId) {
+        return "{\"roleCodes\":[\"%s\"],\"branchIds\":[\"%s\"]}".formatted(role, branchId);
+    }
+
+    private static String etag(long version) {
+        return "\"" + version + "\"";
     }
 
     private long version(String bearer, String url) throws Exception {
