@@ -18,7 +18,7 @@ Public and first-run pages.
 | Login | `/login` | Email or mobile, password, MFA for admins | AUT-01, PLT-08, PLT-09 | P5 | Nitheesh | Meyyarivu | All | Ashok |
 | Forgot password | `/forgot-password` | Request a reset link | AUT-01 | P1 | Nitheesh | Meyyarivu | All | Ashok |
 | Reset password | `/reset-password` | Single-use token, strong password rules | AUT-01 | P1 | Nitheesh | Meyyarivu | All | Ashok |
-| Accept invitation | `/invite/[token]` | Join a company with an invited role | PLT-06 | P1 | Nitheesh | Nitheesh | All | Ashok |
+| Accept invitation | `/invite?token=…` | Join a company with an invited role | PLT-06 | P1 | Nitheesh | Nitheesh | All | Ashok |
 | Company registration | `/signup` | Owner account, mobile and email, business name, state, trial / demo / license (see ONBOARDING.md) | PLT-01, AUT-04 | P1 | Nitheesh | Nitheesh | OW | Ashok |
 | Verify account | `/verify` | Mobile OTP and email verification | AUT-04 | P1 | Nitheesh | Meyyarivu | OW | Ashok |
 | Business profile | `/onboarding/business` | Business type, branches, catalogue size, current software, language | AUT-05 | P2 | Nitheesh | Meyyarivu | OW | Ashok |
