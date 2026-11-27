@@ -1,71 +1,71 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { Button, Icon, Wordmark, cn, type IconName } from "@meno/ui";
-import { useTheme } from "@/hooks/useTheme";
-import { withSlash } from "@/features/onboarding/utils";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+import { Button, Icon, Popover, PopoverContent, PopoverTrigger } from "@meno/ui";
+import { ShellFrame } from "@/components/layout/AppShell";
+import { PLATFORM_ITEMS } from "@/config/nav.generated";
+import { buildMenu } from "@/config/nav";
 import { usePlatformSignOut } from "../queries";
 import { usePlatformStaff } from "../session";
 
-/** MENO staff pages (ROLES_AND_DASHBOARDS.md "SA"). Tabs show only with their permission; more pages join later. */
-const TABS: { href: string; label: string; icon: IconName; permission: string }[] = [
-  { href: "/platform/reference-data/", label: "Reference data", icon: "database", permission: "platform.reference.view" },
-];
-
+/**
+ * MENO staff pages (ROLES_AND_DASHBOARDS.md "SA", ADR-0020) in the same sidebar and top bar as the tenant app. The
+ * menu is NAVIGATION.md "Platform sidebar" (`PLATFORM_ITEMS`): an item shows when the staff member holds its
+ * `platform.*` permission (from the platform token); screens not built yet show as "Soon".
+ */
 export function PlatformShell({ children }: { children: React.ReactNode }) {
-  const { scheme, toggle } = useTheme();
-  const pathname = withSlash(usePathname());
+  const staff = usePlatformStaff();
+  const granted = staff?.permissions;
+  const menu = useMemo(() => {
+    const has = (p: string) => granted?.includes(p) ?? false;
+    return buildMenu(null, has, PLATFORM_ITEMS);
+  }, [granted]);
+
+  return (
+    <ShellFrame menu={menu} items={PLATFORM_ITEMS} home="/platform/reference-data/" label="Platform" account={<StaffMenu />}>
+      {children}
+    </ShellFrame>
+  );
+}
+
+/** Who is signed in as MENO staff, and sign out (the session lives only in this tab). */
+function StaffMenu() {
   const staff = usePlatformStaff();
   const signOut = usePlatformSignOut();
   const router = useRouter();
-  const tabs = TABS.filter((t) => staff?.permissions?.includes(t.permission));
-
+  const name = staff?.fullName ?? staff?.email ?? "MENO staff";
   return (
-    <div className="flex min-h-dvh flex-col bg-paper">
-      <header className="sticky top-0 z-10 border-b border-line bg-paper">
-        <div className="mx-auto flex h-12 w-full max-w-[1280px] items-center gap-3 px-4">
-          <Wordmark size={22} />
-          <span className="text-[12.5px] text-ink-4">Platform</span>
-          <span className="ml-auto hidden truncate text-[12.5px] text-ink-3 sm:block" data-testid="platform-staff-name">
-            {staff?.fullName}
-          </span>
-          <Button variant="ghost" size="icon" className="max-sm:ml-auto" onClick={toggle} aria-label={scheme === "dark" ? "Switch to light" : "Switch to dark"}>
-            <Icon name={scheme === "dark" ? "sun" : "moon"} />
-          </Button>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="icon" aria-label={`Account: ${name}`} data-testid="platform-account">
+          <Icon name="user" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[260px]">
+        <div className="border-b border-line px-2.5 pt-1.5 pb-2.5">
+          <p className="truncate font-medium text-ink" data-testid="platform-staff-name">
+            {name}
+          </p>
+          {staff?.email && <p className="truncate text-[12.5px] text-ink-3">{staff.email}</p>}
+          <p className="mt-0.5 text-[12px] text-ink-4">MENO staff</p>
+        </div>
+        <div className="flex flex-col pt-1.5">
           <Button
             variant="ghost"
-            size="icon"
+            className="justify-start"
             onClick={() => {
               signOut();
               router.replace("/platform/login/");
             }}
-            aria-label="Sign out"
             data-testid="platform-sign-out"
           >
             <Icon name="log-out" />
+            Sign out
           </Button>
+          <p className="px-2.5 pt-1 pb-1.5 text-[12px] text-ink-4">Reloading the page also signs you out: staff sessions are kept only in this tab.</p>
         </div>
-        {tabs.length > 0 && (
-          <nav aria-label="Platform" className="mx-auto flex w-full max-w-[1280px] gap-1 overflow-x-auto px-3 pb-2">
-            {tabs.map((t) => {
-              const active = pathname.startsWith(t.href);
-              return (
-                <Link
-                  key={t.href}
-                  href={t.href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn("flex h-8 shrink-0 items-center gap-2 rounded-tab px-2.5 text-[13px] text-ink-3 hover:bg-hover hover:text-ink", active && "bg-raised font-medium text-ink shadow-[0_0_0_1px_var(--line)]")}
-                >
-                  <Icon name={t.icon} className="text-ink-4" />
-                  {t.label}
-                </Link>
-              );
-            })}
-          </nav>
-        )}
-      </header>
-      <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 pt-6 pb-12">{children}</main>
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 }

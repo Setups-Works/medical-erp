@@ -2,26 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Button, Icon, Kbd, Wordmark, cn } from "@meno/ui";
-import { buildMenu, locate, type CompanyEdition, type NavGroup, type NavItemSpec } from "@/config/nav";
+import type { NavGroup, NavItemSpec } from "@/config/nav";
 import { WIDE, useMediaQuery } from "@/hooks/useMediaQuery";
-import { usePermissions } from "@/hooks/usePermissions";
 import { sidebarStore, useSidebar } from "@/stores/sidebar";
 
 /**
  * App sidebar (NAV-01, NAVIGATION.md, DESIGN_LANGUAGE §5). A 48 px icon rail that opens to a 264 px panel: at 1280 px
  * and wider the panel pushes the page and the choice is remembered; narrower, it covers the page and closes after
  * a click; under 768 px the rail is hidden and the panel opens from the top bar's menu button.
+ * The shell passes the menu: the tenant app (NAVIGATION.md sidebar) or MENO staff (NAVIGATION.md platform sidebar).
  */
-export function Sidebar({ edition = null }: { edition?: CompanyEdition }) {
+export function Sidebar({ menu, active, home, label }: { menu: NavGroup[]; active: NavItemSpec | null; home: string; label: string }) {
   const pathname = usePathname();
-  const permissions = usePermissions();
   const { expanded, openGroups, drawer } = useSidebar();
   const wide = useMediaQuery(WIDE);
   const open = drawer || (wide && expanded);
-  const menu = useMemo(() => buildMenu(edition, permissions.has), [edition, permissions]);
-  const active = locate(pathname);
 
   // Leaving a page closes the covering panel; Esc closes it too (KEYBOARD_SHORTCUTS.md rule 8).
   useEffect(() => sidebarStore.setDrawer(false), [pathname]);
@@ -55,8 +52,9 @@ export function Sidebar({ edition = null }: { edition?: CompanyEdition }) {
         )}
       >
         <div className={cn("flex h-12 shrink-0 items-center border-b border-line", open ? "justify-between pr-1.5 pl-4" : "justify-center")}>
-          <Link href="/dashboard/" aria-label="MENO home" className="rounded-tab">
+          <Link href={home} aria-label={label === "Main" ? "MENO home" : `MENO ${label.toLowerCase()} home`} className="flex items-baseline gap-2 rounded-tab">
             {open ? <Wordmark size={22} /> : <span className="font-brand text-[22px] leading-none text-ink">M</span>}
+            {open && label !== "Main" && <span className="text-[12px] text-ink-4">{label}</span>}
           </Link>
           {drawer && !wide && (
             <Button variant="ghost" size="icon" onClick={() => sidebarStore.setDrawer(false)} aria-label="Close menu">

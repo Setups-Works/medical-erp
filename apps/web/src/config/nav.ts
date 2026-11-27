@@ -29,7 +29,7 @@ export type NavItemSpec = {
   live: boolean;
 };
 
-/** Icon per group: NAVIGATION.md "Sidebar look". Order follows the table. */
+/** Icon per group: NAVIGATION.md "Sidebar look" and "Platform group icons". Order follows the tables. */
 const GROUP_ICONS: Readonly<Record<string, IconName>> = {
   Dashboard: "layout-dashboard",
   Sales: "receipt",
@@ -42,6 +42,11 @@ const GROUP_ICONS: Readonly<Record<string, IconName>> = {
   Reports: "bar-chart",
   "GST & Compliance": "shield",
   Administration: "settings",
+  // Platform sidebar (MENO staff)
+  Overview: "layout-dashboard",
+  Customers: "building",
+  Operations: "database",
+  Security: "shield",
 };
 
 export type NavSection = { name: string | null; items: NavItemSpec[] };
@@ -81,10 +86,10 @@ export function buildMenu(edition: CompanyEdition, has: (permission: string) => 
 
 const trim = (p: string) => (p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p);
 
-function owns(item: NavItemSpec, path: string): number {
+function owns(item: NavItemSpec, path: string, items: readonly NavItemSpec[]): number {
   const under = (r: string) => path === r || path.startsWith(`${r}/`);
-  // A route that is itself the parent of other menu items (/dashboard, /admin, /gst) owns only its exact page.
-  const parent = NAV_ITEMS.some((o) => o.route !== item.route && o.route.startsWith(`${item.route}/`));
+  // A route that is itself the parent of other menu items (/dashboard, /admin, /platform) owns only its exact page.
+  const parent = items.some((o) => o.route !== item.route && o.route.startsWith(`${item.route}/`));
   if (parent ? path === item.route : under(item.route)) return item.route.length;
   return (item.also ?? []).some(under) ? 1 : 0;
 }
@@ -95,7 +100,7 @@ export function locate(pathname: string, items: readonly NavItemSpec[] = NAV_ITE
   let best: NavItemSpec | null = null;
   let bestScore = 0;
   for (const i of items) {
-    const score = owns(i, path);
+    const score = owns(i, path, items);
     if (score > bestScore) [best, bestScore] = [i, score];
   }
   return best;

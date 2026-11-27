@@ -104,6 +104,25 @@ Rules:
 Sidebar look: see DESIGN_LANGUAGE §5 (48 px icon rail expanding to a 264 px panel; group headings 11.5 px uppercase `text-ink-4`; items 13.5 px; active item `bg-hover` + 500 weight). One lucide icon per group: Dashboard `LayoutDashboard`, Sales `Receipt`, Purchase `ShoppingCart`, Inventory `Boxes`, Masters `Database`, Wholesale `Truck`, Finance `Landmark`, CRM & Engagement `HeartHandshake`, Reports `BarChart3`, GST & Compliance `ShieldCheck`, Administration `Settings2`. The Dashboard group shows only the dashboards the user's role may see (ROLES_AND_DASHBOARDS.md).
 
 
+## Platform sidebar (MENO staff, ADR-0020)
+
+The `/platform` pages (Super Admin, ROLES_AND_DASHBOARDS.md "SA") use the same sidebar and top bar as the tenant app, with their own menu below. It is generated into `PLATFORM_ITEMS` by the same `pnpm gen:nav`: an item links once `apps/web/src/app/platform/(staff)<route>/page.tsx` exists, else it shows "Soon". **Permission** is the `platform.*` code a staff member needs (ADR-0020); fill it in the PR that ships the screen. Every route here must be in PAGES.md.
+
+| Group | Menu item | Route | Feature IDs | Permission |
+|---|---|---|---|---|
+| Overview | Platform dashboard | /platform | DSH-09, PLT-15 |  |
+| Customers | Onboarding pipeline | /platform/onboarding | PLT-28 |  |
+| Customers | License console | /platform/licenses | LIC-08, LIC-02, LIC-11 |  |
+| Customers | Plan catalogue | /platform/plans | LIC-01 |  |
+| Operations | Reference data | /platform/reference-data | PLT-22 | `platform.reference.view` |
+| Operations | Feature flags & releases | /platform/releases | PLT-39 |  |
+| Operations | Reliability | /platform/reliability | PLT-41, PLT-43, SEC-15 |  |
+| Security | Security assurance | /platform/security | PLT-44, SEC-07, SEC-08, SEC-10, SEC-14 |  |
+| Security | Privileged access | /platform/privileged-access | SEC-06 |  |
+| Security | Keys & secrets | /platform/keys | SEC-03, SEC-04 |  |
+
+Platform group icons: Overview `LayoutDashboard`, Customers `Building2`, Operations `Database`, Security `ShieldCheck`.
+
 ## Desktop menu bar (NAV-03)
 
 The Electron app shows a native menu bar (Windows: under the title bar, opened with `Alt`; macOS: the system menu). It is **built from the same generated `nav.json` as the sidebar** (edition and permission filters included) plus the app commands below; nobody maintains a second menu by hand. Accelerators come from [KEYBOARD_SHORTCUTS.md](KEYBOARD_SHORTCUTS.md). Owner: Nitheesh (`apps/desktop/src/main/menu.ts`), labels and order reviewed by Meyyarivu.

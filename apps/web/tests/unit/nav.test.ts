@@ -2,10 +2,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { buildMenu, canOpen, editionAllows, goToKeys, locate, type NavItemSpec } from "@/config/nav";
-import { NAV_ITEMS } from "@/config/nav.generated";
+import { NAV_ITEMS, PLATFORM_ITEMS } from "@/config/nav.generated";
 import { isTyping } from "@/hooks/useGoToShortcuts";
 // @ts-expect-error plain ESM build script without types
-import { attachSubPages, build, parseNavigation, render } from "../../../../scripts/nav/build-nav.mjs";
+import { attachSubPages, build, buildPlatform, parseNavigation, parsePlatform, render } from "../../../../scripts/nav/build-nav.mjs";
 
 const repo = (p: string) => fileURLToPath(new URL(`../../../../${p}`, import.meta.url));
 const none = () => false;
@@ -14,12 +14,11 @@ const item = (over: Partial<NavItemSpec>): NavItemSpec => ({ group: "Sales", lab
 
 describe("nav.generated.ts", () => {
   it("matches NAVIGATION.md, PAGES.md and the built routes (run `pnpm gen:nav` if this fails)", () => {
-    const items = build({
-      navigation: readFileSync(repo("docs/design/NAVIGATION.md"), "utf8"),
-      pages: readFileSync(repo("docs/product/PAGES.md"), "utf8"),
-      isBuilt: (route: string) => existsSync(repo(`apps/web/src/app/(app)${route}/page.tsx`)),
-    });
-    expect(render(items)).toBe(readFileSync(repo("apps/web/src/config/nav.generated.ts"), "utf8"));
+    const navigation = readFileSync(repo("docs/design/NAVIGATION.md"), "utf8");
+    const pages = readFileSync(repo("docs/product/PAGES.md"), "utf8");
+    const items = build({ navigation, pages, isBuilt: (route: string) => existsSync(repo(`apps/web/src/app/(app)${route}/page.tsx`)) });
+    const platform = buildPlatform({ navigation, pages, isBuilt: (route: string) => existsSync(repo(`apps/web/src/app/platform/(staff)${route}/page.tsx`)) });
+    expect(render(items, platform)).toBe(readFileSync(repo("apps/web/src/config/nav.generated.ts"), "utf8"));
   });
 
   it("has Dashboard + the 10 groups of NAVIGATION.md, in order", () => {
@@ -36,6 +35,23 @@ describe("nav.generated.ts", () => {
       "GST & Compliance",
       "Administration",
     ]);
+  });
+});
+
+describe("platform menu", () => {
+  it("lists the /platform pages and opens only built ones the staff member may see", () => {
+    expect(PLATFORM_ITEMS.every((i) => i.route.startsWith("/platform"))).toBe(true);
+    const routes = (has: (p: string) => boolean) => buildMenu(null, has, PLATFORM_ITEMS).flatMap((g) => g.sections.flatMap((s) => s.items.filter((i) => i.live).map((i) => i.route)));
+    expect(routes((p) => p === "platform.reference.view")).toEqual(["/platform/reference-data"]);
+    expect(routes(none)).toEqual([]);
+    expect(locate("/platform/reference-data/", PLATFORM_ITEMS)?.label).toBe("Reference data");
+    expect(locate("/platform/", PLATFORM_ITEMS)?.label).toBe("Platform dashboard");
+  });
+
+  it("rejects a platform row outside /platform or with a tenant permission", () => {
+    const t = (row: string) => ["| Group | Menu item | Route | Feature IDs | Permission |", "|---|---|---|---|---|", row].join("\n");
+    expect(() => parsePlatform(t("| Ops | X | /admin/x | PLT-22 |  |"))).toThrow(/not under \/platform/);
+    expect(() => parsePlatform(t("| Ops | X | /platform/x | PLT-22 | `identity.user.view` |"))).toThrow(/permission/);
   });
 });
 
