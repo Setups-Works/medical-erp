@@ -23,7 +23,7 @@ sec("A. Authentication & onboarding", "Public and first-run pages.", [
  ("Login", "/login", "Email or mobile, password, MFA for admins", "AUT-01 PLT-08 PLT-09", ALL),
  ("Forgot password", "/forgot-password", "Request a reset link", "AUT-01", ALL),
  ("Reset password", "/reset-password", "Single-use token, strong password rules", "AUT-01", ALL),
- ("Accept invitation", "/invite/[token]", "Join a company with an invited role", "PLT-06", ALL),
+ ("Accept invitation", "/invite?token=…", "Join a company with an invited role", "PLT-06", ALL),
  ("Company registration", "/signup", "Owner account, mobile and email, business name, state, trial / demo / license (see ONBOARDING.md)", "PLT-01 AUT-04", "OW"),
  ("Verify account", "/verify", "Mobile OTP and email verification", "AUT-04", "OW"),
  ("Business profile", "/onboarding/business", "Business type, branches, catalogue size, current software, language", "AUT-05", "OW"),

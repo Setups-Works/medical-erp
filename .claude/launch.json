@@ -4,8 +4,41 @@
     {
       "name": "project-hub",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "project-management", "run", "dev"],
+      "runtimeArgs": [
+        "--prefix",
+        "project-management",
+        "run",
+        "dev"
+      ],
       "port": 4100
+    },
+    {
+      "name": "web-mock",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "NEXT_PUBLIC_API_MOCKING=all",
+        "pnpm",
+        "--filter",
+        "web",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "web-team",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "NEXT_PUBLIC_API_MOCKING=all",
+        "pnpm",
+        "--dir",
+        "apps/web",
+        "exec",
+        "next",
+        "dev",
+        "-p",
+        "3028"
+      ],
+      "port": 3028
     }
   ]
 }
